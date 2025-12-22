@@ -60,9 +60,11 @@ class SocialShareButton {
         ? document.querySelector(this.options.container)
         : this.options.container;
       
-      if (container) {
-        container.appendChild(button);
+    if (container) {
+      if (!container.querySelector('.social-share-btn')) {
+      container.appendChild(button);
       }
+    }
     }
   }
 
