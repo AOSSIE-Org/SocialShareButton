@@ -54,21 +54,6 @@ class SocialShareButton {
       </svg>
       <span>${this.options.buttonText}</span>
     `;
-    button.addEventListener('keydown', (event) => {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      button.click();
-    }
-    });
-
-    button.addEventListener('keyup', (event) => {
-      if (event.key === ' ') {
-      event.preventDefault();
-      button.click();
-    }
-    });
-
-
     this.button = button;
     if (this.options.container) {
       const container = typeof this.options.container === 'string' 
