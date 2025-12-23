@@ -30,6 +30,9 @@ class SocialShareButton {
     this.modal = null;
     this.button = null;
 
+
+    this._listeners = [];
+
     if (this.options.container) {
       this.init();
     }
@@ -57,10 +60,10 @@ class SocialShareButton {
 
     this.button = button;
     if (this.options.container) {
-      const container = typeof this.options.container === 'string' 
+      const container = typeof this.options.container === 'string'
         ? document.querySelector(this.options.container)
         : this.options.container;
-      
+
       if (container) {
         container.appendChild(button);
       }
@@ -154,28 +157,28 @@ class SocialShareButton {
     const encodedTitle = encodeURIComponent(title);
     const encodedDesc = encodeURIComponent(description);
     const hashtagString = hashtags.length ? '#' + hashtags.join(' #') : '';
-    
+
     // Build platform-specific messages with customizable parameters
     let whatsappMessage, facebookMessage, twitterMessage, telegramMessage, redditTitle, emailBody;
-    
+
     // WhatsApp: Casual with emoji
     whatsappMessage = `\u{1F680} ${title}${description ? '\n\n' + description : ''}${hashtagString ? '\n\n' + hashtagString : ''}\n\nLive on the site \u{1F440}\nClean UI, smooth flow \u{2014} worth peeking\n\u{1F447}`;
-    
+
     // Facebook: Title + Description
     facebookMessage = `${title}${description ? '\n\n' + description : ''}${hashtagString ? '\n\n' + hashtagString : ''}`;
-    
+
     // Twitter: Title + Description + Hashtags + Via
     twitterMessage = `${title}${description ? '\n\n' + description : ''}${hashtagString ? '\n' + hashtagString : ''}`;
-    
+
     // Telegram: Casual with emoji
     telegramMessage = `\u{1F517} ${title}${description ? '\n\n' + description : ''}${hashtagString ? '\n\n' + hashtagString : ''}\n\nLive + working\nClean stuff, take a look \u{1F447}`;
-    
+
     // Reddit: Title + Description
     redditTitle = `${title}${description ? ' - ' + description : ''}`;
-    
+
     // Email: Friendly greeting
     emailBody = `Hey \u{1F44B}\n\nSharing a clean project I came across:\n${title}${description ? '\n\n' + description : ''}\n\nLive, simple, and usable \u{2014} take a look \u{1F447}`;
-    
+
     const encodedWhatsapp = encodeURIComponent(whatsappMessage);
     const encodedFacebook = encodeURIComponent(facebookMessage);
     const encodedTwitter = encodeURIComponent(twitterMessage);
@@ -197,43 +200,43 @@ class SocialShareButton {
   }
 
   attachEvents() {
+    // Helper to track listeners
+    const addListener = (element, event, handler) => {
+      element.addEventListener(event, handler);
+      this._listeners.push({ element, event, handler });
+    };
+
     if (this.button) {
-      this.button.addEventListener('click', () => this.openModal());
+      addListener(this.button, 'click', () => this.openModal());
     }
 
     // Modal overlay click to close
-    this.modal.addEventListener('click', (e) => {
-      if (e.target === this.modal) {
-        this.closeModal();
-      }
+    addListener(this.modal, 'click', (e) => {
+      if (e.target === this.modal) this.closeModal();
     });
 
     // Close button
     const closeBtn = this.modal.querySelector('.social-share-modal-close');
-    closeBtn.addEventListener('click', () => this.closeModal());
+    addListener(closeBtn, 'click', () => this.closeModal());
 
     // Platform buttons
-    const platformBtns = this.modal.querySelectorAll('.social-share-platform-btn');
-    platformBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const platform = btn.dataset.platform;
-        this.share(platform);
+    this.modal.querySelectorAll('.social-share-platform-btn').forEach(btn => {
+      addListener(btn, 'click', () => {
+        this.share(btn.dataset.platform);
       });
     });
 
     // Copy button
     const copyBtn = this.modal.querySelector('.social-share-copy-btn');
-    copyBtn.addEventListener('click', () => this.copyLink());
+    addListener(copyBtn, 'click', () => this.copyLink());
 
     // Input click to select
     const input = this.modal.querySelector('.social-share-link-input input');
-    input.addEventListener('click', (e) => e.target.select());
+    addListener(input, 'click', (e) => e.target.select());
 
     // ESC key to close
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && this.isModalOpen) {
-        this.closeModal();
-      }
+    addListener(document, 'keydown', (e) => {
+      if (e.key === 'Escape' && this.isModalOpen) this.closeModal();
     });
   }
 
@@ -241,7 +244,7 @@ class SocialShareButton {
     this.isModalOpen = true;
     this.modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
-    
+
     // Animate in
     setTimeout(() => {
       this.modal.classList.add('active');
@@ -250,7 +253,7 @@ class SocialShareButton {
 
   closeModal() {
     this.modal.classList.remove('active');
-    
+
     setTimeout(() => {
       this.isModalOpen = false;
       this.modal.style.display = 'none';
@@ -260,14 +263,14 @@ class SocialShareButton {
 
   share(platform) {
     const shareUrl = this.getShareURL(platform);
-    
+
     if (shareUrl) {
       if (platform === 'email') {
         window.location.href = shareUrl;
       } else {
         window.open(shareUrl, '_blank', 'noopener,noreferrer,width=600,height=600');
       }
-      
+
       if (this.options.onShare) {
         this.options.onShare(platform, this.options.url);
       }
@@ -277,17 +280,17 @@ class SocialShareButton {
   copyLink() {
     const input = this.modal.querySelector('.social-share-link-input input');
     const copyBtn = this.modal.querySelector('.social-share-copy-btn');
-    
+
     // Check if clipboard API is available
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(this.options.url).then(() => {
         copyBtn.textContent = 'Copied!';
         copyBtn.classList.add('copied');
-        
+
         if (this.options.onCopy) {
           this.options.onCopy(this.options.url);
         }
-        
+
         setTimeout(() => {
           copyBtn.textContent = 'Copy';
           copyBtn.classList.remove('copied');
@@ -308,14 +311,14 @@ class SocialShareButton {
       input.select();
       input.setSelectionRange(0, 99999); // For mobile devices
       document.execCommand('copy');
-      
+
       copyBtn.textContent = 'Copied!';
       copyBtn.classList.add('copied');
-      
+
       if (this.options.onCopy) {
         this.options.onCopy(this.options.url);
       }
-      
+
       setTimeout(() => {
         copyBtn.textContent = 'Copy';
         copyBtn.classList.remove('copied');
@@ -330,18 +333,30 @@ class SocialShareButton {
   }
 
   destroy() {
+    // Remove all event listeners
+    this._listeners.forEach(({ element, event, handler }) => {
+      element.removeEventListener(event, handler);
+    });
+    this._listeners = [];
+
+    // Remove DOM elements
     if (this.button && this.button.parentNode) {
       this.button.parentNode.removeChild(this.button);
     }
     if (this.modal && this.modal.parentNode) {
       this.modal.parentNode.removeChild(this.modal);
     }
+
+    // Remove custom color styles
+    const styleTag = document.getElementById('social-share-custom-colors');
+    if (styleTag) styleTag.remove();
+
     document.body.style.overflow = '';
   }
 
   updateOptions(options) {
     this.options = { ...this.options, ...options };
-    
+
     // Update URL in modal if it exists
     if (this.modal) {
       const input = this.modal.querySelector('.social-share-link-input input');
@@ -370,7 +385,7 @@ class SocialShareButton {
 
     let css = '';
     const buttonClass = this.options.customClass ? `.${this.options.customClass}.social-share-btn` : '.social-share-btn';
-    
+
     if (this.options.buttonColor) {
       css += `${buttonClass} {
         background-color: ${this.options.buttonColor} !important;
