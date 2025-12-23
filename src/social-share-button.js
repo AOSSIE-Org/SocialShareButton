@@ -30,6 +30,8 @@ class SocialShareButton {
     this.modal = null;
     this.button = null;
 
+    this._closeTimeout = null;
+    this._styleTag = null;
 
     this._listeners = [];
 
@@ -254,12 +256,19 @@ class SocialShareButton {
   closeModal() {
     this.modal.classList.remove('active');
 
-    setTimeout(() => {
+    // Prevent stacking timeouts
+    if (this._closeTimeout) {
+      clearTimeout(this._closeTimeout);
+    }
+
+    this._closeTimeout = setTimeout(() => {
+      if (!this.modal) return; // safety check
       this.isModalOpen = false;
       this.modal.style.display = 'none';
       document.body.style.overflow = '';
     }, 200);
   }
+
 
   share(platform) {
     const shareUrl = this.getShareURL(platform);
@@ -333,6 +342,13 @@ class SocialShareButton {
   }
 
   destroy() {
+
+    // Clear pending modal animation
+    if (this._closeTimeout) {
+      clearTimeout(this._closeTimeout);
+      this._closeTimeout = null;
+    }
+
     // Remove all event listeners
     this._listeners.forEach(({ element, event, handler }) => {
       element.removeEventListener(event, handler);
@@ -348,8 +364,10 @@ class SocialShareButton {
     }
 
     // Remove custom color styles
-    const styleTag = document.getElementById('social-share-custom-colors');
-    if (styleTag) styleTag.remove();
+    if (this._styleTag && this._styleTag.parentNode) {
+      this._styleTag.parentNode.removeChild(this._styleTag);
+      this._styleTag = null;
+    }
 
     document.body.style.overflow = '';
   }
@@ -372,19 +390,18 @@ class SocialShareButton {
   }
 
   applyCustomColors() {
-    // Only apply if buttonColor option is provided
     if (!this.options.buttonColor && !this.options.buttonHoverColor) return;
 
-    // Create or update style tag for custom colors
-    let styleTag = document.getElementById('social-share-custom-colors');
-    if (!styleTag) {
-      styleTag = document.createElement('style');
-      styleTag.id = 'social-share-custom-colors';
-      document.head.appendChild(styleTag);
+    // Create instance-specific style tag
+    if (!this._styleTag) {
+      this._styleTag = document.createElement('style');
+      document.head.appendChild(this._styleTag);
     }
 
     let css = '';
-    const buttonClass = this.options.customClass ? `.${this.options.customClass}.social-share-btn` : '.social-share-btn';
+    const buttonClass = this.options.customClass
+      ? `.${this.options.customClass}.social-share-btn`
+      : '.social-share-btn';
 
     if (this.options.buttonColor) {
       css += `${buttonClass} {
@@ -399,8 +416,9 @@ class SocialShareButton {
       }\n`;
     }
 
-    styleTag.textContent = css;
+    this._styleTag.textContent = css;
   }
+
 }
 
 // Export for different module systems
