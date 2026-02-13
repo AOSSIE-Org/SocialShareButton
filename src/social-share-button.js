@@ -54,7 +54,6 @@ class SocialShareButton {
       </svg>
       <span>${this.options.buttonText}</span>
     `;
-
     this.button = button;
     if (this.options.container) {
       const container = typeof this.options.container === 'string' 
