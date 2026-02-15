@@ -18,13 +18,30 @@ We welcome contributions including bug fixes, feature enhancements, documentatio
 
 1. Fork the repository.
 2. Clone your fork:
+
+   ```bash
    git clone https://github.com/your-username/SocialShareButton.git
+
+   ```
+
 3. Navigate into the project directory:
+
+   ```bash
    cd SocialShareButton
+
+   ```
+
 4. Install dependencies (if applicable):
+
+   ```bash
    npm install
+
+   ```
+
 5. Create a new branch:
+   ```bash
    git checkout -b feature/your-feature-name
+   ```
 
 ### Branch Naming Convention
 
@@ -55,7 +72,12 @@ We welcome contributions including bug fixes, feature enhancements, documentatio
 ## 🚀 Submitting a Pull Request
 
 1. Push your branch:
+
+   ```bash
    git push origin feature/your-feature-name
+
+   ```
+
 2. Open a Pull Request.
 3. Clearly describe:
    - What changes were made
@@ -64,6 +86,7 @@ We welcome contributions including bug fixes, feature enhancements, documentatio
 
 ---
 
+```markdown
 ## 🧑‍💻 Code of Conduct
 
 Please follow the project's Code of Conduct and maintain respectful and inclusive communication.
@@ -71,3 +94,4 @@ Please follow the project's Code of Conduct and maintain respectful and inclusiv
 ---
 
 Thank you for helping improve SocialShareButton ❤️
+```
