@@ -29,6 +29,8 @@ class SocialShareButton {
     this.isModalOpen = false;
     this.modal = null;
     this.button = null;
+    this.customColorMouseEnterHandler = null;
+    this.customColorMouseLeaveHandler = null;
 
     if (this.options.container) {
       this.init();
@@ -337,6 +339,15 @@ class SocialShareButton {
   }
 
   destroy() {
+    if (this.button && this.customColorMouseEnterHandler) {
+      this.button.removeEventListener('mouseenter', this.customColorMouseEnterHandler);
+      this.customColorMouseEnterHandler = null;
+    }
+    if (this.button && this.customColorMouseLeaveHandler) {
+      this.button.removeEventListener('mouseleave', this.customColorMouseLeaveHandler);
+      this.customColorMouseLeaveHandler = null;
+    }
+
     if (this.button && this.button.parentNode) {
       this.button.parentNode.removeChild(this.button);
     }
@@ -358,40 +369,66 @@ class SocialShareButton {
     }
 
     // Reapply custom colors if color option changed
-    if (options.buttonColor || options.buttonHoverColor) {
+    if ('buttonColor' in options || 'buttonHoverColor' in options) {
       this.applyCustomColors();
     }
   }
 
   applyCustomColors() {
-    // Only apply if buttonColor option is provided
-    if (!this.options.buttonColor && !this.options.buttonHoverColor) return;
+    if (!this.button) return;
 
-    // Create or update style tag for custom colors
-    let styleTag = document.getElementById('social-share-custom-colors');
-    if (!styleTag) {
-      styleTag = document.createElement('style');
-      styleTag.id = 'social-share-custom-colors';
-      document.head.appendChild(styleTag);
+    // Remove legacy global style tag to prevent cross-instance color bleed.
+    const styleTag = document.getElementById('social-share-custom-colors');
+    if (styleTag && styleTag.parentNode) {
+      styleTag.parentNode.removeChild(styleTag);
     }
 
-    let css = '';
-    const buttonClass = this.options.customClass ? `.${this.options.customClass}.social-share-btn` : '.social-share-btn';
-    
-    if (this.options.buttonColor) {
-      css += `${buttonClass} {
-        background-color: ${this.options.buttonColor} !important;
-        background-image: none !important;
-      }\n`;
+    if (this.customColorMouseEnterHandler) {
+      this.button.removeEventListener('mouseenter', this.customColorMouseEnterHandler);
+      this.customColorMouseEnterHandler = null;
+    }
+    if (this.customColorMouseLeaveHandler) {
+      this.button.removeEventListener('mouseleave', this.customColorMouseLeaveHandler);
+      this.customColorMouseLeaveHandler = null;
     }
 
-    if (this.options.buttonHoverColor) {
-      css += `${buttonClass}:hover {
-        background-color: ${this.options.buttonHoverColor} !important;
-      }\n`;
+    this.button.style.removeProperty('background-color');
+    this.button.style.removeProperty('background-image');
+    this.button.style.removeProperty('border-color');
+
+    const baseColor = this.options.buttonColor || '';
+    const hoverColor = this.options.buttonHoverColor || baseColor;
+
+    if (!baseColor && !hoverColor) return;
+
+    if (baseColor) {
+      this.button.style.backgroundImage = 'none';
+      this.button.style.backgroundColor = baseColor;
+      this.button.style.borderColor = baseColor;
     }
 
-    styleTag.textContent = css;
+    this.customColorMouseEnterHandler = () => {
+      if (hoverColor) {
+        this.button.style.backgroundImage = 'none';
+        this.button.style.backgroundColor = hoverColor;
+        this.button.style.borderColor = hoverColor;
+      }
+    };
+
+    this.customColorMouseLeaveHandler = () => {
+      if (baseColor) {
+        this.button.style.backgroundImage = 'none';
+        this.button.style.backgroundColor = baseColor;
+        this.button.style.borderColor = baseColor;
+      } else {
+        this.button.style.removeProperty('background-color');
+        this.button.style.removeProperty('background-image');
+        this.button.style.removeProperty('border-color');
+      }
+    };
+
+    this.button.addEventListener('mouseenter', this.customColorMouseEnterHandler);
+    this.button.addEventListener('mouseleave', this.customColorMouseLeaveHandler);
   }
 }
 
