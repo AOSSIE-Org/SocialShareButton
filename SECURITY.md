@@ -4,7 +4,11 @@ This policy applies only to the SocialShareButton repository.
 
 ## Supported Versions
 
-The latest version available on the `main` branch is actively maintained and supported with security updates.  
+| Version / Branch | Supported |
+| ---------------- | --------- |
+| `main`           | ✅ Yes    |
+| Other branches   | ❌ No     |
+
 Older versions may not receive security patches.
 
 ## Reporting a Vulnerability
