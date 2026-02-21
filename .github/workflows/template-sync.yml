@@ -27,7 +27,7 @@ jobs:
       - name: actions-template-sync
         uses: AndreasAugustin/actions-template-sync@v2
         with:
-          source_repo_path: AOSSIE-Org/Template-Repo
+          source_repo_path: StabilityNexus/Template-Repo
           upstream_branch: main # defaults to main
           pr_labels: template_sync,auto_pr # defaults to template_sync
           source_gh_token: ${{ secrets.GITHUB_TOKEN }}
