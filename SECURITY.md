@@ -21,8 +21,6 @@ https://github.com/AOSSIE-Org/SocialShareButton/security/advisories/new
 
 Private reporting ensures the issue can be addressed responsibly without exposing users to unnecessary risk.
 
-If private reporting is unavailable, please contact the repository maintainers through the organization’s official communication channels.
-
 ## What to Include in Your Report
 
 To help us investigate efficiently, please include:
@@ -39,12 +37,10 @@ Providing detailed information helps us respond more quickly and effectively.
 
 Once a vulnerability report is received:
 
-1. The maintainers will acknowledge receipt of the report within 48 hours.
-2. The issue will be investigated and validated.
-3. If confirmed, a fix will be developed and tested.
-4. We will coordinate responsible disclosure with the reporter.
-5. A security update or patch will be released as soon as possible.
+We will acknowledge receipt of the report, investigate and validate the issue, and work on a fix if the vulnerability is confirmed. We will coordinate responsible disclosure with the reporter before any public announcement.
 
 We kindly ask reporters to avoid public disclosure until a fix has been released, allowing us to protect users effectively.
 
 We appreciate responsible disclosure and thank you for helping keep SocialShareButton secure and reliable.
+
+For general discussions or non-sensitive communication, you can also reach out through our official Discord server: https://discord.gg/hjUhu33uAn
