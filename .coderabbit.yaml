@@ -1,14 +1,80 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+
+language: en
+early_access: true
+
+chat:
+  auto_reply: true
+
 reviews:
+  profile: assertive
+
   auto_review:
     enabled: true
+    drafts: false
+    ignore_title_keywords:
+      - "WIP"
+    base_branches:
+      - main
 
   high_level_summary: true
-  poem: false
   review_status: true
-
+  changed_files_summary: true
   collapse_walkthrough: false
+  request_changes_workflow: true
+
+  pre_merge_checks:
+    description:
+      mode: warning
+    docstrings:
+      mode: off
 
   path_filters:
-    - "!node_modules/**"
-    - "!dist/**"
-    - "!build/**"
+    - "!**/node_modules/**"
+    - "!**/dist/**"
+    - "!**/build/**"
+
+  tools:
+    eslint:
+      enabled: true
+    markdownlint:
+      enabled: true
+    yamllint:
+      enabled: true
+    gitleaks:
+      enabled: true
+    github-checks:
+      enabled: true
+      timeout_ms: 90000
+
+  instructions: >-
+    - Verify documentation clarity and spelling
+    - Look for code duplication
+    - Ensure no sensitive information is exposed
+    - Confirm consistent formatting and structure
+    - Suggest improvements when encountering TODO or FIXME comments
+
+  path_instructions:
+    - path: "**/*.{js,jsx}"
+      instructions: |
+        - Follow modern JavaScript best practices
+        - Avoid unused variables and functions
+        - Ensure no exposed secrets or API keys
+        - Check for common security issues (XSS, injection risks)
+
+    - path: "**/*.html"
+      instructions: |
+        - Follow HTML best practices
+        - Ensure accessibility and semantic structure
+        - Check performance considerations
+
+    - path: "**/*.css"
+      instructions: |
+        - Follow consistent naming conventions
+        - Avoid redundant styles
+        - Check for performance optimizations
+
+    - path: "**/*.md"
+      instructions: |
+        - Ensure clear documentation
+        - Fix grammar and formatting issues
