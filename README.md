@@ -682,3 +682,12 @@ This project is licensed under the GNU General Public License v3.0.
 See the [LICENSE](LICENSE) file for details.
 
 ---
+
+## 💪 Thanks To All Contributors
+
+Thanks a lot for spending your time helping SocialShareButton grow. Keep rocking 🥂
+
+[![Contributors](https://contrib.rocks/image?repo=AOSSIE-Org/SocialShareButton)](https://github.com/AOSSIE-Org/SocialShareButton/graphs/contributors)
+
+
+© 2025 AOSSIE
