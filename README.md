@@ -61,7 +61,7 @@ Lightweight social sharing component for web applications. Zero dependencies, fr
 ---
 
 ## Live Demo
-🔗 https://YOUR-USERNAME.github.io/SocialShareButton/
+🔗 https://aarya-chaudhari.github.io/SocialShareButton/
 
 
 ## Features
