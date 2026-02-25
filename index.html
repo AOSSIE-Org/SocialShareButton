@@ -142,12 +142,32 @@
     }
 
     .code-block {
-      background: rgba(0, 0, 0, 0.4);
-      border-radius: 8px;
-      padding: 20px;
-      margin: 20px 0;
-      overflow-x: auto;
-    }
+  position: relative;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+  overflow-x: auto;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.copy-btn:hover {
+  background: #5a67d8;
+  transform: scale(1.05);
+}
 
     .code-block code {
       color: #4fd1c5;
@@ -345,6 +365,7 @@
       <p>Get started in seconds with minimal setup</p>
       
       <div class="code-block">
+  <button class="copy-btn">Copy</button>
 <code>// Include CSS and JS
 &lt;link rel="stylesheet" href="social-share-button.css"&gt;
 &lt;script src="social-share-button.js"&gt;&lt;/script&gt;
@@ -365,6 +386,7 @@ new SocialShareButton({
       <p>First-class React support with hooks</p>
       
       <div class="code-block">
+  <button class="copy-btn">Copy</button>
 <code>import SocialShareButton from 'social-share-button';
 
 function App() {
@@ -414,6 +436,8 @@ function App() {
       title: demoTitle,
       description: demoDescription,
       buttonText: 'Share'
+
+      
     });
 
     // Primary
@@ -544,6 +568,29 @@ function App() {
       buttonHoverColor: '#db2777',
       buttonText: 'Share'
     });
+
+    // Copy to Clipboard Functionality
+const copyButtons = document.querySelectorAll('.copy-btn');
+
+copyButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    const codeBlock = button.nextElementSibling;
+    const text = codeBlock.innerText;
+
+    navigator.clipboard.writeText(text).then(() => {
+      const originalText = button.textContent;
+      button.textContent = 'Copied!';
+      button.style.background = '#10b981';
+
+      setTimeout(() => {
+        button.textContent = originalText;
+        button.style.background = '#667eea';
+      }, 2000);
+    }).catch(err => {
+      console.error('Failed to copy:', err);
+    });
+  });
+});
     });
   </script>
 </body>
