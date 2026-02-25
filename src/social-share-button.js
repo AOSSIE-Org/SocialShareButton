@@ -56,16 +56,17 @@ class SocialShareButton {
       </svg>
       <span>${this.options.buttonText}</span>
     `;
-
     this.button = button;
     if (this.options.container) {
       const container = typeof this.options.container === 'string' 
         ? document.querySelector(this.options.container)
         : this.options.container;
       
-      if (container) {
-        container.appendChild(button);
+    if (container) {
+      if (!container.querySelector('.social-share-btn')) {
+      container.appendChild(button);
       }
+    }
     }
   }
 
