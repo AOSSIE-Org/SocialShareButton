@@ -6,7 +6,8 @@
   <meta name="description" content="SocialShareButton - A lightweight, customizable social sharing component">
   <title>SocialShareButton Demo - Modern Social Sharing Component</title>
   <link rel="stylesheet" href="src/social-share-button.css">
-  <style>
+  <link rel="icon" href="src/favicon.svg">
+ <style>
     * {
       margin: 0;
       padding: 0;
@@ -36,6 +37,19 @@
       margin-bottom: 10px;
       font-weight: 700;
     }
+    .brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 48px;
+    font-weight: 700;
+    }
+
+    .logo {
+     width: 50px;
+     height: 60px;
+     }
 
     .tagline {
       font-size: 20px;
@@ -248,11 +262,15 @@
       background-color: #db2777;
     }
   </style>
+
 </head>
 <body>
   <div class="container">
     <header>
-      <h1>🚀 SocialShareButton</h1>
+
+      <h1 class="brand">
+      <img src="public\socialsharebutton.svg" alt="Logo" class="logo"> SocialShareButton
+      </h1>
       <p class="tagline">A lightweight, modern, and highly customizable social sharing component</p>
       <div class="badges">
         <span class="badge">📦 Zero Dependencies</span>
