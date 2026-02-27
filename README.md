@@ -1,4 +1,5 @@
 # <!-- Don't delete it -->
+
 <div name="readme-top"></div>
 
 <!-- Organization Logo -->
@@ -12,7 +13,7 @@
 <!-- Organization Name -->
 <div align="center">
 
-[![Static Badge](https://img.shields.io/badge/AOSSIE-Social_Share_Button-228B22?style=for-the-badge&labelColor=FFC517)](https://TODO.aossie/)
+[![Static Badge](https://img.shields.io/badge/AOSSIE-Social_Share_Button-228B22?style=for-the-badge&labelColor=FFC517)](https://github.com/AOSSIE-Org/SocialShareButton)
 
 <!-- Correct deployed url to be added -->
 
@@ -53,11 +54,11 @@
 
 Lightweight social sharing component for web applications. Zero dependencies, framework-agnostic.
 
-
 [![npm version](https://img.shields.io/npm/v/social-share-button-aossie.svg)](https://www.npmjs.com/package/social-share-button-aossie)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 
 ---
+
 ## Features
 
 - 🌐 Multiple platforms: WhatsApp, Facebook, X, LinkedIn, Telegram, Reddit, Email
@@ -72,11 +73,32 @@ Lightweight social sharing component for web applications. Zero dependencies, fr
 
 ## Installation
 
-### Via CDN (Recommended)
+## Basic HTML Usage (Vanilla JS)
+
+If you are using plain HTML, you can quickly integrate the Social Share Button without any framework.
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css">
-<script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Social Share Button Demo</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css"
+    />
+  </head>
+  <body>
+    <div id="share-button"></div>
+
+    <script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js"></script>
+    <script>
+      new window.SocialShareButton({
+        container: "#share-button",
+      });
+    </script>
+  </body>
+</html>
 ```
 
 ---
@@ -93,7 +115,10 @@ Lightweight social sharing component for web applications. Zero dependencies, fr
 
 ```html
 <head>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css">
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css"
+  />
 </head>
 <body>
   <div id="root"></div>
@@ -104,17 +129,18 @@ Lightweight social sharing component for web applications. Zero dependencies, fr
 ### Step 2: In your **existing** React component (e.g., `MainLayout.jsx`, `Header.jsx`, or wherever you want the button):
 
 ```jsx
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from "react";
 
-function YourComponent() {  // Use your actual component name (Header, Navbar, etc.)
+function YourComponent() {
+  // Use your actual component name (Header, Navbar, etc.)
   const shareButtonRef = useRef(null);
   const initRef = useRef(false);
 
   useEffect(() => {
     if (initRef.current || !window.SocialShareButton) return;
-    
+
     shareButtonRef.current = new window.SocialShareButton({
-      container: '#share-button'
+      container: "#share-button",
     });
     initRef.current = true;
 
@@ -142,20 +168,24 @@ function YourComponent() {  // Use your actual component name (Header, Navbar, e
 ### Step 1: Add CDN to `app/layout.tsx`
 
 ```tsx
-import Script from 'next/script';
+import Script from "next/script";
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
       <head>
-        <link 
-          rel="stylesheet" 
-          href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css" 
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css"
         />
       </head>
       <body>
         {children}
-        <Script 
+        <Script
           src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js"
           strategy="beforeInteractive"
         />
@@ -168,21 +198,23 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 ### Step 2: In your **existing** React component (e.g., `MainLayout.jsx`, `Header.jsx`, or wherever you want the button):
 
 ```tsx
-'use client';
+"use client";
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from "react";
 
-export default function YourComponent() {  // Use your actual component name
+export default function YourComponent() {
+  // Use your actual component name
   const shareButtonRef = useRef<any>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const initRef = useRef(false);
 
   useEffect(() => {
     const initButton = () => {
-      if (initRef.current || !window.SocialShareButton || !containerRef.current) return;
-      
+      if (initRef.current || !window.SocialShareButton || !containerRef.current)
+        return;
+
       shareButtonRef.current = new window.SocialShareButton({
-        container: '#share-button'
+        container: "#share-button",
       });
       initRef.current = true;
     };
@@ -236,15 +268,15 @@ declare global {
 ### Step 1: Add CDN to `pages/_document.tsx`
 
 ```tsx
-import { Html, Head, Main, NextScript } from 'next/document';
+import { Html, Head, Main, NextScript } from "next/document";
 
 export default function Document() {
   return (
     <Html>
       <Head>
-        <link 
-          rel="stylesheet" 
-          href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css" 
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css"
         />
       </Head>
       <body>
@@ -260,19 +292,21 @@ export default function Document() {
 ### Step 2: In your **existing** component (e.g., `components/Header.tsx`, or wherever you want the button):
 
 ```tsx
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from "react";
 
-export default function YourComponent() {  // Use your actual component name
+export default function YourComponent() {
+  // Use your actual component name
   const shareButtonRef = useRef<any>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const initRef = useRef(false);
 
   useEffect(() => {
     const initButton = () => {
-      if (initRef.current || !window.SocialShareButton || !containerRef.current) return;
-      
+      if (initRef.current || !window.SocialShareButton || !containerRef.current)
+        return;
+
       shareButtonRef.current = new window.SocialShareButton({
-        container: '#share-button'
+        container: "#share-button",
       });
       initRef.current = true;
     };
@@ -327,7 +361,10 @@ declare global {
 
 ```html
 <head>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css">
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css"
+  />
 </head>
 <body>
   <div id="app"></div>
@@ -339,7 +376,7 @@ declare global {
 
 ```javascript
 new window.SocialShareButton({
-  container: '#share-button'
+  container: "#share-button",
 });
 ```
 
@@ -353,37 +390,37 @@ new window.SocialShareButton({
 
 ```jsx
 new SocialShareButton({
-  container: '#share-button',        // Required: CSS selector or DOM element
-  url: 'https://example.com',        // Optional: defaults to window.location.href
-  title: 'Custom Title',             // Optional: defaults to document.title
-  buttonText: 'Share',               // Optional: button label text
-  buttonStyle: 'primary',            // default | primary | compact | icon-only
-  theme: 'dark',                     // dark | light
-  platforms: ['twitter', 'linkedin'] // Optional: defaults to all platforms
+  container: "#share-button", // Required: CSS selector or DOM element
+  url: "https://example.com", // Optional: defaults to window.location.href
+  title: "Custom Title", // Optional: defaults to document.title
+  buttonText: "Share", // Optional: button label text
+  buttonStyle: "primary", // default | primary | compact | icon-only
+  theme: "dark", // dark | light
+  platforms: ["twitter", "linkedin"], // Optional: defaults to all platforms
 });
 ```
 
 ### All Available Options
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `container` | string/Element | - | **Required.** CSS selector or DOM element |
-| `url` | string | `window.location.href` | URL to share |
-| `title` | string | `document.title` | Share title/headline |
-| `description` | string | `''` | Additional description text |
-| `hashtags` | array | `[]` | Hashtags for posts (e.g., `['js', 'webdev']`) |
-| `via` | string | `''` | Twitter handle (without @) |
-| `platforms` | array | All platforms | Platforms to show (see below) |
-| `buttonText` | string | `'Share'` | Button label text |
-| `buttonStyle` | string | `'default'` | `default`, `primary`, `compact`, `icon-only` |
-| `buttonColor` | string | `''` | Custom button background color |
-| `buttonHoverColor` | string | `''` | Custom button hover color |
-| `customClass` | string | `''` | Additional CSS class for button |
-| `theme` | string | `'dark'` | `dark` or `light` |
-| `modalPosition` | string | `'center'` | Modal position on screen |
-| `showButton` | boolean | `true` | Show/hide the share button |
-| `onShare` | function | `null` | Callback when user shares: `(platform, url) => {}` |
-| `onCopy` | function | `null` | Callback when user copies link: `(url) => {}` |
+| Option             | Type           | Default                | Description                                        |
+| ------------------ | -------------- | ---------------------- | -------------------------------------------------- |
+| `container`        | string/Element | -                      | **Required.** CSS selector or DOM element          |
+| `url`              | string         | `window.location.href` | URL to share                                       |
+| `title`            | string         | `document.title`       | Share title/headline                               |
+| `description`      | string         | `''`                   | Additional description text                        |
+| `hashtags`         | array          | `[]`                   | Hashtags for posts (e.g., `['js', 'webdev']`)      |
+| `via`              | string         | `''`                   | Twitter handle (without @)                         |
+| `platforms`        | array          | All platforms          | Platforms to show (see below)                      |
+| `buttonText`       | string         | `'Share'`              | Button label text                                  |
+| `buttonStyle`      | string         | `'default'`            | `default`, `primary`, `compact`, `icon-only`       |
+| `buttonColor`      | string         | `''`                   | Custom button background color                     |
+| `buttonHoverColor` | string         | `''`                   | Custom button hover color                          |
+| `customClass`      | string         | `''`                   | Additional CSS class for button                    |
+| `theme`            | string         | `'dark'`               | `dark` or `light`                                  |
+| `modalPosition`    | string         | `'center'`             | Modal position on screen                           |
+| `showButton`       | boolean        | `true`                 | Show/hide the share button                         |
+| `onShare`          | function       | `null`                 | Callback when user shares: `(platform, url) => {}` |
+| `onCopy`           | function       | `null`                 | Callback when user copies link: `(url) => {}`      |
 
 **Available Platforms:**  
 `whatsapp`, `facebook`, `twitter`, `linkedin`, `telegram`, `reddit`, `email`
@@ -394,16 +431,17 @@ Control the text that appears when users share to social platforms:
 
 ```jsx
 new SocialShareButton({
-  container: '#share-button',
-  url: 'https://myproject.com',
-  title: 'Check out my awesome project!',            // Main title/headline
-  description: 'An amazing tool for developers',     // Additional description
-  hashtags: ['javascript', 'webdev', 'opensource'], // Hashtags included in posts
-  via: 'MyProjectHandle'                            // Your Twitter handle
+  container: "#share-button",
+  url: "https://myproject.com",
+  title: "Check out my awesome project!", // Main title/headline
+  description: "An amazing tool for developers", // Additional description
+  hashtags: ["javascript", "webdev", "opensource"], // Hashtags included in posts
+  via: "MyProjectHandle", // Your Twitter handle
 });
 ```
 
 **How messages are customized per platform:**
+
 - **WhatsApp:** `title` + `description` + `hashtags` + link
 - **Facebook:** `title` + `description` + `hashtags` + link
 - **Twitter/X:** `title` + `description` + `hashtags` + `via` handle + link
@@ -418,8 +456,8 @@ new SocialShareButton({
 
 ```jsx
 new SocialShareButton({
-  container: '#share-button',
-  buttonStyle: 'primary'   // or 'default', 'compact', 'icon-only'
+  container: "#share-button",
+  buttonStyle: "primary", // or 'default', 'compact', 'icon-only'
 });
 ```
 
@@ -429,9 +467,9 @@ Pass `buttonColor` and `buttonHoverColor` to match your project's color scheme:
 
 ```jsx
 new SocialShareButton({
-  container: '#share-button',
-  buttonColor: '#ff6b6b',      // Button background color
-  buttonHoverColor: '#ff5252'  // Hover state color
+  container: "#share-button",
+  buttonColor: "#ff6b6b", // Button background color
+  buttonHoverColor: "#ff5252", // Hover state color
 });
 ```
 
@@ -441,9 +479,9 @@ For more complex styling, use a custom CSS class:
 
 ```jsx
 new SocialShareButton({
-  container: '#share-button',
-  buttonStyle: 'primary',
-  customClass: 'my-custom-button'
+  container: "#share-button",
+  buttonStyle: "primary",
+  customClass: "my-custom-button",
 });
 ```
 
@@ -467,46 +505,46 @@ Then in your CSS file:
 ```jsx
 // Material Design Red
 new SocialShareButton({
-  container: '#share-button',
-  buttonColor: '#f44336',
-  buttonHoverColor: '#da190b'
+  container: "#share-button",
+  buttonColor: "#f44336",
+  buttonHoverColor: "#da190b",
 });
 
 // Tailwind Blue
 new SocialShareButton({
-  container: '#share-button',
-  buttonColor: '#3b82f6',
-  buttonHoverColor: '#2563eb'
+  container: "#share-button",
+  buttonColor: "#3b82f6",
+  buttonHoverColor: "#2563eb",
 });
 
 // Custom Brand Color
 new SocialShareButton({
-  container: '#share-button',
-  buttonColor: '#your-brand-color',
-  buttonHoverColor: '#your-brand-color-dark'
+  container: "#share-button",
+  buttonColor: "#your-brand-color",
+  buttonHoverColor: "#your-brand-color-dark",
 });
 ```
 
 ### Button Styles
 
-| Style | Description |
-|-------|-------------|
-| `default` | Standard button with icon and text |
-| `primary` | Gradient button (recommended) |
-| `compact` | Smaller size for tight spaces |
-| `icon-only` | Icon without text |
+| Style       | Description                        |
+| ----------- | ---------------------------------- |
+| `default`   | Standard button with icon and text |
+| `primary`   | Gradient button (recommended)      |
+| `compact`   | Smaller size for tight spaces      |
+| `icon-only` | Icon without text                  |
 
 ### Callbacks
 
 ```jsx
 new SocialShareButton({
-  container: '#share-button',
+  container: "#share-button",
   onShare: (platform, url) => {
     console.log(`Shared on ${platform}: ${url}`);
   },
   onCopy: (url) => {
-    console.log('Link copied:', url);
-  }
+    console.log("Link copied:", url);
+  },
 });
 ```
 
@@ -517,11 +555,11 @@ new SocialShareButton({
 ### Using npm Package
 
 ```javascript
-import SocialShareButton from 'social-share-button-aossie';
-import 'social-share-button-aossie/src/social-share-button.css';
+import SocialShareButton from "social-share-button-aossie";
+import "social-share-button-aossie/src/social-share-button.css";
 
 new SocialShareButton({
-  container: '#share-button'
+  container: "#share-button",
 });
 ```
 
@@ -530,10 +568,10 @@ new SocialShareButton({
 If you want a reusable React component, copy `src/social-share-button-react.jsx` to your project:
 
 ```jsx
-import { SocialShareButton } from './components/SocialShareButton';
+import { SocialShareButton } from "./components/SocialShareButton";
 
 function App() {
-  return <SocialShareButton platforms={['twitter', 'linkedin']} />;
+  return <SocialShareButton platforms={["twitter", "linkedin"]} />;
 }
 ```
 
@@ -543,15 +581,15 @@ function App() {
 const shareButton = useRef(null);
 
 useEffect(() => {
-  shareButton.current = new window.SocialShareButton({ 
-    container: '#share-button' 
+  shareButton.current = new window.SocialShareButton({
+    container: "#share-button",
   });
 }, []);
 
 useEffect(() => {
   if (shareButton.current) {
-    shareButton.current.updateOptions({ 
-      url: window.location.href 
+    shareButton.current.updateOptions({
+      url: window.location.href,
     });
   }
 }, [pathname]); // Update on route change
@@ -576,9 +614,10 @@ useEffect(() => {
 **Cause:** Script loads after component renders
 
 **Solution:** Add null check:
+
 ```jsx
 if (window.SocialShareButton) {
-  new window.SocialShareButton({ container: '#share-button' });
+  new window.SocialShareButton({ container: "#share-button" });
 }
 ```
 
@@ -589,7 +628,8 @@ if (window.SocialShareButton) {
 
 **Cause:** CSS not loaded or ID mismatch
 
-**Solution:** 
+**Solution:**
+
 - Verify CSS CDN link in `<head>`
 - Match container ID: `container: '#share-button'` = `<div id="share-button">`
 
@@ -630,14 +670,14 @@ if (window.SocialShareButton) {
 ```jsx
 // Professional networks only
 new SocialShareButton({
-  container: '#share-button',
-  platforms: ['linkedin', 'twitter', 'email']
+  container: "#share-button",
+  platforms: ["linkedin", "twitter", "email"],
 });
 
 // Messaging apps only
 new SocialShareButton({
-  container: '#share-button',
-  platforms: ['whatsapp', 'telegram']
+  container: "#share-button",
+  platforms: ["whatsapp", "telegram"],
 });
 ```
 
@@ -645,9 +685,9 @@ new SocialShareButton({
 
 ```jsx
 new SocialShareButton({
-  container: '#share-button',
-  buttonStyle: 'icon-only',
-  theme: 'light'
+  container: "#share-button",
+  buttonStyle: "icon-only",
+  theme: "light",
 });
 ```
 
@@ -681,3 +721,11 @@ This project is licensed under the GNU General Public License v3.0.
 See the [LICENSE](LICENSE) file for details.
 
 ---
+
+## 💪 Thanks To All Contributors
+
+Thanks a lot for spending your time helping SocialShareButton grow. Keep rocking 🥂
+
+[![Contributors](https://contrib.rocks/image?repo=AOSSIE-Org/SocialShareButton)](https://github.com/AOSSIE-Org/SocialShareButton/graphs/contributors)
+
+© 2025 AOSSIE
