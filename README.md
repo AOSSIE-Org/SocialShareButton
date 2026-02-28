@@ -12,9 +12,9 @@
 <!-- Organization Name -->
 <div align="center">
 
-[![Static Badge](https://img.shields.io/badge/AOSSIE-Social_Share_Button-228B22?style=for-the-badge&labelColor=FFC517)](https://TODO.aossie/)
+[![Static Badge](https://img.shields.io/badge/AOSSIE-Social_Share_Button-228B22?style=for-the-badge&labelColor=FFC517)](https://aossie-org.github.io/SocialShareButton/)
 
-<!-- Correct deployed url to be added -->
+[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Click_Here-blue?style=for-the-badge)](https://aossie-org.github.io/SocialShareButton/)
 
 </div>
 
@@ -655,8 +655,11 @@ new SocialShareButton({
 
 ## Demo
 
-Open `index.html` in your browser to see all features.
-Tutorial: https://youtu.be/cLJaT-8rEvQ?si=CLipA0Db4WL0EqKM
+🚀 **[Live Demo](https://aossie-org.github.io/SocialShareButton/)** - Try it now without cloning!
+
+Or open `index.html` locally in your browser to see all features.
+
+📺 Tutorial: https://youtu.be/cLJaT-8rEvQ?si=CLipA0Db4WL0EqKM
 
 ---
 
