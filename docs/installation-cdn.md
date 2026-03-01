@@ -1,6 +1,6 @@
 # Installation via CDN
 
-### Via CDN (Recommended)
+## Via CDN (Recommended)
 
 ```html
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css">

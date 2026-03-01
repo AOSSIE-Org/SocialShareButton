@@ -1,6 +1,6 @@
 # Next.js (Pages Router)
 
-### Step 1: Add CDN to `pages/_document.tsx`
+## Step 1: Add CDN to `pages/_document.tsx`
 
 ```tsx
 import { Html, Head, Main, NextScript } from 'next/document';
@@ -24,7 +24,7 @@ export default function Document() {
 }
 ```
 
-### Step 2: In your component:
+## Step 2: In your component:
 
 ```tsx
 import { useEffect } from 'react';

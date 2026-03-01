@@ -1,6 +1,6 @@
 # React (Create React App)
 
-### Step 1: Add CDN to `public/index.html`
+## Step 1: Add CDN to `public/index.html`
 
 ```html
 <head>
@@ -12,7 +12,7 @@
 </body>
 ```
 
-### Step 2: In your component:
+## Step 2: In your component:
 
 ```jsx
 import { useEffect } from 'react';

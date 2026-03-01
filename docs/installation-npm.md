@@ -1,6 +1,6 @@
 # Installation via npm
 
-### Using npm Package
+## Using npm Package
 
 ```javascript
 import SocialShareButton from 'social-share-button-aossie';

@@ -1,6 +1,6 @@
 # Vue / Angular / Vite
 
-### Step 1: Add CDN to `index.html`
+## Step 1: Add CDN to `index.html`
 
 ```html
 <head>
@@ -12,7 +12,7 @@
 </body>
 ```
 
-### Step 2: Initialize in component
+## Step 2: Initialize in component
 
 ```javascript
 new window.SocialShareButton({

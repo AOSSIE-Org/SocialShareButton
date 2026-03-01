@@ -1,6 +1,6 @@
 # Next.js (App Router)
 
-### Step 1: Add CDN to `app/layout.tsx`
+## Step 1: Add CDN to `app/layout.tsx`
 
 ```tsx
 import Script from 'next/script';
@@ -26,7 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 }
 ```
 
-### Step 2: In your component:
+## Step 2: In your component:
 
 ```tsx
 'use client';

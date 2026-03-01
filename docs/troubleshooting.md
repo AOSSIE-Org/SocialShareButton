@@ -35,7 +35,7 @@ if (window.SocialShareButton) {
 
 **Cause:** CDN script not loaded yet
 
-**Solution:** Use interval polling (see Next.js example above)
+**Solution:** Use interval polling or check if it's available before initializing (see your framework guide)
 
 ---
 
@@ -43,4 +43,4 @@ if (window.SocialShareButton) {
 
 **Cause:** Component initialized once, doesn't track routes
 
-**Solution:** Use `updateOptions()` method (see Advanced Usage above)
+**Solution:** Use `updateOptions()` method (see [Dynamic URL Updates (SPA)](./spa-dynamic-url.md))
