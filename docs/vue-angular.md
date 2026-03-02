@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css">
 </head>
 <body>
-  <div id="app"></div>
+  <div id="share-button"></div>
   <script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js"></script>
 </body>
 ```

@@ -103,13 +103,41 @@ Add this HTML element:
 
 ---
 
-## Full Documentation
+## 📚 Documentation & Getting Started
 
-For framework-specific guides, configuration options, customization, and troubleshooting, visit the complete documentation in the [`/docs` directory](./docs/index.md).
+Choose your framework and start sharing in minutes — no dependencies, no setup friction.
+
+**Start here if you're new to SocialShareButton:**
+
+### Installation Guides
+- [CDN Setup](./docs/installation-cdn.md) - Fastest way to get started
+- [npm Package](./docs/installation-npm.md) - For build-based workflows
+
+### Framework Guides
+- [Vanilla JavaScript](./docs/vanilla-js.md) – Zero-build, script-tag usage
+- [React](./docs/react.md) – Create React App & React projects
+- [Next.js (App Router)](./docs/nextjs-app-router.md) – Recommended for new Next.js apps
+- [Next.js (Pages Router)](./docs/nextjs-pages-router.md) – Legacy Next.js support
+- [Vue / Angular / Vite](./docs/vue-angular.md) – Framework-agnostic setup
+
+### Customize & Configure
+- [Configuration Options](./docs/customization.md) - Colors, styles, button variants, and messaging
+- [Callbacks](./docs/callbacks.md) - Track share events in your app
+- [Dynamic URLs (SPA)](./docs/spa-dynamic-url.md) - Update share URL on route changes
+
+### Help & Support
+- [Troubleshooting](./docs/troubleshooting.md) - Common issues and solutions
+- [View all docs](./docs/index.md) - Complete documentation index
 
 ---
 
-## Contributing
+## 🎬 Demo
+
+See SocialShareButton in action! Open `index.html` in your browser to explore all features.
+
+📺 **Video Tutorial:** [Watch on YouTube](https://youtu.be/cLJaT-8rEvQ?si=CLipA0Db4WL0EqKM)
+
+---
 
 We welcome contributions of all kinds! To contribute:
 
