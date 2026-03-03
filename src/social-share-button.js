@@ -31,17 +31,6 @@ class SocialShareButton {
     this.button = null;
     this.customColorMouseEnterHandler = null;
     this.customColorMouseLeaveHandler = null;
-this.ownsButton = false;
-// Store bound handlers for proper cleanup (fix memory leak)
-this.handleButtonClick = null;
-this.handleOverlayClick = null;
-this.handleCloseClick = null;
-this.handleCopyClick = null;
-this.handleInputClick = null;
-this.handleKeydown = null;
-this.platformBtnHandlers = [];
-this.isCopying = false; // ADD THIS LINE (important)
-this.eventsAttached = false; // Prevent duplicate listener attachment
 
     if (this.options.container) {
       this.init();
@@ -67,27 +56,16 @@ this.eventsAttached = false; // Prevent duplicate listener attachment
       </svg>
       <span>${this.options.buttonText}</span>
     `;
+
     this.button = button;
     if (this.options.container) {
       const container = typeof this.options.container === 'string' 
         ? document.querySelector(this.options.container)
         : this.options.container;
       
-    if (container) {
-  // Check if button already exists in DOM
-  const existingBtn = container.querySelector('.social-share-btn');
-
-  if (existingBtn) {
-  // Reuse existing button but DO NOT own it
-  this.button = existingBtn;
-  this.ownsButton = false;
-} else {
-  // Create and own the new button
-  container.appendChild(button);
-  this.button = button;
-  this.ownsButton = true;
-}
-}
+      if (container) {
+        container.appendChild(button);
+      }
     }
   }
 
@@ -105,10 +83,10 @@ this.eventsAttached = false; // Prevent duplicate listener attachment
           ${this.getPlatformsHTML()}
         </div>
         <div class="social-share-link-container">
-  <div class="social-share-link-input"></div>
-  <button class="social-share-copy-btn" aria-label="Copy link to clipboard">Copy</button>
-  <span class="social-share-copy-status" aria-live="polite" style="position:absolute;left:-9999px;"></span>
-</div>
+          <div class="social-share-link-input">
+          </div>
+          <button class="social-share-copy-btn">Copy</button>
+        </div>
       </div>
     `;
 
@@ -227,57 +205,46 @@ this.eventsAttached = false; // Prevent duplicate listener attachment
     return urls[platform] || '';
   }
 
-attachEvents() {
-  if (this.eventsAttached) return; // Prevent duplicate listeners
-  this.eventsAttached = true;
-  if (this.button) {
-    this.handleButtonClick = () => this.openModal();
-    this.button.addEventListener('click', this.handleButtonClick);
+  attachEvents() {
+    if (this.button) {
+      this.button.addEventListener('click', () => this.openModal());
+    }
+
+    // Modal overlay click to close
+    this.modal.addEventListener('click', (e) => {
+      if (e.target === this.modal) {
+        this.closeModal();
+      }
+    });
+
+    // Close button
+    const closeBtn = this.modal.querySelector('.social-share-modal-close');
+    closeBtn.addEventListener('click', () => this.closeModal());
+
+    // Platform buttons
+    const platformBtns = this.modal.querySelectorAll('.social-share-platform-btn');
+    platformBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const platform = btn.dataset.platform;
+        this.share(platform);
+      });
+    });
+
+    // Copy button
+    const copyBtn = this.modal.querySelector('.social-share-copy-btn');
+    copyBtn.addEventListener('click', () => this.copyLink());
+
+    // Input click to select
+    const input = this.modal.querySelector('.social-share-link-input input');
+    input.addEventListener('click', (e) => e.target.select());
+
+    // ESC key to close
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && this.isModalOpen) {
+        this.closeModal();
+      }
+    });
   }
-
-  // Modal overlay click to close
-  this.handleOverlayClick = (e) => {
-    if (e.target === this.modal) {
-      this.closeModal();
-    }
-  };
-  this.modal.addEventListener('click', this.handleOverlayClick);
-
-  // Close button
-  const closeBtn = this.modal.querySelector('.social-share-modal-close');
-  this.handleCloseClick = () => this.closeModal();
-  closeBtn.addEventListener('click', this.handleCloseClick);
-
-  // Platform buttons
-  const platformBtns = this.modal.querySelectorAll('.social-share-platform-btn');
-  this.platformBtnHandlers = [];
-  platformBtns.forEach(btn => {
-    const handler = () => {
-      const platform = btn.dataset.platform;
-      this.share(platform);
-    };
-    btn.addEventListener('click', handler);
-    this.platformBtnHandlers.push({ btn, handler });
-  });
-
-  // Copy button
-  const copyBtn = this.modal.querySelector('.social-share-copy-btn');
-  this.handleCopyClick = () => this.copyLink();
-  copyBtn.addEventListener('click', this.handleCopyClick);
-
-  // Input click to select
-  const input = this.modal.querySelector('.social-share-link-input input');
-  this.handleInputClick = (e) => e.target.select();
-  input.addEventListener('click', this.handleInputClick);
-
-  // ESC key to close (GLOBAL listener — major leak if not removed)
-  this.handleKeydown = (e) => {
-    if (e.key === 'Escape' && this.isModalOpen) {
-      this.closeModal();
-    }
-  };
-  document.addEventListener('keydown', this.handleKeydown);
-}
 
   openModal() {
     this.isModalOpen = true;
@@ -316,138 +283,79 @@ attachEvents() {
     }
   }
 
-copyLink() {
-  if (this.isCopying) return; // Prevent rapid-click race condition
-  this.isCopying = true;
+  copyLink() {
+    const input = this.modal.querySelector('.social-share-link-input input');
+    const copyBtn = this.modal.querySelector('.social-share-copy-btn');
+    
+    // Check if clipboard API is available
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(this.options.url).then(() => {
+        copyBtn.textContent = 'Copied!';
+        copyBtn.classList.add('copied');
+        
+        if (this.options.onCopy) {
+          this.options.onCopy(this.options.url);
+        }
+        
+        setTimeout(() => {
+          copyBtn.textContent = 'Copy';
+          copyBtn.classList.remove('copied');
+        }, 2000);
+      }).catch((err) => {
+        console.error('Failed to copy:', err);
+        // Fallback to manual selection
+        this.fallbackCopy(input, copyBtn);
+      });
+    } else {
+      // Fallback for browsers without clipboard API
+      this.fallbackCopy(input, copyBtn);
+    }
+  }
 
-  const input = this.modal.querySelector('.social-share-link-input input');
-  const copyBtn = this.modal.querySelector('.social-share-copy-btn');
-  const status = this.modal.querySelector('.social-share-copy-status');
-
-  const showResult = (success) => {
-    if (success) {
+  fallbackCopy(input, copyBtn) {
+    try {
+      input.select();
+      input.setSelectionRange(0, 99999); // For mobile devices
+      document.execCommand('copy');
+      
       copyBtn.textContent = 'Copied!';
       copyBtn.classList.add('copied');
-      if (status) status.textContent = 'Link copied to clipboard';
       
       if (this.options.onCopy) {
         this.options.onCopy(this.options.url);
       }
-    } else {
+      
+      setTimeout(() => {
+        copyBtn.textContent = 'Copy';
+        copyBtn.classList.remove('copied');
+      }, 2000);
+    } catch (err) {
+      console.error('Fallback copy failed:', err);
       copyBtn.textContent = 'Failed';
-      if (status) status.textContent = 'Copy failed';
+      setTimeout(() => {
+        copyBtn.textContent = 'Copy';
+      }, 2000);
+    }
+  }
+
+  destroy() {
+    if (this.button && this.customColorMouseEnterHandler) {
+      this.button.removeEventListener('mouseenter', this.customColorMouseEnterHandler);
+      this.customColorMouseEnterHandler = null;
+    }
+    if (this.button && this.customColorMouseLeaveHandler) {
+      this.button.removeEventListener('mouseleave', this.customColorMouseLeaveHandler);
+      this.customColorMouseLeaveHandler = null;
     }
 
-    setTimeout(() => {
-      copyBtn.textContent = 'Copy';
-      copyBtn.classList.remove('copied');
-      if (status) status.textContent = '';
-      this.isCopying = false; // Unlock after animation
-    }, 2000);
-  };
-
-  // Proper secure context + clipboard check
-  if (navigator.clipboard && window.isSecureContext) {
-    navigator.clipboard.writeText(this.options.url)
-      .then(() => showResult(true))
-      .catch(() => {
-        const fallbackSuccess = this.fallbackCopy(input);
-        showResult(fallbackSuccess);
-      });
-  } else {
-    // Fallback for file:// or insecure context
-    const fallbackSuccess = this.fallbackCopy(input);
-    showResult(fallbackSuccess);
+    if (this.button && this.button.parentNode) {
+      this.button.parentNode.removeChild(this.button);
+    }
+    if (this.modal && this.modal.parentNode) {
+      this.modal.parentNode.removeChild(this.modal);
+    }
+    document.body.style.overflow = '';
   }
-}
-
-fallbackCopy(input) {
-  try {
-    input.select();
-    input.setSelectionRange(0, 99999); // Mobile support
-    const successful = document.execCommand('copy');
-    return successful;
-  } catch (err) {
-    console.error('Fallback copy failed:', err);
-    return false;
-  }
-}
-
-destroy() {
-  // Remove button click listener
-  if (this.button && this.handleButtonClick) {
-    this.button.removeEventListener('click', this.handleButtonClick);
-    this.handleButtonClick = null;
-  }
-
-  // Remove modal overlay listener
-  if (this.modal && this.handleOverlayClick) {
-    this.modal.removeEventListener('click', this.handleOverlayClick);
-    this.handleOverlayClick = null;
-  }
-
-  // Remove close button listener
-  const closeBtn = this.modal?.querySelector('.social-share-modal-close');
-  if (closeBtn && this.handleCloseClick) {
-    closeBtn.removeEventListener('click', this.handleCloseClick);
-    this.handleCloseClick = null;
-  }
-
-  // Remove platform button listeners
-  if (this.platformBtnHandlers.length) {
-    this.platformBtnHandlers.forEach(({ btn, handler }) => {
-      btn.removeEventListener('click', handler);
-    });
-    this.platformBtnHandlers = [];
-  }
-
-  // Remove copy button listener
-  const copyBtn = this.modal?.querySelector('.social-share-copy-btn');
-  if (copyBtn && this.handleCopyClick) {
-    copyBtn.removeEventListener('click', this.handleCopyClick);
-    this.handleCopyClick = null;
-  }
-
-  // Remove input listener
-  const input = this.modal?.querySelector('.social-share-link-input input');
-  if (input && this.handleInputClick) {
-    input.removeEventListener('click', this.handleInputClick);
-    this.handleInputClick = null;
-  }
-
-  // 🚨 MOST IMPORTANT: Remove global keydown listener (Coderabbit's main complaint)
-  if (this.handleKeydown) {
-    document.removeEventListener('keydown', this.handleKeydown);
-    this.handleKeydown = null;
-  }
-
-  // Remove hover color handlers
-  if (this.button && this.customColorMouseEnterHandler) {
-    this.button.removeEventListener('mouseenter', this.customColorMouseEnterHandler);
-    this.customColorMouseEnterHandler = null;
-  }
-
-  if (this.button && this.customColorMouseLeaveHandler) {
-    this.button.removeEventListener('mouseleave', this.customColorMouseLeaveHandler);
-    this.customColorMouseLeaveHandler = null;
-  }
-
-  // Reset state
-  this.isCopying = false;
-
-  // Only remove button if owned
-  if (this.ownsButton && this.button && this.button.parentNode) {
-    this.button.parentNode.removeChild(this.button);
-  }
-
-  // Remove modal
-  if (this.modal && this.modal.parentNode) {
-    this.modal.parentNode.removeChild(this.modal);
-  }
-
-  document.body.style.overflow = '';
-  this.eventsAttached = false; // Allow safe re-initialization
-}
 
   updateOptions(options) {
     this.options = { ...this.options, ...options };

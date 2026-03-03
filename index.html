@@ -575,7 +575,7 @@ const copyButtons = document.querySelectorAll('.copy-btn');
 
 copyButtons.forEach((button) => {
   button.addEventListener('click', () => {
-    const codeBlock = button.closest('.code-container')?.querySelector('code');
+    const codeBlock = button.closest('.code-block')?.querySelector('code');
 const text = codeBlock ? codeBlock.innerText : '';
 
     navigator.clipboard.writeText(text).then(() => {
@@ -587,9 +587,15 @@ const text = codeBlock ? codeBlock.innerText : '';
         button.textContent = originalText;
         button.style.background = '#667eea';
       }, 2000);
-    }).catch(err => {
-      console.error('Failed to copy:', err);
-    });
+    }).catch(() => {
+  button.textContent = 'Failed';
+  button.style.background = '#ef4444';
+
+  setTimeout(() => {
+    button.textContent = 'Copy';
+    button.style.background = '#667eea';
+  }, 2000);
+});
   });
 });
     });
