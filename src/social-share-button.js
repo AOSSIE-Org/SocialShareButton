@@ -27,14 +27,26 @@ class SocialShareButton {
     };
 
     this.isModalOpen = false;
-    this.modal = null;
-    this.button = null;
-    this.customColorMouseEnterHandler = null;
-    this.customColorMouseLeaveHandler = null;
+this.modal = null;
+this.button = null;
+this.customColorMouseEnterHandler = null;
+this.customColorMouseLeaveHandler = null;
 
-    if (this.options.container) {
-      this.init();
-    }
+this.ownsButton = false;
+this.handleButtonClick = null;
+this.handleOverlayClick = null;
+this.handleCloseClick = null;
+this.handleCopyClick = null;
+this.handleInputClick = null;
+this.handleKeydown = null;
+this.platformBtnHandlers = [];
+this.isCopying = false;
+this.eventsAttached = false;
+this.isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined';
+
+    if (this.isBrowser && this.options.container) {
+  this.init();
+}
   }
 
   init() {
@@ -58,6 +70,7 @@ class SocialShareButton {
     `;
 
     this.button = button;
+    this.ownsButton = true;
     if (this.options.container) {
       const container = typeof this.options.container === 'string' 
         ? document.querySelector(this.options.container)
@@ -206,45 +219,51 @@ class SocialShareButton {
   }
 
   attachEvents() {
-    if (this.button) {
-      this.button.addEventListener('click', () => this.openModal());
-    }
+  if (this.eventsAttached) return;
+  this.eventsAttached = true;
 
-    // Modal overlay click to close
-    this.modal.addEventListener('click', (e) => {
-      if (e.target === this.modal) {
-        this.closeModal();
-      }
-    });
-
-    // Close button
-    const closeBtn = this.modal.querySelector('.social-share-modal-close');
-    closeBtn.addEventListener('click', () => this.closeModal());
-
-    // Platform buttons
-    const platformBtns = this.modal.querySelectorAll('.social-share-platform-btn');
-    platformBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const platform = btn.dataset.platform;
-        this.share(platform);
-      });
-    });
-
-    // Copy button
-    const copyBtn = this.modal.querySelector('.social-share-copy-btn');
-    copyBtn.addEventListener('click', () => this.copyLink());
-
-    // Input click to select
-    const input = this.modal.querySelector('.social-share-link-input input');
-    input.addEventListener('click', (e) => e.target.select());
-
-    // ESC key to close
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && this.isModalOpen) {
-        this.closeModal();
-      }
-    });
+  if (this.button) {
+    this.handleButtonClick = () => this.openModal();
+    this.button.addEventListener('click', this.handleButtonClick);
   }
+
+  this.handleOverlayClick = (e) => {
+    if (e.target === this.modal) {
+      this.closeModal();
+    }
+  };
+  this.modal.addEventListener('click', this.handleOverlayClick);
+
+  const closeBtn = this.modal.querySelector('.social-share-modal-close');
+  this.handleCloseClick = () => this.closeModal();
+  closeBtn.addEventListener('click', this.handleCloseClick);
+
+  const platformBtns = this.modal.querySelectorAll('.social-share-platform-btn');
+  this.platformBtnHandlers = [];
+  platformBtns.forEach(btn => {
+    const handler = () => {
+      const platform = btn.dataset.platform;
+      this.share(platform);
+    };
+    btn.addEventListener('click', handler);
+    this.platformBtnHandlers.push({ btn, handler });
+  });
+
+  const copyBtn = this.modal.querySelector('.social-share-copy-btn');
+  this.handleCopyClick = () => this.copyLink();
+  copyBtn.addEventListener('click', this.handleCopyClick);
+
+  const input = this.modal.querySelector('.social-share-link-input input');
+  this.handleInputClick = (e) => e.target.select();
+  input.addEventListener('click', this.handleInputClick);
+
+  this.handleKeydown = (e) => {
+    if (e.key === 'Escape' && this.isModalOpen) {
+      this.closeModal();
+    }
+  };
+  document.addEventListener('keydown', this.handleKeydown);
+}
 
   openModal() {
     this.isModalOpen = true;
@@ -284,78 +303,109 @@ class SocialShareButton {
   }
 
   copyLink() {
-    const input = this.modal.querySelector('.social-share-link-input input');
-    const copyBtn = this.modal.querySelector('.social-share-copy-btn');
-    
-    // Check if clipboard API is available
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(this.options.url).then(() => {
-        copyBtn.textContent = 'Copied!';
-        copyBtn.classList.add('copied');
-        
-        if (this.options.onCopy) {
-          this.options.onCopy(this.options.url);
-        }
-        
-        setTimeout(() => {
-          copyBtn.textContent = 'Copy';
-          copyBtn.classList.remove('copied');
-        }, 2000);
-      }).catch((err) => {
-        console.error('Failed to copy:', err);
-        // Fallback to manual selection
-        this.fallbackCopy(input, copyBtn);
-      });
-    } else {
-      // Fallback for browsers without clipboard API
-      this.fallbackCopy(input, copyBtn);
-    }
-  }
+  if (this.isCopying) return;
+  this.isCopying = true;
 
-  fallbackCopy(input, copyBtn) {
-    try {
-      input.select();
-      input.setSelectionRange(0, 99999); // For mobile devices
-      document.execCommand('copy');
-      
-      copyBtn.textContent = 'Copied!';
-      copyBtn.classList.add('copied');
-      
-      if (this.options.onCopy) {
-        this.options.onCopy(this.options.url);
-      }
-      
-      setTimeout(() => {
-        copyBtn.textContent = 'Copy';
-        copyBtn.classList.remove('copied');
-      }, 2000);
-    } catch (err) {
-      console.error('Fallback copy failed:', err);
-      copyBtn.textContent = 'Failed';
-      setTimeout(() => {
-        copyBtn.textContent = 'Copy';
-      }, 2000);
-    }
-  }
+  const input = this.modal.querySelector('.social-share-link-input input');
+  const copyBtn = this.modal.querySelector('.social-share-copy-btn');
 
-  destroy() {
-    if (this.button && this.customColorMouseEnterHandler) {
-      this.button.removeEventListener('mouseenter', this.customColorMouseEnterHandler);
-      this.customColorMouseEnterHandler = null;
-    }
-    if (this.button && this.customColorMouseLeaveHandler) {
-      this.button.removeEventListener('mouseleave', this.customColorMouseLeaveHandler);
-      this.customColorMouseLeaveHandler = null;
+  const reset = (success) => {
+    copyBtn.textContent = success ? 'Copied!' : 'Failed';
+    if (success) copyBtn.classList.add('copied');
+
+    if (success && this.options.onCopy) {
+      this.options.onCopy(this.options.url);
     }
 
-    if (this.button && this.button.parentNode) {
-      this.button.parentNode.removeChild(this.button);
-    }
-    if (this.modal && this.modal.parentNode) {
-      this.modal.parentNode.removeChild(this.modal);
-    }
-    document.body.style.overflow = '';
+    setTimeout(() => {
+      copyBtn.textContent = 'Copy';
+      copyBtn.classList.remove('copied');
+      this.isCopying = false;
+    }, 2000);
+  };
+
+  if (
+  typeof window !== 'undefined' &&
+  typeof navigator !== 'undefined' &&
+  navigator.clipboard &&
+  window.isSecureContext
+) {
+  navigator.clipboard.writeText(this.options.url)
+    .then(() => reset(true))
+    .catch(() => {
+      const success = this.fallbackCopy(input);
+      reset(success);
+    });
+} else {
+  const success = this.fallbackCopy(input);
+  reset(success);
+}
+}
+
+  fallbackCopy(input) {
+  if (typeof document === 'undefined') return false;
+
+  try {
+    input.select();
+    input.setSelectionRange(0, 99999);
+    return document.execCommand('copy');
+  } catch {
+    return false;
   }
+}
+
+destroy() {
+  if (this.button && this.handleButtonClick) {
+    this.button.removeEventListener('click', this.handleButtonClick);
+  }
+
+  if (this.modal && this.handleOverlayClick) {
+    this.modal.removeEventListener('click', this.handleOverlayClick);
+  }
+
+  const closeBtn = this.modal?.querySelector('.social-share-modal-close');
+  if (closeBtn && this.handleCloseClick) {
+    closeBtn.removeEventListener('click', this.handleCloseClick);
+  }
+
+  this.platformBtnHandlers.forEach(({ btn, handler }) => {
+    btn.removeEventListener('click', handler);
+  });
+
+  const copyBtn = this.modal?.querySelector('.social-share-copy-btn');
+  if (copyBtn && this.handleCopyClick) {
+    copyBtn.removeEventListener('click', this.handleCopyClick);
+  }
+
+  const input = this.modal?.querySelector('.social-share-link-input input');
+  if (input && this.handleInputClick) {
+    input.removeEventListener('click', this.handleInputClick);
+  }
+
+  if (this.handleKeydown) {
+    document.removeEventListener('keydown', this.handleKeydown);
+  }
+
+  if (this.button && this.customColorMouseEnterHandler) {
+    this.button.removeEventListener('mouseenter', this.customColorMouseEnterHandler);
+  }
+
+  if (this.button && this.customColorMouseLeaveHandler) {
+    this.button.removeEventListener('mouseleave', this.customColorMouseLeaveHandler);
+  }
+
+  if (this.ownsButton && this.button?.parentNode) {
+    this.button.parentNode.removeChild(this.button);
+  }
+
+  if (this.modal?.parentNode) {
+    this.modal.parentNode.removeChild(this.modal);
+  }
+
+  document.body.style.overflow = '';
+  this.eventsAttached = false;
+  this.isCopying = false;
+}
 
   updateOptions(options) {
     this.options = { ...this.options, ...options };
