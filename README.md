@@ -58,6 +58,10 @@ Lightweight social sharing component for web applications. Zero dependencies, fr
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 
 ---
+## Live Demo
+
+👉 https://darshancodes09.github.io/SocialShareButton/
+
 ## Features
 
 - 🌐 Multiple platforms: WhatsApp, Facebook, X, LinkedIn, Telegram, Reddit, Email
