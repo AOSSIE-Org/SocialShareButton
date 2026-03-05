@@ -405,6 +405,101 @@ function App() {
       </div>
     </div>
 
+    <div class="demo-section">
+  <h2>⚛️ Create React App</h2>
+  <p>Integration with Create React App</p>
+
+  <div class="code-block">
+    <button class="copy-btn">Copy</button>
+    <span class="copy-status" aria-live="polite" style="position:absolute; left:-9999px;"></span>
+    <code>npm install social-share-button</code>
+  </div>
+
+  <div class="code-block">
+    <button class="copy-btn">Copy</button>
+    <span class="copy-status" aria-live="polite" style="position:absolute; left:-9999px;"></span>
+    <code>
+import SocialShareButton from 'social-share-button';
+
+function App() {
+  return (
+    &lt;SocialShareButton
+      url="https://your-website.com"
+      title="Check this out!"
+    /&gt;
+  );
+}
+
+export default App;
+    </code>
+  </div>
+</div>
+
+<div class="demo-section">
+  <h2>▲ Next.js (App Router)</h2>
+  <p>Integration using the Next.js App Router</p>
+
+  <div class="code-block">
+    <button class="copy-btn">Copy</button>
+    <span class="copy-status" aria-live="polite" style="position:absolute; left:-9999px;"></span>
+    <code>
+"use client";
+
+import SocialShareButton from 'social-share-button';
+
+export default function Page() {
+  return (
+    &lt;SocialShareButton
+      url="https://your-website.com"
+      title="Check this out!"
+    /&gt;
+  );
+}
+    </code>
+  </div>
+</div>
+
+<div class="demo-section">
+  <h2>▲ Next.js (Pages Router)</h2>
+  <p>Integration using the traditional pages router</p>
+
+  <div class="code-block">
+    <button class="copy-btn">Copy</button>
+    <span class="copy-status" aria-live="polite" style="position:absolute; left:-9999px;"></span>
+    <code>
+import SocialShareButton from 'social-share-button';
+
+export default function Home() {
+  return (
+    &lt;SocialShareButton
+      url="https://your-website.com"
+      title="Check this out!"
+    /&gt;
+  );
+}
+    </code>
+  </div>
+</div>
+
+<div class="demo-section">
+  <h2>⚡ Vite / Vue / Angular</h2>
+  <p>Framework-agnostic usage with vanilla JavaScript</p>
+
+  <div class="code-block">
+    <button class="copy-btn">Copy</button>
+    <span class="copy-status" aria-live="polite" style="position:absolute; left:-9999px;"></span>
+    <code>
+import SocialShareButton from 'social-share-button';
+
+new SocialShareButton({
+  container: '#share-button',
+  url: 'https://your-website.com',
+  title: 'Check this out!'
+});
+    </code>
+  </div>
+</div>
+
     <!-- CTA Section -->
     <div class="cta-section">
       <h2 style="color: #fff; margin-bottom: 20px;">Ready to Get Started?</h2>

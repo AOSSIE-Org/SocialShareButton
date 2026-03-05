@@ -76,9 +76,9 @@ this.isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined
         ? document.querySelector(this.options.container)
         : this.options.container;
       
-      if (container) {
-        container.appendChild(button);
-      }
+      if (container && !container.querySelector('.social-share-btn')) {
+  container.appendChild(button);
+}
     }
   }
 
