@@ -73,7 +73,7 @@ Lightweight social sharing component for web applications. Zero dependencies, fr
 
 - 🌐 Multiple platforms: WhatsApp, Facebook, X, LinkedIn, Telegram, Reddit, Email
 - 🎯 Zero dependencies - pure vanilla JavaScript
-- ⚛️ Framework support: React, Next.js, Vue, Angular, or plain HTML
+- ⚛️ Framework support: React, Next.js, Vue, Angular, Astro, or plain HTML
 - 🔄 Auto-detects current URL and page title
 - 📱 Fully responsive and mobile-ready
 - 🎨 Customizable themes (dark/light)
@@ -86,7 +86,10 @@ Lightweight social sharing component for web applications. Zero dependencies, fr
 ### Via CDN (Recommended)
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css">
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css"
+/>
 <script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js"></script>
 ```
 
@@ -368,6 +371,58 @@ new window.SocialShareButton({
   container: "#share-button",
 });
 ```
+
+</details>
+
+<details>
+<summary><b>🚀 Astro</b></summary>
+
+### Step 1: Add CDN to your layout (e.g., `src/layouts/Layout.astro`)
+
+```astro
+---
+// src/layouts/Layout.astro
+---
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css">
+    <slot name="head" />
+  </head>
+  <body>
+    <slot />
+    <script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js" is:inline></script>
+  </body>
+</html>
+```
+
+> **Note:** The `is:inline` directive tells Astro to leave the script tag as-is in the HTML output instead of bundling it, which is required for CDN scripts.
+
+### Step 2: In your **existing** Astro page or component (e.g., `src/pages/index.astro`):
+
+```astro
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout>
+  <header>
+    <div id="share-button"></div>
+  </header>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.SocialShareButton) {
+        new window.SocialShareButton({
+          container: '#share-button'
+        });
+      }
+    });
+  </script>
+</Layout>
+```
+
+> **Tip:** Astro pages are server-rendered as static HTML by default, so the CDN-loaded script works seamlessly without any framework adapters.
 
 </details>
 
