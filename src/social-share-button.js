@@ -42,6 +42,7 @@ class SocialShareButton {
     this.button = null;
     this.customColorMouseEnterHandler = null;
     this.customColorMouseLeaveHandler = null;
+    this._listeners = []; // Central registry for all event listeners
 
     if (this.options.container) {
       this.init();
@@ -222,47 +223,80 @@ class SocialShareButton {
     return urls[platform] || "";
   }
 
+  /**
+   * Helper method to add an event listener and track it for cleanup
+   * @param {Element|Document|Window} element - The element to attach the listener to
+   * @param {string} type - The event type
+   * @param {Function} handler - The event handler function
+   * @param {Object|boolean} options - Optional event listener options
+   */
+  _addEventListener(element, type, handler, options = false) {
+    if (!element) return;
+    element.addEventListener(type, handler, options);
+    this._listeners.push({ element, type, handler, options });
+  }
+
+  /**
+   * Remove all tracked event listeners
+   */
+  _removeAllListeners() {
+    this._listeners.forEach(({ element, type, handler, options }) => {
+      if (element) {
+        element.removeEventListener(type, handler, options);
+      }
+    });
+    this._listeners = [];
+  }
+
   attachEvents() {
+    // Button click to open modal
     if (this.button) {
-      this.button.addEventListener("click", () => this.openModal());
+      const openModalHandler = () => this.openModal();
+      this._addEventListener(this.button, "click", openModalHandler);
     }
 
     // Modal overlay click to close
-    this.modal.addEventListener("click", (e) => {
+    const modalClickHandler = (e) => {
       if (e.target === this.modal) {
         this.closeModal();
       }
-    });
+    };
+    this._addEventListener(this.modal, "click", modalClickHandler);
 
     // Close button
     const closeBtn = this.modal.querySelector(".social-share-modal-close");
-    closeBtn.addEventListener("click", () => this.closeModal());
+    const closeBtnHandler = () => this.closeModal();
+    this._addEventListener(closeBtn, "click", closeBtnHandler);
 
     // Platform buttons
     const platformBtns = this.modal.querySelectorAll(
       ".social-share-platform-btn",
     );
     platformBtns.forEach((btn) => {
-      btn.addEventListener("click", () => {
+      const platformHandler = () => {
         const platform = btn.dataset.platform;
         this.share(platform);
-      });
+      };
+      this._addEventListener(btn, "click", platformHandler);
     });
 
     // Copy button
     const copyBtn = this.modal.querySelector(".social-share-copy-btn");
-    copyBtn.addEventListener("click", () => this.copyLink());
+    const copyBtnHandler = () => this.copyLink();
+    this._addEventListener(copyBtn, "click", copyBtnHandler);
 
     // Input click to select
     const input = this.modal.querySelector(".social-share-link-input input");
-    input.addEventListener("click", (e) => e.target.select());
+    const inputSelectHandler = (e) => e.target.select();
+    this._addEventListener(input, "click", inputSelectHandler);
 
-    // ESC key to close
-    document.addEventListener("keydown", (e) => {
+    // ESC key to close (document-level listener - critical for memory leak prevention)
+    const escapeHandler = (e) => {
       if (e.key === "Escape" && this.isModalOpen) {
         this.closeModal();
       }
-    });
+    };
+    this._addEventListener(document, "keydown", escapeHandler);
   }
 
   openModal() {
@@ -365,6 +399,10 @@ class SocialShareButton {
   }
 
   destroy() {
+    // Remove all tracked event listeners (prevents memory leaks)
+    this._removeAllListeners();
+
+    // Remove custom color handlers
     if (this.button && this.customColorMouseEnterHandler) {
       this.button.removeEventListener(
         "mouseenter",
@@ -380,13 +418,21 @@ class SocialShareButton {
       this.customColorMouseLeaveHandler = null;
     }
 
+    // Remove DOM elements
     if (this.button && this.button.parentNode) {
       this.button.parentNode.removeChild(this.button);
     }
     if (this.modal && this.modal.parentNode) {
       this.modal.parentNode.removeChild(this.modal);
     }
+
+    // Restore body overflow
     document.body.style.overflow = "";
+
+    // Clear references (makes destroy idempotent)
+    this.button = null;
+    this.modal = null;
+    this.isModalOpen = false;
   }
 
   updateOptions(options) {
@@ -465,6 +511,8 @@ class SocialShareButton {
       }
     };
 
+    // Note: Custom color handlers are managed separately (not in _listeners)
+    // because they need to be removed/reapplied when colors change
     this.button.addEventListener(
       "mouseenter",
       this.customColorMouseEnterHandler,
