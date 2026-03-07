@@ -212,6 +212,22 @@
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
     }
 
+    .cta-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.discord-btn {
+  background: #5865F2;
+  color: #fff;
+}
+
+.discord-btn:hover {
+  background: #4752c4;
+}
+
     footer {
       text-align: center;
       color: rgba(255, 255, 255, 0.8);
@@ -405,8 +421,7 @@ new SocialShareButton({
       <div class="code-block">
   <button class="copy-btn" aria-label="Copy code">Copy</button>
   <span class="copy-status" aria-live="polite" style="position:absolute; left:-9999px;"></span>
-  <code>
-<code>import SocialShareButton from 'social-share-button';
+  <code>import SocialShareButton from 'social-share-button';</code>
 
 function App() {
   return (
@@ -422,13 +437,123 @@ function App() {
       </div>
     </div>
 
+    <div class="demo-section">
+  <h2>⚛️ Create React App</h2>
+  <p>Integration with Create React App</p>
+
+  <div class="code-block">
+    <button class="copy-btn">Copy</button>
+    <span class="copy-status" aria-live="polite" style="position:absolute; left:-9999px;"></span>
+    <code>npm install social-share-button</code>
+  </div>
+
+  <div class="code-block">
+    <button class="copy-btn">Copy</button>
+    <span class="copy-status" aria-live="polite" style="position:absolute; left:-9999px;"></span>
+    <code>
+import SocialShareButton from 'social-share-button';
+
+function App() {
+  return (
+    &lt;SocialShareButton
+      url="https://your-website.com"
+      title="Check this out!"
+    /&gt;
+  );
+}
+
+export default App;
+    </code>
+  </div>
+</div>
+
+<div class="demo-section">
+  <h2>▲ Next.js (App Router)</h2>
+  <p>Integration using the Next.js App Router</p>
+
+  <div class="code-block">
+    <button class="copy-btn">Copy</button>
+    <span class="copy-status" aria-live="polite" style="position:absolute; left:-9999px;"></span>
+    <code>
+"use client";
+
+import SocialShareButton from 'social-share-button';
+
+export default function Page() {
+  return (
+    &lt;SocialShareButton
+      url="https://your-website.com"
+      title="Check this out!"
+    /&gt;
+  );
+}
+    </code>
+  </div>
+</div>
+
+<div class="demo-section">
+  <h2>▲ Next.js (Pages Router)</h2>
+  <p>Integration using the traditional pages router</p>
+
+  <div class="code-block">
+    <button class="copy-btn">Copy</button>
+    <span class="copy-status" aria-live="polite" style="position:absolute; left:-9999px;"></span>
+    <code>
+import SocialShareButton from 'social-share-button';
+
+export default function Home() {
+  return (
+    &lt;SocialShareButton
+      url="https://your-website.com"
+      title="Check this out!"
+    /&gt;
+  );
+}
+    </code>
+  </div>
+</div>
+
+<div class="demo-section">
+  <h2>⚡ Vite / Vue / Angular</h2>
+  <p>Framework-agnostic usage with vanilla JavaScript</p>
+
+  <div class="code-block">
+    <button class="copy-btn">Copy</button>
+    <span class="copy-status" aria-live="polite" style="position:absolute; left:-9999px;"></span>
+    <code>
+import SocialShareButton from 'social-share-button';
+
+new SocialShareButton({
+  container: '#share-button',
+  url: 'https://your-website.com',
+  title: 'Check this out!'
+});
+    </code>
+  </div>
+</div>
+
     <!-- CTA Section -->
-    <div class="cta-section">
-      <h2 style="color: #fff; margin-bottom: 20px;">Ready to Get Started?</h2>
-      <a href="https://github.com/AOSSIE-Org/SocialShareButton" class="cta-button" target="_blank" rel="noopener">
-        View on GitHub →
-      </a>
-    </div>
+   <!-- CTA Section -->
+<div class="cta-section">
+  <h2 style="color: #fff; margin-bottom: 20px;">Ready to Get Started?</h2>
+
+  <div class="cta-buttons">
+    <a href="https://github.com/AOSSIE-Org/SocialShareButton" 
+       class="cta-button" 
+       target="_blank" 
+       rel="noopener">
+      View on GitHub →
+    </a>
+
+    <a href="https://discord.gg/prMM922G"
+   class="cta-button discord-btn"
+   target="_blank"
+   rel="noopener noreferrer">
+   Join Discord
+</a>
+  </div>
+
+</div>
 
     <footer>
       <p>Made with ❤️ by the AOSSIE community</p>
