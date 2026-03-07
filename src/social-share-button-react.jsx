@@ -21,6 +21,13 @@ export const SocialShareButton = ({
   onCopy = null,
   buttonStyle = "default",
   modalPosition = "center",
+  // Analytics props — the library itself never collects data.
+  // Provide any combination to connect your own analytics tools.
+  analytics = true,        // set to false to disable all event emission
+  onAnalytics = null,      // (payload) => void — direct callback hook
+  analyticsPlugins = [],   // array of adapter instances (see social-share-analytics.js)
+  componentId = null,      // optional string identifier for this instance
+  debug = false,           // log events to console during development
 }) => {
   const containerRef = useRef(null);
   const shareButtonRef = useRef(null);
@@ -49,6 +56,11 @@ export const SocialShareButton = ({
           onCopy,
           buttonStyle,
           modalPosition,
+          analytics,
+          onAnalytics,
+          analyticsPlugins,
+          componentId,
+          debug,
         });
       }
     }
@@ -78,6 +90,11 @@ export const SocialShareButton = ({
         onCopy,
         buttonStyle,
         modalPosition,
+        analytics,
+        onAnalytics,
+        analyticsPlugins,
+        componentId,
+        debug,
       });
     }
   }, [
@@ -94,6 +111,11 @@ export const SocialShareButton = ({
     onCopy,
     buttonStyle,
     modalPosition,
+    analytics,
+    onAnalytics,
+    analyticsPlugins,
+    componentId,
+    debug,
   ]);
 
   return <div ref={containerRef}></div>;

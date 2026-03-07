@@ -4,6 +4,9 @@
  * @license GPL-3.0
  */
 
+/** Analytics event schema version. Increment when the payload shape changes. */
+const ANALYTICS_SCHEMA_VERSION = "1.0";
+
 class SocialShareButton {
   constructor(options = {}) {
     this.options = {
@@ -35,6 +38,13 @@ class SocialShareButton {
       showButton: options.showButton !== false,
       buttonStyle: options.buttonStyle || "default",
       modalPosition: options.modalPosition || "center",
+      // Analytics — the library emits events but never collects or sends data itself.
+      // Website owners wire up their own analytics tools via these options.
+      analytics: options.analytics !== false, // set to false to disable all event emission
+      onAnalytics: options.onAnalytics || null, // callback: (payload) => void
+      analyticsPlugins: options.analyticsPlugins || [], // array of { track(payload) } adapters
+      componentId: options.componentId || null, // optional identifier for this instance
+      debug: options.debug || false, // log emitted events to console in development
     };
 
     this.isModalOpen = false;
@@ -269,6 +279,7 @@ class SocialShareButton {
     this.isModalOpen = true;
     this.modal.style.display = "flex";
     document.body.style.overflow = "hidden";
+    this._emit("social_share_popup_open", "popup_open");
 
     // Animate in
     setTimeout(() => {
@@ -278,6 +289,7 @@ class SocialShareButton {
 
   closeModal() {
     this.modal.classList.remove("active");
+    this._emit("social_share_popup_close", "popup_close");
 
     setTimeout(() => {
       this.isModalOpen = false;
@@ -290,6 +302,8 @@ class SocialShareButton {
     const shareUrl = this.getShareURL(platform);
 
     if (shareUrl) {
+      this._emit("social_share_click", "share", { platform });
+
       if (platform === "email") {
         window.location.href = shareUrl;
       } else {
@@ -300,9 +314,16 @@ class SocialShareButton {
         );
       }
 
+      this._emit("social_share_success", "share", { platform });
+
       if (this.options.onShare) {
         this.options.onShare(platform, this.options.url);
       }
+    } else {
+      this._emit("social_share_error", "error", {
+        platform,
+        errorMessage: `No share URL configured for platform: ${platform}`,
+      });
     }
   }
 
@@ -317,6 +338,7 @@ class SocialShareButton {
         .then(() => {
           copyBtn.textContent = "Copied!";
           copyBtn.classList.add("copied");
+          this._emit("social_share_copy", "copy");
 
           if (this.options.onCopy) {
             this.options.onCopy(this.options.url);
@@ -346,6 +368,7 @@ class SocialShareButton {
 
       copyBtn.textContent = "Copied!";
       copyBtn.classList.add("copied");
+      this._emit("social_share_copy", "copy");
 
       if (this.options.onCopy) {
         this.options.onCopy(this.options.url);
@@ -357,6 +380,9 @@ class SocialShareButton {
       }, 2000);
     } catch (err) {
       console.error("Fallback copy failed:", err);
+      this._emit("social_share_error", "error", {
+        errorMessage: `Copy failed: ${err}`,
+      });
       copyBtn.textContent = "Failed";
       setTimeout(() => {
         copyBtn.textContent = "Copy";
@@ -473,6 +499,113 @@ class SocialShareButton {
       "mouseleave",
       this.customColorMouseLeaveHandler,
     );
+  }
+
+  // ---------------------------------------------------------------------------
+  // Analytics event system
+  //
+  // The library is privacy-by-design: it never collects, stores, or transmits
+  // user data. _emit() only dispatches interaction events locally so that the
+  // host website can forward them to whichever analytics tool they choose.
+  //
+  // Three delivery paths run in parallel for maximum flexibility:
+  //   1. DOM CustomEvent  — works with CDN drops, vanilla JS, and any framework.
+  //                         Multiple independent listeners can subscribe with
+  //                         document.addEventListener('social-share', handler).
+  //   2. onAnalytics hook — single direct callback, useful for inline setups.
+  //   3. analyticsPlugins — adapter registry; each adapter's track() method is
+  //                         called in turn, allowing GA4 + Mixpanel + custom
+  //                         systems to all receive the same event simultaneously.
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Returns the host container element, or null when no container is configured.
+   * @returns {Element|null}
+   */
+  _getContainer() {
+    if (!this.options.container) return null;
+    return typeof this.options.container === "string"
+      ? document.querySelector(this.options.container)
+      : this.options.container;
+  }
+
+  /**
+   * Emits an analytics event through all configured delivery paths.
+   *
+   * Standard payload schema
+   * ─────────────────────────────────────────────────────────────────────────
+   * {
+   *   eventName      : string   — e.g. 'social_share_click'
+   *   interactionType: string   — 'share' | 'copy' | 'popup_open' |
+   *                               'popup_close' | 'error'
+   *   platform       : string|null — 'twitter', 'facebook', etc.
+   *   url            : string   — URL being shared
+   *   title          : string   — page title
+   *   timestamp      : number   — Unix ms (Date.now())
+   *   componentId    : string|null — value of the componentId option
+   *   errorMessage   : string   — only present on social_share_error events
+   * }
+   *
+   * @param {string} eventName       - snake_case event identifier
+   * @param {string} interactionType - broad interaction category
+   * @param {Object} [extra]         - optional extra fields (platform, errorMessage)
+   */
+  _emit(eventName, interactionType, extra = {}) {
+    if (this.options.analytics === false) return;
+
+    const payload = {
+      version: ANALYTICS_SCHEMA_VERSION,
+      source: "social-share-button",
+      eventName,
+      interactionType,
+      platform: extra.platform || null,
+      url: this.options.url,
+      title: this.options.title,
+      timestamp: Date.now(),
+      componentId: this.options.componentId,
+    };
+
+    if (extra.errorMessage) {
+      payload.errorMessage = extra.errorMessage;
+    }
+
+    // Optional console output for development / debugging
+    if (this.options.debug) {
+      console.log("[SocialShareButton Analytics]", payload);
+    }
+
+    // Path 1 — DOM CustomEvent (framework-agnostic, CDN-friendly)
+    // Bubbles from the container element so delegated listeners work naturally.
+    if (typeof window !== "undefined" && typeof CustomEvent !== "undefined") {
+      try {
+        const domEvent = new CustomEvent("social-share", {
+          bubbles: true,
+          cancelable: false,
+          composed: true, // crosses shadow-DOM boundaries; safe to set in all envs
+          detail: payload,
+        });
+        const el = this._getContainer();
+        (el || document).dispatchEvent(domEvent);
+      } catch (_) {}
+    }
+
+    // Path 2 — onAnalytics callback (direct, single-consumer hook)
+    if (typeof this.options.onAnalytics === "function") {
+      try {
+        this.options.onAnalytics(payload);
+      } catch (_) {}
+    }
+
+    // Path 3 — plugin / adapter registry (supports multiple simultaneous consumers)
+    if (Array.isArray(this.options.analyticsPlugins)) {
+      for (const plugin of this.options.analyticsPlugins) {
+        if (plugin && typeof plugin.track === "function") {
+          try {
+            plugin.track(payload);
+          } catch (_) {}
+        }
+      }
+    }
   }
 }
 
