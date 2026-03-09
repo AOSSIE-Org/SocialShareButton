@@ -33,52 +33,71 @@ export default function SocialShareButton(props) {
   const currentUrl = () => props.url || (typeof window !== 'undefined' ? window.location.href : '');
   const currentTitle = () => props.title || (typeof document !== 'undefined' ? document.title : '');
 
-  onMount(() => {
-    // Guard: only run in the browser (SolidStart SSR safety)
-    if (typeof window !== 'undefined' && window.SocialShareButton) {
-      shareButton = new window.SocialShareButton({
-        container,
-        url: currentUrl(),
-        title: currentTitle(),
-        description: props.description ?? '',
-        hashtags: props.hashtags ?? [],
-        via: props.via ?? '',
-        platforms: props.platforms ?? [
-          'whatsapp',
-          'facebook',
-          'twitter',
-          'linkedin',
-          'telegram',
-          'reddit',
-        ],
-        theme: props.theme ?? 'dark',
-        buttonText: props.buttonText ?? 'Share',
-        customClass: props.customClass ?? '',
-        onShare: props.onShare ?? null,
-        onCopy: props.onCopy ?? null,
-        buttonStyle: props.buttonStyle ?? 'default',
-        modalPosition: props.modalPosition ?? 'center',
-      });
-    }
+  const defaultPlatforms = ['whatsapp', 'facebook', 'twitter', 'linkedin', 'telegram', 'reddit'];
+
+  const buildOptions = () => ({
+    container,
+    url: currentUrl(),
+    title: currentTitle(),
+    description: props.description ?? '',
+    hashtags: props.hashtags ?? [],
+    via: props.via ?? '',
+    platforms: props.platforms ?? defaultPlatforms,
+    theme: props.theme ?? 'dark',
+    buttonText: props.buttonText ?? 'Share',
+    customClass: props.customClass ?? '',
+    buttonColor: props.buttonColor ?? '',
+    buttonHoverColor: props.buttonHoverColor ?? '',
+    onShare: props.onShare ?? null,
+    onCopy: props.onCopy ?? null,
+    buttonStyle: props.buttonStyle ?? 'default',
+    modalPosition: props.modalPosition ?? 'center',
   });
 
-  // Re-apply options whenever any reactive prop changes
+  onMount(() => {
+    // Guard: only run in the browser (SolidStart SSR safety).
+    // If the CDN script has not yet executed, retry on a short interval
+    // until window.SocialShareButton becomes available.
+    if (typeof window === 'undefined') return;
+
+    if (window.SocialShareButton) {
+      shareButton = new window.SocialShareButton(buildOptions());
+      return;
+    }
+
+    // CDN not yet loaded — poll until it is, then initialise
+    const intervalId = setInterval(() => {
+      if (window.SocialShareButton) {
+        clearInterval(intervalId);
+        shareButton = new window.SocialShareButton(buildOptions());
+      }
+    }, 50);
+
+    // Safety: stop polling on cleanup if it never loaded
+    onCleanup(() => clearInterval(intervalId));
+  });
+
+  // Re-apply options whenever any reactive prop changes.
+  // Mirrors the same defaults used at mount so a first reactive flush
+  // never overwrites initialised values with undefined.
   createEffect(() => {
     if (shareButton) {
       shareButton.updateOptions({
         url: currentUrl(),
         title: currentTitle(),
-        description: props.description,
-        hashtags: props.hashtags,
-        via: props.via,
-        platforms: props.platforms,
-        theme: props.theme,
-        buttonText: props.buttonText,
-        customClass: props.customClass,
-        onShare: props.onShare,
-        onCopy: props.onCopy,
-        buttonStyle: props.buttonStyle,
-        modalPosition: props.modalPosition,
+        description: props.description ?? '',
+        hashtags: props.hashtags ?? [],
+        via: props.via ?? '',
+        platforms: props.platforms ?? defaultPlatforms,
+        theme: props.theme ?? 'dark',
+        buttonText: props.buttonText ?? 'Share',
+        customClass: props.customClass ?? '',
+        buttonColor: props.buttonColor ?? '',
+        buttonHoverColor: props.buttonHoverColor ?? '',
+        onShare: props.onShare ?? null,
+        onCopy: props.onCopy ?? null,
+        buttonStyle: props.buttonStyle ?? 'default',
+        modalPosition: props.modalPosition ?? 'center',
       });
     }
   });
