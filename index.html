@@ -438,6 +438,36 @@ function App() {
       </div>
     </div>
 
+    <!-- Solid.js Example -->
+    <div class="demo-section">
+      <h2>&#x26A1;&#xFE0F; Solid.js Integration</h2>
+      <p>Reactive Solid.js wrapper with SSR support via SolidStart</p>
+
+      <div class="code-block">
+        <button class="copy-btn" aria-label="Copy code">Copy</button>
+        <span class="copy-status" aria-live="polite" style="position:absolute; left:-9999px;"></span>
+        <code>// Step 1: add CDN links to your index.html or root layout
+// &lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css"&gt;
+// &lt;script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js"&gt;&lt;/script&gt;
+
+// Step 2: import the wrapper and use it in your Solid.js page
+// App.jsx
+import SocialShareButton from './social-share-button-solid';
+
+export default function App() {
+  return (
+    &lt;SocialShareButton
+      url="https://your-website.com"
+      title="Check this out!"
+      description="An amazing website"
+      theme="dark"
+      buttonText="Share"
+    /&gt;
+  );
+}</code>
+      </div>
+    </div>
+
     <!-- CTA Section -->
     <div class="cta-section">
       <h2 style="color: #fff; margin-bottom: 20px;">Ready to Get Started?</h2>
