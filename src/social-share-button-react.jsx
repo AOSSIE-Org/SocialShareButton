@@ -1,39 +1,30 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from 'react';
 
 export const SocialShareButton = ({
   url,
   title,
-  description = "",
+  description = '',
   hashtags = [],
-  via = "",
-  platforms = [
-    "whatsapp",
-    "facebook",
-    "twitter",
-    "linkedin",
-    "telegram",
-    "reddit",
-  ],
-  theme = "dark",
-  buttonText = "Share",
-  customClass = "",
+  via = '',
+  platforms = ['whatsapp', 'facebook', 'twitter', 'linkedin', 'telegram', 'reddit'],
+  theme = 'dark',
+  buttonText = 'Share',
+  customClass = '',
   onShare = null,
   onCopy = null,
-  buttonStyle = "default",
-  modalPosition = "center",
+  buttonStyle = 'default',
+  modalPosition = 'center',
 }) => {
   const containerRef = useRef(null);
   const shareButtonRef = useRef(null);
 
   // Auto-detect current URL and title if not provided
-  const currentUrl =
-    url || (typeof window !== "undefined" ? window.location.href : "");
-  const currentTitle =
-    title || (typeof document !== "undefined" ? document.title : "");
+  const currentUrl = url || (typeof window !== 'undefined' ? window.location.href : '');
+  const currentTitle = title || (typeof document !== 'undefined' ? document.title : '');
 
   useEffect(() => {
     if (containerRef.current && !shareButtonRef.current) {
-      if (typeof window !== "undefined" && window.SocialShareButton) {
+      if (typeof window !== 'undefined' && window.SocialShareButton) {
         shareButtonRef.current = new window.SocialShareButton({
           container: containerRef.current,
           url: currentUrl,
