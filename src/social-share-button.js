@@ -19,6 +19,7 @@ class SocialShareButton {
         'linkedin',
         'telegram',
         'reddit',
+        'email',
       ],
       theme: options.theme || 'dark',
       buttonText: options.buttonText || 'Share',
@@ -31,6 +32,11 @@ class SocialShareButton {
       showButton: options.showButton !== false,
       buttonStyle: options.buttonStyle || 'default',
       modalPosition: options.modalPosition || 'center',
+      analytics: options.analytics !== false,
+      onAnalytics: options.onAnalytics || null,
+      analyticsPlugins: options.analyticsPlugins || [],
+      componentId: options.componentId || '',
+      debug: options.debug || false,
     };
 
     this.isModalOpen = false;
@@ -57,12 +63,15 @@ class SocialShareButton {
     const button = document.createElement('button');
     button.className = `social-share-btn ${this.options.buttonStyle} ${this.options.customClass}`;
     button.setAttribute('aria-label', 'Share');
-    button.innerHTML = `
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="share-icon">
-        <path d="M18 16.08C17.24 16.08 16.56 16.38 16.04 16.85L8.91 12.7C8.96 12.47 9 12.24 9 12C9 11.76 8.96 11.53 8.91 11.3L15.96 7.19C16.5 7.69 17.21 8 18 8C19.66 8 21 6.66 21 5C21 3.34 19.66 2 18 2C16.34 2 15 3.34 15 5C15 5.24 15.04 5.47 15.09 5.7L8.04 9.81C7.5 9.31 6.79 9 6 9C4.34 9 3 10.34 3 12C3 13.66 4.34 15 6 15C6.79 15 7.5 14.69 8.04 14.19L15.16 18.35C15.11 18.56 15.08 18.78 15.08 19C15.08 20.61 16.39 21.92 18 21.92C19.61 21.92 20.92 20.61 20.92 19C20.92 17.39 19.61 16.08 18 16.08Z" fill="currentColor"/>
-      </svg>
-      <span>${this.options.buttonText}</span>
-    `;
+
+    const svgWrapper = document.createElement('span');
+    svgWrapper.innerHTML =
+      '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="share-icon"><path d="M18 16.08C17.24 16.08 16.56 16.38 16.04 16.85L8.91 12.7C8.96 12.47 9 12.24 9 12C9 11.76 8.96 11.53 8.91 11.3L15.96 7.19C16.5 7.69 17.21 8 18 8C19.66 8 21 6.66 21 5C21 3.34 19.66 2 18 2C16.34 2 15 3.34 15 5C15 5.24 15.04 5.47 15.09 5.7L8.04 9.81C7.5 9.31 6.79 9 6 9C4.34 9 3 10.34 3 12C3 13.66 4.34 15 6 15C6.79 15 7.5 14.69 8.04 14.19L15.16 18.35C15.11 18.56 15.08 18.78 15.08 19C15.08 20.61 16.39 21.92 18 21.92C19.61 21.92 20.92 20.61 20.92 19C20.92 17.39 19.61 16.08 18 16.08Z" fill="currentColor"/></svg>';
+    button.appendChild(svgWrapper.firstElementChild);
+
+    this._buttonLabel = document.createElement('span');
+    this._buttonLabel.textContent = this.options.buttonText;
+    button.appendChild(this._buttonLabel);
 
     this.button = button;
     if (this.options.container) {
@@ -247,11 +256,12 @@ class SocialShareButton {
     input.addEventListener('click', (e) => e.target.select());
 
     // ESC key to close
-    document.addEventListener('keydown', (e) => {
+    this._onKeyDown = (e) => {
       if (e.key === 'Escape' && this.isModalOpen) {
         this.closeModal();
       }
-    });
+    };
+    document.addEventListener('keydown', this._onKeyDown);
   }
 
   openModal() {
@@ -350,6 +360,11 @@ class SocialShareButton {
   }
 
   destroy() {
+    if (this._onKeyDown) {
+      document.removeEventListener('keydown', this._onKeyDown);
+      this._onKeyDown = null;
+    }
+
     if (this.button && this.customColorMouseEnterHandler) {
       this.button.removeEventListener('mouseenter', this.customColorMouseEnterHandler);
       this.customColorMouseEnterHandler = null;
@@ -377,6 +392,45 @@ class SocialShareButton {
       if (input) {
         input.value = this.options.url;
       }
+
+      // Sync theme class on overlay
+      if ('theme' in options) {
+        this.modal.className = `social-share-modal-overlay ${this.options.theme}`;
+        if (this.isModalOpen) {
+          this.modal.classList.add('active');
+        }
+      }
+
+      // Sync modal position class on content
+      if ('modalPosition' in options) {
+        const content = this.modal.querySelector('.social-share-modal-content');
+        if (content) {
+          content.className = `social-share-modal-content ${this.options.modalPosition}`;
+        }
+      }
+
+      // Rebuild platform buttons if platforms list changed
+      if ('platforms' in options) {
+        const platformsContainer = this.modal.querySelector('.social-share-platforms');
+        if (platformsContainer) {
+          platformsContainer.innerHTML = this.getPlatformsHTML();
+          platformsContainer.querySelectorAll('.social-share-platform-btn').forEach((btn) => {
+            btn.addEventListener('click', () => {
+              this.share(btn.dataset.platform);
+            });
+          });
+        }
+      }
+    }
+
+    // Sync button label text
+    if ('buttonText' in options && this._buttonLabel) {
+      this._buttonLabel.textContent = this.options.buttonText;
+    }
+
+    // Sync button className
+    if (('buttonStyle' in options || 'customClass' in options) && this.button) {
+      this.button.className = `social-share-btn ${this.options.buttonStyle} ${this.options.customClass}`;
     }
 
     // Reapply custom colors if color option changed

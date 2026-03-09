@@ -430,8 +430,9 @@
             style="position: absolute; left: -9999px"
           ></span>
           <code
-            >import SocialShareButton from 'social-share-button'; function App() { return (
-            &lt;SocialShareButton url="https://your-website.com" title="Check this out!"
+            >import SocialShareButton from
+            'social-share-button-aossie/src/social-share-button-react.jsx'; function App() { return
+            ( &lt;SocialShareButton url="https://your-website.com" title="Check this out!"
             onShare={(platform) =&gt; { console.log('Shared on:', platform); }} /&gt; ); }</code
           >
         </div>
@@ -631,27 +632,53 @@
           button.addEventListener('click', () => {
             const codeBlock = button.closest('.code-block')?.querySelector('code');
             const text = codeBlock ? codeBlock.innerText : '';
+            const statusSpan = button.nextElementSibling;
+            const originalText = button.textContent;
 
-            navigator.clipboard.writeText(text).then(() => {
-              const originalText = button.textContent;
-
-              // Find aria-live span
-              const statusSpan = button.nextElementSibling;
-
+            function showSuccess() {
               if (statusSpan && statusSpan.classList.contains('copy-status')) {
                 statusSpan.textContent = 'Code copied to clipboard';
               }
-
               button.textContent = 'Copied!';
-
               setTimeout(() => {
                 button.textContent = originalText;
-
                 if (statusSpan && statusSpan.classList.contains('copy-status')) {
                   statusSpan.textContent = '';
                 }
               }, 2000);
-            });
+            }
+
+            function showFailure() {
+              button.textContent = 'Failed!';
+              if (statusSpan && statusSpan.classList.contains('copy-status')) {
+                statusSpan.textContent = 'Copy failed';
+              }
+              setTimeout(() => {
+                button.textContent = originalText;
+                if (statusSpan && statusSpan.classList.contains('copy-status')) {
+                  statusSpan.textContent = '';
+                }
+              }, 2000);
+            }
+
+            function fallbackCopy() {
+              try {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.focus();
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showSuccess();
+              } catch (_err) {
+                showFailure();
+              }
+            }
+
+            navigator.clipboard.writeText(text).then(showSuccess).catch(fallbackCopy);
           });
         });
       });
