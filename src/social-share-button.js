@@ -12,7 +12,7 @@ class SocialShareButton {
       description: options.description || '',
       hashtags: options.hashtags || [],
       via: options.via || '',
-      platforms: options.platforms || ['whatsapp', 'facebook', 'twitter', 'linkedin', 'telegram', 'reddit','email'],
+      platforms: options.platforms || ['whatsapp', 'facebook', 'twitter', 'linkedin', 'telegram', 'reddit',"email"],
       theme: options.theme || 'dark',
       buttonText: options.buttonText || 'Share',
       customClass: options.customClass || '',
