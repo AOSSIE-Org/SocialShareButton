@@ -6,9 +6,8 @@
   <meta name="description" content="SocialShareButton - A lightweight, customizable social sharing component">
   <title>SocialShareButton Demo - Modern Social Sharing Component</title>
   <link rel="stylesheet" href="src/social-share-button.css">
-  
-  
-  <style>
+  <link rel="icon" href="src/favicon.svg">
+ <style>
     * {
       margin: 0;
       padding: 0;
@@ -38,6 +37,19 @@
       margin-bottom: 10px;
       font-weight: 700;
     }
+    .brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 48px;
+    font-weight: 700;
+    }
+
+    .logo {
+     width: 50px;
+     height: 60px;
+     }
 
     .tagline {
       font-size: 20px;
@@ -142,12 +154,32 @@
     }
 
     .code-block {
-      background: rgba(0, 0, 0, 0.4);
-      border-radius: 8px;
-      padding: 20px;
-      margin: 20px 0;
-      overflow-x: auto;
-    }
+  position: relative;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+  overflow-x: auto;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.copy-btn:hover {
+  background: #5a67d8;
+  transform: scale(1.05);
+}
 
     .code-block code {
       color: #4fd1c5;
@@ -180,6 +212,22 @@
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
     }
 
+    .cta-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.discord-btn {
+  background: #5865F2;
+  color: #fff;
+}
+
+.discord-btn:hover {
+  background: #4752c4;
+}
+
     footer {
       text-align: center;
       color: rgba(255, 255, 255, 0.8);
@@ -188,7 +236,7 @@
     }
 
     @media (max-width: 768px) {
-      h1 {
+      h1,.brand {
         font-size: 32px;
       }
 
@@ -203,11 +251,15 @@
 
   
   </style>
+
 </head>
 <body>
   <div class="container">
     <header>
-      <h1>🚀 SocialShareButton</h1>
+
+      <h1 class="brand">
+      <img src="public/socialsharebutton.svg" alt="" aria-hidden="true" class="logo"> SocialShareButton
+      </h1>
       <p class="tagline">A lightweight, modern, and highly customizable social sharing component</p>
       <div class="badges">
         <span class="badge">📦 Zero Dependencies</span>
@@ -344,8 +396,10 @@
       <h2>🚀 Quick Start</h2>
       <p>Get started in seconds with minimal setup</p>
       
-      <div class="code-block">
-<code>// Include CSS and JS
+<div class="code-block">
+  <button class="copy-btn" aria-label="Copy code">Copy</button>
+  <span class="copy-status" aria-live="polite" style="position:absolute; left:-9999px;"></span>
+  <code>
 &lt;link rel="stylesheet" href="social-share-button.css"&gt;
 &lt;script src="social-share-button.js"&gt;&lt;/script&gt;
 
@@ -365,6 +419,9 @@ new SocialShareButton({
       <p>First-class React support with hooks</p>
       
       <div class="code-block">
+  <button class="copy-btn" aria-label="Copy code">Copy</button>
+  <span class="copy-status" aria-live="polite" style="position:absolute; left:-9999px;"></span>
+  <code>
 <code>import SocialShareButton from 'social-share-button';
 
 function App() {
@@ -387,7 +444,16 @@ function App() {
       <a href="https://github.com/AOSSIE-Org/SocialShareButton" class="cta-button" target="_blank" rel="noopener">
         View on GitHub →
       </a>
-    </div>
+
+    <a href="https://discord.gg/prMM922G"
+   class="cta-button discord-btn"
+   target="_blank"
+   rel="noopener noreferrer">
+   Join Discord
+</a>
+  </div>
+
+</div>
 
     <footer>
       <p>Made with ❤️ by the AOSSIE community</p>
@@ -414,6 +480,8 @@ function App() {
       title: demoTitle,
       description: demoDescription,
       buttonText: 'Share'
+
+      
     });
 
     // Primary
@@ -544,6 +612,37 @@ function App() {
       buttonHoverColor: '#db2777',
       buttonText: 'Share'
     });
+
+    // Copy to Clipboard Functionality
+const copyButtons = document.querySelectorAll('.copy-btn');
+
+copyButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    const codeBlock = button.closest('.code-block')?.querySelector('code');
+const text = codeBlock ? codeBlock.innerText : '';
+
+    navigator.clipboard.writeText(text).then(() => {
+  const originalText = button.textContent;
+
+  // Find aria-live span
+  const statusSpan = button.nextElementSibling;
+
+  if (statusSpan && statusSpan.classList.contains("copy-status")) {
+    statusSpan.textContent = "Code copied to clipboard";
+  }
+
+  button.textContent = "Copied!";
+
+  setTimeout(() => {
+    button.textContent = originalText;
+
+    if (statusSpan && statusSpan.classList.contains("copy-status")) {
+      statusSpan.textContent = "";
+    }
+  }, 2000);
+});
+  });
+});
     });
   </script>
 </body>
