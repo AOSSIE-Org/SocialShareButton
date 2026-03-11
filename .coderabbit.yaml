@@ -8,7 +8,7 @@ language: en
 early_access: true
 
 chat:
-  # CodeRabbit will automatically respond to @coderabbitai mentions in PR comments
+  # CodeRabbit will automatically respond to PR comments without requiring an @coderabbitai mention
   auto_reply: true
 
 reviews:
@@ -46,7 +46,7 @@ reviews:
   changed_files_summary: true
 
   # Leave comments without blocking PR approval (non-blocking feedback for inline comment coverage)
-  request_changes_workflow: true
+  request_changes_workflow: false
 
   # Pre-merge checks to enforce before merging PRs
   pre_merge_checks:
@@ -160,21 +160,62 @@ reviews:
     # React component files - INLINE COMMENT COVERAGE
     - path: "src/**/*.jsx"
       instructions: |
-        **Inline Comment Coverage Check for React Components**
+        **Inline Comment Coverage Check (PRIORITY) - React Components**
         
-        Ensure all component methods, hooks, and significant state management logic have clear inline comments:
+        **IMPORTANT: This rule mirrors the src/**/*.js inline-comment coverage constraints. JSDoc comments or component-level prose alone do NOT satisfy this requirement. Inline // comments within method bodies are mandatory.**
         
-        1. **What each logical block does**
-        2. **Why non-obvious React patterns exist** (e.g., useEffect dependencies, memo optimizations)
-        3. **Edge cases and component lifecycle considerations**
+        Ensure all public and private methods, hooks, and significant properties have clear inline comments addressing:
         
-        **Flag any newly added or modified function or hook that lacks descriptive inline comments.**
+        1. **What each logical block does** (not just restating the code)
+           - Example: "Safety check: prevent errors if component was unmounted"
+           - Example: "Defer state update to next render cycle for smooth transition"
+           - Example: "Extract user preferences from context for form initialization"
         
-        **React Best Practices:**
-        - Ensure proper React hooks usage
-        - Check for unnecessary re-renders
-        - Validate prop types
+        2. **Why non-obvious logic exists**
+           - Example: "Shared modal state management: only increment counter if this instance doesn't already own the lock"
+           - Example: "Clear any pending timers to prevent race conditions after unmount"
+           - Example: "Memoize callback to prevent child re-renders when props haven't changed"
+        
+        3. **Edge cases and guards**
+           - Example: "Re-entrancy guard to prevent duplicate API calls"
+           - Example: "Safety check in case component was unmounted during async operation"
+           - Example: "Prevent state update if ref is null (component may be unmounting)"
+        
+        4. **React-specific patterns and lifecycle considerations**
+           - Example: "useEffect dependency array includes callback ref to avoid stale closures"
+           - Example: "useMemo optimization: expensive calculation only re-runs when userId changes"
+           - Example: "Cleanup function: remove event listeners to prevent memory leaks"
+        
+        **Flag any newly added or modified function, hook, or property that lacks descriptive inline comments.**
+        
+        Preferred style:
+        - Use inline comments (// comment) within function/hook bodies
+        - Focus on "what" and "why", not just repeating the code
+        - Comment before logical blocks, not every line
+        - Explain non-obvious patterns like state management, effect dependencies, memo optimizations, ref handling, async guards
+        - JSDoc/component-level comments do NOT satisfy this requirement
+        
+        Examples of GOOD comments:
+        ✓ // Safety check: prevent errors if component was unmounted
+        ✓ // Shared modal state: only increment if not already owned
+        ✓ // Clear any pending timers to prevent race conditions after unmount
+        ✓ // Memoize callback to prevent unnecessary child re-renders
+        ✓ // useEffect dependency: include callback to avoid stale closure
+        
+        Examples of BAD comments:
+        ✗ // Set state to true (just restates the code)
+        ✗ // Call useEffect (doesn't explain why)
+        ✗ No comment at all for complex logic
+        ✗ Only JSDoc above component without inline comments in the body
+        
+        **Additional React Best Practices:**
+        - Ensure proper React hooks usage (rules of hooks, dependency arrays)
+        - Check for unnecessary re-renders and missing memoization
+        - Validate prop types and prop usage
         - No exposed API keys or sensitive data
+        - Avoid common security vulnerabilities (XSS, injection attacks)
+        - Ensure proper error handling and error boundaries where appropriate
+        - Review for performance issues (expensive renders, large lists without virtualization)
     
     # CSS files
     - path: "**/*.css"
