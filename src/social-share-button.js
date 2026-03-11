@@ -177,7 +177,6 @@ class SocialShareButton {
     const { url, title, description, hashtags, via } = this.options;
     const encodedUrl = encodeURIComponent(url);
     const encodedTitle = encodeURIComponent(title);
-    const encodedDesc = encodeURIComponent(description);
     const hashtagString = hashtags.length ? '#' + hashtags.join(' #') : '';
 
     // Build platform-specific messages with customizable parameters
@@ -424,6 +423,7 @@ class SocialShareButton {
           // Guard against async callback after destroy
           if (this.isDestroyed) return;
 
+          // eslint-disable-next-line no-console
           console.error('Failed to copy:', err);
           // Fallback to manual selection
           this.fallbackCopy(input, copyBtn);
@@ -463,6 +463,7 @@ class SocialShareButton {
         this.feedbackTimeout = null;
       }, 2000);
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.error('Fallback copy failed:', err);
       copyBtn.textContent = 'Failed';
 
