@@ -1,0 +1,545 @@
+/**
+ * SocialShareDesigner Styles
+ * Designer panel for customizing SocialShareButton via CSS custom properties
+ */
+
+/* ── Panel Container ────────────────────────────────────────── */
+.ssb-designer {
+  background: #1a1a1a;
+  color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 13px;
+  width: 300px;
+  min-width: 280px;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  height: 100%;
+  max-height: 100vh;
+}
+
+.ssb-designer-header {
+  padding: 14px 18px;
+  border-bottom: 1px solid #2a2a2a;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.ssb-designer-header h2 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 0.3px;
+}
+
+.ssb-designer-badge {
+  background: #f5c518;
+  color: #000;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 8px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+/* ── Scrollable Body ────────────────────────────────────────── */
+.ssb-designer-body {
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #3a3a3a transparent;
+}
+
+.ssb-designer-body::-webkit-scrollbar {
+  width: 4px;
+}
+.ssb-designer-body::-webkit-scrollbar-thumb {
+  background: #3a3a3a;
+  border-radius: 4px;
+}
+
+/* ── Section ────────────────────────────────────────────────── */
+.ssb-section {
+  padding: 14px 18px;
+  border-top: 1px solid #2a2a2a;
+}
+
+.ssb-section:first-child {
+  border-top: none;
+}
+
+.ssb-section-label {
+  display: block;
+  text-transform: uppercase;
+  color: #888;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  margin-bottom: 10px;
+}
+
+/* ── Toggle Group ───────────────────────────────────────────── */
+.ssb-toggle-group {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.ssb-toggle-group button {
+  flex: 1;
+  min-width: 0;
+  padding: 6px 8px;
+  background: #2a2a2a;
+  border: 1px solid #3a3a3a;
+  border-radius: 6px;
+  color: #bbb;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.ssb-toggle-group button:hover {
+  background: #333;
+  color: #fff;
+}
+
+.ssb-toggle-group button.active {
+  background: #f5c518;
+  border-color: #f5c518;
+  color: #000;
+  font-weight: 600;
+}
+
+/* ── Platform List ──────────────────────────────────────────── */
+.ssb-platform-list {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.ssb-platform-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ssb-platform-row-label {
+  font-size: 12px;
+  color: #ccc;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.ssb-platform-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+/* ── Toggle Switch ──────────────────────────────────────────── */
+.ssb-switch {
+  position: relative;
+  width: 34px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.ssb-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.ssb-switch-track {
+  position: absolute;
+  inset: 0;
+  background: #3a3a3a;
+  border-radius: 18px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.ssb-switch-track::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 12px;
+  height: 12px;
+  background: #666;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.ssb-switch input:checked + .ssb-switch-track {
+  background: #f5c518;
+}
+
+.ssb-switch input:checked + .ssb-switch-track::after {
+  left: 19px;
+  background: #000;
+}
+
+/* ── Color Swatches ─────────────────────────────────────────── */
+.ssb-swatch-row {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.ssb-swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  padding: 0;
+  outline: none;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.ssb-swatch:hover {
+  transform: scale(1.15);
+}
+
+.ssb-swatch.active {
+  border-color: #f5c518;
+  box-shadow: 0 0 0 2px rgba(245, 197, 24, 0.3);
+}
+
+/* ── Inline Color Picker ────────────────────────────────────── */
+.ssb-color-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.ssb-color-row label {
+  font-size: 11px;
+  color: #888;
+  min-width: 80px;
+  flex-shrink: 0;
+}
+
+.ssb-color-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #2a2a2a;
+  border: 1px solid #3a3a3a;
+  border-radius: 6px;
+  padding: 4px 8px;
+  flex: 1;
+  transition: border-color 0.15s;
+}
+
+.ssb-color-wrap:focus-within {
+  border-color: #f5c518;
+}
+
+.ssb-color-wrap input[type="color"] {
+  width: 20px;
+  height: 20px;
+  border: none;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.ssb-color-wrap input[type="text"] {
+  background: none;
+  border: none;
+  color: #ccc;
+  font-size: 11px;
+  width: 60px;
+  outline: none;
+  font-family: "Courier New", monospace;
+}
+
+/* ── Gradient Toggle Row ────────────────────────────────────── */
+.ssb-gradient-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #2a2a2a;
+}
+
+.ssb-gradient-row span {
+  font-size: 12px;
+  color: #aaa;
+}
+
+.ssb-gradient-pickers {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.ssb-gradient-pickers .ssb-color-row {
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 0;
+  gap: 5px;
+}
+
+.ssb-gradient-pickers .ssb-color-row label {
+  min-width: unset;
+}
+
+.ssb-gradient-pickers .ssb-color-wrap {
+  width: 100%;
+}
+
+.ssb-gradient-preview {
+  height: 8px;
+  border-radius: 4px;
+  margin-top: 10px;
+  border: 1px solid #3a3a3a;
+  transition: background 0.2s;
+}
+
+/* ── Sliders ────────────────────────────────────────────────── */
+.ssb-slider-row {
+  margin-bottom: 11px;
+}
+
+.ssb-slider-row:last-child {
+  margin-bottom: 0;
+}
+
+.ssb-slider-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.ssb-slider-label {
+  font-size: 11px;
+  color: #aaa;
+}
+
+.ssb-slider-value {
+  font-size: 11px;
+  color: #f5c518;
+  font-weight: 600;
+  min-width: 38px;
+  text-align: right;
+  font-family: "Courier New", monospace;
+}
+
+.ssb-slider-row input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  background: #3a3a3a;
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+}
+
+.ssb-slider-row input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #f5c518;
+  cursor: pointer;
+  border: 2px solid #1a1a1a;
+  transition: transform 0.15s;
+}
+
+.ssb-slider-row input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.25);
+}
+
+.ssb-slider-row input[type="range"]::-moz-range-thumb {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #f5c518;
+  cursor: pointer;
+  border: 2px solid #1a1a1a;
+}
+
+/* ── Text / Select Inputs ───────────────────────────────────── */
+.ssb-input-row {
+  margin-bottom: 11px;
+}
+
+.ssb-input-row:last-child {
+  margin-bottom: 0;
+}
+
+.ssb-input-row label {
+  display: block;
+  font-size: 11px;
+  color: #aaa;
+  margin-bottom: 5px;
+}
+
+.ssb-input-row input[type="text"],
+.ssb-input-row select {
+  background: #2a2a2a;
+  border: 1px solid #3a3a3a;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 12px;
+  padding: 7px 10px;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.15s;
+  -webkit-appearance: none;
+  appearance: none;
+  box-sizing: border-box;
+}
+
+.ssb-input-row input[type="text"]:focus,
+.ssb-input-row select:focus {
+  border-color: #f5c518;
+}
+
+.ssb-input-row select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 26px;
+  cursor: pointer;
+}
+
+/* ── Per-Platform Icon Colors ───────────────────────────────── */
+.ssb-icon-colors {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ssb-icon-color-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ssb-icon-color-label {
+  font-size: 12px;
+  color: #ccc;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── Footer ─────────────────────────────────────────────────── */
+.ssb-designer-footer {
+  padding: 14px 18px;
+  border-top: 1px solid #2a2a2a;
+  display: flex;
+  gap: 8px;
+  background: #1a1a1a;
+  flex-shrink: 0;
+}
+
+.ssb-btn-export {
+  flex: 1;
+  padding: 9px 12px;
+  background: #f5c518;
+  border: none;
+  border-radius: 7px;
+  color: #000;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  letter-spacing: 0.2px;
+}
+
+.ssb-btn-export:hover {
+  background: #ffd33d;
+}
+
+.ssb-btn-export:active {
+  transform: scale(0.97);
+}
+
+.ssb-btn-reset {
+  padding: 9px 12px;
+  background: transparent;
+  border: 1px solid #555;
+  border-radius: 7px;
+  color: #aaa;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.ssb-btn-reset:hover {
+  border-color: #888;
+  color: #fff;
+}
+
+/* ── Toast ──────────────────────────────────────────────────── */
+.ssb-toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  background: #f5c518;
+  color: #000;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 9px 18px;
+  border-radius: 18px;
+  z-index: 999999;
+  opacity: 0;
+  transition: all 0.25s ease;
+  pointer-events: none;
+  white-space: nowrap;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.ssb-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ── Sub-label (within sections) ───────────────────────────── */
+.ssb-sub-label {
+  display: block;
+  font-size: 10px;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 7px;
+  margin-top: 11px;
+}
+
+.ssb-sub-label:first-child {
+  margin-top: 0;
+}

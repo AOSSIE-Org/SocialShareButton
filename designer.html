@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SocialShareButton — Theme Designer</title>
+
+  <!-- Social Share Button styles (required, not modified) -->
+  <link rel="stylesheet" href="src/social-share-button.css">
+  <!-- Designer panel styles -->
+  <link rel="stylesheet" href="src/social-share-designer.css">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #111;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Top nav ─────────────────────────────────────────────── */
+    .designer-nav {
+      background: #1a1a1a;
+      border-bottom: 1px solid #2a2a2a;
+      padding: 0 24px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .designer-nav-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .designer-nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: #fff;
+    }
+
+    .designer-nav-logo svg {
+      color: #f5c518;
+    }
+
+    .designer-nav-logo span {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .designer-nav-sep {
+      width: 1px;
+      height: 20px;
+      background: #3a3a3a;
+    }
+
+    .designer-nav-title {
+      font-size: 13px;
+      color: #888;
+      font-weight: 400;
+    }
+
+    .designer-nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-btn {
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid #3a3a3a;
+      background: #2a2a2a;
+      color: #ccc;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+
+    .nav-btn:hover { background: #333; color: #fff; }
+
+    .nav-btn.primary {
+      background: #f5c518;
+      border-color: #f5c518;
+      color: #000;
+      font-weight: 600;
+    }
+
+    .nav-btn.primary:hover { background: #ffd33d; }
+
+    /* ── Main layout ─────────────────────────────────────────── */
+    .designer-layout {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+      height: calc(100vh - 52px);
+    }
+
+    /* ── Preview pane (left) ─────────────────────────────────── */
+    .designer-preview {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #161616;
+      overflow-y: auto;
+      padding: 32px 24px;
+      gap: 32px;
+    }
+
+    .preview-section-title {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: #555;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    /* ── Share button preview ───────────────────────────────── */
+    .preview-btn-stage {
+      background: #1e1e1e;
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      padding: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ── Modal preview card ─────────────────────────────────── */
+    .preview-modal-stage {
+      background: #1e1e1e;
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    /* The preview card uses the same CSS classes as the real modal — CSS vars apply automatically */
+    #ssb-preview-overlay {
+      /* static — not a real overlay; just a wrapper for theme class */
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+    }
+
+    #ssb-preview-card {
+      /* override the transform/opacity animation so card is always visible */
+      transform: none !important;
+      opacity: 1 !important;
+      width: 100%;
+      position: relative;
+      /* max-width controlled by CSS var via JS */
+      max-width: var(--ssb-modal-width, 540px);
+    }
+
+    /* ── Designer panel (right) ──────────────────────────────── */
+    .designer-sidebar {
+      width: 300px;
+      min-width: 280px;
+      flex-shrink: 0;
+      border-left: 1px solid #2a2a2a;
+      overflow-y: auto;
+      background: #1a1a1a;
+    }
+
+    #designer-panel {
+      height: 100%;
+    }
+
+    #designer-panel .ssb-designer {
+      border-radius: 0;
+      width: 100%;
+      max-height: none;
+      height: 100%;
+      box-shadow: none;
+    }
+
+    /* ── Responsive ──────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .designer-layout {
+        flex-direction: column;
+        height: auto;
+        overflow: visible;
+      }
+
+      .designer-preview {
+        padding: 20px 16px;
+      }
+
+      .designer-sidebar {
+        width: 100%;
+        border-left: none;
+        border-top: 1px solid #2a2a2a;
+        overflow-y: visible;
+      }
+
+      #designer-panel .ssb-designer {
+        max-height: none;
+        height: auto;
+      }
+    }
+
+    /* ── CSS var overrides land here ─────────────────────────── */
+    .social-share-btn {
+      border-radius: var(--ssb-btn-radius, 8px);
+      font-size: var(--ssb-btn-font-size, 14px);
+      font-weight: var(--ssb-btn-font-weight, 500);
+      border-width: var(--ssb-btn-border-width, 1px);
+      border-style: solid;
+      border-color: var(--ssb-btn-border-color, rgba(255,255,255,0.2));
+      font-family: var(--ssb-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
+    }
+
+    .social-share-modal-content {
+      background: var(--ssb-modal-bg, #282828);
+      max-width: var(--ssb-modal-width, 540px);
+      border-radius: var(--ssb-modal-radius, 12px);
+      transition: all var(--ssb-modal-speed, 0.3s) cubic-bezier(0.4,0,0.2,1);
+    }
+
+    .social-share-platform-icon {
+      width: var(--ssb-icon-size, 56px);
+      height: var(--ssb-icon-size, 56px);
+      border-radius: var(--ssb-icon-shape, 50%);
+    }
+
+    .social-share-platform-btn:hover {
+      transform: scale(var(--ssb-hover-scale, 1.05));
+    }
+
+    .social-share-copy-btn {
+      background: var(--ssb-accent, #3ea6ff);
+    }
+
+    .social-share-copy-btn:hover {
+      background: var(--ssb-accent, #3ea6ff);
+      filter: brightness(1.15);
+    }
+
+    .social-share-btn {
+      box-shadow: var(--ssb-shadow-intensity, none);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Navigation ─────────────────────────────────────────── -->
+  <nav class="designer-nav">
+    <div class="designer-nav-left">
+      <a class="designer-nav-logo" href="index.html">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <path d="M18 16.08C17.24 16.08 16.56 16.38 16.04 16.85L8.91 12.7C8.96 12.47 9 12.24 9 12C9 11.76 8.96 11.53 8.91 11.3L15.96 7.19C16.5 7.69 17.21 8 18 8C19.66 8 21 6.66 21 5C21 3.34 19.66 2 18 2C16.34 2 15 3.34 15 5C15 5.24 15.04 5.47 15.09 5.7L8.04 9.81C7.5 9.31 6.79 9 6 9C4.34 9 3 10.34 3 12C3 13.66 4.34 15 6 15C6.79 15 7.5 14.69 8.04 14.19L15.16 18.35C15.11 18.56 15.08 18.78 15.08 19C15.08 20.61 16.39 21.92 18 21.92C19.61 21.92 20.92 20.61 20.92 19C20.92 17.39 19.61 16.08 18 16.08Z" fill="currentColor"/>
+        </svg>
+        <span>SocialShareButton</span>
+      </a>
+      <div class="designer-nav-sep"></div>
+      <span class="designer-nav-title">Theme Designer</span>
+    </div>
+    <div class="designer-nav-right">
+      <a class="nav-btn" href="index.html">← Back to Demo</a>
+      <button class="nav-btn primary" id="nav-export-btn">Export Theme</button>
+    </div>
+  </nav>
+
+  <!-- ── Main layout ─────────────────────────────────────────── -->
+  <div class="designer-layout">
+
+    <!-- LEFT: Live Preview -->
+    <div class="designer-preview">
+
+      <!-- Share button preview -->
+      <div>
+        <p class="preview-section-title">Share Button</p>
+        <div class="preview-btn-stage">
+          <div id="share-button"></div>
+        </div>
+      </div>
+
+      <!-- Modal card preview (static clone, same CSS classes) -->
+      <div>
+        <p class="preview-section-title">Modal Preview (live)</p>
+        <div class="preview-modal-stage">
+          <div class="social-share-modal-overlay dark" id="ssb-preview-overlay">
+            <div class="social-share-modal-content center" id="ssb-preview-card">
+
+              <div class="social-share-modal-header">
+                <h3>Share</h3>
+                <button class="social-share-modal-close" aria-label="Close" style="pointer-events:none">✕</button>
+              </div>
+
+              <div class="social-share-platforms" id="ssb-preview-platforms">
+                <!-- Populated by designer -->
+              </div>
+
+              <div class="social-share-link-container">
+                <div class="social-share-link-input">
+                  <input type="text" value="https://example.com" readonly aria-label="URL to share">
+                </div>
+                <button class="social-share-copy-btn" style="pointer-events:none">Copy</button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /.designer-preview -->
+
+    <!-- RIGHT: Designer panel -->
+    <aside class="designer-sidebar">
+      <div id="designer-panel"></div>
+    </aside>
+
+  </div><!-- /.designer-layout -->
+
+  <!-- Scripts (existing files untouched) -->
+  <script src="src/social-share-button.js"></script>
+  <script src="src/social-share-designer.js"></script>
+
+  <script>
+    /* ── Init real SocialShareButton ────────────────────────── */
+    const btn = new SocialShareButton({
+      container: '#share-button',
+      url: 'https://example.com',
+      title: 'SocialShareButton Demo',
+      description: 'A lightweight, customizable social sharing component',
+      platforms: ['whatsapp', 'facebook', 'twitter', 'linkedin', 'telegram', 'reddit', 'email'],
+      theme: 'dark',
+      buttonText: 'Share',
+      buttonStyle: 'default',
+    });
+
+    /* ── Init Designer ──────────────────────────────────────── */
+    const designer = new SocialShareDesigner({
+      panelContainer: '#designer-panel',
+      targetButton: btn,           // instance → full control
+    });
+
+    /* ── Populate preview platforms on load ─────────────────── */
+    (function populatePreview() {
+      const PLATFORMS = {
+        whatsapp: { name: 'WhatsApp', color: '#25D366', emoji: '💬' },
+        facebook: { name: 'Facebook', color: '#1877F2', emoji: 'f'  },
+        twitter:  { name: 'X',        color: '#000000', emoji: 'X'  },
+        linkedin: { name: 'LinkedIn', color: '#0A66C2', emoji: 'in' },
+        telegram: { name: 'Telegram', color: '#0088cc', emoji: '✈'  },
+        reddit:   { name: 'Reddit',   color: '#FF4500', emoji: 'r'  },
+        email:    { name: 'Email',    color: '#7f7f7f', emoji: '✉'  },
+      };
+      const container = document.getElementById('ssb-preview-platforms');
+      if (!container) return;
+      container.innerHTML = Object.entries(PLATFORMS).map(([p, { name, color, emoji }]) => `
+        <button class="social-share-platform-btn" data-platform="${p}" style="--platform-color:${color};pointer-events:none">
+          <div class="social-share-platform-icon" style="background-color:${color}">
+            <span style="color:#fff;font-size:18px;font-weight:700;line-height:1;font-family:sans-serif;">${emoji}</span>
+          </div>
+          <span>${name}</span>
+        </button>
+      `).join('');
+    })();
+
+    /* ── Nav export button wires to designer ────────────────── */
+    document.getElementById('nav-export-btn').addEventListener('click', () => {
+      document.getElementById('ssb-btn-export').click();
+    });
+  </script>
+</body>
+</html>
