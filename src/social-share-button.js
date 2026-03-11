@@ -226,7 +226,7 @@ class SocialShareButton {
     this.listeners.push({ element, type, handler, options });
   }
 
-  //Remove all tracked event listeners (used in destroy to prevent memory leaks)
+  // Remove all tracked event listeners (used in destroy to prevent memory leaks)
   removeAllListeners() {
     this.listeners.forEach(({ element, type, handler, options }) => {
       if (element) {
