@@ -419,12 +419,7 @@ class SocialShareButton {
             this.feedbackTimeout = null;
           }, 2000);
         })
-        .catch((err) => {
-          // Guard against async callback after destroy
-          if (this.isDestroyed) return;
-
-          // eslint-disable-next-line no-console
-          console.error('Failed to copy:', err);
+        .catch(() => {
           // Fallback to manual selection
           this.fallbackCopy(input, copyBtn);
         });
@@ -462,9 +457,7 @@ class SocialShareButton {
         copyBtn.classList.remove('copied');
         this.feedbackTimeout = null;
       }, 2000);
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.error('Fallback copy failed:', err);
+    } catch (_err) {
       copyBtn.textContent = 'Failed';
 
       // Clear any existing feedback timeout
