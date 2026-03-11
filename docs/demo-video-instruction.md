@@ -55,11 +55,10 @@ Show the code added for the framework integration.
 
 For example:
 
-```
 social-share-button-qwik.js
 social-share-button-solid.js
 social-share-button-react.js
-```
+
 
 
 
@@ -77,36 +76,31 @@ These starters generate a **clean project structure with minimal configuration**
 Examples:
 
 ### Qwik
-```
+
 npm create qwik@latest
 npm install
 npm run dev
-```
+
 
 ### Preact
-```
 npm create preact@latest
-```
+
 
 ### Remix
-```
 npx create-remix@latest
-```
+
 
 ### SolidJS
-```
 npx degit solidjs/templates/js my-app
-```
+
 
 ### Rails
-```
 rails new my-app
-```
+
 
 ### Django
-```
 django-admin startproject myapp
-```
+
 
 Contributors may use similar official starter commands for other frameworks if needed.
 
@@ -118,16 +112,16 @@ Run the project locally and demonstrate the button rendering.
 
 Example commands:
 
-```
+
 npm install
 npm run dev
-```
+
 
 
 Then open the browser and show the working result:
-```
+
 http://localhost:5173
-```
+
 
 
 
