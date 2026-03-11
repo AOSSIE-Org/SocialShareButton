@@ -1,37 +1,18 @@
-# Enables IDE autocompletion for this config file
+﻿# Enables IDE autocompletion for this config file
 # yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
 
 # Language for CodeRabbit's review comments
 language: en
 
-# Enable experimental features 
+# Enable experimental features
 early_access: true
 
 chat:
-  # CodeRabbit will automatically reply to PR comments when auto_reply is true
+  # CodeRabbit will automatically respond to @coderabbitai mentions in PR comments
   auto_reply: true
 
-issue_enrichment:
-  labeling:
-    auto_apply_labels: true
-    labeling_instructions:
-      - label: bug
-        instructions: Issues reporting bugs, errors, crashes, incorrect behavior, or unexpected results. This includes runtime errors, logic errors, broken functionality, regressions, and any deviation from expected or documented behavior.
-      - label: enhancement
-        instructions: Feature requests, improvements to existing functionality, performance optimizations, refactoring suggestions, UI/UX enhancements, and any suggestions to make the project better or add new capabilities.
-      - label: documentation
-        instructions: Documentation updates, additions, corrections, or clarifications needed. This includes missing docs, outdated information, unclear instructions, API documentation, code examples, README improvements, and any requests for better explanations or guides.
-  planning:
-    enabled: true
-    auto_planning:
-      enabled: true
-      labels:
-        - "plan-me" # Auto-plan issues with this label
-        - "feature" # Also auto-plan these
-        - "!no-plan" # Never auto-plan issues with this label
-
 reviews:
-  profile: assertive # Options: chill (focuses on significant issues, less nitpicky about style), assertive (more thorough, flags style issues and minor improvements too)
+  profile: assertive # Options: chill (focuses on significant issues), assertive (more thorough)
 
   auto_review:
     # Automatically trigger reviews when PRs are opened or updated
@@ -53,7 +34,7 @@ reviews:
   sequence_diagrams: true
 
   # Include poems in reviews
-  poem: true
+  poem: false
 
   # Show review completion status
   review_status: true
@@ -63,32 +44,27 @@ reviews:
 
   # Include summary of all changed files
   changed_files_summary: true
-# Request changes workflow: true = requests changes and blocks PR approval when issues found
-  request_changes_workflow: true
+
+  # Leave comments without blocking PR approval (non-blocking feedback for inline comment coverage)
+  request_changes_workflow: false
 
   # Pre-merge checks to enforce before merging PRs
   pre_merge_checks:
     description:
       # Validate that PR has a proper description
       mode: warning # Options: off, warning, error
-    docstrings:
-      # Disable docstring coverage checks (let's assume we don't need them)
-      mode: off
 
   # Exclude these paths from reviews (build artifacts and dependencies)
   path_filters:
-    - "!**/node_modules/**" # npm dependencies
-    - "!**/android/**" # Native Android build files
-    - "!**/ios/**" # Native iOS build files
-    - "!**/.expo/**" # Expo build cache
-    - "!**/.expo-shared/**" # Expo shared config
-    - "!**/dist/**" # Build output
+    - "!**/node_modules/**"
+    - "!**/dist/**"
+    - "!**/build/**"
+    - "!**/.next/**"
+    - "!**/coverage/**"
 
   # Use the following tools when reviewing
   tools:
-    shellcheck:
-      enabled: true
-    ruff:
+    eslint:
       enabled: true
     markdownlint:
       enabled: true
@@ -99,54 +75,27 @@ reviews:
       enabled: true
       enabled_only: false
       level: default
-    biome:
-      enabled: true
-    hadolint:
-      enabled: true
-    swiftlint:
-      enabled: true
-    phpstan:
-      enabled: true
-      level: default
-    golangci-lint:
-      enabled: true
-    yamllint:
-      enabled: true
     gitleaks:
       enabled: true
-    checkov:
-      enabled: true
-    detekt:
-      enabled: true
-    eslint:
+    yamllint:
       enabled: true
 
   # Apply the following labels to PRs
   labeling_instructions:
-    - label: Python Lang
-      instructions: Apply when the PR/MR contains changes to python source-code
-    - label: Solidity Lang
-      instructions: Apply when the PR/MR contains changes to solidity source-code
-    - label: Typescript Lang
-      instructions: Apply when the PR/MR contains changes to javascript or typescript source-code
-    - label: Ergoscript Lang
-      instructions: Apply when the PR/MR contains changes to ergoscript source-code
-    - label: Bash Lang
-      instructions: >-
-        Apply when the PR/MR contains changes to shell-scripts or BASH code
-        snippets
-    - label: Make Lang
-      instructions: >-
-        Apply when the PR/MR contains changes to the file `Makefile` or makefile
-        code snippets
+    - label: JavaScript
+      instructions: Apply when the PR/MR contains changes to JavaScript source-code
+    - label: React
+      instructions: Apply when the PR/MR contains changes to React components
+    - label: CSS
+      instructions: Apply when the PR/MR contains changes to CSS files
     - label: Documentation
-      instructions: >-
-        Apply whenever project documentation (namely markdown source-code) is
-        updated by the PR/MR
+      instructions: Apply whenever project documentation (namely markdown source-code) is updated by the PR/MR
+    - label: Bug Fix
+      instructions: Apply when the PR/MR fixes a bug or resolves an issue
+    - label: Enhancement
+      instructions: Apply when the PR/MR adds new features or improvements
     - label: Linter
-      instructions: >-
-        Apply when the purpose of the PR/MR is related to fixing the feedback
-        from a linter
+      instructions: Apply when the purpose of the PR/MR is related to fixing the feedback from a linter
 
   # Custom review instructions for specific file patterns
   path_instructions:
@@ -157,124 +106,110 @@ reviews:
         - Ensure that test code is automated, comprehensive, and follows testing best practices
         - Verify that all critical functionality is covered by tests
         - Confirm that the code meets the project's requirements and objectives
-        - Confirm that copyright years are up to date whenever a file is changed
         - Point out redundant obvious comments that do not add clarity to the code
         - Ensure that comments are concise and suggest more concise comment statements if possible
-        - Discourage usage of verbose comment styles such as NatSpec
         - Look for code duplication
         - Suggest code completions when:
             - seeing a TODO comment
             - seeing a FIXME comment
     
-    # TypeScript/JavaScript files
-    - path: "**/*.{ts,tsx,js,jsx}"
+    # JavaScript source files - INLINE COMMENT COVERAGE
+    - path: "src/**/*.js"
       instructions: |
-        NextJS:
-        - Ensure that "use client" is being used
-        - Ensure that only features that allow pure client-side rendering are used
-        - NextJS best practices (including file structure, API routes, and static generation methods) are used.
-      
-        TypeScript:
-        - Avoid 'any', use explicit types
-        - Prefer 'import type' for type imports
-        - Review for significant deviations from Google JavaScript style guide. Minor style issues are not a priority
-        - The code adheres to best practices associated with React
-        - The code adheres to best practices associated with React PWA
-        - The code adheres to best practices associated with SPA
-        - The code adheres to best practices recommended by lighthouse or similar tools for performance
-        - The code adheres to best practices associated with Node.js
-        - The code adheres to best practices recommended for performance
-
-        Security:
+        **Inline Comment Coverage Check (PRIORITY)**
+        
+        Ensure all public and private methods and significant properties have clear inline comments addressing:
+        
+        1. **What each logical block does** (not just restating the code)
+           - Example: "Safety check: prevent errors if modal was destroyed"
+           - Example: "Animate in after short delay for smooth transition"
+        
+        2. **Why non-obvious logic exists**
+           - Example: "Shared body overflow management: only increment counter if this instance doesn't already own the lock"
+           - Example: "Clear any pending animations (both open and close to prevent race conditions)"
+        
+        3. **Edge cases and guards**
+           - Example: "Re-entrancy guard to prevent duplicate initialization"
+           - Example: "Safety check in case destroy() was called during async operation"
+        
+        **Flag any newly added or modified function or property that lacks descriptive inline comments.**
+        
+        Preferred style:
+        - Use inline comments (// comment) within method bodies
+        - Focus on "what" and "why", not just repeating the code
+        - Comment before logical blocks, not every line
+        - Explain non-obvious patterns like reference counting, state management, async guards
+        
+        Examples of GOOD comments:
+        ✓ // Safety check: prevent errors if modal was destroyed
+        ✓ // Shared body overflow management: only increment if not already owned
+        ✓ // Clear any pending animations to prevent race conditions
+        
+        Examples of BAD comments:
+        ✗ // Set overflow to hidden (just restates the code)
+        ✗ // Increment counter (doesn't explain why)
+        ✗ No comment at all for complex logic
+        
+        **Additional JavaScript Best Practices:**
+        - Check for major style guide violations
         - No exposed API keys or sensitive data
-        - Use expo-secure-store for sensitive storage
-        - Validate deep linking configurations
-        - Check for common security vulnerabilities such as:
-          - SQL Injection
-          - XSS (Cross-Site Scripting)
-          - CSRF (Cross-Site Request Forgery)
-          - Insecure dependencies
-          - Sensitive data exposure
-
-        Internationalization:
-        - User-visible strings should be externalized to resource files (i18n)
-
-    # HTML files
-    - path: "**/*.html"
+        - Avoid common security vulnerabilities (XSS, injection attacks)
+        - Ensure proper error handling
+        - Review for performance issues
+    
+    # React component files - INLINE COMMENT COVERAGE
+    - path: "src/**/*.jsx"
       instructions: |
-        Review the HTML code against the google html style guide and point out any mismatches. Ensure that:
-        - The code adheres to best practices recommended by lighthouse or similar tools for performance
-
+        **Inline Comment Coverage Check for React Components**
+        
+        Ensure all component methods, hooks, and significant state management logic have clear inline comments:
+        
+        1. **What each logical block does**
+        2. **Why non-obvious React patterns exist** (e.g., useEffect dependencies, memo optimizations)
+        3. **Edge cases and component lifecycle considerations**
+        
+        **Flag any newly added or modified function or hook that lacks descriptive inline comments.**
+        
+        **React Best Practices:**
+        - Ensure proper React hooks usage
+        - Check for unnecessary re-renders
+        - Validate prop types
+        - No exposed API keys or sensitive data
+    
     # CSS files
     - path: "**/*.css"
       instructions: |
-        Review the CSS code against the google css style guide and point out any mismatches. Ensure that:
-        - The code adheres to best practices associated with CSS.
-        - The code adheres to best practices recommended by lighthouse or similar tools for performance.
-        - The code adheres to similar naming conventions for classes, ids.
-
-    # Python files
-    - path: "**/*.{py}"
+        Review CSS code for:
+        - Adherence to best practices
+        - Proper naming conventions for classes
+        - Performance optimizations
+        - Consistent styling patterns
+    
+    # HTML files
+    - path: "**/*.html"
       instructions: |
-        Python:
-        - Check for major PEP 8 violations and Python best practices. 
-
-    # Solidity Smart Contract files
-    - path: "**/*.sol"
-      instructions: |
-        Solidity:
-        - Review the Solidity contracts for security vulnerabilities and adherence to best practices.
-        - Ensure immutability is used appropriately (e.g., `immutable` and `constant` where applicable).
-        - Ensure there are no unbounded loops that could lead to gas exhaustion.
-        - Verify correct and explicit visibility modifiers for all state variables and functions.
-        - Flag variables that are declared but used only once or are unnecessary.
-        - Identify potential gas optimization opportunities without compromising readability or security.
-        - Verify that any modification to contract logic includes corresponding updates to automated tests.
-        - Ensure failure paths and revert scenarios are explicitly handled and validated.
-        - Validate proper access control enforcement (e.g., Ownable, RBAC, role checks).
-        - Ensure consistent and correct event emission for all state-changing operations.
-        - Confirm architectural consistency with existing contracts (no unintended storage layout changes unless clearly documented).
-        - Flag major feature additions or architectural changes that were implemented without prior design discussion (if applicable).
-        - Flag pull requests that mix unrelated changes or multiple concerns in a single submission.
-        - Ensure security-sensitive logic changes are not introduced without adequate test coverage.
-        - Review for common smart contract vulnerabilities, including but not limited to:
-            - Reentrancy
-            - Improper input validation
-            - Access control bypass
-            - Integer overflows/underflows (if using unchecked blocks)
-            - Front-running risks where applicable
-
-
-    # Javascript/Typescript test files
-    - path: "**/*.test.{ts,tsx,js,jsx}"
+        Review HTML code for:
+        - Adherence to HTML5 standards
+        - Proper semantic markup
+        - Accessibility (ARIA labels, alt text)
+        - Performance optimizations
+    
+    # Test files
+    - path: "**/*.test.{js,jsx}"
       instructions: |
         Review test files for:
-        - Comprehensive coverage of component behavior
-        - Proper use of the project's chosen testing framework and utilities (e.g., Jest and Testing Library, if applicable)
+        - Comprehensive coverage of component/function behavior
+        - Proper use of testing libraries
         - Async behavior is properly tested
-        - Accessibility testing is included
-        - Test descriptions are sufficiently detailed to clarify the purpose of each test
-        - The tests are not tautological 
-
-    # Solidity test files
-    - path: "**/*.test.{sol}"
+        - Test descriptions are sufficiently detailed
+        - Tests are not tautological
+    
+    # Markdown documentation
+    - path: "**/*.md"
       instructions: |
-        Review test files for:
-        - Comprehensive coverage of contract behavior.
-        - Coverage of success paths, edge cases, and failure/revert scenarios.
-        - Proper validation of access control restrictions.
-        - Verification of event emissions where applicable.
-        - Explicit validation of state changes after each relevant function call.
-        - Adequate test updates whenever contract logic is modified.
-        - Deterministic behavior (tests should not rely on implicit execution order or shared mutable state).
-        - Clear and descriptive test names that reflect the intended behavior being validated.
-
-
-    # Asset files (images, fonts, etc.)
-    - path: "assets/**/*"
-      instructions: |
-        Review asset files for:
-        - Image optimization (appropriate size and format)
-        - Proper @2x and @3x variants for different screen densities
-        - SVG assets are optimized
-        - Font files are licensed and optimized
+        Review documentation for:
+        - Spelling and grammar
+        - Clear and concise explanations
+        - Up-to-date information
+        - Proper formatting and structure
+        - Working links and references
