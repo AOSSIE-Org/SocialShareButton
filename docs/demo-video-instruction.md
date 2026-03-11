@@ -199,3 +199,20 @@ Before submitting your PR, ensure that:
 - [ ] Button rendering shown on localhost
 - [ ] Video uploaded with public access
 - [ ] Video link added to the README demo section
+
+
+
+## 💬 Getting Help
+
+If you have questions regarding the framework integration, demo video creation, or testing setup, please ask in the **AOSSIE Discord server**.
+
+Maintainers prefer discussing issues and queries on Discord for faster collaboration and guidance.
+
+You can join the server here:
+
+https://discord.com/invite/hjUhu33uAn
+
+Please include the following when asking for help:
+- Your framework (React, Qwik, SolidJS, etc.)
+- Link to your Pull Request
+- A short description of the issue you are facing
