@@ -110,7 +110,7 @@ django-admin startproject myapp
 
 Contributors may use similar official starter commands for other frameworks if needed.
 
-git
+
 
 ### 4. Running the Project
 
@@ -145,6 +145,7 @@ If the released CDN version is used, the demo may load **older library code**, w
 
 Therefore, for **testing and demo video recording**, contributors should use **jsDelivr with their branch name**.
 
+Their new wrapper code (e.g., social-share-button-qwik.js) only exists in their PR branch — not in the published v1.0.3 CDN tag.
 ---
 
 
