@@ -1,4 +1,4 @@
-﻿# Enables IDE autocompletion for this config file
+# Enables IDE autocompletion for this config file
 # yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
 
 # Language for CodeRabbit's review comments
@@ -34,7 +34,7 @@ reviews:
   sequence_diagrams: true
 
   # Include poems in reviews
-  poem: false
+  poem: true
 
   # Show review completion status
   review_status: true
@@ -46,7 +46,7 @@ reviews:
   changed_files_summary: true
 
   # Leave comments without blocking PR approval (non-blocking feedback for inline comment coverage)
-  request_changes_workflow: false
+  request_changes_workflow: true
 
   # Pre-merge checks to enforce before merging PRs
   pre_merge_checks:
