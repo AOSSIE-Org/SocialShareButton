@@ -112,13 +112,13 @@ Your video must cover all of the following:
 
 1. Record your demo following the checklist above.
 2. Upload it to a public hosting platform.
-3. Add the public link to your **Pull Request description** under a `Demo Video` section, like this:
+3. Add the public link to your **Pull Request description** under a `Demo Video` section. Example:
 
-```md
-## Demo Video
+   ```md
+   ## Demo Video
 
-[Watch demo](https://your-link-here)
-```
+   [Watch demo](https://your-link-here)
+   ```
 
 4. If submitting via Discord, paste the link in the relevant project channel alongside your PR link.
 
