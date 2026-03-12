@@ -26,28 +26,48 @@ Your demo must show SocialShareButton integrated into a **brand new project crea
 
 Use the official starter for your framework. These generate the cleanest starter code directly.
 
-| Framework  | Starter Command                                                          |
-| ---------- | ------------------------------------------------------------------------ |
-| React      | `npx create-react-app my-app`                                            |
-| Next.js    | `npx create-next-app@latest my-app`                                      |
-| Solid.js   | `npx degit solidjs/templates/js my-app`                                  |
-| Qwik       | `npm create qwik@latest`                                                 |
-| Preact     | `npm create preact@latest`                                               |
-| Remix      | `npx create-remix@latest`                                                |
-| Vue        | `npm create vue@latest`                                                  |
-| Svelte     | `npx sv create my-app`                                                   |
-| Astro      | `npm create astro@latest`                                                |
-| Angular    | `npx @angular/cli new my-app`                                            |
-| Django     | `django-admin startproject myapp`                                        |
-| Rails      | `rails new my-app`                                                       |
-| Vanilla JS | Create an `index.html` file with a `<script>` tag (no build tool needed) |
+| Framework    | Starter Command                                                          |
+| ------------ | ------------------------------------------------------------------------ |
+| React (Vite) | `npm create vite@latest my-app -- --template react`                      |
+| Next.js      | `npx create-next-app@latest my-app`                                      |
+| Solid.js     | `npx degit solidjs/templates/js my-app`                                  |
+| Qwik         | `npm create qwik@latest`                                                 |
+| Preact       | `npm create preact@latest`                                               |
+| Remix        | `npx create-remix@latest`                                                |
+| Vue          | `npm create vue@latest`                                                  |
+| Svelte       | `npx sv create my-app`                                                   |
+| Astro        | `npm create astro@latest`                                                |
+| Angular      | `npx @angular/cli new my-app`                                            |
+| Django       | `django-admin startproject myapp`                                        |
+| Rails        | `rails new my-app`                                                       |
+| Vanilla JS   | Create an `index.html` file with a `<script>` tag (no build tool needed) |
 
-After running the starter command:
+After running the starter command, follow the setup steps for your ecosystem:
+
+**JavaScript frameworks (React, Solid.js, Vue, Qwik, Preact, Remix, Svelte, Astro, Angular, Next.js):**
 
 ```bash
 cd my-app
-npm install   # or yarn / pnpm
-npm run dev   # start the dev server
+npm install        # or yarn install / pnpm install
+npm run dev        # start the dev server
+```
+
+**Django:**
+
+```bash
+cd myapp
+python -m venv venv
+source venv/bin/activate   # Windows: venv\Scripts\activate
+pip install django
+python manage.py runserver
+```
+
+**Rails:**
+
+```bash
+cd my-app
+bundle install
+bin/rails server
 ```
 
 Then install SocialShareButton and integrate it following the README.
@@ -94,8 +114,9 @@ Your video must cover all of the following:
 2. Upload it to a public hosting platform.
 3. Add the public link to your **Pull Request description** under a `Demo Video` section, like this:
 
-```
+```md
 ## Demo Video
+
 [Watch demo](https://your-link-here)
 ```
 
