@@ -1,30 +1,32 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from "react";
 
 export const SocialShareButton = ({
   url,
   title,
-  description = '',
+  description = "",
   hashtags = [],
   via = '',
-  platforms = ['whatsapp', 'facebook', 'twitter', 'linkedin', 'telegram', 'reddit',"email","pinterest"],
+  platforms = ['whatsapp', 'facebook', 'twitter', 'linkedin', 'telegram', 'reddit',"pinterest"],
   theme = 'dark',
   buttonText = 'Share',
   customClass = '',
   onShare = null,
   onCopy = null,
-  buttonStyle = 'default',
-  modalPosition = 'center'
+  buttonStyle = "default",
+  modalPosition = "center",
 }) => {
   const containerRef = useRef(null);
   const shareButtonRef = useRef(null);
 
   // Auto-detect current URL and title if not provided
-  const currentUrl = url || (typeof window !== 'undefined' ? window.location.href : '');
-  const currentTitle = title || (typeof document !== 'undefined' ? document.title : '');
+  const currentUrl =
+    url || (typeof window !== "undefined" ? window.location.href : "");
+  const currentTitle =
+    title || (typeof document !== "undefined" ? document.title : "");
 
   useEffect(() => {
     if (containerRef.current && !shareButtonRef.current) {
-      if (typeof window !== 'undefined' && window.SocialShareButton) {
+      if (typeof window !== "undefined" && window.SocialShareButton) {
         shareButtonRef.current = new window.SocialShareButton({
           container: containerRef.current,
           url: currentUrl,
@@ -39,7 +41,7 @@ export const SocialShareButton = ({
           onShare,
           onCopy,
           buttonStyle,
-          modalPosition
+          modalPosition,
         });
       }
     }
@@ -68,10 +70,24 @@ export const SocialShareButton = ({
         onShare,
         onCopy,
         buttonStyle,
-        modalPosition
+        modalPosition,
       });
     }
-  }, [currentUrl, currentTitle, description, hashtags, via, platforms, theme, buttonText, customClass, onShare, onCopy, buttonStyle, modalPosition]);
+  }, [
+    currentUrl,
+    currentTitle,
+    description,
+    hashtags,
+    via,
+    platforms,
+    theme,
+    buttonText,
+    customClass,
+    onShare,
+    onCopy,
+    buttonStyle,
+    modalPosition,
+  ]);
 
   return <div ref={containerRef}></div>;
 };

@@ -1,12 +1,14 @@
 # Contributing to SocialShareButton
 
-Thank you for your interest in contributing to **SocialShareButton**! 🚀  
+Thank you for your interest in contributing to **SocialShareButton**! 🚀
 We welcome contributions from everyone.
 
 This document provides guidelines to help you contribute effectively and keep the project clean and maintainable.
 
 ---
+
 ## 🚨 Important: Discord Communication
+
 - Join our [Discord server](https://discord.gg/hjUhu33uAn) before starting any work
 - All project communication must happen on Discord.
 - Please post PR/issue updates in the relevant Discord channel.
@@ -33,6 +35,7 @@ You can contribute in many ways:
 - 🧪 Improving testing or code quality
 
 ---
+
 ### 📌 Before Starting Work
 
 - Please create or comment on an issue first.
@@ -52,10 +55,11 @@ git clone https://github.com/YOUR_USERNAME/SocialShareButton.git
 ```
 
 - Add upstream remote:
-  
+
 ```bash
 git remote add upstream https://github.com/AOSSIE-Org/SocialShareButton.git
 ```
+
 ### 2️⃣ Create a New Branch
 
 Always create a new branch for your changes:
@@ -63,6 +67,7 @@ Always create a new branch for your changes:
 ```bash
 git checkout -b feature/your-feature-name
 ```
+
 **Examples:**
 
 - `feature/add-linkedin-support`
@@ -98,25 +103,33 @@ git checkout -b feature/your-feature-name
 - Use clear and meaningful commit messages.
 
 **Format:**
+
 ```
 type: short description
 ```
 
 **Examples:**
+
 ```
 feat: add Twitter share support
 fix: resolve mobile button spacing issue
 docs: improve README installation section
 ```
+
 ### 6️⃣ Push and Open a Pull Request
+
 Before pushing, sync with upstream:
+
 ```bash
 git fetch upstream
 ```
+
 ```bash
 git rebase upstream/main
 ```
+
 Push your branch:
+
 ```bash
  git push origin feature/your-feature-name
 ```
@@ -132,7 +145,9 @@ Push your branch:
 - Any relevant issue reference
 
 ## 📋 Pull Request Guidelines
+
 ### ✅ Before Submitting
+
 - [ ] Code tested
 - [ ] Documentation updated
 - [ ] Linked related issue
@@ -148,6 +163,7 @@ Push your branch:
 - Be respectful and constructive.
 - Communicate progress on Discord.
 - Inactive issues may be reassigned.
+
 ## 🙋 Getting Help
 
 - Review the README and existing documentation first.
