@@ -12,7 +12,7 @@ class SocialShareButton {
       description: options.description || '',
       hashtags: options.hashtags || [],
       via: options.via || '',
-      platforms: options.platforms || ['whatsapp', 'facebook', 'twitter', 'linkedin', 'telegram', 'reddit',"email"],
+      platforms: options.platforms || ['whatsapp', 'facebook', 'twitter', 'linkedin', 'telegram', 'reddit','pinterest'],
       theme: options.theme || 'dark',
       buttonText: options.buttonText || 'Share',
       customClass: options.customClass || '',
@@ -138,7 +138,12 @@ class SocialShareButton {
         name: 'Email',
         color: '#7f7f7f',
         icon: '<path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>'
-      }
+      },
+    pinterest: {
+  name: 'Pinterest',
+  color: '#E60023',
+  icon: '<path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.43 7.627 11.174-.105-.949-.2-2.406.042-3.445.219-.941 1.406-5.988 1.406-5.988s-.359-.719-.359-1.781c0-1.669.967-2.916 2.169-2.916 1.022 0 1.516.767 1.516 1.686 0 1.027-.654 2.561-.992 3.986-.283 1.196.6 2.17 1.777 2.17 2.133 0 3.774-2.25 3.774-5.495 0-2.874-2.066-4.883-5.017-4.883-3.418 0-5.426 2.563-5.426 5.211 0 1.032.398 2.14.896 2.74.098.12.112.225.083.347-.09.382-.293 1.197-.333 1.364-.052.219-.171.265-.395.16-1.474-.686-2.395-2.84-2.395-4.574 0-3.724 2.707-7.144 7.805-7.144 4.098 0 7.287 2.921 7.287 6.83 0 4.078-2.572 7.359-6.141 7.359-1.2 0-2.329-.623-2.713-1.357l-.738 2.814c-.267 1.027-.99 2.316-1.474 3.103A12.003 12.003 0 0024 12c0-6.627-5.373-12-12-12z"/>'
+}
     };
 
     return this.options.platforms
@@ -165,7 +170,7 @@ class SocialShareButton {
     const hashtagString = hashtags.length ? '#' + hashtags.join(' #') : '';
     
     // Build platform-specific messages with customizable parameters
-    let whatsappMessage, facebookMessage, twitterMessage, telegramMessage, redditTitle, emailBody;
+    let whatsappMessage, facebookMessage, twitterMessage, telegramMessage, redditTitle, emailBody,pinterestText;
     
     // WhatsApp: Casual with emoji
     whatsappMessage = `\u{1F680} ${title}${description ? '\n\n' + description : ''}${hashtagString ? '\n\n' + hashtagString : ''}\n\nLive on the site \u{1F440}\nClean UI, smooth flow \u{2014} worth peeking\n\u{1F447}`;
@@ -184,6 +189,9 @@ class SocialShareButton {
     
     // Email: Friendly greeting
     emailBody = `Hey \u{1F44B}\n\nSharing a clean project I came across:\n${title}${description ? '\n\n' + description : ''}\n\nLive, simple, and usable \u{2014} take a look \u{1F447}`;
+    //Pinterest::Title + Description
+    pinterestText = `${title}${description ? '\n\n' + description : ''}`;
+
     
     const encodedWhatsapp = encodeURIComponent(whatsappMessage);
     const encodedFacebook = encodeURIComponent(facebookMessage);
@@ -191,6 +199,7 @@ class SocialShareButton {
     const encodedTelegram = encodeURIComponent(telegramMessage);
     const encodedReddit = encodeURIComponent(redditTitle);
     const encodedEmail = encodeURIComponent(emailBody);
+    const encodedPinterest = encodeURIComponent(pinterestText);
 
     const urls = {
       whatsapp: `https://wa.me/?text=${encodedWhatsapp}%20${encodedUrl}`,
@@ -199,7 +208,8 @@ class SocialShareButton {
       linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`,
       telegram: `https://t.me/share/url?url=${encodedUrl}&text=${encodedTelegram}`,
       reddit: `https://reddit.com/submit?url=${encodedUrl}&title=${encodedReddit}`,
-      email: `mailto:?subject=${encodedTitle}&body=${encodedEmail}%20${encodedUrl}`
+      email: `mailto:?subject=${encodedTitle}&body=${encodedEmail}%20${encodedUrl}`,
+      pinterest: `https://pinterest.com/pin/create/button/?url=${encodedUrl}&description=${encodedPinterest}`,
     };
 
     return urls[platform] || '';
