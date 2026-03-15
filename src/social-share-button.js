@@ -5,7 +5,7 @@
  */
 
 /**
- * ⚠️ IMPORTANT: This _ContentDetector IIFE is INTENTIONALY DUPLICATED from
+ * ⚠️ IMPORTANT: This _ContentDetector IIFE is INTENTIONALLY DUPLICATED from
  * src/utils/extractContent.js to keep the CDN build zero-dependency.
  *
  * Any changes to detection priorities, selectors, or excerpt logic MUST be
@@ -267,8 +267,9 @@ class SocialShareButton {
 
     this.options = {
       url: options.url || (typeof window !== 'undefined' ? window.location.href : ''),
-      title: options.title || _autoTitle || (typeof document !== 'undefined' ? document.title : ''),
-      description: options.description || _autoDescription || '',
+      title:
+        options.title ?? (_autoTitle || (typeof document !== 'undefined' ? document.title : '')),
+      description: options.description ?? (_autoDescription || ''),
       hashtags: options.hashtags || [],
       via: options.via || '',
       platforms: options.platforms || [

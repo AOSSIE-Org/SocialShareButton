@@ -519,7 +519,7 @@ Note: You only need to provide `url` — if `autoDetect` is enabled (default), t
 new SocialShareButton({
   container: '#share-button', // Required: CSS selector or DOM element
   url: 'https://example.com', // Optional: defaults to window.location.href
-  title: 'Custom Title', // Optional: defaults to document.title
+  title: 'Custom Title', // Optional: auto-detected from page metadata when omitted
   buttonText: 'Share', // Optional: button label text
   buttonStyle: 'primary', // default | primary | compact | icon-only
   theme: 'dark', // dark | light
@@ -529,26 +529,26 @@ new SocialShareButton({
 
 ### All Available Options
 
-| Option             | Type           | Default                | Description                                          |
-| ------------------ | -------------- | ---------------------- | ---------------------------------------------------- |
-| `container`        | string/Element | -                      | **Required.** CSS selector or DOM element            |
-| `url`              | string         | `window.location.href` | URL to share                                         |
-| `title`            | string         | `document.title`       | Share title/headline                                 |
-| `description`      | string         | `''`                   | Additional description text                          |
-| `hashtags`         | array          | `[]`                   | Hashtags for posts (e.g., `['js', 'webdev']`)        |
-| `via`              | string         | `''`                   | Twitter handle (without @)                           |
-| `platforms`        | array          | All platforms          | Platforms to show (see below)                        |
-| `buttonText`       | string         | `'Share'`              | Button label text                                    |
-| `buttonStyle`      | string         | `'default'`            | `default`, `primary`, `compact`, `icon-only`         |
-| `buttonColor`      | string         | `''`                   | Custom button background color                       |
-| `buttonHoverColor` | string         | `''`                   | Custom button hover color                            |
-| `customClass`      | string         | `''`                   | Additional CSS class for button                      |
-| `theme`            | string         | `'dark'`               | `dark` or `light`                                    |
-| `modalPosition`    | string         | `'center'`             | Modal position on screen                             |
-| `showButton`       | boolean        | `true`                 | Show/hide the share button                           |
-| `onShare`          | function       | `null`                 | Callback when user shares: `(platform, url) => {}`   |
-| `onCopy`           | function       | `null`                 | Callback when user copies link: `(url) => {}`        |
-| `autoDetect`       | boolean        | `true`                 | Auto-detect title/description from page when omitted |
+| Option             | Type           | Default                                                     | Description                                                          |
+| ------------------ | -------------- | ----------------------------------------------------------- | -------------------------------------------------------------------- |
+| `container`        | string/Element | -                                                           | **Required.** CSS selector or DOM element                            |
+| `url`              | string         | `window.location.href`                                      | URL to share                                                         |
+| `title`            | string         | auto-detected (og:title → h1 → document.title)              | Share title/headline — auto-detected from page metadata when omitted |
+| `description`      | string         | auto-detected (og:description → meta description → excerpt) | Additional description text — auto-detected when omitted             |
+| `hashtags`         | array          | `[]`                                                        | Hashtags for posts (e.g., `['js', 'webdev']`)                        |
+| `via`              | string         | `''`                                                        | Twitter handle (without @)                                           |
+| `platforms`        | array          | All platforms                                               | Platforms to show (see below)                                        |
+| `buttonText`       | string         | `'Share'`                                                   | Button label text                                                    |
+| `buttonStyle`      | string         | `'default'`                                                 | `default`, `primary`, `compact`, `icon-only`                         |
+| `buttonColor`      | string         | `''`                                                        | Custom button background color                                       |
+| `buttonHoverColor` | string         | `''`                                                        | Custom button hover color                                            |
+| `customClass`      | string         | `''`                                                        | Additional CSS class for button                                      |
+| `theme`            | string         | `'dark'`                                                    | `dark` or `light`                                                    |
+| `modalPosition`    | string         | `'center'`                                                  | Modal position on screen                                             |
+| `showButton`       | boolean        | `true`                                                      | Show/hide the share button                                           |
+| `onShare`          | function       | `null`                                                      | Callback when user shares: `(platform, url) => {}`                   |
+| `onCopy`           | function       | `null`                                                      | Callback when user copies link: `(url) => {}`                        |
+| `autoDetect`       | boolean        | `true`                                                      | Auto-detect title/description from page when omitted                 |
 
 **Available Platforms:**  
 `whatsapp`, `facebook`, `twitter`, `linkedin`, `telegram`, `reddit`, `email`
