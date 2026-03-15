@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 
+// Import SocialShareButton directly for ESM bundles, fall back to window for CDN
 import SocialShareButtonCore from './social-share-button.js';
 
 export const SocialShareButton = ({
