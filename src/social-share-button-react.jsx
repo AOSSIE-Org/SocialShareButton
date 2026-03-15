@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react';
 
+import SocialShareButtonCore from './social-share-button.js';
+
 export const SocialShareButton = ({
   url,
   title,
@@ -35,8 +37,12 @@ export const SocialShareButton = ({
 
   useEffect(() => {
     if (containerRef.current && !shareButtonRef.current) {
-      if (typeof window !== 'undefined' && window.SocialShareButton) {
-        shareButtonRef.current = new window.SocialShareButton({
+      // Use imported class for ESM bundles, fall back to window for CDN script tags
+      const ShareButtonConstructor =
+        SocialShareButtonCore || (typeof window !== 'undefined' ? window.SocialShareButton : null);
+
+      if (ShareButtonConstructor) {
+        shareButtonRef.current = new ShareButtonConstructor({
           container: containerRef.current,
           url: currentUrl,
           title: currentTitle,
@@ -75,13 +81,17 @@ export const SocialShareButton = ({
     if (shareButtonRef.current) {
       // Invalidate detection cache on every route/prop change so the new
       // page content is picked up when autoDetect is enabled.
-      if (
-        autoDetect &&
-        typeof window !== 'undefined' &&
-        window.SocialShareButton &&
-        typeof window.SocialShareButton.clearContentCache === 'function'
-      ) {
-        window.SocialShareButton.clearContentCache();
+      if (autoDetect) {
+        const ShareButtonConstructor =
+          SocialShareButtonCore ||
+          (typeof window !== 'undefined' ? window.SocialShareButton : null);
+
+        if (
+          ShareButtonConstructor &&
+          typeof ShareButtonConstructor.clearContentCache === 'function'
+        ) {
+          ShareButtonConstructor.clearContentCache();
+        }
       }
 
       shareButtonRef.current.updateOptions({

@@ -15,17 +15,31 @@
  * the same signals that Mozilla Readability uses internally, without adding any
  * external dependency (preserving the project's zero-dependency promise).
  *
- * Cache: results are cached per-document for 30 seconds so repeated calls within
- * the same page lifecycle are O(1) after the first extraction.
+ * Cache: results are cached per-document URL for 30 seconds so repeated calls within
+ * the same page lifecycle are O(1) after the first extraction. This avoids stale
+ * results across different pages in SSR/multi-page scenarios.
  *
  * @module extractContent
  */
 
-/** @type {{ result: ContentResult, ts: number } | null} */
-let _cache = null;
+/** @type {Map<string, { result: ContentResult, ts: number }>} */
+const _cache = new Map();
 
 /** Cache TTL in milliseconds (30 s). */
 const CACHE_TTL_MS = 30_000;
+
+/**
+ * Gets the cache key for a document (uses URL to differentiate SSR requests).
+ * @param {Document} doc
+ * @returns {string}
+ */
+function _getCacheKey(doc) {
+  try {
+    return doc.URL || doc.location?.href || 'default';
+  } catch (_) {
+    return 'default';
+  }
+}
 
 /**
  * @typedef {Object} ContentResult
@@ -213,7 +227,7 @@ function generateExcerpt(text, minLen = 140, maxLen = 200) {
 /**
  * Extracts sharing-relevant content from the given Document.
  *
- * Results are cached for CACHE_TTL_MS milliseconds. Pass `bustCache = true`
+ * Results are cached per-document URL for CACHE_TTL_MS milliseconds. Pass `bustCache = true`
  * to force a fresh extraction (useful after dynamic content updates).
  *
  * @param {Document} doc         - The document to analyse (typically `document`).
@@ -221,9 +235,14 @@ function generateExcerpt(text, minLen = 140, maxLen = 200) {
  * @returns {ContentResult}
  */
 function extractContent(doc, bustCache = false) {
+  const cacheKey = _getCacheKey(doc);
+
   // Serve from cache if still fresh
-  if (!bustCache && _cache && Date.now() - _cache.ts < CACHE_TTL_MS) {
-    return _cache.result;
+  if (!bustCache) {
+    const cached = _cache.get(cacheKey);
+    if (cached && Date.now() - cached.ts < CACHE_TTL_MS) {
+      return cached.result;
+    }
   }
 
   /** @type {ContentResult} */
@@ -241,11 +260,13 @@ function extractContent(doc, bustCache = false) {
       textContent = extractPlainText(contentRoot);
       excerpt = generateExcerpt(textContent);
     } else {
-      // textContent is the full body text when we have a meta description
+      // textContent is the full body text when we have a meta description.
+      // Intentional fallback to excerpt if extraction fails.
       try {
         const contentRoot = findContentRoot(doc);
         textContent = extractPlainText(contentRoot);
       } catch (_) {
+        // Fallback to excerpt when textContent extraction fails
         textContent = excerpt;
       }
     }
@@ -260,16 +281,22 @@ function extractContent(doc, bustCache = false) {
     };
   }
 
-  _cache = { result, ts: Date.now() };
+  _cache.set(cacheKey, { result, ts: Date.now() });
   return result;
 }
 
 /**
  * Clears the internal extraction cache.
  * Call this when the page content changes dynamically (e.g. SPA navigation).
+ *
+ * @param {string} [url] - Optional specific URL to clear. If omitted, clears all cache.
  */
-function clearContentCache() {
-  _cache = null;
+function clearContentCache(url) {
+  if (url) {
+    _cache.delete(url);
+  } else {
+    _cache.clear();
+  }
 }
 
 export { extractContent, clearContentCache };

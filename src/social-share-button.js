@@ -188,8 +188,12 @@ class SocialShareButton {
           const detected = _ContentDetector.extract(document);
           if (_needsTitle) _autoTitle = detected.title || '';
           if (_needsDesc) _autoDescription = detected.excerpt || '';
-        } catch (_) {
+        } catch (_err) {
           // Never let detection errors break the constructor
+          if (options.debug) {
+            // eslint-disable-next-line no-console
+            console.warn('[SocialShareButton] Content detection failed', _err);
+          }
         }
       }
     }
@@ -755,6 +759,30 @@ class SocialShareButton {
   }
 
   updateOptions(options) {
+    // Re-run content detection if autoDetect is enabled and title/description not provided
+    if (this.options.autoDetect && typeof document !== 'undefined') {
+      const needsTitle = !options.title && !this.options.title;
+      const needsDesc = !options.description && !this.options.description;
+
+      if (needsTitle || needsDesc) {
+        try {
+          const detected = _ContentDetector.extract(document, true); // bustCache
+          if (needsTitle && detected.title) {
+            options.title = detected.title;
+          }
+          if (needsDesc && detected.excerpt) {
+            options.description = detected.excerpt;
+          }
+        } catch (_err) {
+          // Never let detection errors break updateOptions
+          if (this.options.debug) {
+            // eslint-disable-next-line no-console
+            console.warn('[SocialShareButton] Content detection failed in updateOptions', _err);
+          }
+        }
+      }
+    }
+
     this.options = { ...this.options, ...options };
 
     // Update URL in modal if it exists
@@ -917,8 +945,12 @@ class SocialShareButton {
         });
         const el = this._getContainer();
         (el || document).dispatchEvent(domEvent);
-      } catch (_) {
+      } catch (_err) {
         // Swallow CustomEvent dispatch errors (e.g. in sandboxed environments)
+        if (this.options.debug) {
+          // eslint-disable-next-line no-console
+          console.warn('[SocialShareButton] CustomEvent dispatch failed', _err);
+        }
       }
     }
 
@@ -926,8 +958,12 @@ class SocialShareButton {
     if (typeof this.options.onAnalytics === 'function') {
       try {
         this.options.onAnalytics(payload);
-      } catch (_) {
+      } catch (_err) {
         // Swallow errors thrown by consumer callbacks
+        if (this.options.debug) {
+          // eslint-disable-next-line no-console
+          console.warn('[SocialShareButton] onAnalytics callback threw', _err);
+        }
       }
     }
 
@@ -937,8 +973,12 @@ class SocialShareButton {
         if (plugin && typeof plugin.track === 'function') {
           try {
             plugin.track(payload);
-          } catch (_) {
+          } catch (_err) {
             // Swallow errors thrown by individual plugin adapters
+            if (this.options.debug) {
+              // eslint-disable-next-line no-console
+              console.warn('[SocialShareButton] Analytics plugin failed', _err);
+            }
           }
         }
       }
@@ -962,8 +1002,8 @@ SocialShareButton.originalBodyOverflow = null;
  *   SocialShareButton.clearContentCache();
  * }, [pathname]);
  */
-SocialShareButton.clearContentCache = function () {
-  _ContentDetector.clearCache();
+SocialShareButton.clearContentCache = function (url) {
+  _ContentDetector.clearCache(url);
 };
 
 // Export for different module systems

@@ -440,12 +440,12 @@ SocialShareButton can automatically detect the title and description for sharing
 When `title` or `description` props are not provided, the component runs a lightweight detection pass over the page:
 
 | Priority | Signal                                                   | Used for               |
-| -------- | -------------------------------------------------------- | ---------------------- | ---------------- |
+| -------- | -------------------------------------------------------- | ---------------------- |
 | 1        | `<meta property="og:title">`                             | Title                  |
 | 2        | `<meta name="twitter:title">`                            | Title                  |
 | 3        | First `<h1>` in `<article>` / `<main>` / `[role="main"]` | Title                  |
 | 4        | Common CMS selectors (`.post-title`, `.entry-title`, …)  | Title                  |
-| 5        | `document.title` (strips `                               | Site Name` suffixes)   | Title (fallback) |
+| 5        | `document.title` (strips common site name suffixes)      | Title (fallback)       |
 | 1        | `<meta property="og:description">`                       | Description            |
 | 2        | `<meta name="twitter:description">`                      | Description            |
 | 3        | `<meta name="description">`                              | Description            |
@@ -495,7 +495,7 @@ new SocialShareButton({
 
 ### SPA / Client-Side Navigation
 
-When the route changes, call `clearContentCache()` before updating options so the next detection picks up fresh page content:
+When the route changes, call `clearContentCache()` before updating options. The component will automatically re-detect content when `autoDetect` is enabled (default):
 
 ```jsx
 // React Router / Next.js
@@ -503,10 +503,13 @@ useEffect(() => {
   SocialShareButton.clearContentCache();
   shareButtonRef.current?.updateOptions({
     url: window.location.href,
-    title: document.title,
   });
 }, [pathname]);
 ```
+
+Note: You only need to provide `url` — if `autoDetect` is enabled (default), the component will automatically re-detect `title` and `description` from the new page's metadata. If you explicitly provide `title` or `description` in `updateOptions`, those values will be used instead of auto-detection.
+
+````
 
 ---
 
@@ -524,7 +527,7 @@ new SocialShareButton({
   theme: 'dark', // dark | light
   platforms: ['twitter', 'linkedin'], // Optional: defaults to all platforms
 });
-```
+````
 
 ### All Available Options
 
