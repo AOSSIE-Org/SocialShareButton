@@ -703,6 +703,15 @@ function App() {
 }
 ```
 
+> **Performance tip:** Array and callback props (`hashtags`, `platforms`, `analyticsPlugins`, `onShare`, `onCopy`, `onAnalytics`) are compared by reference. Passing inline literals (e.g. `platforms={['twitter']}`) creates a new reference on every parent render and triggers `updateOptions()` unnecessarily. Wrap them with `useMemo` / `useCallback` in your parent component:
+>
+> ```jsx
+> const platforms = useMemo(() => ['twitter', 'linkedin'], []);
+> const onShare = useCallback((platform, url) => console.log(platform, url), []);
+>
+> return <SocialShareButton platforms={platforms} onShare={onShare} />;
+> ```
+
 ### Update URL Dynamically (SPA)
 
 ```jsx

@@ -132,6 +132,13 @@ const _ContentDetector = (() => {
     return doc.body || doc.documentElement;
   }
 
+  /**
+   * Produce a clean plain-text version of a DOM subtree for excerpt generation.
+   * Clones the root so the live DOM is never mutated, then strips scripts,
+   * styles, navigation, ads, ARIA-hidden nodes, and modal overlays — elements
+   * that carry no article content and would pollute shareable text.
+   * Normalizes collapsed whitespace in the resulting textContent.
+   */
   function _toPlainText(root) {
     const clone = root.cloneNode(true);
     clone
