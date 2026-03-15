@@ -139,7 +139,7 @@ const _ContentDetector = (() => {
      * @returns {{ title: string, excerpt: string, textContent: string }}
      */
     extract(doc, bustCache = false) {
-      const cacheKey = doc && doc.URL ? doc.URL : '';
+      const cacheKey = doc && doc.URL ? doc.URL : 'default';
       const cached = _cache.get(cacheKey);
       if (!bustCache && cached && Date.now() - cached.ts < CACHE_TTL_MS) {
         return cached.result;
