@@ -13,7 +13,7 @@
  *
  * This module-level detector:
  *   - Shares the same detection logic and selectors
- *   - Uses a singleton _cache (not URL-keyed since it's for browser runtime)
+ *   - Uses a URL-keyed Map cache (keyed by doc.URL) to prevent SSR cache leaks
  *   - Is used only by the vanilla JS SocialShareButton class
  *
  * For SSR/URL-keyed caching, use src/utils/extractContent.js instead.
@@ -32,7 +32,7 @@
  * page lifecycle are negligible in cost.
  */
 const _ContentDetector = (() => {
-  let _cache = null;
+  const _cache = new Map(); // keyed by doc.URL to prevent SSR cache leaks
   const CACHE_TTL_MS = 30_000;
 
   function _getMeta(doc, selector) {
@@ -139,8 +139,10 @@ const _ContentDetector = (() => {
      * @returns {{ title: string, excerpt: string, textContent: string }}
      */
     extract(doc, bustCache = false) {
-      if (!bustCache && _cache && Date.now() - _cache.ts < CACHE_TTL_MS) {
-        return _cache.result;
+      const cacheKey = doc && doc.URL ? doc.URL : '';
+      const cached = _cache.get(cacheKey);
+      if (!bustCache && cached && Date.now() - cached.ts < CACHE_TTL_MS) {
+        return cached.result;
       }
       let result;
       try {
@@ -166,13 +168,19 @@ const _ContentDetector = (() => {
           textContent: '',
         };
       }
-      _cache = { result, ts: Date.now() };
+      _cache.set(cacheKey, { result, ts: Date.now() });
       return result;
     },
 
-    /** Clear extraction cache (call on SPA navigation). */
-    clearCache() {
-      _cache = null;
+    /** Clear extraction cache (call on SPA navigation).
+     * @param {string} [url] — if provided, only that entry is cleared; otherwise the whole cache is cleared.
+     */
+    clearCache(url) {
+      if (url) {
+        _cache.delete(url);
+      } else {
+        _cache.clear();
+      }
     },
   };
 })();
