@@ -121,6 +121,11 @@ const _ContentDetector = (() => {
   function _excerpt(text, minLen = 140, maxLen = 200) {
     if (!text) return '';
     if (text.length <= maxLen) return text;
+    // Take a window up to maxLen chars and try to end at a sentence boundary
+    // (sentEnd) — but only when the boundary is beyond minLen to avoid
+    // too-short snippets.  If no good sentence boundary exists, fall back to
+    // the last word boundary (wordEnd) and append an ellipsis so the result is
+    // always a complete word rather than a mid-word cut.
     const win = text.slice(0, maxLen);
     const sentEnd = Math.max(win.lastIndexOf('. '), win.lastIndexOf('! '), win.lastIndexOf('? '));
     if (sentEnd >= minLen) return win.slice(0, sentEnd + 1).trim();
@@ -786,8 +791,11 @@ class SocialShareButton {
   updateOptions(options) {
     // Re-run content detection if autoDetect is enabled and title/description not provided
     if (this.options.autoDetect && typeof document !== 'undefined') {
-      const needsTitle = !options.title && !this.options.title;
-      const needsDesc = !options.description && !this.options.description;
+      // Base detection need on the *incoming* options object (not on previously
+      // resolved values) so route navigations without explicit props trigger
+      // fresh detection even after initial auto-detection populated this.options.
+      const needsTitle = !Object.prototype.hasOwnProperty.call(options, 'title');
+      const needsDesc = !Object.prototype.hasOwnProperty.call(options, 'description');
 
       if (needsTitle || needsDesc) {
         try {
@@ -800,10 +808,7 @@ class SocialShareButton {
           }
         } catch (_err) {
           // Never let detection errors break updateOptions
-          if (this.options.debug) {
-            // eslint-disable-next-line no-console
-            console.warn('[SocialShareButton] Content detection failed in updateOptions', _err);
-          }
+          this._debugWarn('Content detection failed in updateOptions', _err);
         }
       }
     }
@@ -1034,11 +1039,6 @@ SocialShareButton.originalBodyOverflow = null;
 SocialShareButton.clearContentCache = function (url) {
   _ContentDetector.clearCache(url);
 };
-
-// Export for different module systems
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = SocialShareButton;
-}
 
 if (typeof window !== 'undefined') {
   window.SocialShareButton = SocialShareButton;
