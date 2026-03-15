@@ -35,11 +35,23 @@ const _ContentDetector = (() => {
   const _cache = new Map(); // keyed by doc.URL to prevent SSR cache leaks
   const CACHE_TTL_MS = 30_000;
 
+  /**
+   * Read a <meta> tag's `content` attribute using the given CSS selector.
+   * Returns an empty string when the element or its content attribute is absent.
+   */
   function _getMeta(doc, selector) {
     const el = doc.querySelector(selector);
     return el && el.getAttribute('content') ? el.getAttribute('content').trim() : '';
   }
 
+  /**
+   * Detect the page title using a priority chain:
+   *   1. og:title meta tag
+   *   2. twitter:title meta tag (name or property variant)
+   *   3. First non-empty h1 inside a landmark element (article/main/[role=main])
+   *      or a common CMS title class, then bare h1 as last-resort selector
+   *   4. document.title with the trailing "| SiteName" suffix stripped via regex
+   */
   function _detectTitle(doc) {
     const og = _getMeta(doc, 'meta[property="og:title"]');
     if (og) return og;
@@ -73,6 +85,14 @@ const _ContentDetector = (() => {
     return raw.replace(/\s*[|\-\u2013\u2014]\s*.{1,60}$/, '').trim() || raw;
   }
 
+  /**
+   * Detect the page description / excerpt using a priority chain:
+   *   1. og:description meta tag
+   *   2. twitter:description meta tag (name or property variant)
+   *   3. meta[name="description"]
+   * Returns an empty string when none of the above are present (caller should
+   * fall back to body text extraction via _findContentRoot + _toPlainText).
+   */
   function _detectMetaDesc(doc) {
     return (
       _getMeta(doc, 'meta[property="og:description"]') ||
@@ -82,6 +102,14 @@ const _ContentDetector = (() => {
     );
   }
 
+  /**
+   * Find the most specific semantic content root for body-text extraction.
+   * Tries landmark selectors in order of specificity (article → [role=main] →
+   * main → common CMS content classes → id-based selectors).  A candidate is
+   * accepted only when it contains at least 50 characters of text so that empty
+   * or stub elements are skipped.  Falls back to document.body when nothing
+   * qualifies.
+   */
   function _findContentRoot(doc) {
     const candidates = [
       'article',
@@ -210,8 +238,10 @@ class SocialShareButton {
     const _autoDetectEnabled = options.autoDetect !== false;
 
     if (_autoDetectEnabled && typeof document !== 'undefined') {
-      const _needsTitle = !options.title;
-      const _needsDesc = !options.description;
+      // Use == null (covers both undefined and null) so an explicit empty string
+      // provided by the caller is honoured and does not trigger auto-detection.
+      const _needsTitle = options.title == null;
+      const _needsDesc = options.description == null;
 
       if (_needsTitle || _needsDesc) {
         try {
@@ -789,8 +819,13 @@ class SocialShareButton {
   }
 
   updateOptions(options) {
-    // Re-run content detection if autoDetect is enabled and title/description not provided
-    if (this.options.autoDetect && typeof document !== 'undefined') {
+    // Re-run content detection if autoDetect is enabled and title/description not provided.
+    // Compute effectiveAutoDetect from the *incoming* options first so that
+    // toggling autoDetect on/off in the same call takes effect immediately.
+    const effectiveAutoDetect = Object.prototype.hasOwnProperty.call(options, 'autoDetect')
+      ? options.autoDetect
+      : this.options.autoDetect;
+    if (effectiveAutoDetect && typeof document !== 'undefined') {
       // Base detection need on the *incoming* options object (not on previously
       // resolved values) so route navigations without explicit props trigger
       // fresh detection even after initial auto-detection populated this.options.

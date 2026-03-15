@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useRef } from 'react';
 
 // Import SocialShareButton directly for ESM bundles, fall back to window for CDN
@@ -93,7 +95,9 @@ export const SocialShareButton = ({
           ShareButtonConstructor &&
           typeof ShareButtonConstructor.clearContentCache === 'function'
         ) {
-          ShareButtonConstructor.clearContentCache();
+          // Pass the current URL so only this page's cache entry is cleared,
+          // rather than wiping the entire global cache shared across instances.
+          ShareButtonConstructor.clearContentCache(currentUrl);
         }
       }
 
