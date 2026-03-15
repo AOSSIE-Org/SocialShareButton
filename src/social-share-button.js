@@ -447,28 +447,27 @@ class SocialShareButton {
     const encodedUrl = encodeURIComponent(url);
     const encodedTitle = encodeURIComponent(title);
     // const encodedDesc = encodeURIComponent(description);
+
+    // Build platform-specific messages.
+    // Templates are extracted here for easy localisation — replace these
+    // string-building expressions with your own i18n interpolation function
+    // (e.g. i18n.t('share.whatsapp', { title, description, hashtagString }))
+    // if you need locale-specific punctuation, ordering, or emoji variants.
     const hashtagString = hashtags.length ? '#' + hashtags.join(' #') : '';
-
-    // Build platform-specific messages with customizable parameters
-    let whatsappMessage, facebookMessage, twitterMessage, telegramMessage, redditTitle, emailBody;
-
-    // WhatsApp: Casual with emoji
-    whatsappMessage = `\u{1F680} ${title}${description ? '\n\n' + description : ''}${hashtagString ? '\n\n' + hashtagString : ''}\n\nLive on the site \u{1F440}\nClean UI, smooth flow \u{2014} worth peeking\n\u{1F447}`;
-
-    // Facebook: Title + Description
-    facebookMessage = `${title}${description ? '\n\n' + description : ''}${hashtagString ? '\n\n' + hashtagString : ''}`;
-
-    // Twitter: Title + Description + Hashtags + Via
-    twitterMessage = `${title}${description ? '\n\n' + description : ''}${hashtagString ? '\n' + hashtagString : ''}`;
-
-    // Telegram: Casual with emoji
-    telegramMessage = `\u{1F517} ${title}${description ? '\n\n' + description : ''}${hashtagString ? '\n\n' + hashtagString : ''}\n\nLive + working\nClean stuff, take a look \u{1F447}`;
-
-    // Reddit: Title + Description
-    redditTitle = `${title}${description ? ' - ' + description : ''}`;
-
-    // Email: Friendly greeting
-    emailBody = `Hey \u{1F44B}\n\nSharing a clean project I came across:\n${title}${description ? '\n\n' + description : ''}\n\nLive, simple, and usable \u{2014} take a look \u{1F447}`;
+    const SHARE_TEMPLATES = {
+      whatsapp: `\u{1F680} ${title}${description ? '\n\n' + description : ''}${hashtagString ? '\n\n' + hashtagString : ''}\n\nLive on the site \u{1F440}\nClean UI, smooth flow \u{2014} worth peeking\n\u{1F447}`,
+      facebook: `${title}${description ? '\n\n' + description : ''}${hashtagString ? '\n\n' + hashtagString : ''}`,
+      twitter: `${title}${description ? '\n\n' + description : ''}${hashtagString ? '\n' + hashtagString : ''}`,
+      telegram: `\u{1F517} ${title}${description ? '\n\n' + description : ''}${hashtagString ? '\n\n' + hashtagString : ''}\n\nLive + working\nClean stuff, take a look \u{1F447}`,
+      reddit: `${title}${description ? ' - ' + description : ''}`,
+      email: `Hey \u{1F44B}\n\nSharing a clean project I came across:\n${title}${description ? '\n\n' + description : ''}\n\nLive, simple, and usable \u{2014} take a look \u{1F447}`,
+    };
+    const whatsappMessage = SHARE_TEMPLATES.whatsapp;
+    const facebookMessage = SHARE_TEMPLATES.facebook;
+    const twitterMessage = SHARE_TEMPLATES.twitter;
+    const telegramMessage = SHARE_TEMPLATES.telegram;
+    const redditTitle = SHARE_TEMPLATES.reddit;
+    const emailBody = SHARE_TEMPLATES.email;
 
     const encodedWhatsapp = encodeURIComponent(whatsappMessage);
     const encodedFacebook = encodeURIComponent(facebookMessage);
