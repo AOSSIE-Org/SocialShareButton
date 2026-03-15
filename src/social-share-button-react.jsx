@@ -1,46 +1,41 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
 
 export const SocialShareButton = ({
   url,
   title,
-  description = "",
+  description = '',
   hashtags = [],
-  via = "",
-  platforms = [
-    "whatsapp",
-    "facebook",
-    "twitter",
-    "linkedin",
-    "telegram",
-    "reddit",
-  ],
-  theme = "dark",
-  buttonText = "Share",
-  customClass = "",
+  via = '',
+  platforms = ['whatsapp', 'facebook', 'twitter', 'linkedin', 'telegram', 'reddit'],
+  theme = 'dark',
+  buttonText = 'Share',
+  customClass = '',
   onShare = null,
   onCopy = null,
-  buttonStyle = "default",
-  modalPosition = "center",
+  buttonStyle = 'default',
+  modalPosition = 'center',
+  // Content auto-detection — set to false when all props are always provided.
+  autoDetect = true,
   // Analytics props — the library itself never collects data.
   // Provide any combination to connect your own analytics tools.
-  analytics = true,        // set to false to disable all event emission
-  onAnalytics = null,      // (payload) => void — direct callback hook
-  analyticsPlugins = [],   // array of adapter instances (see social-share-analytics.js)
-  componentId = null,      // optional string identifier for this instance
-  debug = false,           // log events to console during development
+  analytics = true, // set to false to disable all event emission
+  onAnalytics = null, // (payload) => void — direct callback hook
+  analyticsPlugins = [], // array of adapter instances (see social-share-analytics.js)
+  componentId = null, // optional string identifier for this instance
+  debug = false, // log events to console during development
 }) => {
   const containerRef = useRef(null);
   const shareButtonRef = useRef(null);
 
-  // Auto-detect current URL and title if not provided
-  const currentUrl =
-    url || (typeof window !== "undefined" ? window.location.href : "");
-  const currentTitle =
-    title || (typeof document !== "undefined" ? document.title : "");
+  // Auto-detect current URL and title if not provided.
+  // When autoDetect is enabled, the vanilla SocialShareButton constructor
+  // handles deeper detection (og:title, meta description, semantic HTML).
+  const currentUrl = url || (typeof window !== 'undefined' ? window.location.href : '');
+  const currentTitle = title || (typeof document !== 'undefined' ? document.title : '');
 
   useEffect(() => {
     if (containerRef.current && !shareButtonRef.current) {
-      if (typeof window !== "undefined" && window.SocialShareButton) {
+      if (typeof window !== 'undefined' && window.SocialShareButton) {
         shareButtonRef.current = new window.SocialShareButton({
           container: containerRef.current,
           url: currentUrl,
@@ -56,6 +51,7 @@ export const SocialShareButton = ({
           onCopy,
           buttonStyle,
           modalPosition,
+          autoDetect,
           analytics,
           onAnalytics,
           analyticsPlugins,
@@ -73,9 +69,21 @@ export const SocialShareButton = ({
     };
   }, []);
 
-  // Update options when props change (including URL from route changes)
+  // Update options when props change (including URL from route changes).
+  // Also bust the content-detection cache so the new page's metadata is used.
   useEffect(() => {
     if (shareButtonRef.current) {
+      // Invalidate detection cache on every route/prop change so the new
+      // page content is picked up when autoDetect is enabled.
+      if (
+        autoDetect &&
+        typeof window !== 'undefined' &&
+        window.SocialShareButton &&
+        typeof window.SocialShareButton.clearContentCache === 'function'
+      ) {
+        window.SocialShareButton.clearContentCache();
+      }
+
       shareButtonRef.current.updateOptions({
         url: currentUrl,
         title: currentTitle,
@@ -90,6 +98,7 @@ export const SocialShareButton = ({
         onCopy,
         buttonStyle,
         modalPosition,
+        autoDetect,
         analytics,
         onAnalytics,
         analyticsPlugins,
@@ -111,6 +120,7 @@ export const SocialShareButton = ({
     onCopy,
     buttonStyle,
     modalPosition,
+    autoDetect,
     analytics,
     onAnalytics,
     analyticsPlugins,
