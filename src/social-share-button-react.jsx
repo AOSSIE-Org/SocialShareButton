@@ -6,7 +6,7 @@ import SocialShareButtonCore from './social-share-button.js';
 export const SocialShareButton = ({
   url,
   title,
-  description = '',
+  description,
   hashtags = [],
   via = '',
   platforms = ['whatsapp', 'facebook', 'twitter', 'linkedin', 'telegram', 'reddit'],
@@ -30,11 +30,10 @@ export const SocialShareButton = ({
   const containerRef = useRef(null);
   const shareButtonRef = useRef(null);
 
-  // Auto-detect current URL and title if not provided.
-  // When autoDetect is enabled, the vanilla SocialShareButton constructor
-  // handles deeper detection (og:title, meta description, semantic HTML).
+  // Resolve URL — fall back to current page URL but leave title/description
+  // undefined when not provided so the core SocialShareButton auto-detection
+  // priority chain (og:title → twitter:title → h1 → document.title etc.) runs.
   const currentUrl = url || (typeof window !== 'undefined' ? window.location.href : '');
-  const currentTitle = title || (typeof document !== 'undefined' ? document.title : '');
 
   useEffect(() => {
     if (containerRef.current && !shareButtonRef.current) {
@@ -43,11 +42,11 @@ export const SocialShareButton = ({
         SocialShareButtonCore || (typeof window !== 'undefined' ? window.SocialShareButton : null);
 
       if (ShareButtonConstructor) {
-        shareButtonRef.current = new ShareButtonConstructor({
+        // Only include title/description in the options object when explicitly
+        // provided — omitting them lets the core detector's priority chain run.
+        const initOptions = {
           container: containerRef.current,
           url: currentUrl,
-          title: currentTitle,
-          description,
           hashtags,
           via,
           platforms,
@@ -64,7 +63,10 @@ export const SocialShareButton = ({
           analyticsPlugins,
           componentId,
           debug,
-        });
+        };
+        if (title !== undefined) initOptions.title = title;
+        if (description !== undefined) initOptions.description = description;
+        shareButtonRef.current = new ShareButtonConstructor(initOptions);
       }
     }
 
@@ -95,10 +97,8 @@ export const SocialShareButton = ({
         }
       }
 
-      shareButtonRef.current.updateOptions({
+      const updateOpts = {
         url: currentUrl,
-        title: currentTitle,
-        description,
         hashtags,
         via,
         platforms,
@@ -115,11 +115,14 @@ export const SocialShareButton = ({
         analyticsPlugins,
         componentId,
         debug,
-      });
+      };
+      if (title !== undefined) updateOpts.title = title;
+      if (description !== undefined) updateOpts.description = description;
+      shareButtonRef.current.updateOptions(updateOpts);
     }
   }, [
     currentUrl,
-    currentTitle,
+    title,
     description,
     hashtags,
     via,
