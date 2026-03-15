@@ -509,8 +509,6 @@ useEffect(() => {
 
 Note: You only need to provide `url` — if `autoDetect` is enabled (default), the component will automatically re-detect `title` and `description` from the new page's metadata. If you explicitly provide `title` or `description` in `updateOptions`, those values will be used instead of auto-detection.
 
-````
-
 ---
 
 ## Configuration
@@ -527,7 +525,7 @@ new SocialShareButton({
   theme: 'dark', // dark | light
   platforms: ['twitter', 'linkedin'], // Optional: defaults to all platforms
 });
-````
+```
 
 ### All Available Options
 

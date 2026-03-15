@@ -181,7 +181,9 @@ function extractPlainText(root) {
       "[aria-hidden='true'], .nav, .navigation, .menu, .sidebar, " +
       '.advertisement, .ad, .cookie-banner, .social-share-modal-overlay'
   );
-  noise.forEach((el) => el.remove());
+  noise.forEach(function (el) {
+    el.remove();
+  });
 
   return clone.textContent.replace(/\s+/g, ' ').trim();
 }

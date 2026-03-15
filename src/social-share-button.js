@@ -5,6 +5,21 @@
  */
 
 /**
+ * ⚠️ IMPORTANT: This _ContentDetector IIFE is INTENTIONALY DUPLICATED from
+ * src/utils/extractContent.js to keep the CDN build zero-dependency.
+ *
+ * Any changes to detection priorities, selectors, or excerpt logic MUST be
+ * mirrored in both places. The source of truth is src/utils/extractContent.js.
+ *
+ * This module-level detector:
+ *   - Shares the same detection logic and selectors
+ *   - Uses a singleton _cache (not URL-keyed since it's for browser runtime)
+ *   - Is used only by the vanilla JS SocialShareButton class
+ *
+ * For SSR/URL-keyed caching, use src/utils/extractContent.js instead.
+ */
+
+/**
  * Lightweight content auto-detection module (inlined to preserve zero-dependency CDN build).
  *
  * Detection priority for title:
@@ -97,7 +112,9 @@ const _ContentDetector = (() => {
           "[aria-hidden='true'],.nav,.navigation,.menu,.sidebar," +
           '.advertisement,.ad,.cookie-banner,.social-share-modal-overlay'
       )
-      .forEach((el) => el.remove());
+      .forEach(function (el) {
+        el.remove();
+      });
     return clone.textContent.replace(/\s+/g, ' ').trim();
   }
 
@@ -908,6 +925,19 @@ class SocialShareButton {
    * @param {string} interactionType - broad interaction category
    * @param {Object} [extra]         - optional extra fields (platform, errorMessage)
    */
+
+  /**
+   * Debug helper - logs warnings when debug option is enabled.
+   * @param {string} message
+   * @param {Error} err
+   */
+  _debugWarn(message, err) {
+    if (this.options.debug) {
+      // eslint-disable-next-line no-console
+      console.warn('[SocialShareButton]', message, err);
+    }
+  }
+
   _emit(eventName, interactionType, extra = {}) {
     if (this.options.analytics === false) return;
 
@@ -947,10 +977,7 @@ class SocialShareButton {
         (el || document).dispatchEvent(domEvent);
       } catch (_err) {
         // Swallow CustomEvent dispatch errors (e.g. in sandboxed environments)
-        if (this.options.debug) {
-          // eslint-disable-next-line no-console
-          console.warn('[SocialShareButton] CustomEvent dispatch failed', _err);
-        }
+        this._debugWarn('CustomEvent dispatch failed', _err);
       }
     }
 
@@ -960,10 +987,7 @@ class SocialShareButton {
         this.options.onAnalytics(payload);
       } catch (_err) {
         // Swallow errors thrown by consumer callbacks
-        if (this.options.debug) {
-          // eslint-disable-next-line no-console
-          console.warn('[SocialShareButton] onAnalytics callback threw', _err);
-        }
+        this._debugWarn('onAnalytics callback threw', _err);
       }
     }
 
@@ -975,10 +999,7 @@ class SocialShareButton {
             plugin.track(payload);
           } catch (_err) {
             // Swallow errors thrown by individual plugin adapters
-            if (this.options.debug) {
-              // eslint-disable-next-line no-console
-              console.warn('[SocialShareButton] Analytics plugin failed', _err);
-            }
+            this._debugWarn('Analytics plugin failed', _err);
           }
         }
       }
