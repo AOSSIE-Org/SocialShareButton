@@ -190,56 +190,44 @@ class SocialShareButton {
   }
 
   getShareURL(platform) {
-  const { url, title, description, hashtags, via } = this.options;
-  const encodedUrl = encodeURIComponent(url);
-  const encodedTitle = encodeURIComponent(title);
-  const hashtagString = hashtags.length ? "#" + hashtags.join(" #") : "";
+    const { url, title, description, hashtags, via } = this.options;
+    const encodedUrl = encodeURIComponent(url);
+    const encodedTitle = encodeURIComponent(title);
+    const hashtagString = hashtags.length ? "#" + hashtags.join(" #") : "";
 
-  // Build platform-specific messages with customizable parameters
-  let whatsappMessage,
-    facebookMessage,
-    twitterMessage,
-    telegramMessage,
-    redditTitle,
-    emailBody;
+    let whatsappMessage,
+      facebookMessage,
+      twitterMessage,
+      telegramMessage,
+      redditTitle,
+      emailBody;
 
-  // WhatsApp: title + description + hashtags
-  whatsappMessage = `${title}${description ? "\n\n" + description : ""}${hashtagString ? "\n\n" + hashtagString : ""}`;
+    whatsappMessage = `${title}${description ? "\n\n" + description : ""}${hashtagString ? "\n\n" + hashtagString : ""}`;
+    facebookMessage = `${title}${description ? "\n\n" + description : ""}${hashtagString ? "\n\n" + hashtagString : ""}`;
+    twitterMessage = `${title}${description ? "\n\n" + description : ""}${hashtagString ? "\n" + hashtagString : ""}`;
+    telegramMessage = `${title}${description ? "\n\n" + description : ""}${hashtagString ? "\n\n" + hashtagString : ""}`;
+    redditTitle = `${title}${description ? " - " + description : ""}`;
+    emailBody = `${title}${description ? "\n\n" + description : ""}`;
 
-  // Facebook: title + description + hashtags
-  facebookMessage = `${title}${description ? "\n\n" + description : ""}${hashtagString ? "\n\n" + hashtagString : ""}`;
+    const encodedWhatsapp = encodeURIComponent(whatsappMessage);
+    const encodedFacebook = encodeURIComponent(facebookMessage);
+    const encodedTwitter = encodeURIComponent(twitterMessage);
+    const encodedTelegram = encodeURIComponent(telegramMessage);
+    const encodedReddit = encodeURIComponent(redditTitle);
+    const encodedEmail = encodeURIComponent(emailBody);
 
-  // Twitter: title + description + hashtags + via
-  twitterMessage = `${title}${description ? "\n\n" + description : ""}${hashtagString ? "\n" + hashtagString : ""}`;
+    const urls = {
+      whatsapp: `https://wa.me/?text=${encodedWhatsapp}%20${encodedUrl}`,
+      facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedFacebook}`,
+      twitter: `https://twitter.com/intent/tweet?text=${encodedTwitter}&url=${encodedUrl}${via ? "&via=" + encodeURIComponent(via) : ""}`,
+      linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`,
+      telegram: `https://t.me/share/url?url=${encodedUrl}&text=${encodedTelegram}`,
+      reddit: `https://reddit.com/submit?url=${encodedUrl}&title=${encodedReddit}`,
+      email: `mailto:?subject=${encodedTitle}&body=${encodedEmail}%20${encodedUrl}`,
+    };
 
-  // Telegram: title + description + hashtags
-  telegramMessage = `${title}${description ? "\n\n" + description : ""}${hashtagString ? "\n\n" + hashtagString : ""}`;
-
-  // Reddit: title + description
-  redditTitle = `${title}${description ? " - " + description : ""}`;
-
-  // Email: description in body, title in subject
-  emailBody = `${title}${description ? description : ""}`;
-
-  const encodedWhatsapp = encodeURIComponent(whatsappMessage);
-  const encodedFacebook = encodeURIComponent(facebookMessage);
-  const encodedTwitter = encodeURIComponent(twitterMessage);
-  const encodedTelegram = encodeURIComponent(telegramMessage);
-  const encodedReddit = encodeURIComponent(redditTitle);
-  const encodedEmail = encodeURIComponent(emailBody);
-
-  const urls = {
-    whatsapp: `https://wa.me/?text=${encodedWhatsapp}%20${encodedUrl}`,
-    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedFacebook}`,
-    twitter: `https://twitter.com/intent/tweet?text=${encodedTwitter}&url=${encodedUrl}${via ? "&via=" + encodeURIComponent(via) : ""}`,
-    linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`,
-    telegram: `https://t.me/share/url?url=${encodedUrl}&text=${encodedTelegram}`,
-    reddit: `https://reddit.com/submit?url=${encodedUrl}&title=${encodedReddit}`,
-    email: `mailto:?subject=${encodedTitle}&body=${encodedEmail}%20${encodedUrl}`,
-  };
-
-  return urls[platform] || "";
-}
+    return urls[platform] || "";
+  }
 
   addEventListener(element, type, handler, options = false) {
     if (!element) return;
