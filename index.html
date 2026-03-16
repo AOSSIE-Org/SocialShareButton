@@ -438,6 +438,52 @@ function App() {
       </div>
     </div>
 
+    <!-- WordPress Integration -->
+    <div class="demo-section">
+      <h2>🔷 WordPress Integration</h2>
+      <p>
+        WordPress powers over 40% of the web. Integration is done via standard WordPress
+        enqueueing APIs in your theme's
+        <code style="background:rgba(0,0,0,0.3);padding:2px 6px;border-radius:4px;">functions.php</code>
+        — no wrapper file needed.
+      </p>
+
+      <p style="font-weight:600;margin-top:16px;">Step 1 — Enqueue CSS &amp; JS in <code style="background:rgba(0,0,0,0.3);padding:2px 6px;border-radius:4px;">functions.php</code></p>
+      <div class="code-block">
+        <button class="copy-btn" aria-label="Copy code">Copy</button>
+        <span class="copy-status" aria-live="polite" style="position:absolute;left:-9999px;"></span>
+        <code>
+function enqueue_social_share_button() {
+    wp_enqueue_style(
+        'social-share-button',
+        'https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.css'
+    );
+    wp_enqueue_script(
+        'social-share-button',
+        'https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.js',
+        [],
+        null,
+        true // Load in footer
+    );
+}
+add_action('wp_enqueue_scripts', 'enqueue_social_share_button');
+
+function init_social_share_button() { ?>
+    &lt;div id="share-button"&gt;&lt;/div&gt;
+    &lt;script&gt;
+      new SocialShareButton({
+        container: '#share-button',
+        url: window.location.href,
+        title: document.title,
+        theme: 'dark',
+        buttonText: 'Share'
+      });
+    &lt;/script&gt;
+&lt;?php }
+add_action('wp_footer', 'init_social_share_button');</code>
+      </div>
+    </div>
+
     <!-- CTA Section -->
     <div class="cta-section">
       <h2 style="color: #fff; margin-bottom: 20px;">Ready to Get Started?</h2>
