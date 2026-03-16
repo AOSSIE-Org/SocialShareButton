@@ -190,57 +190,56 @@ class SocialShareButton {
   }
 
   getShareURL(platform) {
-    const { url, title, description, hashtags, via } = this.options;
-    const encodedUrl = encodeURIComponent(url);
-    const encodedTitle = encodeURIComponent(title);
-    // const encodedDesc = encodeURIComponent(description);
-    const hashtagString = hashtags.length ? "#" + hashtags.join(" #") : "";
+  const { url, title, description, hashtags, via } = this.options;
+  const encodedUrl = encodeURIComponent(url);
+  const encodedTitle = encodeURIComponent(title);
+  const hashtagString = hashtags.length ? "#" + hashtags.join(" #") : "";
 
-    // Build platform-specific messages with customizable parameters
-    let whatsappMessage,
-      facebookMessage,
-      twitterMessage,
-      telegramMessage,
-      redditTitle,
-      emailBody;
+  // Build platform-specific messages with customizable parameters
+  let whatsappMessage,
+    facebookMessage,
+    twitterMessage,
+    telegramMessage,
+    redditTitle,
+    emailBody;
 
-    // WhatsApp: Casual with emoji
-    whatsappMessage = `\u{1F680} ${title}${description ? "\n\n" + description : ""}${hashtagString ? "\n\n" + hashtagString : ""}\n\nLive on the site \u{1F440}\nClean UI, smooth flow \u{2014} worth peeking\n\u{1F447}`;
+  // WhatsApp: title + description + hashtags
+  whatsappMessage = `${title}${description ? "\n\n" + description : ""}${hashtagString ? "\n\n" + hashtagString : ""}`;
 
-    // Facebook: Title + Description
-    facebookMessage = `${title}${description ? "\n\n" + description : ""}${hashtagString ? "\n\n" + hashtagString : ""}`;
+  // Facebook: title + description + hashtags
+  facebookMessage = `${title}${description ? "\n\n" + description : ""}${hashtagString ? "\n\n" + hashtagString : ""}`;
 
-    // Twitter: Title + Description + Hashtags + Via
-    twitterMessage = `${title}${description ? "\n\n" + description : ""}${hashtagString ? "\n" + hashtagString : ""}`;
+  // Twitter: title + description + hashtags + via
+  twitterMessage = `${title}${description ? "\n\n" + description : ""}${hashtagString ? "\n" + hashtagString : ""}`;
 
-    // Telegram: Casual with emoji
-    telegramMessage = `\u{1F517} ${title}${description ? "\n\n" + description : ""}${hashtagString ? "\n\n" + hashtagString : ""}\n\nLive + working\nClean stuff, take a look \u{1F447}`;
+  // Telegram: title + description + hashtags
+  telegramMessage = `${title}${description ? "\n\n" + description : ""}${hashtagString ? "\n\n" + hashtagString : ""}`;
 
-    // Reddit: Title + Description
-    redditTitle = `${title}${description ? " - " + description : ""}`;
+  // Reddit: title + description
+  redditTitle = `${title}${description ? " - " + description : ""}`;
 
-    // Email: Friendly greeting
-    emailBody = `Hey \u{1F44B}\n\nSharing a clean project I came across:\n${title}${description ? "\n\n" + description : ""}\n\nLive, simple, and usable \u{2014} take a look \u{1F447}`;
+  // Email: description in body, title in subject
+  emailBody = `${description ? description : ""}`;
 
-    const encodedWhatsapp = encodeURIComponent(whatsappMessage);
-    const encodedFacebook = encodeURIComponent(facebookMessage);
-    const encodedTwitter = encodeURIComponent(twitterMessage);
-    const encodedTelegram = encodeURIComponent(telegramMessage);
-    const encodedReddit = encodeURIComponent(redditTitle);
-    const encodedEmail = encodeURIComponent(emailBody);
+  const encodedWhatsapp = encodeURIComponent(whatsappMessage);
+  const encodedFacebook = encodeURIComponent(facebookMessage);
+  const encodedTwitter = encodeURIComponent(twitterMessage);
+  const encodedTelegram = encodeURIComponent(telegramMessage);
+  const encodedReddit = encodeURIComponent(redditTitle);
+  const encodedEmail = encodeURIComponent(emailBody);
 
-    const urls = {
-      whatsapp: `https://wa.me/?text=${encodedWhatsapp}%20${encodedUrl}`,
-      facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedFacebook}`,
-      twitter: `https://twitter.com/intent/tweet?text=${encodedTwitter}&url=${encodedUrl}${via ? "&via=" + encodeURIComponent(via) : ""}`,
-      linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`,
-      telegram: `https://t.me/share/url?url=${encodedUrl}&text=${encodedTelegram}`,
-      reddit: `https://reddit.com/submit?url=${encodedUrl}&title=${encodedReddit}`,
-      email: `mailto:?subject=${encodedTitle}&body=${encodedEmail}%20${encodedUrl}`,
-    };
+  const urls = {
+    whatsapp: `https://wa.me/?text=${encodedWhatsapp}%20${encodedUrl}`,
+    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedFacebook}`,
+    twitter: `https://twitter.com/intent/tweet?text=${encodedTwitter}&url=${encodedUrl}${via ? "&via=" + encodeURIComponent(via) : ""}`,
+    linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`,
+    telegram: `https://t.me/share/url?url=${encodedUrl}&text=${encodedTelegram}`,
+    reddit: `https://reddit.com/submit?url=${encodedUrl}&title=${encodedReddit}`,
+    email: `mailto:?subject=${encodedTitle}&body=${encodedEmail}%20${encodedUrl}`,
+  };
 
-    return urls[platform] || "";
-  }
+  return urls[platform] || "";
+}
 
   addEventListener(element, type, handler, options = false) {
     if (!element) return;
