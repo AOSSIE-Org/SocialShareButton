@@ -1,0 +1,103 @@
+/**
+ * SocialShareButton Astro Component
+ *
+ * A framework-agnostic wrapper component for Astro that uses the SocialShareButton
+ * vanilla JS library. Works with Astro's client-side hydration.
+ *
+ * Usage:
+ * ---
+ * import SocialShareButton from './components/SocialShareButton.astro';
+ * ---
+ * <SocialShareButton
+ *   url="https://example.com"
+ *   title="My Page"
+ *   description="Check this out!"
+ *   platforms="whatsapp,facebook,twitter"
+ *   client:load
+ * />
+ */
+
+const {
+  url = '',
+  title = '',
+  description = '',
+  hashtags = [],
+  via = '',
+  platforms = ['whatsapp', 'facebook', 'twitter', 'linkedin', 'telegram', 'reddit'],
+  theme = 'dark',
+  buttonText = 'Share',
+  customClass = '',
+  buttonStyle = 'default',
+  modalPosition = 'center',
+} = Astro.props;
+
+const hashtagsStr = Array.isArray(hashtags) ? hashtags.join(',') : hashtags;
+const platformsStr = Array.isArray(platforms) ? platforms.join(',') : platforms;
+---
+
+<div
+  class={`social-share-button-astro ${customClass}`}
+  data-url={url}
+  data-title={title}
+  data-description={description}
+  data-hashtags={hashtagsStr}
+  data-via={via}
+  data-platforms={platformsStr}
+  data-theme={theme}
+  data-button-text={buttonText}
+  data-button-style={buttonStyle}
+  data-modal-position={modalPosition}
+></div>
+
+<script>
+  class SocialShareButtonAstro {
+    constructor(element) {
+      this.element = element;
+      this.instance = null;
+      this.init();
+    }
+
+    init() {
+      if (typeof window === 'undefined' || !window.SocialShareButton) {
+        return;
+      }
+
+      const options = {
+        container: this.element,
+        url: this.element.dataset.url || window.location.href,
+        title: this.element.dataset.title || document.title,
+        description: this.element.dataset.description || '',
+        hashtags: this.element.dataset.hashtags
+          ? this.element.dataset.hashtags.split(',').map((t) => t.trim()).filter(Boolean)
+          : [],
+        via: this.element.dataset.via || '',
+        platforms: this.element.dataset.platforms
+          ? this.element.dataset.platforms.split(',').map((p) => p.trim()).filter(Boolean)
+          : ['whatsapp', 'facebook', 'twitter', 'linkedin', 'telegram', 'reddit'],
+        theme: this.element.dataset.theme || 'dark',
+        buttonText: this.element.dataset.buttonText || 'Share',
+        buttonStyle: this.element.dataset.buttonStyle || 'default',
+        modalPosition: this.element.dataset.modalPosition || 'center',
+      };
+
+      this.instance = new window.SocialShareButton(options);
+    }
+
+    destroy() {
+      if (this.instance && typeof this.instance.destroy === 'function') {
+        this.instance.destroy();
+        this.instance = null;
+      }
+    }
+  }
+
+  document.querySelectorAll('.social-share-button-astro').forEach((element) => {
+    new SocialShareButtonAstro(element);
+  });
+
+  document.addEventListener('astro:page-load', () => {
+    document.querySelectorAll('.social-share-button-astro').forEach((element) => {
+      new SocialShareButtonAstro(element);
+    });
+  });
+</script>
