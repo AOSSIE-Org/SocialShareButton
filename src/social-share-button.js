@@ -189,7 +189,7 @@ class SocialShareButton {
       .join("");
   }
 
-  getShareURL(platform) {
+    getShareURL(platform) {
     const { url, title, description, hashtags, via } = this.options;
     const encodedUrl = encodeURIComponent(url);
     const encodedTitle = encodeURIComponent(title);
