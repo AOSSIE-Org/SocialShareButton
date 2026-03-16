@@ -438,6 +438,61 @@ function App() {
       </div>
     </div>
 
+    <!-- Hugo / Jekyll Integration -->
+    <div class="demo-section">
+      <h2>📄 Hugo / Jekyll Integration</h2>
+      <p>
+        Hugo and Jekyll generate static HTML — no JavaScript framework wrapper is needed.
+        Drop the CDN links into your base layout template and the button is ready on every page.
+      </p>
+
+      <p style="font-weight:600;margin-top:16px;">Hugo — <code style="background:rgba(0,0,0,0.3);padding:2px 6px;border-radius:4px;">layouts/_default/baseof.html</code></p>
+      <div class="code-block">
+        <button class="copy-btn" aria-label="Copy code">Copy</button>
+        <span class="copy-status" aria-live="polite" style="position:absolute;left:-9999px;"></span>
+        <code>
+&lt;!-- In &lt;head&gt; --&gt;
+&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.css"&gt;
+
+&lt;!-- Before &lt;/body&gt; --&gt;
+&lt;script src="https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.js"&gt;&lt;/script&gt;
+&lt;div id="share-button"&gt;&lt;/div&gt;
+&lt;script&gt;
+  new SocialShareButton({
+    container: '#share-button',
+    url: window.location.href,
+    title: document.title,
+    description: '{{ .Description }}',
+    theme: 'dark',
+    buttonText: 'Share'
+  });
+&lt;/script&gt;</code>
+      </div>
+
+      <p style="font-weight:600;margin-top:16px;">Jekyll — <code style="background:rgba(0,0,0,0.3);padding:2px 6px;border-radius:4px;">_layouts/default.html</code></p>
+      <div class="code-block">
+        <button class="copy-btn" aria-label="Copy code">Copy</button>
+        <span class="copy-status" aria-live="polite" style="position:absolute;left:-9999px;"></span>
+        <code>
+&lt;!-- In &lt;head&gt; --&gt;
+&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.css"&gt;
+
+&lt;!-- Before &lt;/body&gt; --&gt;
+&lt;script src="https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.js"&gt;&lt;/script&gt;
+&lt;div id="share-button"&gt;&lt;/div&gt;
+&lt;script&gt;
+  new SocialShareButton({
+    container: '#share-button',
+    url: window.location.href,
+    title: document.title,
+    description: '{{ page.description }}',
+    theme: 'dark',
+    buttonText: 'Share'
+  });
+&lt;/script&gt;</code>
+      </div>
+    </div>
+
     <!-- CTA Section -->
     <div class="cta-section">
       <h2 style="color: #fff; margin-bottom: 20px;">Ready to Get Started?</h2>
