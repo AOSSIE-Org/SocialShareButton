@@ -219,7 +219,7 @@ class SocialShareButton {
   redditTitle = `${title}${description ? " - " + description : ""}`;
 
   // Email: description in body, title in subject
-  emailBody = `${description ? description : ""}`;
+  emailBody = `${title}${description ? description : ""}`;
 
   const encodedWhatsapp = encodeURIComponent(whatsappMessage);
   const encodedFacebook = encodeURIComponent(facebookMessage);
