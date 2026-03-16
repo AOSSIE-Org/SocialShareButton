@@ -438,6 +438,59 @@ function App() {
       </div>
     </div>
 
+    <!-- Remix Integration -->
+    <div class="demo-section">
+      <h2>🎸 Remix Integration</h2>
+      <p>
+        Remix is an SSR-first React framework — all browser APIs must live inside
+        <code style="background:rgba(0,0,0,0.3);padding:2px 6px;border-radius:4px;">useEffect</code>.
+        Copy <code style="background:rgba(0,0,0,0.3);padding:2px 6px;border-radius:4px;">src/social-share-button-remix.jsx</code>
+        into your project and follow the steps below.
+      </p>
+
+      <p style="font-weight:600;margin-top:16px;">Step 1 — Load the CSS &amp; JS in <code style="background:rgba(0,0,0,0.3);padding:2px 6px;border-radius:4px;">app/root.tsx</code></p>
+      <div class="code-block">
+        <button class="copy-btn" aria-label="Copy code">Copy</button>
+        <span class="copy-status" aria-live="polite" style="position:absolute;left:-9999px;"></span>
+        <code>
+// app/root.tsx
+import type { LinksFunction } from "@remix-run/node";
+
+export const links: LinksFunction = () => [
+  {
+    rel: "stylesheet",
+    href: "https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.css",
+  },
+];
+
+// In the &lt;head&gt; of your root component, add:
+// &lt;Scripts /&gt; loads the Remix client bundle.
+// Place the CDN &lt;script&gt; just before &lt;/body&gt;:
+// &lt;script src="https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.js"&gt;&lt;/script&gt;</code>
+      </div>
+
+      <p style="font-weight:600;margin-top:16px;">Step 2 — Use the component in a route</p>
+      <div class="code-block">
+        <button class="copy-btn" aria-label="Copy code">Copy</button>
+        <span class="copy-status" aria-live="polite" style="position:absolute;left:-9999px;"></span>
+        <code>
+// app/routes/_index.tsx
+import SocialShareButton from "~/components/social-share-button-remix";
+
+export default function Index() {
+  return (
+    &lt;SocialShareButton
+      url="https://your-website.com"
+      title="Check this out!"
+      description="An amazing website"
+      theme="dark"
+      buttonText="Share"
+    /&gt;
+  );
+}</code>
+      </div>
+    </div>
+
     <!-- CTA Section -->
     <div class="cta-section">
       <h2 style="color: #fff; margin-bottom: 20px;">Ready to Get Started?</h2>
