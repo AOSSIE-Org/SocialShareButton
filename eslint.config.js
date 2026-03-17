@@ -1,13 +1,13 @@
-import js from "@eslint/js";
-import globals from "globals";
+import js from '@eslint/js';
+import globals from 'globals';
 
 export default [
   js.configs.recommended,
   {
-    files: ["src/**/*.{js,jsx}"],
+    files: ['src/**/*.{js,jsx}'],
     languageOptions: {
-      ecmaVersion: "latest",
-      sourceType: "module",
+      ecmaVersion: 'latest',
+      sourceType: 'module',
       parserOptions: {
         ecmaFeatures: {
           jsx: true,
@@ -20,15 +20,16 @@ export default [
       },
     },
     rules: {
-      "no-console": "error",
-      "no-unused-vars": ["warn", { "caughtErrorsIgnorePattern": "^_" }],
-      "semi": ["error", "always"],
+      'no-console': 'error',
+      'no-unused-vars': ['warn', { caughtErrorsIgnorePattern: '^_' }],
+      quotes: ['error', 'single'],
+      semi: ['error', 'always'],
     },
   },
   {
-    files: ["eslint.config.js", "**/*.config.js"],
+    files: ['eslint.config.js', '**/*.config.js'],
     languageOptions: {
-      sourceType: "module",
+      sourceType: 'module',
       globals: {
         ...globals.node,
       },
