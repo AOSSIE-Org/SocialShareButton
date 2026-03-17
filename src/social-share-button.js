@@ -308,12 +308,10 @@ class SocialShareButton {
     if (!this.modal) return;
 
     this.isModalOpen = true;
-<<<<<<< HEAD
+
     this.modal.style.display = "flex";
     this._emit("social_share_popup_open", "popup_open");
-=======
-    this.modal.style.display = 'flex';
->>>>>>> ef65eb5 (added sigle quotes rule)
+
 
     // Shared body overflow management: only increment counter if this instance doesn't already own the lock
     if (typeof document !== 'undefined' && document.body) {
@@ -352,12 +350,9 @@ class SocialShareButton {
   closeModal() {
     if (!this.modal) return; // Safety check
 
-<<<<<<< HEAD
     this.modal.classList.remove("active");
     this._emit("social_share_popup_close", "popup_close");
-=======
-    this.modal.classList.remove('active');
->>>>>>> ef65eb5 (added sigle quotes rule)
+
 
     // Clear any pending animations (both open and close to prevent race conditions)
     if (this.openTimeout) {
@@ -398,13 +393,10 @@ class SocialShareButton {
     const shareUrl = this.getShareURL(platform);
 
     if (shareUrl) {
-<<<<<<< HEAD
+
       this._emit("social_share_click", "share", { platform });
 
       if (platform === "email") {
-=======
-      if (platform === 'email') {
->>>>>>> ef65eb5 (added sigle quotes rule)
         window.location.href = shareUrl;
       } else {
         window.open(shareUrl, '_blank', 'noopener,noreferrer,width=600,height=600');
@@ -434,15 +426,9 @@ class SocialShareButton {
         .then(() => {
           // Guard against async callback after destroy
           if (this.isDestroyed) return;
-
-<<<<<<< HEAD
           copyBtn.textContent = "Copied!";
           copyBtn.classList.add("copied");
           this._emit("social_share_copy", "copy");
-=======
-          copyBtn.textContent = 'Copied!';
-          copyBtn.classList.add('copied');
->>>>>>> ef65eb5 (added sigle quotes rule)
 
           if (this.options.onCopy) {
             this.options.onCopy(this.options.url);
@@ -480,14 +466,10 @@ class SocialShareButton {
       input.setSelectionRange(0, 99999); // For mobile devices
       document.execCommand('copy');
 
-<<<<<<< HEAD
       copyBtn.textContent = "Copied!";
       copyBtn.classList.add("copied");
       this._emit("social_share_copy", "copy");
-=======
-      copyBtn.textContent = 'Copied!';
-      copyBtn.classList.add('copied');
->>>>>>> ef65eb5 (added sigle quotes rule)
+
 
       if (this.options.onCopy) {
         this.options.onCopy(this.options.url);
