@@ -18,7 +18,10 @@ For demo recording, contributors should use **jsDelivr with their branch name**.
 Use the following CDN format:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/GITHUB_USERNAME/SocialShareButton@BRANCH_NAME/src/social-share-button.css">
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/GITHUB_USERNAME/SocialShareButton@BRANCH_NAME/src/social-share-button.css"
+/>
 
 <script src="https://cdn.jsdelivr.net/gh/GITHUB_USERNAME/SocialShareButton@BRANCH_NAME/src/social-share-button.js"></script>
 ```
@@ -31,7 +34,10 @@ BRANCH_NAME: feat/qwik-integration
 ```
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/aashnaachaudhary10/SocialShareButton@feat/qwik-integration/src/social-share-button.css">
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/aashnaachaudhary10/SocialShareButton@feat/qwik-integration/src/social-share-button.css"
+/>
 
 <script src="https://cdn.jsdelivr.net/gh/aashnaachaudhary10/SocialShareButton@feat/qwik-integration/src/social-share-button.js"></script>
 ```
@@ -60,23 +66,23 @@ Your video must cover all of the following:
 
 ## Video Quality
 
-* Minimum resolution: **720p (1280×720)**.
-* Make sure the browser window and all UI elements are **clearly and fully visible** — avoid recording a tiny window.
-* **Do not perform any actions in the background while recording the preview** (such as running scripts, console commands, automation tools, or manual changes outside the UI). All interactions must be visible in the interface.
+- Minimum resolution: **720p (1280×720)**.
+- Make sure the browser window and all UI elements are **clearly and fully visible** — avoid recording a tiny window.
+- **Do not perform any actions in the background while recording the preview** (such as running scripts, console commands, automation tools, or manual changes outside the UI). All interactions must be visible in the interface.
 
 > ⚠️ **Warning:** If hidden or background actions are detected during the preview, the submission may be **rejected**.
 
-* Audio commentary is optional but encouraged; if you choose to narrate, keep it clear.
-* No need for heavy editing — a clean screen recording is sufficient.
+- Audio commentary is optional but encouraged; if you choose to narrate, keep it clear.
+- No need for heavy editing — a clean screen recording is sufficient.
 
 ---
 
 ## Notes
 
-* The video duration must be **150 seconds (2 minutes 30 seconds) or less**.
-* Upload the video to **Google Drive or any platform with public access** (the maintainers will later upload it to the **AOSSIE YouTube channel**).
-* Add the **public video link to the README demo section** of the repository where the integration is demonstrated.
-* **Reference Demo (Next.js App Router):**
+- The video duration must be **150 seconds (2 minutes 30 seconds) or less**.
+- Upload the video to **Google Drive or any platform with public access** (the maintainers will later upload it to the **AOSSIE YouTube channel**).
+- Add the **public video link to the README demo section** of the repository where the integration is demonstrated.
+- **Reference Demo (Next.js App Router):**
   [https://youtu.be/cLJaT-8rEvQ?si=CLipA0Db4WL0EqKM](https://youtu.be/cLJaT-8rEvQ?si=CLipA0Db4WL0EqKM)
 
 ---

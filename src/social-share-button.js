@@ -5,7 +5,7 @@
  */
 
 /** Analytics event schema version. Increment when the payload shape changes. */
-const ANALYTICS_SCHEMA_VERSION = "1.0";
+const ANALYTICS_SCHEMA_VERSION = '1.0';
 
 class SocialShareButton {
   constructor(options = {}) {
@@ -32,8 +32,8 @@ class SocialShareButton {
       onCopy: options.onCopy || null,
       container: options.container || null,
       showButton: options.showButton !== false,
-      buttonStyle: options.buttonStyle || "default",
-      modalPosition: options.modalPosition || "center",
+      buttonStyle: options.buttonStyle || 'default',
+      modalPosition: options.modalPosition || 'center',
       // Analytics — the library emits events but never collects or sends data itself.
       // Website owners wire up their own analytics tools via these options.
       analytics: options.analytics !== false, // set to false to disable all event emission
@@ -309,9 +309,8 @@ class SocialShareButton {
 
     this.isModalOpen = true;
 
-    this.modal.style.display = "flex";
-    this._emit("social_share_popup_open", "popup_open");
-
+    this.modal.style.display = 'flex';
+    this._emit('social_share_popup_open', 'popup_open');
 
     // Shared body overflow management: only increment counter if this instance doesn't already own the lock
     if (typeof document !== 'undefined' && document.body) {
@@ -350,9 +349,8 @@ class SocialShareButton {
   closeModal() {
     if (!this.modal) return; // Safety check
 
-    this.modal.classList.remove("active");
-    this._emit("social_share_popup_close", "popup_close");
-
+    this.modal.classList.remove('active');
+    this._emit('social_share_popup_close', 'popup_close');
 
     // Clear any pending animations (both open and close to prevent race conditions)
     if (this.openTimeout) {
@@ -393,22 +391,21 @@ class SocialShareButton {
     const shareUrl = this.getShareURL(platform);
 
     if (shareUrl) {
+      this._emit('social_share_click', 'share', { platform });
 
-      this._emit("social_share_click", "share", { platform });
-
-      if (platform === "email") {
+      if (platform === 'email') {
         window.location.href = shareUrl;
       } else {
         window.open(shareUrl, '_blank', 'noopener,noreferrer,width=600,height=600');
       }
 
-      this._emit("social_share_success", "share", { platform });
+      this._emit('social_share_success', 'share', { platform });
 
       if (this.options.onShare) {
         this.options.onShare(platform, this.options.url);
       }
     } else {
-      this._emit("social_share_error", "error", {
+      this._emit('social_share_error', 'error', {
         platform,
         errorMessage: `No share URL configured for platform: ${platform}`,
       });
@@ -426,9 +423,9 @@ class SocialShareButton {
         .then(() => {
           // Guard against async callback after destroy
           if (this.isDestroyed) return;
-          copyBtn.textContent = "Copied!";
-          copyBtn.classList.add("copied");
-          this._emit("social_share_copy", "copy");
+          copyBtn.textContent = 'Copied!';
+          copyBtn.classList.add('copied');
+          this._emit('social_share_copy', 'copy');
 
           if (this.options.onCopy) {
             this.options.onCopy(this.options.url);
@@ -466,10 +463,9 @@ class SocialShareButton {
       input.setSelectionRange(0, 99999); // For mobile devices
       document.execCommand('copy');
 
-      copyBtn.textContent = "Copied!";
-      copyBtn.classList.add("copied");
-      this._emit("social_share_copy", "copy");
-
+      copyBtn.textContent = 'Copied!';
+      copyBtn.classList.add('copied');
+      this._emit('social_share_copy', 'copy');
 
       if (this.options.onCopy) {
         this.options.onCopy(this.options.url);
@@ -670,8 +666,8 @@ class SocialShareButton {
    */
   _getContainer() {
     if (!this.options.container) return null;
-    if (typeof document === "undefined") return null;
-    return typeof this.options.container === "string"
+    if (typeof document === 'undefined') return null;
+    return typeof this.options.container === 'string'
       ? document.querySelector(this.options.container)
       : this.options.container;
   }
@@ -702,7 +698,7 @@ class SocialShareButton {
 
     const payload = {
       version: ANALYTICS_SCHEMA_VERSION,
-      source: "social-share-button",
+      source: 'social-share-button',
       eventName,
       interactionType,
       platform: extra.platform || null,
@@ -719,14 +715,14 @@ class SocialShareButton {
     // Optional console output for development / debugging
     if (this.options.debug) {
       // eslint-disable-next-line no-console
-      console.log("[SocialShareButton Analytics]", payload);
+      console.log('[SocialShareButton Analytics]', payload);
     }
 
     // Path 1 — DOM CustomEvent (framework-agnostic, CDN-friendly)
     // Bubbles from the container element so delegated listeners work naturally.
-    if (typeof window !== "undefined" && typeof CustomEvent !== "undefined") {
+    if (typeof window !== 'undefined' && typeof CustomEvent !== 'undefined') {
       try {
-        const domEvent = new CustomEvent("social-share", {
+        const domEvent = new CustomEvent('social-share', {
           bubbles: true,
           cancelable: false,
           composed: true, // crosses shadow-DOM boundaries; safe to set in all envs
@@ -738,7 +734,7 @@ class SocialShareButton {
     }
 
     // Path 2 — onAnalytics callback (direct, single-consumer hook)
-    if (typeof this.options.onAnalytics === "function") {
+    if (typeof this.options.onAnalytics === 'function') {
       try {
         this.options.onAnalytics(payload);
       } catch (_) {}
@@ -747,7 +743,7 @@ class SocialShareButton {
     // Path 3 — plugin / adapter registry (supports multiple simultaneous consumers)
     if (Array.isArray(this.options.analyticsPlugins)) {
       for (const plugin of this.options.analyticsPlugins) {
-        if (plugin && typeof plugin.track === "function") {
+        if (plugin && typeof plugin.track === 'function') {
           try {
             plugin.track(payload);
           } catch (_) {}
