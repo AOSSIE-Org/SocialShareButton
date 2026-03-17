@@ -8,6 +8,7 @@
     "src/social-share-button.css",
     "src/social-share-button-react.jsx",
     "src/social-share-analytics.js",
+    "src/utils/extractContent.js",
     "README.md",
     "LICENSE"
   ],
@@ -15,7 +16,8 @@
     "lint": "eslint src/**/*.{js,jsx} --max-warnings=0",
     "lint:fix": "eslint src/**/*.{js,jsx} --fix",
     "format": "prettier --write \"**/*.{js,jsx,json,css,md,html}\"",
-    "format:check": "prettier --check \"**/*.{js,jsx,json,css,md,html}\""
+    "format:check": "prettier --check \"**/*.{js,jsx,json,css,md,html}\"",
+    "test": "node --test tests/**/*.test.js"
   },
   "repository": {
     "type": "git",
@@ -44,6 +46,7 @@
     "@eslint/js": "^9.39.4",
     "eslint": "^9.39.4",
     "globals": "^17.4.0",
+    "jsdom": "^28.1.0",
     "prettier": "^3.2.4"
   },
   "type": "module"
