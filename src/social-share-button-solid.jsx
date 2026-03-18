@@ -35,6 +35,10 @@ export default function SocialShareButton(props) {
 
   const defaultPlatforms = ['whatsapp', 'facebook', 'twitter', 'linkedin', 'telegram', 'reddit'];
 
+  /**
+   * Builds the options object for SocialShareButton, applying defaults.
+   * @returns {Object} Options to pass to the SocialShareButton constructor or updateOptions
+   */
   const buildOptions = () => ({
     container,
     url: currentUrl(),
@@ -50,6 +54,7 @@ export default function SocialShareButton(props) {
     buttonHoverColor: props.buttonHoverColor ?? '',
     onShare: props.onShare ?? null,
     onCopy: props.onCopy ?? null,
+    showButton: props.showButton ?? true,
     buttonStyle: props.buttonStyle ?? 'default',
     modalPosition: props.modalPosition ?? 'center',
   });
@@ -66,11 +71,18 @@ export default function SocialShareButton(props) {
     }
 
     // CDN not yet loaded — poll until it is, then initialise
+    let retries = 0;
+    const maxRetries = 100; // Stop after 5 seconds (100 * 50ms)
+
     const intervalId = setInterval(() => {
       if (window.SocialShareButton) {
         clearInterval(intervalId);
         shareButton = new window.SocialShareButton(buildOptions());
+      } else if (retries >= maxRetries) {
+        clearInterval(intervalId);
+        console.warn('SocialShareButton: Failed to load from CDN after 5 seconds.');
       }
+      retries++;
     }, 50);
 
     // Safety: stop polling on cleanup if it never loaded
@@ -82,23 +94,8 @@ export default function SocialShareButton(props) {
   // never overwrites initialised values with undefined.
   createEffect(() => {
     if (shareButton) {
-      shareButton.updateOptions({
-        url: currentUrl(),
-        title: currentTitle(),
-        description: props.description ?? '',
-        hashtags: props.hashtags ?? [],
-        via: props.via ?? '',
-        platforms: props.platforms ?? defaultPlatforms,
-        theme: props.theme ?? 'dark',
-        buttonText: props.buttonText ?? 'Share',
-        customClass: props.customClass ?? '',
-        buttonColor: props.buttonColor ?? '',
-        buttonHoverColor: props.buttonHoverColor ?? '',
-        onShare: props.onShare ?? null,
-        onCopy: props.onCopy ?? null,
-        buttonStyle: props.buttonStyle ?? 'default',
-        modalPosition: props.modalPosition ?? 'center',
-      });
+      const { container: _, ...updateOpts } = buildOptions();
+      shareButton.updateOptions(updateOpts);
     }
   });
 
