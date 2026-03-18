@@ -391,6 +391,43 @@
       </div>
     </div>
 
+    <!-- Auto-Detection Demo -->
+    <div class="demo-section">
+      <h2>🤖 Content Auto-Detection</h2>
+      <p>Automatically detects page title and extracts descriptions from meta tags or page content. Zero config required!</p>
+      
+      <div class="code-block" style="margin-bottom: 20px;">
+        <button class="copy-btn" aria-label="Copy code">Copy</button>
+        <span class="copy-status" aria-live="polite" style="position:absolute; left:-9999px;"></span>
+        <code>
+&lt;!-- Include via CDN --&gt;
+&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@feature/socialshare-autodetect/src/social-share-button.css"&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@feature/socialshare-autodetect/src/social-share-button.js"&gt;&lt;/script&gt;
+
+&lt;div id="demo-autodetect"&gt;&lt;/div&gt;
+
+&lt;script&gt;
+  // Initialize with zero config for auto-detection
+  new SocialShareButton({
+    container: '#demo-autodetect'
+  });
+&lt;/script&gt;</code>
+      </div>
+
+      <div class="demo-grid">
+        <div class="demo-item">
+          <h3>Auto-Detect (Enabled)</h3>
+          <p>Title and description automatically populated</p>
+          <div id="demo-autodetect"></div>
+        </div>
+        <div class="demo-item">
+          <h3>Auto-Detect (Disabled)</h3>
+          <p>Manual props overriding auto-detection</p>
+          <div id="demo-no-autodetect"></div>
+        </div>
+      </div>
+    </div>
+
     <!-- Quick Start -->
     <div class="demo-section">
       <h2>🚀 Quick Start</h2>
@@ -546,6 +583,21 @@ function App() {
       platforms: ['whatsapp', 'telegram'],
       buttonText: 'Share'
     });
+    // Auto-Detect Enabled
+    new SocialShareButton({
+      container: '#demo-autodetect',
+      buttonText: 'Auto-Detect Share'
+    });
+
+    // Auto-Detect Disabled
+    new SocialShareButton({
+      container: '#demo-no-autodetect',
+      autoDetect: false,
+      title: 'Manual Title Override',
+      description: 'This uses explicit manual props instead of auto-detection.',
+      buttonText: 'Manual Share'
+    });
+
 
     // Custom Colors - Red
     new SocialShareButton({
