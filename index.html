@@ -397,7 +397,7 @@
       <p>Get started in seconds with minimal setup</p>
       
 <div class="code-block">
-  <button class="copy-btn" aria-label="Copy code">Copy</button>
+  <button type="button" class="copy-btn" aria-label="Copy code">Copy</button>
   <span class="copy-status" aria-live="polite" style="position:absolute; left:-9999px;"></span>
   <code>
 &lt;link rel="stylesheet" href="social-share-button.css"&gt;
@@ -419,17 +419,17 @@ new SocialShareButton({
       <p>First-class React support with hooks</p>
       
       <div class="code-block">
-  <button class="copy-btn" aria-label="Copy code">Copy</button>
+  <button type="button" class="copy-btn" aria-label="Copy code">Copy</button>
   <span class="copy-status" aria-live="polite" style="position:absolute; left:-9999px;"></span>
   <code>
-<code>import SocialShareButton from 'social-share-button';
+import SocialShareButton from 'social-share-button';
 
 function App() {
   return (
     &lt;SocialShareButton
       url="https://your-website.com"
       title="Check this out!"
-      onShare={(platform) => {
+      onShare={(platform) =&gt; {
         console.log('Shared on:', platform);
       }}
     /&gt;
@@ -450,7 +450,7 @@ function App() {
 
       <p style="font-weight:600;margin-top:16px;">Step 1 — Enqueue CSS &amp; JS in <code style="background:rgba(0,0,0,0.3);padding:2px 6px;border-radius:4px;">functions.php</code></p>
       <div class="code-block">
-        <button class="copy-btn" aria-label="Copy code">Copy</button>
+        <button type="button" class="copy-btn" aria-label="Copy code">Copy</button>
         <span class="copy-status" aria-live="polite" style="position:absolute;left:-9999px;"></span>
         <code>
 function enqueue_social_share_button() {
