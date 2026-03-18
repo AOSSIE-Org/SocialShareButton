@@ -29,6 +29,9 @@ const {
   customClass = '',
   buttonStyle = 'default',
   modalPosition = 'center',
+  analytics = false,
+  componentId = null,
+  debug = false,
 } = Astro.props;
 
 const hashtagsStr = Array.isArray(hashtags) ? hashtags.join(',') : hashtags;
@@ -47,6 +50,9 @@ const platformsStr = Array.isArray(platforms) ? platforms.join(',') : platforms;
   data-button-text={buttonText}
   data-button-style={buttonStyle}
   data-modal-position={modalPosition}
+  data-analytics={analytics}
+  data-component-id={componentId}
+  data-debug={debug}
 ></div>
 
 <script>
@@ -78,6 +84,9 @@ const platformsStr = Array.isArray(platforms) ? platforms.join(',') : platforms;
         buttonText: this.element.dataset.buttonText || 'Share',
         buttonStyle: this.element.dataset.buttonStyle || 'default',
         modalPosition: this.element.dataset.modalPosition || 'center',
+        analytics: this.element.dataset.analytics === 'true',
+        componentId: this.element.dataset.componentId || null,
+        debug: this.element.dataset.debug === 'true',
       };
 
       this.instance = new window.SocialShareButton(options);

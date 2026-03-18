@@ -14,6 +14,11 @@
   export let onCopy = null;
   export let buttonStyle = 'default';
   export let modalPosition = 'center';
+  export let analytics = false;
+  export let onAnalytics = null;
+  export let analyticsPlugins = [];
+  export let componentId = null;
+  export let debug = false;
 
   let container;
   let shareButton = null;
@@ -38,6 +43,11 @@
         onCopy,
         buttonStyle,
         modalPosition,
+        analytics,
+        onAnalytics,
+        analyticsPlugins,
+        componentId,
+        debug,
       });
     }
   });

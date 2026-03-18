@@ -22,6 +22,11 @@ const props = defineProps({
   onCopy: { type: Function, default: null },
   buttonStyle: { type: String, default: 'default' },
   modalPosition: { type: String, default: 'center' },
+  analytics: { type: Boolean, default: false },
+  onAnalytics: { type: Function, default: null },
+  analyticsPlugins: { type: Array, default: () => [] },
+  componentId: { type: String, default: null },
+  debug: { type: Boolean, default: false },
 });
 
 const container = ref(null);
@@ -54,6 +59,11 @@ const initShareButton = () => {
     onCopy: props.onCopy,
     buttonStyle: props.buttonStyle,
     modalPosition: props.modalPosition,
+    analytics: props.analytics,
+    onAnalytics: props.onAnalytics,
+    analyticsPlugins: props.analyticsPlugins,
+    componentId: props.componentId,
+    debug: props.debug,
   });
 };
 
