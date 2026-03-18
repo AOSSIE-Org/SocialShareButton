@@ -1,46 +1,37 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
 
 export const SocialShareButton = ({
   url,
   title,
-  description = "",
+  description = '',
   hashtags = [],
-  via = "",
-  platforms = [
-    "whatsapp",
-    "facebook",
-    "twitter",
-    "linkedin",
-    "telegram",
-    "reddit",
-  ],
-  theme = "dark",
-  buttonText = "Share",
-  customClass = "",
+  via = '',
+  platforms = ['whatsapp', 'facebook', 'twitter', 'linkedin', 'telegram', 'reddit'],
+  theme = 'dark',
+  buttonText = 'Share',
+  customClass = '',
   onShare = null,
   onCopy = null,
-  buttonStyle = "default",
-  modalPosition = "center",
+  buttonStyle = 'default',
+  modalPosition = 'center',
   // Analytics props — the library itself never collects data.
   // Provide any combination to connect your own analytics tools.
-  analytics = true,        // set to false to disable all event emission
-  onAnalytics = null,      // (payload) => void — direct callback hook
-  analyticsPlugins = [],   // array of adapter instances (see social-share-analytics.js)
-  componentId = null,      // optional string identifier for this instance
-  debug = false,           // log events to console during development
+  analytics = true, // set to false to disable all event emission
+  onAnalytics = null, // (payload) => void — direct callback hook
+  analyticsPlugins = [], // array of adapter instances (see social-share-analytics.js)
+  componentId = null, // optional string identifier for this instance
+  debug = false, // log events to console during development
 }) => {
   const containerRef = useRef(null);
   const shareButtonRef = useRef(null);
 
   // Auto-detect current URL and title if not provided
-  const currentUrl =
-    url || (typeof window !== "undefined" ? window.location.href : "");
-  const currentTitle =
-    title || (typeof document !== "undefined" ? document.title : "");
+  const currentUrl = url || (typeof window !== 'undefined' ? window.location.href : '');
+  const currentTitle = title || (typeof document !== 'undefined' ? document.title : '');
 
   useEffect(() => {
     if (containerRef.current && !shareButtonRef.current) {
-      if (typeof window !== "undefined" && window.SocialShareButton) {
+      if (typeof window !== 'undefined' && window.SocialShareButton) {
         shareButtonRef.current = new window.SocialShareButton({
           container: containerRef.current,
           url: currentUrl,
