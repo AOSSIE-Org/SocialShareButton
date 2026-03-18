@@ -189,6 +189,12 @@
       white-space: pre;
     }
 
+    .inline-code {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
     .cta-section {
       text-align: center;
       padding: 40px 20px;
@@ -397,7 +403,7 @@
       <p>Get started in seconds with minimal setup</p>
       
 <div class="code-block">
-  <button class="copy-btn" aria-label="Copy code">Copy</button>
+  <button type="button" class="copy-btn" aria-label="Copy code">Copy</button>
   <span class="copy-status" aria-live="polite" style="position:absolute; left:-9999px;"></span>
   <code>
 &lt;link rel="stylesheet" href="social-share-button.css"&gt;
@@ -419,10 +425,10 @@ new SocialShareButton({
       <p>First-class React support with hooks</p>
       
       <div class="code-block">
-  <button class="copy-btn" aria-label="Copy code">Copy</button>
+  <button type="button" class="copy-btn" aria-label="Copy code">Copy</button>
   <span class="copy-status" aria-live="polite" style="position:absolute; left:-9999px;"></span>
   <code>
-<code>import SocialShareButton from 'social-share-button';
+import SocialShareButton from 'social-share-button';
 
 function App() {
   return (
@@ -444,22 +450,22 @@ function App() {
       <p>
         Ruby on Rails, Django, and Laravel generate HTML on the server.
         The integration pattern is identical across all three: include the CDN CSS in
-        <code style="background:rgba(0,0,0,0.3);padding:2px 6px;border-radius:4px;">&lt;head&gt;</code>,
+        <code class="inline-code">&lt;head&gt;</code>,
         add the JS and initialisation script before
-        <code style="background:rgba(0,0,0,0.3);padding:2px 6px;border-radius:4px;">&lt;/body&gt;</code>
+        <code class="inline-code">&lt;/body&gt;</code>
         in your base layout template.
       </p>
 
-      <p style="font-weight:600;margin-top:16px;">Ruby on Rails — <code style="background:rgba(0,0,0,0.3);padding:2px 6px;border-radius:4px;">app/views/layouts/application.html.erb</code></p>
+      <p style="font-weight:600;margin-top:16px;">Ruby on Rails — <code class="inline-code">app/views/layouts/application.html.erb</code></p>
       <div class="code-block">
-        <button class="copy-btn" aria-label="Copy code">Copy</button>
+        <button type="button" class="copy-btn" aria-label="Copy code">Copy</button>
         <span class="copy-status" aria-live="polite" style="position:absolute;left:-9999px;"></span>
         <code>
 &lt;%# In &lt;head&gt; %&gt;
-&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.css"&gt;
+&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css"&gt;
 
 &lt;%# Before &lt;/body&gt; %&gt;
-&lt;script src="https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js"&gt;&lt;/script&gt;
 &lt;div id="share-button"&gt;&lt;/div&gt;
 &lt;script&gt;
   new SocialShareButton({
@@ -472,16 +478,16 @@ function App() {
 &lt;/script&gt;</code>
       </div>
 
-      <p style="font-weight:600;margin-top:16px;">Django — <code style="background:rgba(0,0,0,0.3);padding:2px 6px;border-radius:4px;">templates/base.html</code></p>
+      <p style="font-weight:600;margin-top:16px;">Django — <code class="inline-code">templates/base.html</code></p>
       <div class="code-block">
-        <button class="copy-btn" aria-label="Copy code">Copy</button>
+        <button type="button" class="copy-btn" aria-label="Copy code">Copy</button>
         <span class="copy-status" aria-live="polite" style="position:absolute;left:-9999px;"></span>
         <code>
 {# In &lt;head&gt; #}
-&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.css"&gt;
+&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css"&gt;
 
 {# Before &lt;/body&gt; #}
-&lt;script src="https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js"&gt;&lt;/script&gt;
 &lt;div id="share-button"&gt;&lt;/div&gt;
 &lt;script&gt;
   new SocialShareButton({
@@ -494,16 +500,16 @@ function App() {
 &lt;/script&gt;</code>
       </div>
 
-      <p style="font-weight:600;margin-top:16px;">Laravel — <code style="background:rgba(0,0,0,0.3);padding:2px 6px;border-radius:4px;">resources/views/layouts/app.blade.php</code></p>
+      <p style="font-weight:600;margin-top:16px;">Laravel — <code class="inline-code">resources/views/layouts/app.blade.php</code></p>
       <div class="code-block">
-        <button class="copy-btn" aria-label="Copy code">Copy</button>
+        <button type="button" class="copy-btn" aria-label="Copy code">Copy</button>
         <span class="copy-status" aria-live="polite" style="position:absolute;left:-9999px;"></span>
         <code>
 {{-- In &lt;head&gt; --}}
-&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.css"&gt;
+&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css"&gt;
 
 {{-- Before &lt;/body&gt; --}}
-&lt;script src="https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js"&gt;&lt;/script&gt;
 &lt;div id="share-button"&gt;&lt;/div&gt;
 &lt;script&gt;
   new SocialShareButton({

@@ -45,26 +45,26 @@ This tutorial is split into **two videos** (authentic screen-recordings, no simu
 
 | Timestamp | What is shown                                                             |
 | --------- | ------------------------------------------------------------------------- |
-| 0:00–0:30 | Opening VS Code / OpenCode in AOSSIE-Org/Website project folder           |
-| 0:30–1:00 | Opening the integration prompt file from SocialShareButton                |
-| 1:00–1:30 | Giving AI prompt: "integrate SocialShareButton into this Next.js project" |
-| 1:30–2:00 | AI reads the prompt file, automatically adds CDN links to layout          |
-| 2:00–2:30 | AI modifies Navbar component, adds container div and initialization code  |
-| 2:30–3:00 | Adding `debug: true` option to enable analytics                           |
-| 3:00–3:30 | Running `npm run dev` to start the development server                     |
-| 3:30–4:00 | Browser showing share button appearing, clicking to open modal            |
+| 0:00–0:10 | Opening VS Code / OpenCode in AOSSIE-Org/Website project folder           |
+| 0:10–0:20 | Opening the integration prompt file from SocialShareButton                |
+| 0:20–0:30 | Giving AI prompt: "integrate SocialShareButton into this Next.js project" |
+| 0:30–0:40 | AI reads the prompt file, automatically adds CDN links to layout          |
+| 0:40–0:50 | AI modifies Navbar component, adds container div and initialization code  |
+| 0:50–1:00 | Adding `debug: true` option to enable analytics                           |
+| 1:00–1:10 | Running `npm run dev` to start the development server                     |
+| 1:10–1:20 | Browser showing share button appearing, clicking to open modal            |
 
 ### Video 2 — Live Preview on AOSSIE Website
 
 | Timestamp | What is shown                                               |
 | --------- | ----------------------------------------------------------- |
-| 0:00–0:15 | Full AOSSIE website with share button visible in Navbar     |
-| 0:15–0:45 | Clicking share button → modal opens with all platforms      |
-| 0:45–1:15 | Clicking Twitter → opens Twitter share window               |
-| 1:15–1:45 | Clicking WhatsApp → opens WhatsApp share window             |
-| 1:45–2:15 | Clicking "Copy link" → link copied, toast/feedback shown    |
-| 2:15–2:45 | Console panel: showing analytics events firing in real-time |
-| 2:45–3:00 | Summary: button fully functional, analytics tracking works  |
+| 0:00–0:10 | Full AOSSIE website with share button visible in Navbar     |
+| 0:10–0:20 | Clicking share button → modal opens with all platforms      |
+| 0:20–0:30 | Clicking Twitter → opens Twitter share window               |
+| 0:30–0:40 | Clicking WhatsApp → opens WhatsApp share window             |
+| 0:40–0:50 | Clicking "Copy link" → link copied, toast/feedback shown    |
+| 0:50–1:00 | Console panel: showing analytics events firing in real-time |
+| 1:00–1:10 | Summary: button fully functional, analytics tracking works  |
 
 ---
 
@@ -100,7 +100,7 @@ shareButtonRef.current = new window.SocialShareButton({
 
 **Events you will see in the console:**
 
-```
+```text
 [SocialShareButton Analytics] { eventName: 'social_share_popup_open', platform: null, url: '...', ... }
 [SocialShareButton Analytics] { eventName: 'social_share_click',       platform: 'twitter', url: '...', ... }
 [SocialShareButton Analytics] { eventName: 'social_share_copy',        platform: null, url: '...', ... }
