@@ -41,9 +41,17 @@ export default function SocialShareButton({
   onCopy = null,
   buttonStyle = 'default',
   modalPosition = 'center',
+  analytics = false,
+  onAnalytics = null,
+  analyticsPlugins = [],
+  componentId = null,
+  debug = false,
 }) {
   const containerRef = useRef(null);
   const shareButtonRef = useRef(null);
+
+  const currentUrl = url || (typeof window !== 'undefined' ? window.location.href : '');
+  const currentTitle = title || (typeof document !== 'undefined' ? document.title : '');
 
   // ── Mount: initialise once in the browser ──────────────────────────────
   useEffect(() => {
@@ -52,8 +60,8 @@ export default function SocialShareButton({
 
     shareButtonRef.current = new window.SocialShareButton({
       container: containerRef.current,
-      url: url || window.location.href,
-      title: title || document.title,
+      url: currentUrl,
+      title: currentTitle,
       description,
       hashtags,
       via,
@@ -65,6 +73,11 @@ export default function SocialShareButton({
       onCopy,
       buttonStyle,
       modalPosition,
+      analytics,
+      onAnalytics,
+      analyticsPlugins,
+      componentId,
+      debug,
     });
 
     // Cleanup on unmount
@@ -74,7 +87,6 @@ export default function SocialShareButton({
         shareButtonRef.current = null;
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // ── Prop updates: keep the button in sync without re-mounting ──────────
@@ -82,8 +94,8 @@ export default function SocialShareButton({
     if (!shareButtonRef.current) return;
 
     shareButtonRef.current.updateOptions({
-      url,
-      title,
+      url: currentUrl,
+      title: currentTitle,
       description,
       hashtags,
       via,
@@ -95,10 +107,15 @@ export default function SocialShareButton({
       onCopy,
       buttonStyle,
       modalPosition,
+      analytics,
+      onAnalytics,
+      analyticsPlugins,
+      componentId,
+      debug,
     });
   }, [
-    url,
-    title,
+    currentUrl,
+    currentTitle,
     description,
     hashtags,
     via,
@@ -110,6 +127,11 @@ export default function SocialShareButton({
     onCopy,
     buttonStyle,
     modalPosition,
+    analytics,
+    onAnalytics,
+    analyticsPlugins,
+    componentId,
+    debug,
   ]);
 
   return <div ref={containerRef}></div>;

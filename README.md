@@ -428,6 +428,53 @@ new window.SocialShareButton({
 
 </details>
 
+<details>
+<summary><b>🎸 Remix</b></summary>
+
+### Step 1: Load CSS via `links` export and JS via CDN script in `app/root.tsx`
+
+```tsx
+import type { LinksFunction } from '@remix-run/node';
+
+export const links: LinksFunction = () => [
+  {
+    rel: 'stylesheet',
+    href: 'https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css',
+  },
+];
+```
+
+Add the CDN `<script>` tag just before `</body>` in your root component:
+
+```html
+<script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js"></script>
+```
+
+### Step 2: Copy `src/social-share-button-remix.jsx` into your project and use it in a route
+
+```tsx
+// app/routes/_index.tsx
+import SocialShareButton from '~/components/social-share-button-remix';
+
+export default function Index() {
+  return (
+    <SocialShareButton
+      url="https://your-website.com"
+      title="Check this out!"
+      description="An amazing website"
+      theme="dark"
+      buttonText="Share"
+    />
+  );
+}
+```
+
+> **Note:** Remix is SSR-first. The component wraps all browser-API calls inside
+> `useEffect` with an `typeof window !== 'undefined'` guard so it renders safely
+> on the server and only initialises `SocialShareButton` in the browser.
+
+</details>
+
 ---
 
 ## Configuration
@@ -705,53 +752,6 @@ if (window.SocialShareButton) {
 **Cause:** Component initialized once, doesn't track routes
 
 **Solution:** Use `updateOptions()` method (see Advanced Usage above)
-
-</details>
-
-<details>
-<summary><b>🎸 Remix</b></summary>
-
-### Step 1: Load CSS via `links` export and JS via CDN script in `app/root.tsx`
-
-```tsx
-import type { LinksFunction } from '@remix-run/node';
-
-export const links: LinksFunction = () => [
-  {
-    rel: 'stylesheet',
-    href: 'https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css',
-  },
-];
-```
-
-Add the CDN `<script>` tag just before `</body>` in your root component:
-
-```html
-<script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js"></script>
-```
-
-### Step 2: Copy `src/social-share-button-remix.jsx` into your project and use it in a route
-
-```tsx
-// app/routes/_index.tsx
-import SocialShareButton from '~/components/social-share-button-remix';
-
-export default function Index() {
-  return (
-    <SocialShareButton
-      url="https://your-website.com"
-      title="Check this out!"
-      description="An amazing website"
-      theme="dark"
-      buttonText="Share"
-    />
-  );
-}
-```
-
-> **Note:** Remix is SSR-first. The component wraps all browser-API calls inside
-> `useEffect` with an `typeof window !== 'undefined'` guard so it renders safely
-> on the server and only initialises `SocialShareButton` in the browser.
 
 </details>
 
