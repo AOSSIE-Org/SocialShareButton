@@ -123,14 +123,14 @@ class GoogleAnalyticsAdapter extends SocialShareAnalyticsPlugin {
    */
   constructor(config = {}) {
     super();
-    this.eventCategory = config.eventCategory || "social_share";
+    this.eventCategory = config.eventCategory || 'social_share';
   }
 
   track(payload) {
-    if (typeof window === "undefined" || typeof window.gtag !== "function") {
+    if (typeof window === 'undefined' || typeof window.gtag !== 'function') {
       return;
     }
-    window.gtag("event", payload.eventName, {
+    window.gtag('event', payload.eventName, {
       event_category: this.eventCategory,
       event_label: payload.platform,
       share_platform: payload.platform,
@@ -151,9 +151,9 @@ class GoogleAnalyticsAdapter extends SocialShareAnalyticsPlugin {
 class MixpanelAdapter extends SocialShareAnalyticsPlugin {
   track(payload) {
     if (
-      typeof window === "undefined" ||
-      typeof window.mixpanel === "undefined" ||
-      typeof window.mixpanel.track !== "function"
+      typeof window === 'undefined' ||
+      typeof window.mixpanel === 'undefined' ||
+      typeof window.mixpanel.track !== 'function'
     ) {
       return;
     }
@@ -177,9 +177,9 @@ class MixpanelAdapter extends SocialShareAnalyticsPlugin {
 class SegmentAdapter extends SocialShareAnalyticsPlugin {
   track(payload) {
     if (
-      typeof window === "undefined" ||
-      typeof window.analytics === "undefined" ||
-      typeof window.analytics.track !== "function"
+      typeof window === 'undefined' ||
+      typeof window.analytics === 'undefined' ||
+      typeof window.analytics.track !== 'function'
     ) {
       return;
     }
@@ -201,7 +201,7 @@ class SegmentAdapter extends SocialShareAnalyticsPlugin {
 // -----------------------------------------------------------------------------
 class PlausibleAdapter extends SocialShareAnalyticsPlugin {
   track(payload) {
-    if (typeof window === "undefined" || typeof window.plausible !== "function") {
+    if (typeof window === 'undefined' || typeof window.plausible !== 'function') {
       return;
     }
     window.plausible(payload.eventName, {
@@ -223,9 +223,9 @@ class PlausibleAdapter extends SocialShareAnalyticsPlugin {
 class PostHogAdapter extends SocialShareAnalyticsPlugin {
   track(payload) {
     if (
-      typeof window === "undefined" ||
-      typeof window.posthog === "undefined" ||
-      typeof window.posthog.capture !== "function"
+      typeof window === 'undefined' ||
+      typeof window.posthog === 'undefined' ||
+      typeof window.posthog.capture !== 'function'
     ) {
       return;
     }
@@ -256,8 +256,8 @@ class CustomAdapter extends SocialShareAnalyticsPlugin {
    */
   constructor(onTrack) {
     super();
-    if (typeof onTrack !== "function") {
-      throw new TypeError("CustomAdapter expects a function argument.");
+    if (typeof onTrack !== 'function') {
+      throw new TypeError('CustomAdapter expects a function argument.');
     }
     this._onTrack = onTrack;
   }
@@ -281,10 +281,10 @@ const adapters = {
   CustomAdapter,
 };
 
-if (typeof module !== "undefined" && module.exports) {
+if (typeof module !== 'undefined' && module.exports) {
   module.exports = adapters;
 }
 
-if (typeof window !== "undefined") {
+if (typeof window !== 'undefined') {
   window.SocialShareAnalytics = adapters;
 }

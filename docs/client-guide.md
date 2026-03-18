@@ -8,12 +8,12 @@
 
 Your audience is already sharing. Give them a button worth clicking.
 
-| What you get | What you skip |
-|---|---|
-| One-line install | Backend servers |
+| What you get           | What you skip               |
+| ---------------------- | --------------------------- |
+| One-line install       | Backend servers             |
 | Works on any framework | Tracking or data collection |
-| Fully customizable | Lock-in or licensing fees |
-| Lightweight & fast | Build step (CDN option) |
+| Fully customizable     | Lock-in or licensing fees   |
+| Lightweight & fast     | Build step (CDN option)     |
 
 ---
 
