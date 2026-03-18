@@ -154,6 +154,34 @@ class SocialShareButtonElement extends HTMLElement {
     this.setAttribute('auto-detect', String(value));
   }
 
+  get analytics() {
+    return this.getAttribute('analytics') !== 'false';
+  }
+
+  set analytics(value) {
+    this.setAttribute('analytics', String(value));
+  }
+
+  get componentId() {
+    return this.getAttribute('component-id') || null;
+  }
+
+  set componentId(value) {
+    if (value === null) {
+      this.removeAttribute('component-id');
+    } else {
+      this.setAttribute('component-id', value);
+    }
+  }
+
+  get debug() {
+    return this.getAttribute('debug') === 'true';
+  }
+
+  set debug(value) {
+    this.setAttribute('debug', String(value));
+  }
+
   _getOptions() {
     return {
       container: this._shadow.getElementById('container'),
@@ -168,6 +196,9 @@ class SocialShareButtonElement extends HTMLElement {
       buttonStyle: this.buttonStyle,
       modalPosition: this.modalPosition,
       autoDetect: this.autoDetect,
+      analytics: this.analytics,
+      componentId: this.componentId,
+      debug: this.debug,
     };
   }
 
