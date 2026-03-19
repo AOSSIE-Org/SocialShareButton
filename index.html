@@ -16,7 +16,7 @@
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg,#667eea 0%, #764ba2 100%);
       min-height: 100vh;
       padding: 20px;
     }
@@ -261,6 +261,7 @@
       <img src="public/socialsharebutton.svg" alt="" aria-hidden="true" class="logo"> SocialShareButton
       </h1>
       <p class="tagline">A lightweight, modern, and highly customizable social sharing component</p>
+      <!-- Badges   -->
       <div class="badges">
         <span class="badge">📦 Zero Dependencies</span>
         <span class="badge">⚡ &lt; 10KB</span>
@@ -437,6 +438,56 @@ function App() {
 }</code>
       </div>
     </div>
+
+<!-- Qwik Integration Demo Section -->
+<div class="demo-section" >
+  <h2>⚡ Qwik / QwikCity Integration</h2>
+  <p>Use SocialShareButton with the Qwik framework, fully SSR-safe and client-only.</p>
+
+  <div class="demo-grid">
+
+  </div>
+
+  <div class="code-block">
+    <button class="copy-btn" aria-label="Copy code">Copy</button>
+    <span class="copy-status" aria-live="polite" style="position:absolute; left:-9999px;"></span>
+    <code>
+import { component$ } from '@builder.io/qwik';
+import { SocialShareButton } from '~/components/social-share-button-qwik';
+
+export default component$(() =&gt; (
+  &lt;SocialShareButton
+    url="https://your-website.com"
+    title="Check this out!"
+    description="An amazing website"
+    theme="dark"
+    buttonText="Share"
+  /&gt;
+));</code>
+  </div>
+</div>
+
+<!-- Load Qwik for the demo -->
+<script type="module">
+  import { component$, useVisibleTask$, useSignal } from 'https://cdn.jsdelivr.net/npm/@builder.io/qwik@1.0.0/dist/qwik.mjs';
+  // Demo 
+  useVisibleTask$(() => {
+    const container = document.querySelector('#demo-qwik');
+    if (container && window.SocialShareButton) {
+      new window.SocialShareButton({
+        container,
+        url: 'https://github.com/AOSSIE-Org/SocialShareButton',
+        title: 'SocialShareButton - Qwik Demo',
+        description: 'Demo of SocialShareButton in Qwik',
+        buttonText: 'Share',
+        theme: 'dark'
+      });
+    }
+  });
+</script>
+
+
+
 
     <!-- CTA Section -->
     <div class="cta-section">

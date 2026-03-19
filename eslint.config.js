@@ -4,6 +4,7 @@ import globals from "globals";
 export default [
   js.configs.recommended,
   {
+    // Apply settings specifically to source files
     files: ["src/**/*.{js,jsx}"],
     languageOptions: {
       ecmaVersion: "latest",
@@ -26,6 +27,7 @@ export default [
     },
   },
   {
+    // Special rules for configuration files
     files: ["eslint.config.js", "**/*.config.js"],
     languageOptions: {
       sourceType: "module",
