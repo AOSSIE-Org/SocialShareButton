@@ -249,7 +249,7 @@
       }
     }
 
-  
+
   </style>
 
 </head>
@@ -396,7 +396,7 @@
     <div class="demo-section">
       <h2>🚀 Quick Start</h2>
       <p>Get started in seconds with minimal setup</p>
-      
+
 <div class="code-block">
   <button class="copy-btn" aria-label="Copy code">Copy</button>
   <span class="copy-status" aria-live="polite" style="position:absolute; left:-9999px;"></span>
@@ -418,7 +418,7 @@ new SocialShareButton({
     <div class="demo-section">
       <h2>⚛️ React Integration</h2>
       <p>First-class React support with hooks</p>
-      
+
       <div class="code-block">
   <button class="copy-btn" aria-label="Copy code">Copy</button>
   <span class="copy-status" aria-live="polite" style="position:absolute; left:-9999px;"></span>
@@ -438,6 +438,10 @@ function App() {
 }</code>
       </div>
     </div>
+     <!-- Preact Integration -->
+    <div class="demo-section">
+      <h2>⚛️ Preact Integration</h2>
+      <p><strong>Step 1:</strong> Include CSS and JS via CDN</p>
 
 <!-- Qwik Integration Demo Section -->
 <div class="demo-section" >
@@ -489,6 +493,38 @@ export default component$(() =&gt; (
 
 
 
+      <div class="code-block">
+  <button type="button" class="copy-btn" aria-label="Copy code">Copy</button>
+  <span class="copy-status" aria-live="polite" style="position:absolute; left:-9999px;"></span>
+  <code>
+&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.css"&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.js"&gt;&lt;/script&gt;
+  </code>
+      </div>
+
+      <p><strong>Step 2:</strong> Import and use the component in a Preact app</p>
+
+      <div class="code-block">
+  <button class="copy-btn" aria-label="Copy code">Copy</button>
+  <span class="copy-status" aria-live="polite" style="position:absolute; left:-9999px;"></span>
+  <code>
+// App.jsx (Preact)
+import SocialShareButton from './social-share-button-preact';
+
+export default function App() {
+  return (
+    &lt;SocialShareButton
+      url="https://your-website.com"
+      title="Check this out!"
+      description="An amazing website"
+      theme="dark"
+      buttonText="Share"
+    /&gt;
+  );
+}
+  </code>
+      </div>
+    </div>
     <!-- CTA Section -->
     <div class="cta-section">
       <h2 style="color: #fff; margin-bottom: 20px;">Ready to Get Started?</h2>
@@ -509,8 +545,8 @@ export default component$(() =&gt; (
     <footer>
       <p>Made with ❤️ by the AOSSIE community</p>
       <p style="margin-top: 10px; opacity: 0.7;">
-        GPL v3 Licensed | 
-        <a href="https://github.com/AOSSIE-Org/SocialShareButton" style="color: #fff;" rel="noopener">GitHub</a> | 
+        GPL v3 Licensed |
+        <a href="https://github.com/AOSSIE-Org/SocialShareButton" style="color: #fff;" rel="noopener">GitHub</a> |
         <a href="https://github.com/AOSSIE-Org/SocialShareButton/issues" style="color: #fff;" rel="noopener">Issues</a>
       </p>
     </footer>
@@ -532,7 +568,7 @@ export default component$(() =&gt; (
       description: demoDescription,
       buttonText: 'Share'
 
-      
+
     });
 
     // Primary

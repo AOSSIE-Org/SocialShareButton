@@ -73,7 +73,7 @@ Lightweight social sharing component for web applications. Zero dependencies, fr
 
 - 🌐 Multiple platforms: WhatsApp, Facebook, X, LinkedIn, Telegram, Reddit, Email, Pinterest
 - 🎯 Zero dependencies - pure vanilla JavaScript
-- ⚛️ Framework support: React, Next.js, Vue, Angular,Qwik or plain HTML
+- ⚛️ Framework support: React, Preact, Next.js, Vue, Angular, Qwik or plain HTML
 - 🔄 Auto-detects current URL and page title
 - 📱 Fully responsive and mobile-ready
 - 🎨 Customizable themes (dark/light)
@@ -428,6 +428,66 @@ Open your root or layout component (e.g., `App.vue`, `app.component.html`, or `A
 new window.SocialShareButton({
   container: "#share-button",
 });
+```
+
+</details>
+
+
+<details>
+<summary><b>⚛️ Preact</b></summary>
+
+### Step 1: Add CDN to `index.html`
+
+```html
+<head>
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.css"
+  />
+</head>
+<body>
+  <div id="app"></div>
+  <script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.js"></script>
+</body>
+```
+
+### Step 2: Add to a layout or header component
+
+Open an **existing** component that renders on every page — typically `src/components/Header.jsx`, `src/components/Navbar.jsx`, or your root `App.jsx`. Add the snippet below to that component so the share button is consistently available across your app.
+
+```jsx
+import { useEffect, useRef } from "preact/hooks";
+
+// ⬇️ Replace 'Header' with the name of the component where you want the
+// share button to appear — e.g. Navbar, MainLayout, App, etc.
+export default function Header() {
+  const shareButtonRef = useRef(null);
+  const containerRef = useRef(null);
+  const initRef = useRef(false);
+
+  useEffect(() => {
+    if (initRef.current || !window.SocialShareButton || !containerRef.current)
+      return;
+
+    shareButtonRef.current = new window.SocialShareButton({
+      container: "#share-button",
+    });
+    initRef.current = true;
+
+    return () => {
+      if (shareButtonRef.current?.destroy) {
+        shareButtonRef.current.destroy();
+      }
+      initRef.current = false;
+    };
+  }, []);
+
+  return (
+    <header>
+      <div id="share-button" ref={containerRef}></div>
+    </header>
+  );
+}
 ```
 
 </details>
