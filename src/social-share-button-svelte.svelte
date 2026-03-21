@@ -30,7 +30,15 @@
 
   onMount(() => {
     // SSR guard — SvelteKit pre-renders on the server where window is undefined
-    if (typeof window !== 'undefined' && window.SocialShareButton && container) {
+    if (typeof window === 'undefined') return;
+
+    if (!window.SocialShareButton) {
+      // CDN script may not have loaded yet (network error or ad blocker)
+      console.warn('[SocialShareButton] window.SocialShareButton not found. Ensure the CDN script is loaded in app.html before this component mounts.');
+      return;
+    }
+
+    if (container) {
       shareButton = new window.SocialShareButton({
         container,
         url: url || window.location.href,

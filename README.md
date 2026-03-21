@@ -489,7 +489,13 @@ export default function Header() {
 <details>
 <summary><b>🟠 SvelteKit</b></summary>
 
-### Step 1: Add CDN to `src/app.html`
+### Step 1: Install the npm package
+
+```bash
+npm install social-share-button-aossie
+```
+
+### Step 2: Add the core library CDN to `src/app.html`
 
 ```html
 <head>
@@ -504,7 +510,7 @@ export default function Header() {
 </body>
 ```
 
-### Step 2: Use the Svelte wrapper in any `+page.svelte`
+### Step 3: Use the Svelte wrapper in any `+page.svelte`
 
 ```svelte
 <script>

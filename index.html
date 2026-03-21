@@ -477,7 +477,8 @@
       <!-- SvelteKit Integration -->
       <div class="demo-section">
         <h2>🟠 SvelteKit Integration</h2>
-        <p><strong>Step 1:</strong> Include CSS and JS via CDN in your <code>app.html</code></p>
+        <p>Load the core library globally, then use the Svelte wrapper component in your pages.</p>
+        <p><strong>Step 1:</strong> Add CSS and JS to <code>src/app.html</code> (loads the core library)</p>
 
         <div class="code-block">
           <button type="button" class="copy-btn" aria-label="Copy code">Copy</button>
@@ -494,7 +495,7 @@
           </code>
         </div>
 
-        <p><strong>Step 2:</strong> Import and use the component in a <code>+page.svelte</code> file</p>
+        <p><strong>Step 2:</strong> Install the package and use the wrapper in <code>+page.svelte</code></p>
 
         <div class="code-block">
           <button type="button" class="copy-btn" aria-label="Copy code">Copy</button>
@@ -504,6 +505,7 @@
             style="position: absolute; left: -9999px"
           ></span>
           <code>
+            &lt;!-- Install: npm install social-share-button-aossie --&gt;
             &lt;!-- +page.svelte --&gt;
             &lt;script&gt;
               import SocialShareButton from 'social-share-button-aossie/src/social-share-button-svelte.svelte';
