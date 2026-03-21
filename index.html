@@ -194,6 +194,11 @@
         white-space: pre;
       }
 
+      .framework-snippet-title {
+        color: #fff;
+        margin-top: 10px;
+      }
+
       .cta-section {
         text-align: center;
         padding: 40px 20px;
@@ -484,7 +489,7 @@
           small script.
         </p>
 
-        <h3 style="color: #fff; margin-top: 10px">
+        <h3 class="framework-snippet-title">
           Ruby on Rails (app/views/layouts/application.html.erb)
         </h3>
         <div class="code-block">
@@ -496,16 +501,16 @@
           ></span>
           <code>
             &lt;%# In &lt;head&gt; %&gt; &lt;link rel="stylesheet"
-            href="https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.css"&gt;
+            href="https://raw.githubusercontent.com/AOSSIE-Org/SocialShareButton/v1.0.3/src/social-share-button.css"&gt;
             &lt;%# Before &lt;/body&gt; %&gt; &lt;script
-            src="https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.js"&gt;&lt;/script&gt;
+            src="https://raw.githubusercontent.com/AOSSIE-Org/SocialShareButton/v1.0.3/src/social-share-button.js"&gt;&lt;/script&gt;
             &lt;div id="share-button"&gt;&lt;/div&gt; &lt;script&gt; new SocialShareButton({
             container: '#share-button', url: window.location.href, title: document.title, theme:
             'dark', buttonText: 'Share' }); &lt;/script&gt;
           </code>
         </div>
 
-        <h3 style="color: #fff; margin-top: 10px">Django (templates/base.html)</h3>
+        <h3 class="framework-snippet-title">Django (templates/base.html)</h3>
         <div class="code-block">
           <button type="button" class="copy-btn" aria-label="Copy code">Copy</button>
           <span
@@ -515,16 +520,16 @@
           ></span>
           <code>
             {# In &lt;head&gt; #} &lt;link rel="stylesheet"
-            href="https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.css"&gt;
+            href="https://raw.githubusercontent.com/AOSSIE-Org/SocialShareButton/v1.0.3/src/social-share-button.css"&gt;
             {# Before &lt;/body&gt; #} &lt;script
-            src="https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.js"&gt;&lt;/script&gt;
+            src="https://raw.githubusercontent.com/AOSSIE-Org/SocialShareButton/v1.0.3/src/social-share-button.js"&gt;&lt;/script&gt;
             &lt;div id="share-button"&gt;&lt;/div&gt; &lt;script&gt; new SocialShareButton({
             container: '#share-button', url: window.location.href, title: document.title, theme:
             'dark', buttonText: 'Share' }); &lt;/script&gt;
           </code>
         </div>
 
-        <h3 style="color: #fff; margin-top: 10px">
+        <h3 class="framework-snippet-title">
           Laravel (resources/views/layouts/app.blade.php)
         </h3>
         <div class="code-block">
@@ -536,9 +541,9 @@
           ></span>
           <code>
             {{-- In &lt;head&gt; --}} &lt;link rel="stylesheet"
-            href="https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.css"&gt;
+            href="https://raw.githubusercontent.com/AOSSIE-Org/SocialShareButton/v1.0.3/src/social-share-button.css"&gt;
             {{-- Before &lt;/body&gt; --}} &lt;script
-            src="https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.js"&gt;&lt;/script&gt;
+            src="https://raw.githubusercontent.com/AOSSIE-Org/SocialShareButton/v1.0.3/src/social-share-button.js"&gt;&lt;/script&gt;
             &lt;div id="share-button"&gt;&lt;/div&gt; &lt;script&gt; new SocialShareButton({
             container: '#share-button', url: window.location.href, title: document.title, theme:
             'dark', buttonText: 'Share' }); &lt;/script&gt;
@@ -748,40 +753,64 @@
               clearTimeout(button.copyResetTimer);
             }
 
-            navigator.clipboard
-              .writeText(text)
-              .then(() => {
-                if (statusSpan && statusSpan.classList.contains("copy-status")) {
-                  statusSpan.textContent = "Code copied to clipboard";
-                }
+            const handleCopySuccess = () => {
+              if (statusSpan && statusSpan.classList.contains("copy-status")) {
+                statusSpan.textContent = "Code copied to clipboard";
+              }
 
-                button.textContent = "Copied!";
+              button.textContent = "Copied!";
 
-                button.copyResetTimer = setTimeout(() => {
-                  button.textContent = originalText;
-
-                  if (statusSpan && statusSpan.classList.contains("copy-status")) {
-                    statusSpan.textContent = "";
-                  }
-                }, 2000);
-              })
-              .catch((error) => {
-                console.error("Failed to copy to clipboard", error);
-
+              button.copyResetTimer = setTimeout(() => {
                 button.textContent = originalText;
 
                 if (statusSpan && statusSpan.classList.contains("copy-status")) {
-                  statusSpan.textContent = "Failed to copy to clipboard";
+                  statusSpan.textContent = "";
                 }
+              }, 2000);
+            };
 
-                button.copyResetTimer = setTimeout(() => {
-                  button.textContent = originalText;
+            const handleCopyFailure = (error) => {
+              console.error("Failed to copy to clipboard", error);
 
-                  if (statusSpan && statusSpan.classList.contains("copy-status")) {
-                    statusSpan.textContent = "";
-                  }
-                }, 2000);
-              });
+              button.textContent = originalText;
+
+              if (statusSpan && statusSpan.classList.contains("copy-status")) {
+                statusSpan.textContent = "Failed to copy to clipboard";
+              }
+
+              button.copyResetTimer = setTimeout(() => {
+                button.textContent = originalText;
+
+                if (statusSpan && statusSpan.classList.contains("copy-status")) {
+                  statusSpan.textContent = "";
+                }
+              }, 2000);
+            };
+
+            if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+              navigator.clipboard.writeText(text).then(handleCopySuccess).catch(handleCopyFailure);
+            } else {
+              const tempTextArea = document.createElement("textarea");
+              tempTextArea.value = text;
+              tempTextArea.setAttribute("readonly", "");
+              tempTextArea.style.position = "absolute";
+              tempTextArea.style.left = "-9999px";
+              document.body.appendChild(tempTextArea);
+              tempTextArea.select();
+
+              try {
+                const copied = document.execCommand("copy");
+                if (copied) {
+                  handleCopySuccess();
+                } else {
+                  handleCopyFailure(new Error("Legacy copy command failed"));
+                }
+              } catch (error) {
+                handleCopyFailure(error);
+              } finally {
+                document.body.removeChild(tempTextArea);
+              }
+            }
           });
         });
       });

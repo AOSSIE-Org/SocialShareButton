@@ -120,10 +120,10 @@ For server-rendered apps like **Rails**, **Django**, and **Laravel**, use the sa
 
 ```erb
 <%# In <head> %>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share-button-aossie/src/social-share-button.css">
 
 <%# Before </body> %>
-<script src="https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/social-share-button-aossie/src/social-share-button.js"></script>
 <div id="share-button"></div>
 <script>
   new SocialShareButton({
@@ -140,10 +140,10 @@ For server-rendered apps like **Rails**, **Django**, and **Laravel**, use the sa
 
 ```django
 {# In <head> #}
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share-button-aossie/src/social-share-button.css">
 
 {# Before </body> #}
-<script src="https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/social-share-button-aossie/src/social-share-button.js"></script>
 <div id="share-button"></div>
 <script>
   new SocialShareButton({
@@ -160,10 +160,10 @@ For server-rendered apps like **Rails**, **Django**, and **Laravel**, use the sa
 
 ```blade
 {{-- In <head> --}}
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share-button-aossie/src/social-share-button.css">
 
 {{-- Before </body> --}}
-<script src="https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/social-share-button-aossie/src/social-share-button.js"></script>
 <div id="share-button"></div>
 <script>
   new SocialShareButton({
