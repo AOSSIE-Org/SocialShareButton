@@ -474,6 +474,78 @@
           </code>
         </div>
       </div>
+
+      <!-- Server-Rendered Frameworks Integration (Rails / Django / Laravel) -->
+      <div class="demo-section">
+        <h2>🖥️ Server-Rendered Frameworks (Rails / Django / Laravel)</h2>
+        <p>
+          Integration pattern is the same for all three: include CSS in <code>&lt;head&gt;</code>,
+          include JS before <code>&lt;/body&gt;</code>, add a container, then initialize with a
+          small script.
+        </p>
+
+        <h3 style="color: #fff; margin-top: 10px">
+          Ruby on Rails (app/views/layouts/application.html.erb)
+        </h3>
+        <div class="code-block">
+          <button type="button" class="copy-btn" aria-label="Copy code">Copy</button>
+          <span
+            class="copy-status"
+            aria-live="polite"
+            style="position: absolute; left: -9999px"
+          ></span>
+          <code>
+            &lt;%# In &lt;head&gt; %&gt; &lt;link rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.css"&gt;
+            &lt;%# Before &lt;/body&gt; %&gt; &lt;script
+            src="https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.js"&gt;&lt;/script&gt;
+            &lt;div id="share-button"&gt;&lt;/div&gt; &lt;script&gt; new SocialShareButton({
+            container: '#share-button', url: window.location.href, title: document.title, theme:
+            'dark', buttonText: 'Share' }); &lt;/script&gt;
+          </code>
+        </div>
+
+        <h3 style="color: #fff; margin-top: 10px">Django (templates/base.html)</h3>
+        <div class="code-block">
+          <button type="button" class="copy-btn" aria-label="Copy code">Copy</button>
+          <span
+            class="copy-status"
+            aria-live="polite"
+            style="position: absolute; left: -9999px"
+          ></span>
+          <code>
+            {# In &lt;head&gt; #} &lt;link rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.css"&gt;
+            {# Before &lt;/body&gt; #} &lt;script
+            src="https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.js"&gt;&lt;/script&gt;
+            &lt;div id="share-button"&gt;&lt;/div&gt; &lt;script&gt; new SocialShareButton({
+            container: '#share-button', url: window.location.href, title: document.title, theme:
+            'dark', buttonText: 'Share' }); &lt;/script&gt;
+          </code>
+        </div>
+
+        <h3 style="color: #fff; margin-top: 10px">
+          Laravel (resources/views/layouts/app.blade.php)
+        </h3>
+        <div class="code-block">
+          <button type="button" class="copy-btn" aria-label="Copy code">Copy</button>
+          <span
+            class="copy-status"
+            aria-live="polite"
+            style="position: absolute; left: -9999px"
+          ></span>
+          <code>
+            {{-- In &lt;head&gt; --}} &lt;link rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.css"&gt;
+            {{-- Before &lt;/body&gt; --}} &lt;script
+            src="https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.js"&gt;&lt;/script&gt;
+            &lt;div id="share-button"&gt;&lt;/div&gt; &lt;script&gt; new SocialShareButton({
+            container: '#share-button', url: window.location.href, title: document.title, theme:
+            'dark', buttonText: 'Share' }); &lt;/script&gt;
+          </code>
+        </div>
+      </div>
+
       <!-- CTA Section -->
       <div class="cta-section">
         <h2 style="color: #fff; margin-bottom: 20px">Ready to Get Started?</h2>
@@ -676,37 +748,40 @@
               clearTimeout(button.copyResetTimer);
             }
 
-            navigator.clipboard.writeText(text).then(() => {
-              if (statusSpan && statusSpan.classList.contains("copy-status")) {
-                statusSpan.textContent = "Code copied to clipboard";
-              }
+            navigator.clipboard
+              .writeText(text)
+              .then(() => {
+                if (statusSpan && statusSpan.classList.contains("copy-status")) {
+                  statusSpan.textContent = "Code copied to clipboard";
+                }
 
-              button.textContent = "Copied!";
+                button.textContent = "Copied!";
 
-              button.copyResetTimer = setTimeout(() => {
+                button.copyResetTimer = setTimeout(() => {
+                  button.textContent = originalText;
+
+                  if (statusSpan && statusSpan.classList.contains("copy-status")) {
+                    statusSpan.textContent = "";
+                  }
+                }, 2000);
+              })
+              .catch((error) => {
+                console.error("Failed to copy to clipboard", error);
+
                 button.textContent = originalText;
 
                 if (statusSpan && statusSpan.classList.contains("copy-status")) {
-                  statusSpan.textContent = "";
+                  statusSpan.textContent = "Failed to copy to clipboard";
                 }
-              }, 2000);
-            }).catch((error) => {
-              console.error("Failed to copy to clipboard", error);
 
-              button.textContent = originalText;
+                button.copyResetTimer = setTimeout(() => {
+                  button.textContent = originalText;
 
-              if (statusSpan && statusSpan.classList.contains("copy-status")) {
-                statusSpan.textContent = "Failed to copy to clipboard";
-              }
-
-              button.copyResetTimer = setTimeout(() => {
-                button.textContent = originalText;
-
-                if (statusSpan && statusSpan.classList.contains("copy-status")) {
-                  statusSpan.textContent = "";
-                }
-              }, 2000);
-            });
+                  if (statusSpan && statusSpan.classList.contains("copy-status")) {
+                    statusSpan.textContent = "";
+                  }
+                }, 2000);
+              });
           });
         });
       });

@@ -72,7 +72,7 @@ Lightweight social sharing component for web applications. Zero dependencies, fr
 
 - 🌐 Multiple platforms: WhatsApp, Facebook, X, LinkedIn, Telegram, Reddit, Email, Pinterest
 - 🎯 Zero dependencies - pure vanilla JavaScript
-- ⚛️ Framework support: React, Preact, Next.js, Vue, Angular, or plain HTML
+- ⚛️ Framework support: React, Preact, Next.js, Vue, Angular, Rails, Django, Laravel, or plain HTML
 - 🔄 Auto-detects current URL and page title
 - 📱 Fully responsive and mobile-ready
 - 🎨 Customizable themes (dark/light)
@@ -110,6 +110,73 @@ No matter which framework you use, integration always follows the same 3 steps:
 | **3️⃣ Initialize**    | Call `new SocialShareButton({ container: "#share-button" })` | Inside that component, after the DOM is ready (e.g. `useEffect`, `mounted`, `ngAfterViewInit`) |
 
 > 💡 Pick your framework below for the full copy-paste snippet:
+
+For server-rendered apps like **Rails**, **Django**, and **Laravel**, use the same CDN pattern in your base layout template: CSS in `<head>`, JS before `</body>`, then initialize `new SocialShareButton(...)`.
+
+<details>
+<summary><b>🖥️ Server-Rendered Frameworks (Rails / Django / Laravel)</b></summary>
+
+### Ruby on Rails (`app/views/layouts/application.html.erb`)
+
+```erb
+<%# In <head> %>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.css">
+
+<%# Before </body> %>
+<script src="https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.js"></script>
+<div id="share-button"></div>
+<script>
+  new SocialShareButton({
+    container: '#share-button',
+    url: window.location.href,
+    title: document.title,
+    theme: 'dark',
+    buttonText: 'Share'
+  });
+</script>
+```
+
+### Django (`templates/base.html`)
+
+```django
+{# In <head> #}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.css">
+
+{# Before </body> #}
+<script src="https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.js"></script>
+<div id="share-button"></div>
+<script>
+  new SocialShareButton({
+    container: '#share-button',
+    url: window.location.href,
+    title: document.title,
+    theme: 'dark',
+    buttonText: 'Share'
+  });
+</script>
+```
+
+### Laravel (`resources/views/layouts/app.blade.php`)
+
+```blade
+{{-- In <head> --}}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.css">
+
+{{-- Before </body> --}}
+<script src="https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.js"></script>
+<div id="share-button"></div>
+<script>
+  new SocialShareButton({
+    container: '#share-button',
+    url: window.location.href,
+    title: document.title,
+    theme: 'dark',
+    buttonText: 'Share'
+  });
+</script>
+```
+
+</details>
 
 <details>
 <summary><b>📦 Create React App</b></summary>
