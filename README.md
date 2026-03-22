@@ -123,6 +123,7 @@ demonstrates real-time analytics events and user interactions.
 - Real-time analytics events (popup open, click, copy)
 - Platform interaction (Twitter, WhatsApp, Pinterest, etc.)
 > 💡 Tip: Enable `debug: true` during development to log analytics events in the browser console.
+
 ### Demo Video
 
 Google Drive Link:  
