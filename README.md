@@ -120,7 +120,7 @@ real-time analytics events during user interactions.
 
 - 3-step integration (CDN, HTML container, initialization)
 - Live demo of the share button
-- Real-time analytics events (popup open, click, copy)
+- Real-time analytics events (`social_share_popup_open`, `social_share_click`, `social_share_copy`)
 - Platform interaction (Twitter, WhatsApp, Pinterest, etc.)
 > 💡 Tip: Enable `debug: true` during development to log analytics events in the browser console.
 
