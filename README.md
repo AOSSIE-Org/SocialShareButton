@@ -113,8 +113,8 @@ No matter which framework you use, integration always follows the same 3 steps:
 
 ## 🎥 Video Tutorial: Manual Integration + Analytics
 
-Prefer a visual walkthrough? This short tutorial demonstrates how to integrate SocialShareButton step-by-step and
-demonstrates real-time analytics events and user interactions.
+Prefer a visual walkthrough? This short tutorial shows how to integrate SocialShareButton step-by-step and observe
+real-time analytics events during user interactions.
 
 ### What this video covers
 
