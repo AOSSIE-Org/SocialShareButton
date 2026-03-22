@@ -109,6 +109,25 @@ No matter which framework you use, integration always follows the same 3 steps:
 | **2️⃣ Add Container** | Place `<div id="share-button"></div>`                        | The UI component where you want the button to appear                                           |
 | **3️⃣ Initialize**    | Call `new SocialShareButton({ container: "#share-button" })` | Inside that component, after the DOM is ready (e.g. `useEffect`, `mounted`, `ngAfterViewInit`) |
 
+---
+
+## 🎥 Video Tutorial: Manual Integration + Analytics
+
+Prefer a visual walkthrough? This short tutorial demonstrates how to integrate SocialShareButton step-by-step and shows analytics events in real time.
+
+### What this video covers
+
+- 3-step integration (CDN, HTML container, initialization)
+- Live demo of the share button
+- Analytics events using debug mode
+- Platform interaction (including Pinterest)
+
+### Demo Video
+
+Google Drive Link:  
+https://drive.google.com/file/d/1h1e9hJHqA3UXhF12KAP-NlkwkLIrlose/view?usp=drive_link
+
+---
 > 💡 Pick your framework below for the full copy-paste snippet:
 
 <details>
