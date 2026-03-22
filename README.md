@@ -113,15 +113,16 @@ No matter which framework you use, integration always follows the same 3 steps:
 
 ## 🎥 Video Tutorial: Manual Integration + Analytics
 
-Prefer a visual walkthrough? This short tutorial demonstrates how to integrate SocialShareButton step-by-step and shows analytics events in real time.
+Prefer a visual walkthrough? This short tutorial demonstrates how to integrate SocialShareButton step-by-step and 
+demonstrates real-time analytics events and user interactions.
 
 ### What this video covers
 
 - 3-step integration (CDN, HTML container, initialization)
 - Live demo of the share button
-- Analytics events using debug mode
-- Platform interaction (including Pinterest)
-
+- Real-time analytics events (popup open, click, copy)
+- Platform interaction (Twitter, WhatsApp, Pinterest, etc.)
+> 💡 Tip: Enable `debug: true` during development to log analytics events in the browser console.
 ### Demo Video
 
 Google Drive Link:  
