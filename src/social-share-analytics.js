@@ -242,6 +242,42 @@ class PostHogAdapter extends SocialShareAnalyticsPlugin {
 }
 
 // -----------------------------------------------------------------------------
+// Google Tag Manager (DataLayer)
+// Requires: window.dataLayer exists. Uses dataLayer.push({ event, ...props }).
+// Docs: https://developers.google.com/tag-manager/devguide
+// -----------------------------------------------------------------------------
+class GoogleTagManagerAdapter extends SocialShareAnalyticsPlugin {
+  track(payload) {
+    if (typeof window === "undefined" || !Array.isArray(window.dataLayer)) {
+      return;
+    }
+    window.dataLayer.push({
+      event: payload.eventName,
+      source: payload.source,
+      interactionType: payload.interactionType,
+      platform: payload.platform,
+      url: payload.url,
+      title: payload.title,
+      componentId: payload.componentId,
+      timestamp: payload.timestamp,
+      ...(payload.errorMessage ? { errorMessage: payload.errorMessage } : {}),
+      ...(payload.context ? { context: payload.context } : {}),
+    });
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Console Adapter
+// Lightweight adapter for development / quick debugging.
+// -----------------------------------------------------------------------------
+class ConsoleAdapter extends SocialShareAnalyticsPlugin {
+  track(payload) {
+    // eslint-disable-next-line no-console
+    console.info("[SocialShareButton Analytics][ConsoleAdapter]", payload);
+  }
+}
+
+// -----------------------------------------------------------------------------
 // Custom / Callback Adapter
 // Use this adapter to wrap any inline function without subclassing.
 //
@@ -278,6 +314,8 @@ const adapters = {
   SegmentAdapter,
   PlausibleAdapter,
   PostHogAdapter,
+  GoogleTagManagerAdapter,
+  ConsoleAdapter,
   CustomAdapter,
 };
 

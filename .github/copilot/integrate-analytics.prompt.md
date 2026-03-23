@@ -83,6 +83,23 @@ new SocialShareButton({
 
 Load the adapters file **in addition to** the main library script:
 
+### Optional analytics control APIs
+
+```js
+// Runtime option updates, inspector-safe history, and manual reset
+shareButton.setAnalyticsOptions({
+  sampleRate: 0.3,
+  dedupeWindow: 1500,
+  dedupeBy: ["eventName", "platform", "url"],
+  historyLimit: 200,
+  enrichContext: true,
+  includeUserAgent: false,
+});
+
+console.log(shareButton.getAnalyticsHistory());
+shareButton.clearAnalyticsHistory();
+```
+
 ```html
 <!-- After the main social-share-button.js script tag -->
 <!-- CDN (pick whichever tag version ships this file): -->
@@ -98,6 +115,12 @@ const { GoogleAnalyticsAdapter, MixpanelAdapter } = window.SocialShareAnalytics;
 new SocialShareButton({
   container: "#share-button",
   analyticsPlugins: [new GoogleAnalyticsAdapter(), new MixpanelAdapter()],
+  analyticsOptions: {
+    sampleRate: 0.5, // send 50% of events
+    dedupeWindow: 3000, // prevent duplicate events within 3 seconds
+    enrichContext: true,
+    includeUserAgent: false,
+  },
 });
 ```
 
@@ -181,6 +204,28 @@ new SocialShareButton({
   analyticsPlugins: [new PostHogAdapter()],
 });
 // Calls: posthog.capture(eventName, { platform, url, ... })
+```
+
+### Google Tag Manager (dataLayer)
+
+```js
+const { GoogleTagManagerAdapter } = window.SocialShareAnalytics;
+new SocialShareButton({
+  container: "#share-button",
+  analyticsPlugins: [new GoogleTagManagerAdapter()],
+});
+// Calls: dataLayer.push({ event: eventName, ...payload })
+```
+
+### Console (debug adapter)
+
+```js
+const { ConsoleAdapter } = window.SocialShareAnalytics;
+new SocialShareButton({
+  container: "#share-button",
+  analyticsPlugins: [new ConsoleAdapter()],
+});
+// Calls: console.info("[SocialShareButton Analytics][ConsoleAdapter]", payload)
 ```
 
 ### Custom / inline function

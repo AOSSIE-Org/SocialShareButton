@@ -38,6 +38,7 @@ class SocialShareButton {
       // Analytics — the library emits events but never collects or sends data itself.
       // Website owners wire up their own analytics tools via these options.
       analytics: options.analytics !== false, // set to false to disable all event emission
+      analyticsOptions: options.analyticsOptions || {}, // advanced analytics controls: sampleRate, filter, dedupeWindow, enrichContext
       onAnalytics: options.onAnalytics || null, // callback: (payload) => void
       analyticsPlugins: options.analyticsPlugins || [], // array of { track(payload) } adapters
       componentId: options.componentId || null, // optional identifier for this instance
@@ -58,6 +59,8 @@ class SocialShareButton {
     this.ownsBodyLock = false; // Track if this instance owns the body overflow lock
     this.eventsAttached = false; // Guard against multiple attachEvents() calls
     this.isDestroyed = false; // Track if instance has been destroyed (prevents async callbacks)
+    this._lastAnalyticsEvent = null; // For optional analytics dedupe by eventKey/time window
+    this.analyticsHistory = []; // keep a local rolling history of emitted events
 
     if (this.options.container) {
       this.init();
@@ -690,6 +693,40 @@ class SocialShareButton {
   }
 
   /**
+   * Generates a short unique event ID for each emitted analytics event.
+   * @returns {string}
+   */
+  _generateEventId() {
+    return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+  }
+
+  /**
+   * Update analytics options at runtime (includes dedupe settings, sampling).
+   * @param {Object} opts
+   */
+  setAnalyticsOptions(opts = {}) {
+    this.options.analyticsOptions = {
+      ...this.options.analyticsOptions,
+      ...opts,
+    };
+  }
+
+  /**
+   * Returns a read-only copy of the event history buffer.
+   * @returns {Array<Object>}
+   */
+  getAnalyticsHistory() {
+    return [...this.analyticsHistory];
+  }
+
+  /**
+   * Clears tracked analytics event history.
+   */
+  clearAnalyticsHistory() {
+    this.analyticsHistory = [];
+  }
+
+  /**
    * Logs analytics warnings only when debug mode is enabled.
    * @param {string} message - Description of the failed analytics path.
    * @param {Error} err - The caught error instance.
@@ -725,9 +762,12 @@ class SocialShareButton {
   _emit(eventName, interactionType, extra = {}) {
     if (this.options.analytics === false) return;
 
+    const analyticsOptions = this.options.analyticsOptions || {};
+
     const payload = {
       version: ANALYTICS_SCHEMA_VERSION,
       source: "social-share-button",
+      eventId: this._generateEventId(),
       eventName,
       interactionType,
       platform: extra.platform || null,
@@ -739,6 +779,67 @@ class SocialShareButton {
 
     if (extra.errorMessage) {
       payload.errorMessage = extra.errorMessage;
+    }
+
+    // Analytics sample rate and filtering
+    const sampleRate = Number(analyticsOptions.sampleRate || 1);
+    if (sampleRate <= 0 || sampleRate > 0 && sampleRate < 1 && Math.random() > sampleRate) {
+      return;
+    }
+
+    if (typeof analyticsOptions.filter === "function" && !analyticsOptions.filter(payload)) {
+      return;
+    }
+
+    // Optional event dedupe within rolling window (milliseconds)
+    const dedupeWindow = Number(analyticsOptions.dedupeWindow || 0);
+    if (dedupeWindow > 0 && this._lastAnalyticsEvent) {
+      let sameEvent =
+        this._lastAnalyticsEvent.eventName === payload.eventName &&
+        this._lastAnalyticsEvent.platform === payload.platform &&
+        this._lastAnalyticsEvent.url === payload.url &&
+        this._lastAnalyticsEvent.interactionType === payload.interactionType;
+
+      if (typeof analyticsOptions.dedupeBy === "function") {
+        sameEvent = analyticsOptions.dedupeBy(this._lastAnalyticsEvent, payload);
+      } else if (Array.isArray(analyticsOptions.dedupeBy)) {
+        sameEvent = analyticsOptions.dedupeBy.every((key) =>
+          Object.prototype.hasOwnProperty.call(payload, key)
+            ? this._lastAnalyticsEvent[key] === payload[key]
+            : false
+        );
+      }
+
+      if (sameEvent && Date.now() - this._lastAnalyticsEvent.timestamp < dedupeWindow) {
+        return;
+      }
+    }
+
+    // Enrich context if enabled (default true)
+    if (analyticsOptions.enrichContext !== false) {
+      payload.context = {
+        referrer: typeof document !== "undefined" ? document.referrer || null : null,
+        locale:
+          typeof navigator !== "undefined" && navigator.language
+            ? navigator.language
+            : null,
+        viewport:
+          typeof window !== "undefined"
+            ? `${window.innerWidth}x${window.innerHeight}`
+            : null,
+      };
+      if (analyticsOptions.includeUserAgent && typeof navigator !== "undefined") {
+        payload.context.userAgent = navigator.userAgent;
+      }
+    }
+
+    this._lastAnalyticsEvent = payload;
+
+    // Keep rolling event history buffer for debugging/inspection
+    const historyLimit = Number(analyticsOptions.historyLimit || 100);
+    this.analyticsHistory.push(payload);
+    if (this.analyticsHistory.length > historyLimit) {
+      this.analyticsHistory.shift();
     }
 
     // Optional console output for development / debugging

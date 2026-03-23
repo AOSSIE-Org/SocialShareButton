@@ -111,6 +111,39 @@ No matter which framework you use, integration always follows the same 3 steps:
 
 > 💡 Pick your framework below for the full copy-paste snippet:
 
+## Analytics events (built-in privacy-first observability)
+
+`SocialShareButton` emits a standard event payload for every animation step, click, copy, and error. Electrify your GSOC demo by showing how to connect this to your own analytics stack with zero data collection on the library side.
+
+- `analyticsOptions`: configure sampling, dedupe, enrichment, and history
+- `eventId`: unique ID for every analytics payload to support traceability
+- `getAnalyticsHistory()`: inspect the last `historyLimit` events
+- `clearAnalyticsHistory()`: reset internal debug buffer
+
+```js
+const shareButton = new SocialShareButton({
+  container: "#share-button",
+  analyticsOptions: {
+    sampleRate: 0.6,                // keep volume down in load tests
+    dedupeWindow: 3000,             // suppress duplicate clicks in short windows
+    dedupeBy: ["eventName", "platform","url"],
+    historyLimit: 150,
+    enrichContext: true,
+    includeUserAgent: false,
+  },
+  analyticsPlugins: [new ConsoleAdapter()],
+  onAnalytics: (payload) => {
+    // custom filtering + forwarding
+    if (payload.eventName !== "social_share_popup_open") {
+      sendTelemetry(payload);
+    }
+  },
+});
+
+console.log(shareButton.getAnalyticsHistory());
+shareButton.clearAnalyticsHistory();
+```
+
 <details>
 <summary><b>📦 Create React App</b></summary>
 

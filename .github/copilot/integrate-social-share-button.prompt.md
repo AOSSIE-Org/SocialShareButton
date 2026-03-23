@@ -440,6 +440,7 @@ function App() {
 | `onShare`          | function       | `null`                 | `(platform, url) => void`                                  |
 | `onCopy`           | function       | `null`                 | `(url) => void`                                            |
 | `analytics`        | boolean        | `true`                 | Set `false` to disable all event emission                  |
+| `analyticsOptions` | object         | `{}`                   | Advanced analytics controls: `sampleRate`, `filter`, `dedupeWindow`, `dedupeBy`, `historyLimit`, `enrichContext`, `includeUserAgent` |
 | `onAnalytics`      | function       | `null`                 | `(payload) => void` — direct analytics hook                |
 | `analyticsPlugins` | array          | `[]`                   | Adapter instances from `social-share-analytics.js`         |
 | `componentId`      | string         | `null`                 | Label this instance for analytics tracking                 |
