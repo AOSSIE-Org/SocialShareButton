@@ -411,6 +411,9 @@ class SocialShareButton {
 
   share(platform) {
     if (platform === "discord") {
+      // Discord has no public web share API unlike other platforms.
+      // We open Discord DMs and copy the URL to clipboard so the
+      // user can paste it directly into any channel or DM.
       this._emit("social_share_click", "share", { platform });
       navigator.clipboard.writeText(this.options.url).then(() => {
         if (this.isDestroyed) return;
@@ -418,14 +421,23 @@ class SocialShareButton {
         if (copyBtn) {
           copyBtn.textContent = "Copied!";
           copyBtn.classList.add("copied");
-          setTimeout(() => {
+          if (this.feedbackTimeout) clearTimeout(this.feedbackTimeout);
+          this.feedbackTimeout = setTimeout(() => {
             if (this.isDestroyed || !copyBtn) return;
             copyBtn.textContent = "Copy";
             copyBtn.classList.remove("copied");
+            this.feedbackTimeout = null;
           }, 2000);
         }
         this._emit("social_share_success", "share", { platform });
         if (this.options.onShare) this.options.onShare(platform, this.options.url);
+      }).catch(() => {
+        // Fallback if clipboard API is denied or unavailable
+        if (this.isDestroyed) return;
+        this._emit("social_share_error", "error", {
+          platform,
+          errorMessage: "Clipboard access denied for Discord share",
+        });
       });
       window.open(
         "https://discord.com/channels/@me",
