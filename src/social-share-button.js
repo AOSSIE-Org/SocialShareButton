@@ -249,8 +249,9 @@ class SocialShareButton {
       reddit: `https://reddit.com/submit?url=${encodedUrl}&title=${encodedReddit}`,
       email: `mailto:?subject=${encodedTitle}&body=${encodedEmail}%20${encodedUrl}`,
       pinterest: `https://pinterest.com/pin/create/button/?url=${encodedUrl}&description=${encodedPinterest}`,
-      discord: `https://discord.com/channels/@me`,
+      discord: `https://discord.com/channels/@me`
     };
+    
 
     return urls[platform] || "";
   }
