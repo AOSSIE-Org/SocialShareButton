@@ -410,6 +410,31 @@ class SocialShareButton {
   }
 
   share(platform) {
+    if (platform === "discord") {
+      this._emit("social_share_click", "share", { platform });
+      navigator.clipboard.writeText(this.options.url).then(() => {
+        if (this.isDestroyed) return;
+        const copyBtn = this.modal.querySelector(".social-share-copy-btn");
+        if (copyBtn) {
+          copyBtn.textContent = "Copied!";
+          copyBtn.classList.add("copied");
+          setTimeout(() => {
+            if (this.isDestroyed || !copyBtn) return;
+            copyBtn.textContent = "Copy";
+            copyBtn.classList.remove("copied");
+          }, 2000);
+        }
+        this._emit("social_share_success", "share", { platform });
+        if (this.options.onShare) this.options.onShare(platform, this.options.url);
+      });
+      window.open(
+        "https://discord.com/channels/@me",
+        "_blank",
+        "noopener,noreferrer,width=600,height=600"
+      );
+      return;
+    }
+
     const shareUrl = this.getShareURL(platform);
 
     if (shareUrl) {
@@ -433,7 +458,6 @@ class SocialShareButton {
       });
     }
   }
-
   copyLink() {
     const input = this.modal.querySelector(".social-share-link-input input");
     const copyBtn = this.modal.querySelector(".social-share-copy-btn");
