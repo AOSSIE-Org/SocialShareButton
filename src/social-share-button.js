@@ -86,10 +86,16 @@ class SocialShareButton {
 
     this.button = button;
     if (this.options.container) {
-      const container =
-        typeof this.options.container === "string"
-          ? document.querySelector(this.options.container)
-          : this.options.container;
+      let container = null;
+      try {
+        // DOM manipulation: querySelector may throw for invalid selectors
+        container =
+          typeof this.options.container === "string"
+            ? document.querySelector(this.options.container)
+            : this.options.container;
+      } catch (error) {
+        console.error("DOM manipulation failed: Invalid container selector", error);
+      }
 
       if (container) {
         container.appendChild(button);
@@ -404,15 +410,31 @@ class SocialShareButton {
   }
 
   share(platform) {
-    const shareUrl = this.getShareURL(platform);
+    let shareUrl = "";
+    try {
+      // URL handling: encodeURIComponent may throw URIError on lone surrogates
+      shareUrl = this.getShareURL(platform);
+    } catch (error) {
+      console.error("URL handling failed: Data encoding error", error);
+    }
 
     if (shareUrl) {
       this._emit("social_share_click", "share", { platform });
 
       if (platform === "email") {
-        window.location.href = shareUrl;
+        try {
+          // Navigation may be blocked in some restricted contexts
+          window.location.href = shareUrl;
+        } catch (error) {
+          console.error("Sharing failed: Navigation strictly blocked", error);
+        }
       } else {
-        window.open(shareUrl, "_blank", "noopener,noreferrer,width=600,height=600");
+        try {
+          // window.open may throw if blocked by browser settings or in restricted frames
+          window.open(shareUrl, "_blank", "noopener,noreferrer,width=600,height=600");
+        } catch (error) {
+          console.error("Sharing failed: Popup window blocked", error);
+        }
       }
 
       this._emit("social_share_success", "share", { platform });
@@ -434,37 +456,43 @@ class SocialShareButton {
 
     // Check if clipboard API is available
     if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard
-        .writeText(this.options.url)
-        .then(() => {
-          // Guard against async callback after destroy
-          if (this.isDestroyed) return;
+      try {
+        navigator.clipboard
+          .writeText(this.options.url)
+          .then(() => {
+            // Guard against async callback after destroy
+            if (this.isDestroyed) return;
 
-          copyBtn.textContent = "Copied!";
-          copyBtn.classList.add("copied");
-          this._emit("social_share_copy", "copy");
+            copyBtn.textContent = "Copied!";
+            copyBtn.classList.add("copied");
+            this._emit("social_share_copy", "copy");
 
-          if (this.options.onCopy) {
-            this.options.onCopy(this.options.url);
-          }
+            if (this.options.onCopy) {
+              this.options.onCopy(this.options.url);
+            }
 
-          // Clear any existing feedback timeout
-          if (this.feedbackTimeout) {
-            clearTimeout(this.feedbackTimeout);
-          }
+            // Clear any existing feedback timeout
+            if (this.feedbackTimeout) {
+              clearTimeout(this.feedbackTimeout);
+            }
 
-          // Track feedback timeout to prevent callback after destroy
-          this.feedbackTimeout = setTimeout(() => {
-            if (this.isDestroyed || !copyBtn) return; // Safety check
-            copyBtn.textContent = "Copy";
-            copyBtn.classList.remove("copied");
-            this.feedbackTimeout = null;
-          }, 2000);
-        })
-        .catch(() => {
-          // Fallback to manual selection
-          this.fallbackCopy(input, copyBtn);
-        });
+            // Track feedback timeout to prevent callback after destroy
+            this.feedbackTimeout = setTimeout(() => {
+              if (this.isDestroyed || !copyBtn) return; // Safety check
+              copyBtn.textContent = "Copy";
+              copyBtn.classList.remove("copied");
+              this.feedbackTimeout = null;
+            }, 2000);
+          })
+          .catch((error) => {
+            console.error("Clipboard copy failed async:", error);
+            // Fallback to manual selection
+            this.fallbackCopy(input, copyBtn);
+          });
+      } catch (error) {
+        console.error("Clipboard wrapper failed synchronously:", error);
+        this.fallbackCopy(input, copyBtn);
+      }
     } else {
       // Fallback for browsers without clipboard API
       this.fallbackCopy(input, copyBtn);
@@ -500,7 +528,8 @@ class SocialShareButton {
         copyBtn.classList.remove("copied");
         this.feedbackTimeout = null;
       }, 2000);
-    } catch (_err) {
+    } catch (error) {
+      console.error("Clipboard copy failed (fallback document.execCommand):", error);
       copyBtn.textContent = "Failed";
 
       // Clear any existing feedback timeout
