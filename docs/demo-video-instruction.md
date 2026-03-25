@@ -82,8 +82,8 @@ Your video must cover all of the following:
 - The video duration must be **150 seconds (2 minutes 30 seconds) or less**.
 - Upload the video to **Google Drive or any platform with public access** (the maintainers will later upload it to the **AOSSIE YouTube channel**).
 - Add the **public video link to the README demo section** of the repository where the integration is demonstrated.
-- **Reference Demo (Next.js App Router):**
-  [https://youtu.be/cLJaT-8rEvQ?si=CLipA0Db4WL0EqKM](https://youtu.be/cLJaT-8rEvQ?si=CLipA0Db4WL0EqKM)
+- **Reference Demo (Qwik framework):**
+  [https://www.youtube.com/watch?v=SnwuEmI_CzU](https://www.youtube.com/watch?v=SnwuEmI_CzU)
 
 ---
 

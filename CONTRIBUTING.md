@@ -134,6 +134,22 @@ Push your branch:
  git push origin feature/your-feature-name
 ```
 
+## 🛠️ Development Workflow
+
+### Local Development
+
+1. Install dependencies: `npm install`
+2. Open `index.html` in your browser to see the local demo.
+3. Make changes to files in the `src/` directory.
+4. Refresh the browser to see your changes (no build step is required for the core library).
+
+### Code Quality Tools
+
+We use ESLint for linting and Prettier for formatting. Please run these before submitting a PR:
+- `npm run lint` — Check for code quality and style issues.
+- `npm run format` — Automatically format your code to project standards.
+- `npm run format:check` — Verify that files are correctly formatted.
+
 - Then open a Pull Request including:
 
 - What changes were made

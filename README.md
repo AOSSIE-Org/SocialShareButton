@@ -66,13 +66,14 @@ Lightweight social sharing component for web applications. Zero dependencies, fr
 [![npm version](https://img.shields.io/npm/v/social-share-button-aossie.svg)](https://www.npmjs.com/package/social-share-button-aossie)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 
+
 ---
 
 ## Features
 
 - 🌐 Multiple platforms: WhatsApp, Facebook, X, LinkedIn, Telegram, Reddit, Email, Pinterest
 - 🎯 Zero dependencies - pure vanilla JavaScript
-- ⚛️ Framework support: React, Preact, SvelteKit, Next.js, Vue, Angular, or plain HTML
+- ⚛️ Framework support: React, Preact, SvelteKit, Qwik, Next.js, Vue, Angular, or plain HTML
 - 🔄 Auto-detects current URL and page title
 - 📱 Fully responsive and mobile-ready
 - 🎨 Customizable themes (dark/light)
