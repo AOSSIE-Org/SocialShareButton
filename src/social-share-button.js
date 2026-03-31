@@ -42,6 +42,7 @@ class SocialShareButton {
       analyticsPlugins: options.analyticsPlugins || [], // array of { track(payload) } adapters
       componentId: options.componentId || null, // optional identifier for this instance
       debug: options.debug || false, // log emitted events to console in development
+      useNativeShare: options.useNativeShare || false, // prioritize Native Web Share API if supported
     };
 
     this.isModalOpen = false;
@@ -172,6 +173,16 @@ class SocialShareButton {
         color: "#E60023",
         icon: '<path d="M12 0C5.372 0 0 5.373 0 12c0 4.99 3.052 9.267 7.386 11.059-.102-.94-.194-2.385.04-3.413.211-.904 1.356-5.752 1.356-5.752s-.346-.693-.346-1.717c0-1.608.932-2.808 2.093-2.808.987 0 1.463.741 1.463 1.63 0 .993-.632 2.476-.958 3.853-.273 1.155.58 2.098 1.718 2.098 2.062 0 3.646-2.174 3.646-5.31 0-2.778-1.997-4.722-4.847-4.722-3.304 0-5.242 2.478-5.242 5.039 0 .997.384 2.066.865 2.647.095.115.109.215.08.331-.088.365-.282 1.155-.321 1.316-.05.212-.165.257-.381.155-1.418-.66-2.305-2.733-2.305-4.397 0-3.579 2.601-6.867 7.497-6.867 3.936 0 6.998 2.805 6.998 6.557 0 3.91-2.466 7.058-5.892 7.058-1.15 0-2.232-.597-2.6-1.302l-.707 2.692c-.255.983-.946 2.215-1.408 2.966A12.002 12.002 0 0024 12C24 5.373 18.627 0 12 0z"/>',
       },
+      threads: {
+        name: "Threads",
+        color: "#000000",
+        icon: '<path d="M14.152 11.222A5.122 5.122 0 0 1 12 11.139v2.164a2.915 2.915 0 0 0 1.936-2.081zm-2.152-1.928a2.91 2.91 0 0 0-1.956 2.05h3.912a2.91 2.91 0 0 0-1.956-2.05zM12 0c6.627 0 12 5.373 12 12s-5.373 12-12 12S0 18.627 0 12 5.373 0 12 0zm0 4.102c-4.357 0-7.898 3.541-7.898 7.898s3.541 7.898 7.898 7.898 7.898-3.541 7.898-7.898S16.357 4.102 12 4.102zm0 13.824a5.925 5.925 0 0 1-5.924-5.924A5.925 5.925 0 0 1 12 6.078c2.951 0 5.4 2.168 5.845 5.011l-2.008.31a3.869 3.869 0 0 0-3.837-3.348A3.953 3.953 0 0 0 8.046 12a3.953 3.953 0 0 0 3.954 3.949c1.69 0 3.14-.993 3.69-2.45h2.036c-.63 2.534-2.887 4.427-5.726 4.427z"/>',
+      },
+      hackernews: {
+        name: "Hacker News",
+        color: "#FF6600",
+        icon: '<path d="M0 0h24v24H0V0zm12.394 13.91v4.717h-1.802v-4.713L5.674 4.544h2.091l3.35 6.78h.047l3.298-6.78h2.091l-4.157 9.365z"/>',
+      },
     };
 
     return this.options.platforms
@@ -204,7 +215,8 @@ class SocialShareButton {
       telegramMessage,
       redditTitle,
       emailBody,
-      pinterestText;
+      pinterestText,
+      threadsMessage;
 
     // WhatsApp: Casual with emoji
     whatsappMessage = `\u{1F680} ${title}${description ? "\n\n" + description : ""}${hashtagString ? "\n\n" + hashtagString : ""}\n\nLive on the site \u{1F440}\nClean UI, smooth flow \u{2014} worth peeking\n\u{1F447}`;
@@ -227,6 +239,9 @@ class SocialShareButton {
     // Pinterest: Title + Description
     pinterestText = `${title || ""}${description ? " - " + description : ""}`;
 
+    // Threads: Title + Description + Hashtags
+    threadsMessage = `${title}${description ? "\n\n" + description : ""}${hashtagString ? "\n" + hashtagString : ""}`;
+
     const encodedWhatsapp = encodeURIComponent(whatsappMessage);
     const encodedFacebook = encodeURIComponent(facebookMessage);
     const encodedTwitter = encodeURIComponent(twitterMessage);
@@ -234,6 +249,7 @@ class SocialShareButton {
     const encodedReddit = encodeURIComponent(redditTitle);
     const encodedEmail = encodeURIComponent(emailBody);
     const encodedPinterest = encodeURIComponent(pinterestText);
+    const encodedThreads = encodeURIComponent(threadsMessage);
 
     const urls = {
       whatsapp: `https://wa.me/?text=${encodedWhatsapp}%20${encodedUrl}`,
@@ -244,6 +260,8 @@ class SocialShareButton {
       reddit: `https://reddit.com/submit?url=${encodedUrl}&title=${encodedReddit}`,
       email: `mailto:?subject=${encodedTitle}&body=${encodedEmail}%20${encodedUrl}`,
       pinterest: `https://pinterest.com/pin/create/button/?url=${encodedUrl}&description=${encodedPinterest}`,
+      threads: `https://threads.net/intent/post?text=${encodedThreads}%20${encodedUrl}`,
+      hackernews: `https://news.ycombinator.com/submitlink?u=${encodedUrl}&t=${encodedTitle}`,
     };
 
     return urls[platform] || "";
@@ -271,7 +289,28 @@ class SocialShareButton {
 
     // Button click to open modal
     if (this.button) {
-      const openModalHandler = () => this.openModal();
+      const openModalHandler = () => {
+        if (this.options.useNativeShare && navigator.share) {
+          navigator
+            .share({
+              title: this.options.title,
+              text: this.options.description,
+              url: this.options.url,
+            })
+            .then(() => {
+              this._emit("social_share_success", "share", { platform: "native" });
+              if (this.options.onShare) this.options.onShare("native", this.options.url);
+            })
+            .catch((err) => {
+              // Fallback to modal if native share was cancelled or failed but without throwing exception
+              if (err.name !== "AbortError") {
+                this.openModal();
+              }
+            });
+        } else {
+          this.openModal();
+        }
+      };
       this.addEventListener(this.button, "click", openModalHandler);
     }
 

@@ -281,8 +281,11 @@
         <div class="feature-grid">
           <div class="feature-card">
             <div class="feature-icon">🌐</div>
-            <h3>7+ Platforms</h3>
-            <p>WhatsApp, Facebook, X, LinkedIn, Telegram, Reddit, Email, Pinterest</p>
+            <h3>9+ Platforms</h3>
+            <p>
+              WhatsApp, Facebook, X, LinkedIn, Telegram, Reddit, Email, Pinterest, Threads, Hacker
+              News
+            </p>
           </div>
           <div class="feature-card">
             <div class="feature-icon">🎨</div>
@@ -380,12 +383,12 @@
         <div class="demo-grid">
           <div class="demo-item">
             <h3>Professional</h3>
-            <p>LinkedIn, X, Email</p>
+            <p>LinkedIn, X, Email, Hacker News</p>
             <div id="demo-professional"></div>
           </div>
           <div class="demo-item">
             <h3>Social Media</h3>
-            <p>Facebook, X, Reddit, Pinterest</p>
+            <p>Facebook, X, Reddit, Pinterest, Threads</p>
             <div id="demo-social"></div>
           </div>
           <div class="demo-item">
@@ -393,6 +396,28 @@
             <p>WhatsApp, Telegram</p>
             <div id="demo-messaging"></div>
           </div>
+        </div>
+      </div>
+
+      <!-- Advanced Features -->
+      <div class="demo-section">
+        <h2>🔥 Advanced Features</h2>
+        <p>Take advantage of device capabilities like the Native Web Share API.</p>
+        <div class="demo-grid">
+          <div class="demo-item">
+            <h3>Native Web Share</h3>
+            <p>
+              Uses OS native sharing menu on supported devices (mobile). Fallbacks to UI modal on
+              desktop.
+            </p>
+            <div id="demo-native"></div>
+          </div>
+        </div>
+        <div class="code-block" style="margin-top: 20px">
+          <code>
+            new SocialShareButton({ container: '#share-button', url: 'https://your-website.com',
+            useNativeShare: true // Prioritizes standard OS share sheet! });
+          </code>
         </div>
       </div>
 
@@ -497,103 +522,92 @@
       </div>
     </div>
 
+    <!--Qwik/QwikCity Integration-->
+    <div class="demo-section">
+      <h2>⚡ Qwik / QwikCity Integration</h2>
+      <p>Resumability-optimized wrapper for the fastest performance.</p>
 
-  <!--Qwik/QwikCity Integration-->
-  <div class="demo-section">
-  <h2>⚡ Qwik / QwikCity Integration</h2>
-  <p>Resumability-optimized wrapper for the fastest performance.</p>
-  
-  <div class="code-block">
-    <button class="copy-btn" type="button" aria-label="Copy code">Copy</button>
-    <span class="copy-status" aria-live="polite" style="position:absolute; left:-9999px;"></span>
-    <code>
-    &lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.css"&gt;
-    &lt;script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.js"&gt;&lt;/script&gt;
-    </code>
-    <code>
-    import { component$ } from '@builder.io/qwik';
-    import { SocialShareButton } from './social-share-button-qwik';
-
-    export default component$(() => (
-    &lt;SocialShareButton
-    url="https://your-website.com"
-    theme="light"
-    buttonText="Share Now"
-    buttonStyle="primary"
-    /&gt;
-  ));</code>
-  </div>
-</div>
-
-
+      <div class="code-block">
+        <button class="copy-btn" type="button" aria-label="Copy code">Copy</button>
+        <span
+          class="copy-status"
+          aria-live="polite"
+          style="position: absolute; left: -9999px"
+        ></span>
+        <code>
+          &lt;link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.css"&gt;
+          &lt;script
+          src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.js"&gt;&lt;/script&gt;
+        </code>
+        <code>
+          import { component$ } from '@builder.io/qwik'; import { SocialShareButton } from
+          './social-share-button-qwik'; export default component$(() => ( &lt;SocialShareButton
+          url="https://your-website.com" theme="light" buttonText="Share Now" buttonStyle="primary"
+          /&gt; ));</code
+        >
+      </div>
+    </div>
 
     <div class="demo-section">
-  <h2>▲ Next.js Integration</h2>
-  <p>Use the component inside a Next.js page</p>
+      <h2>▲ Next.js Integration</h2>
+      <p>Use the component inside a Next.js page</p>
 
-  <div class="code-block">
-<code>import SocialShareButton from 'social-share-button';
+      <div class="code-block">
+        <code
+          >import SocialShareButton from 'social-share-button'; export default function Home() {
+          return ( &lt;SocialShareButton url="https://your-website.com" title="Check this out!"
+          /&gt; ); }</code
+        >
+      </div>
+    </div>
 
-export default function Home() {
-  return (
-    &lt;SocialShareButton
-      url="https://your-website.com"
-      title="Check this out!"
-    /&gt;
-  );
-}</code>
-  </div>
-</div>
+    <div class="demo-section">
+      <h2>🟢 Vue / Vite Integration</h2>
+      <p>Use inside a Vue component</p>
 
-<div class="demo-section">
-  <h2>🟢 Vue / Vite Integration</h2>
-  <p>Use inside a Vue component</p>
+      <div class="code-block">
+        <code
+          >&lt;template&gt; &lt;SocialShareButton url="https://your-website.com" title="Check this
+          out!" /&gt; &lt;/template&gt; &lt;script setup&gt; import SocialShareButton from
+          'social-share-button' &lt;/script&gt;</code
+        >
+      </div>
+    </div>
 
-  <div class="code-block">
-<code>&lt;template&gt;
-  &lt;SocialShareButton
-    url="https://your-website.com"
-    title="Check this out!"
-  /&gt;
-&lt;/template&gt;
+    <div class="demo-section">
+      <h2>🅰️ Angular Integration</h2>
+      <p>Use inside an Angular component template</p>
 
-&lt;script setup&gt;
-import SocialShareButton from 'social-share-button'
-&lt;/script&gt;</code>
-  </div>
-</div>
-
-<div class="demo-section">
-  <h2>🅰️ Angular Integration</h2>
-  <p>Use inside an Angular component template</p>
-
-  <div class="code-block">
-<code>&lt;social-share-button
-  [url]="'https://your-website.com'"
-  [title]="'Check this out!'"
-&gt;
-&lt;/social-share-button&gt;</code>
-  </div>
-</div>
-
-
+      <div class="code-block">
+        <code
+          >&lt;social-share-button [url]="'https://your-website.com'" [title]="'Check this out!'"
+          &gt; &lt;/social-share-button&gt;</code
+        >
+      </div>
+    </div>
 
     <!-- CTA Section -->
     <div class="cta-section">
-      <h2 style="color: #fff; margin-bottom: 20px;">Ready to Get Started?</h2>
-      <a href="https://github.com/AOSSIE-Org/SocialShareButton" class="cta-button" target="_blank" rel="noopener">
+      <h2 style="color: #fff; margin-bottom: 20px">Ready to Get Started?</h2>
+      <a
+        href="https://github.com/AOSSIE-Org/SocialShareButton"
+        class="cta-button"
+        target="_blank"
+        rel="noopener"
+      >
         View on GitHub →
       </a>
 
-    <a href="https://discord.gg/prMM922G"
-   class="cta-button discord-btn"
-   target="_blank"
-   rel="noopener noreferrer">
-   Join Discord
-</a>
-  </div>
-
-</div>
+      <a
+        href="https://discord.gg/prMM922G"
+        class="cta-button discord-btn"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Join Discord
+      </a>
+    </div>
 
     <footer>
       <p>Made with ❤️ by the AOSSIE community</p>
@@ -671,7 +685,7 @@ import SocialShareButton from 'social-share-button'
           container: "#demo-professional",
           url: demoUrl,
           title: demoTitle,
-          platforms: ["linkedin", "twitter", "email"],
+          platforms: ["linkedin", "twitter", "email", "hackernews"],
           buttonText: "Share",
         });
 
@@ -680,7 +694,7 @@ import SocialShareButton from 'social-share-button'
           container: "#demo-social",
           url: demoUrl,
           title: demoTitle,
-          platforms: ["facebook", "twitter", "reddit", "pinterest"],
+          platforms: ["facebook", "twitter", "reddit", "pinterest", "threads"],
           buttonText: "Share",
         });
 
@@ -691,6 +705,16 @@ import SocialShareButton from 'social-share-button'
           title: demoTitle,
           platforms: ["whatsapp", "telegram"],
           buttonText: "Share",
+        });
+
+        // Native share
+        new SocialShareButton({
+          container: "#demo-native",
+          url: demoUrl,
+          title: demoTitle,
+          buttonStyle: "primary",
+          buttonText: "Native Share",
+          useNativeShare: true,
         });
 
         // Custom Colors - Red
@@ -774,37 +798,40 @@ import SocialShareButton from 'social-share-button'
               clearTimeout(button.copyResetTimer);
             }
 
-            navigator.clipboard.writeText(text).then(() => {
-              if (statusSpan && statusSpan.classList.contains("copy-status")) {
-                statusSpan.textContent = "Code copied to clipboard";
-              }
+            navigator.clipboard
+              .writeText(text)
+              .then(() => {
+                if (statusSpan && statusSpan.classList.contains("copy-status")) {
+                  statusSpan.textContent = "Code copied to clipboard";
+                }
 
-              button.textContent = "Copied!";
+                button.textContent = "Copied!";
 
-              button.copyResetTimer = setTimeout(() => {
+                button.copyResetTimer = setTimeout(() => {
+                  button.textContent = originalText;
+
+                  if (statusSpan && statusSpan.classList.contains("copy-status")) {
+                    statusSpan.textContent = "";
+                  }
+                }, 2000);
+              })
+              .catch((error) => {
+                console.error("Failed to copy to clipboard", error);
+
                 button.textContent = originalText;
 
                 if (statusSpan && statusSpan.classList.contains("copy-status")) {
-                  statusSpan.textContent = "";
+                  statusSpan.textContent = "Failed to copy to clipboard";
                 }
-              }, 2000);
-            }).catch((error) => {
-              console.error("Failed to copy to clipboard", error);
 
-              button.textContent = originalText;
+                button.copyResetTimer = setTimeout(() => {
+                  button.textContent = originalText;
 
-              if (statusSpan && statusSpan.classList.contains("copy-status")) {
-                statusSpan.textContent = "Failed to copy to clipboard";
-              }
-
-              button.copyResetTimer = setTimeout(() => {
-                button.textContent = originalText;
-
-                if (statusSpan && statusSpan.classList.contains("copy-status")) {
-                  statusSpan.textContent = "";
-                }
-              }, 2000);
-            });
+                  if (statusSpan && statusSpan.classList.contains("copy-status")) {
+                    statusSpan.textContent = "";
+                  }
+                }, 2000);
+              });
           });
         });
       });
