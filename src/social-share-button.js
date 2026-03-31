@@ -86,13 +86,18 @@ class SocialShareButton {
 
     this.button = button;
     if (this.options.container) {
-      const container =
-        typeof this.options.container === "string"
-          ? document.querySelector(this.options.container)
-          : this.options.container;
+      try {
+        const container =
+          typeof this.options.container === "string"
+            ? document.querySelector(this.options.container)
+            : this.options.container;
 
-      if (container) {
-        container.appendChild(button);
+        if (container) {
+          container.appendChild(button);
+        }
+      } catch (error) {
+        // Invalid CSS selector in options.container throws a DOMException
+        this._debugWarn("createButton: invalid container selector", error);
       }
     }
   }
@@ -500,7 +505,8 @@ class SocialShareButton {
         copyBtn.classList.remove("copied");
         this.feedbackTimeout = null;
       }, 2000);
-    } catch (_err) {
+    } catch (error) {
+      this._debugWarn("fallbackCopy: copy command failed", error);
       copyBtn.textContent = "Failed";
 
       // Clear any existing feedback timeout
