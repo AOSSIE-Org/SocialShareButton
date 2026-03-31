@@ -341,6 +341,11 @@
         <p>Customize button colors to match your brand palette</p>
         <div class="demo-grid">
           <div class="demo-item">
+  <h3>✨ Sneha Custom</h3>
+  <p>Custom demo added by Sneha</p>
+  <div id="demo-sneha"></div>
+</div>
+          <div class="demo-item">
             <h3>Red Theme</h3>
             <p>#f44336 - Material Red</p>
             <div id="demo-red"></div>
@@ -577,7 +582,22 @@ import SocialShareButton from 'social-share-button'
 </div>
 
 
+<!-- Sneha Custom Demo -->
+<div class="demo-section">
+  <h2>🧪 Sneha Custom Demo</h2>
+  <p>This is Sneha's custom integration demo.</p>
 
+  <div class="demo-grid">
+    <div class="demo-item">
+      <h3>My Share Button</h3>
+      <p>Custom example added by Sneha</p>
+
+      <!-- THIS IS IMPORTANT -->
+      <div id="share-button"></div>
+
+    </div>
+  </div>
+</div>
     <!-- CTA Section -->
     <div class="cta-section">
       <h2 style="color: #fff; margin-bottom: 20px;">Ready to Get Started?</h2>
@@ -758,6 +778,24 @@ import SocialShareButton from 'social-share-button'
           buttonHoverColor: "#db2777",
           buttonText: "Share",
         });
+        new SocialShareButton({
+  container: "#share-button",
+  url: "https://github.com/AOSSIE-Org/SocialShareButton",
+  title: "Sneha's Project 🔥",
+  description: "Testing my custom integration 🚀",
+  buttonStyle: "primary",
+  buttonText: "Share My Project",
+});
+
+// 🔥 Sneha Custom Demo
+new SocialShareButton({
+  container: "#demo-sneha",
+  url: "https://github.com/AOSSIE-Org/SocialShareButton",
+  title: "Sneha's Project 🔥",
+  description: "Custom demo added by Sneha 🚀",
+  buttonStyle: "primary",
+  buttonText: "Share My Project",
+});
 
         // Copy to Clipboard Functionality
         const copyButtons = document.querySelectorAll(".copy-btn");
