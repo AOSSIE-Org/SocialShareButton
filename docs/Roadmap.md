@@ -1,7 +1,7 @@
 # 🚀 SocialShareButton — Project Roadmap
 
 > **Version:** 2.0 Draft  
-> **Status:** Living Document 
+> **Status:** Living Document
 
 ---
 
@@ -27,23 +27,23 @@ This section is the ground truth before any planning.
 
 ### ✅ What Already Exists
 
-| Feature | Status | Notes |
-|---|---|---|
-| CDN distribution (jsDelivr) | ✅ | `v1.0.3` |
-| npm package | ✅ | Published as `social-share-button-aossie` (unscoped) |
-| 7 share platforms | ✅ | WhatsApp, Facebook, X, LinkedIn, Telegram, Reddit, Email |
-| `onShare` callback | ✅ | `(platform, url) => {}` |
-| `onCopy` callback | ✅ | `(url) => {}` |
-| `theme: 'dark' \| 'light'` | ✅ | Basic two-mode theming |
-| `buttonColor` / `buttonHoverColor` | ✅ | Programmatic color overrides |
-| `customClass` | ✅ | Escape hatch for custom CSS |
-| `modalPosition` | ✅ | Modal placement config |
-| `updateOptions()` | ✅ | SPA dynamic URL updates |
-| React wrapper | ✅ | Exists as `src/social-share-button-react.jsx` (copy-paste only) |
-| TypeScript types | ❌ | None shipped |
-| Scoped npm package | ❌ | Not yet (`@social-share/core` etc.) |
-| Framework packages | ❌ | No installable Vue / Qwik / Solid packages |
-| Proper CSS build artifact | ❌ | CSS imported from `src/` path — breaks in most bundlers |
+| Feature                            | Status | Notes                                                           |
+| ---------------------------------- | ------ | --------------------------------------------------------------- |
+| CDN distribution (jsDelivr)        | ✅     | `v1.0.3`                                                        |
+| npm package                        | ✅     | Published as `social-share-button-aossie` (unscoped)            |
+| 7 share platforms                  | ✅     | WhatsApp, Facebook, X, LinkedIn, Telegram, Reddit, Email        |
+| `onShare` callback                 | ✅     | `(platform, url) => {}`                                         |
+| `onCopy` callback                  | ✅     | `(url) => {}`                                                   |
+| `theme: 'dark' \| 'light'`         | ✅     | Basic two-mode theming                                          |
+| `buttonColor` / `buttonHoverColor` | ✅     | Programmatic color overrides                                    |
+| `customClass`                      | ✅     | Escape hatch for custom CSS                                     |
+| `modalPosition`                    | ✅     | Modal placement config                                          |
+| `updateOptions()`                  | ✅     | SPA dynamic URL updates                                         |
+| React wrapper                      | ✅     | Exists as `src/social-share-button-react.jsx` (copy-paste only) |
+| TypeScript types                   | ❌     | None shipped                                                    |
+| Scoped npm package                 | ❌     | Not yet (`@social-share/core` etc.)                             |
+| Framework packages                 | ❌     | No installable Vue / Qwik / Solid packages                      |
+| Proper CSS build artifact          | ❌     | CSS imported from `src/` path — breaks in most bundlers         |
 
 ### ⚠️ Known Issues to Fix Before Any New Features
 
@@ -108,13 +108,13 @@ social-share-button/               ← Turborepo monorepo root
 
 ### Layer Responsibilities
 
-| Layer | Package | Responsibility |
-|---|---|---|
-| Core Engine | `@social-share/core` | Platform logic, URL building, config validation |
-| Analytics | `@social-share/analytics` | Event emission, consent, adapter routing |
-| Theme | `@social-share/theme` | CSS tokens, presets, Theme Designer, export |
-| Framework Wrappers | `@social-share/react` etc. | Framework-specific components using core |
-| CDN Build | `apps/cdn-build` | Bundles core + wrappers into single distributable |
+| Layer              | Package                    | Responsibility                                    |
+| ------------------ | -------------------------- | ------------------------------------------------- |
+| Core Engine        | `@social-share/core`       | Platform logic, URL building, config validation   |
+| Analytics          | `@social-share/analytics`  | Event emission, consent, adapter routing          |
+| Theme              | `@social-share/theme`      | CSS tokens, presets, Theme Designer, export       |
+| Framework Wrappers | `@social-share/react` etc. | Framework-specific components using core          |
+| CDN Build          | `apps/cdn-build`           | Bundles core + wrappers into single distributable |
 
 ---
 
@@ -122,7 +122,7 @@ social-share-button/               ← Turborepo monorepo root
 
 ---
 
-### ✅ Phase 0 — Stabilization *(Now — before any refactoring)*
+### ✅ Phase 0 — Stabilization _(Now — before any refactoring)_
 
 **Goal:** Fix the broken npm package experience and document the full API surface. No new features.
 
@@ -181,6 +181,7 @@ export function executeShare(platform: Platform, config: ShareConfig): void { ..
 **Goal:** Replace the copy-paste React wrapper with installable framework packages. React first since it already exists as `.jsx`.
 
 **Priority order:**
+
 1. `@social-share/react` — replaces `src/social-share-button-react.jsx`
 2. `@social-share/vue` — Composition API component
 3. `@social-share/qwik` — Resumable, SSR-safe (open issue)
@@ -191,26 +192,27 @@ export function executeShare(platform: Platform, config: ShareConfig): void { ..
 
 ```typescript
 interface SocialShareButtonProps {
-  url?: string;                   // default: window.location.href
-  title?: string;                 // default: document.title
+  url?: string; // default: window.location.href
+  title?: string; // default: document.title
   description?: string;
   hashtags?: string[];
   via?: string;
   platforms?: Platform[];
   buttonText?: string;
-  buttonStyle?: 'default' | 'primary' | 'compact' | 'icon-only';
-  buttonColor?: string;           // existing API
-  buttonHoverColor?: string;      // existing API
-  customClass?: string;           // existing API
-  theme?: 'dark' | 'light' | ThemeTokens;  // string shorthand still works
-  analytics?: AnalyticsConfig;    // Phase 3
+  buttonStyle?: "default" | "primary" | "compact" | "icon-only";
+  buttonColor?: string; // existing API
+  buttonHoverColor?: string; // existing API
+  customClass?: string; // existing API
+  theme?: "dark" | "light" | ThemeTokens; // string shorthand still works
+  analytics?: AnalyticsConfig; // Phase 3
   componentId?: string;
-  onShare?: (platform: Platform, url: string) => void;  // same signature as today
-  onCopy?: (url: string) => void;                       // same signature as today
+  onShare?: (platform: Platform, url: string) => void; // same signature as today
+  onCopy?: (url: string) => void; // same signature as today
 }
 ```
 
 **Migration for existing React wrapper users:**
+
 ```tsx
 // Before (copy-paste)
 import { SocialShareButton } from "./components/SocialShareButton";
@@ -226,7 +228,7 @@ import { SocialShareButton } from "@social-share/react";
 
 ---
 
-### 🔬 Phase 3 — Analytics Module 
+### 🔬 Phase 3 — Analytics Module
 
 **Goal:** Ship `@social-share/analytics` — a privacy-first, pluggable analytics layer that uses the existing `onShare` / `onCopy` callbacks as its internal trigger mechanism.
 
@@ -234,25 +236,25 @@ import { SocialShareButton } from "@social-share/react";
 
 ```typescript
 // Path 1: DOM Events — zero config, works with any analytics tool
-document.addEventListener('ssb:share', (e) => console.log(e.detail));
-document.addEventListener('ssb:copy', (e) => console.log(e.detail));
-document.addEventListener('ssb:modal_open', (e) => console.log(e.detail));
-document.addEventListener('ssb:modal_close', (e) => console.log(e.detail));
+document.addEventListener("ssb:share", (e) => console.log(e.detail));
+document.addEventListener("ssb:copy", (e) => console.log(e.detail));
+document.addEventListener("ssb:modal_open", (e) => console.log(e.detail));
+document.addEventListener("ssb:modal_close", (e) => console.log(e.detail));
 
 // Path 2: Single callback hook — simplest npm integration
 new SocialShareButton({
   analytics: {
-    onEvent: (event: SSBEvent) => myAnalytics.track(event.name, event.data)
-  }
+    onEvent: (event: SSBEvent) => myAnalytics.track(event.name, event.data),
+  },
 });
 
 // Path 3: Named adapter — built-in wiring for popular tools
-import { GA4Adapter } from '@social-share/analytics/adapters/ga4';
+import { GA4Adapter } from "@social-share/analytics/adapters/ga4";
 
 new SocialShareButton({
   analytics: {
-    adapter: new GA4Adapter({ measurementId: 'G-XXXXXXXX' })
-  }
+    adapter: new GA4Adapter({ measurementId: "G-XXXXXXXX" }),
+  },
 });
 ```
 
@@ -260,31 +262,31 @@ new SocialShareButton({
 
 ```typescript
 interface SSBEvent {
-  name: 'ssb:share' | 'ssb:copy' | 'ssb:modal_open' | 'ssb:modal_close';
+  name: "ssb:share" | "ssb:copy" | "ssb:modal_open" | "ssb:modal_close";
   platform?: Platform;
-  componentId?: string;       // developer-defined identifier
+  componentId?: string; // developer-defined identifier
   url: string;
   timestamp: number;
-  sessionId: string;          // anonymous, ephemeral, never persisted
+  sessionId: string; // anonymous, ephemeral, never persisted
 }
 ```
 
 #### Built-in Adapters
 
-| Adapter | Notes |
-|---|---|
-| `GA4Adapter` | `gtag('event', ...)` — no PII sent |
-| `MixpanelAdapter` | `mixpanel.track()` — requires Mixpanel loaded |
-| `SegmentAdapter` | `analytics.track()` — wraps Segment's standard API |
-| `PlausibleAdapter` | `plausible()` custom event — cookieless by default |
-| `PostHogAdapter` | `posthog.capture()` — EU cloud + self-hosted compatible |
-| `CustomAdapter` | Extend `BaseAdapter`, implement `track(event: SSBEvent): void` |
+| Adapter            | Notes                                                          |
+| ------------------ | -------------------------------------------------------------- |
+| `GA4Adapter`       | `gtag('event', ...)` — no PII sent                             |
+| `MixpanelAdapter`  | `mixpanel.track()` — requires Mixpanel loaded                  |
+| `SegmentAdapter`   | `analytics.track()` — wraps Segment's standard API             |
+| `PlausibleAdapter` | `plausible()` custom event — cookieless by default             |
+| `PostHogAdapter`   | `posthog.capture()` — EU cloud + self-hosted compatible        |
+| `CustomAdapter`    | Extend `BaseAdapter`, implement `track(event: SSBEvent): void` |
 
 #### Privacy Controls
 
 ```typescript
-SocialShareButton.analytics.enable();    // call after consent granted
-SocialShareButton.analytics.disable();   // opt-out / consent withdrawn
+SocialShareButton.analytics.enable(); // call after consent granted
+SocialShareButton.analytics.disable(); // opt-out / consent withdrawn
 SocialShareButton.analytics.isEnabled(); // boolean
 SocialShareButton.analytics.debug(true); // log to console, don't send
 ```
@@ -298,7 +300,7 @@ SocialShareButton.analytics.debug(true); // log to console, don't send
 
 ---
 
-### 🎨 Phase 4 — Theme System + Theme Designer 
+### 🎨 Phase 4 — Theme System + Theme Designer
 
 **Goal:** Extend existing `dark` / `light` theming into a full CSS-variable-based system with an interactive Theme Designer. All existing `theme`, `buttonColor`, `buttonHoverColor`, `customClass` options remain fully supported.
 
@@ -311,7 +313,7 @@ SocialShareButton.analytics.debug(true); // log to console, don't send
   --ssb-btn-bg: #1da1f2;
   --ssb-btn-bg-hover: #0d8fd9;
   --ssb-btn-radius: 6px;
-  --ssb-btn-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  --ssb-btn-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 
   /* Per-platform icon colors */
   --ssb-icon-twitter: #1da1f2;
@@ -327,7 +329,7 @@ SocialShareButton.analytics.debug(true); // log to console, don't send
   --ssb-modal-animation-speed: 200ms;
 
   --ssb-font-family: system-ui, sans-serif;
-  --ssb-shape: rounded;   /* rounded | pill | square */
+  --ssb-shape: rounded; /* rounded | pill | square */
 }
 ```
 
@@ -336,6 +338,7 @@ SocialShareButton.analytics.debug(true); // log to console, don't send
 Hosted at `apps/playground`.
 
 **Controls:**
+
 - Colors & Gradients — solid + gradient builder per button
 - Shapes — rounded / pill / square
 - Border — width, color, style
@@ -344,6 +347,7 @@ Hosted at `apps/playground`.
 - Font family, shadow intensity, hover effect selector
 
 **Export formats:**
+
 - CSS variables block
 - `.json` theme file (SDK-importable)
 - Shareable URL (theme as URL params)
@@ -369,38 +373,41 @@ import myTheme from './my-theme.json'; // from Theme Designer
 **Goal:** CDN and SDK reach full feature parity. Complete all planned server-side and CMS integrations.
 
 **CDN feature parity:**
+
 - Bundle includes analytics + theming (opt-in at build config level)
 - Config via `data-ssb-*` HTML attributes or `window.SocialShareButtonConfig`
 - SRI hash generation in CI, hosted on jsDelivr + unpkg
 
 **Platform integrations:**
 
-| Integration | Delivery | Issue Status |
-|---|---|---|
-| Remix | `@social-share/react` + SSR guide | 🟡 Open |
-| Solid.js | `@social-share/solid` | 🟡 Open |
-| Rails | Gem wrapper + CDN tag helper | 🟡 Open |
-| Django | Template tag + CDN | 🟡 Open |
-| Laravel | Blade component + CDN | 🟡 Open |
-| WordPress | Plugin (CDN-backed) | 🟡 Open |
-| Hugo | Shortcode + CDN | 🟡 Open |
-| Jekyll | Include template + CDN | 🟡 Open |
-| Web Components (Lit) | `@social-share/wc` | 🟡 Open |
-| Alpine.js | `x-data` binding guide + CDN | 🟡 Open |
+| Integration          | Delivery                          | Issue Status |
+| -------------------- | --------------------------------- | ------------ |
+| Remix                | `@social-share/react` + SSR guide | 🟡 Open      |
+| Solid.js             | `@social-share/solid`             | 🟡 Open      |
+| Rails                | Gem wrapper + CDN tag helper      | 🟡 Open      |
+| Django               | Template tag + CDN                | 🟡 Open      |
+| Laravel              | Blade component + CDN             | 🟡 Open      |
+| WordPress            | Plugin (CDN-backed)               | 🟡 Open      |
+| Hugo                 | Shortcode + CDN                   | 🟡 Open      |
+| Jekyll               | Include template + CDN            | 🟡 Open      |
+| Web Components (Lit) | `@social-share/wc`                | 🟡 Open      |
+| Alpine.js            | `x-data` binding guide + CDN      | 🟡 Open      |
 
 CI smoke test per integration: spin up minimal app, assert button renders and emits share event.
 
 ---
 
-### ⚡ Phase 6 — Advanced Features & Ecosystem 
+### ⚡ Phase 6 — Advanced Features & Ecosystem
 
 **Accessibility:**
+
 - Full ARIA — `role="button"`, `aria-label`, `aria-expanded` on modal
 - Keyboard navigation — Tab, Enter, Escape
 - `prefers-reduced-motion` support (maps to `--ssb-modal-animation-speed: 0ms`)
 - WCAG 2.1 AA tested with axe-core in CI
 
 **Performance:**
+
 - CDN bundle: target < 8KB gzipped
 - npm packages: tree-shakeable — twitter-only import ~1KB
 - CSS: single `@layer` block, no `@import` chains
@@ -409,22 +416,24 @@ CI smoke test per integration: spin up minimal app, assert button renders and em
 
 ```typescript
 SocialShareButton.registerPlatform({
-  id: 'bluesky',
-  label: 'Bluesky',
+  id: "bluesky",
+  label: "Bluesky",
   icon: BlueskyIcon,
   buildURL: (config) => `https://bsky.app/intent/compose?text=${config.title} ${config.url}`,
 });
 ```
 
 **Native Web Share API:**
+
 ```typescript
 new SocialShareButton({
-  preferNativeShare: 'mobile-only',  // true | false | 'mobile-only'
+  preferNativeShare: "mobile-only", // true | false | 'mobile-only'
 });
 // Falls back to custom modal when navigator.share() is unavailable
 ```
 
 **Monorepo tooling maturity:**
+
 - Changesets-based automated releases via GitHub Actions
 - Per-package changelogs
 - Canary / beta release channel
@@ -434,20 +443,20 @@ new SocialShareButton({
 
 ## 🤝 Contribution Opportunities
 
-| Area | Skills Needed | Phase |
-|---|---|---|
-| Fix CSS export path + `exports` field | npm packaging | 0 |
-| Write `.d.ts` TypeScript declarations | TypeScript | 0 |
-| Core engine extraction | TypeScript, DOM APIs | 1 |
-| Turborepo + pnpm workspace setup | Monorepo tooling | 1 |
-| `@social-share/react` (from existing jsx) | React | 2 |
-| `@social-share/vue` / `solid` / `qwik` | Vue / Solid / Qwik | 2 |
-| Analytics adapters | GA4 / PostHog / Segment APIs | 3 |
-| Theme Designer UI | React, CSS variables | 4 |
-| CMS / server-side integrations | Rails / Django / Laravel / WP | 5 |
-| Accessibility audit | WCAG, axe-core | 6 |
-| Docs site | Next.js, MDX | Ongoing |
-| CI/CD pipelines | GitHub Actions, Changesets | Ongoing |
+| Area                                      | Skills Needed                 | Phase   |
+| ----------------------------------------- | ----------------------------- | ------- |
+| Fix CSS export path + `exports` field     | npm packaging                 | 0       |
+| Write `.d.ts` TypeScript declarations     | TypeScript                    | 0       |
+| Core engine extraction                    | TypeScript, DOM APIs          | 1       |
+| Turborepo + pnpm workspace setup          | Monorepo tooling              | 1       |
+| `@social-share/react` (from existing jsx) | React                         | 2       |
+| `@social-share/vue` / `solid` / `qwik`    | Vue / Solid / Qwik            | 2       |
+| Analytics adapters                        | GA4 / PostHog / Segment APIs  | 3       |
+| Theme Designer UI                         | React, CSS variables          | 4       |
+| CMS / server-side integrations            | Rails / Django / Laravel / WP | 5       |
+| Accessibility audit                       | WCAG, axe-core                | 6       |
+| Docs site                                 | Next.js, MDX                  | Ongoing |
+| CI/CD pipelines                           | GitHub Actions, Changesets    | Ongoing |
 
 > 💡 Phase 0 tasks are labeled `good-first-issue` and require no monorepo knowledge — ideal starting point for new contributors.
 
@@ -465,16 +474,16 @@ new SocialShareButton({
 
 ## 📊 Distribution Strategy
 
-| Path | Audience | Package | Status |
-|---|---|---|---|
-| CDN (`<script>` tag) | No-build / CMS / quick integration | IIFE bundle | ✅ v1.0.3 |
-| npm (unscoped) | Current npm users | `social-share-button-aossie` | ✅ Needs fix (Phase 0) |
-| npm (scoped core) | Framework-agnostic use | `@social-share/core` | 🚧 Phase 1 |
-| npm (framework) | React / Vue / Next.js apps | `@social-share/react` etc. | 🎯 Phase 2 |
-| npm (analytics) | Apps needing share tracking | `@social-share/analytics` | 🎯 Phase 3 |
-| npm (theme) | Theme Designer consumers | `@social-share/theme` | 🎯 Phase 4 |
-| Server-side templates | Rails, Django, Laravel, WP | CDN + thin wrapper | 🎯 Phase 5 |
+| Path                  | Audience                           | Package                      | Status                 |
+| --------------------- | ---------------------------------- | ---------------------------- | ---------------------- |
+| CDN (`<script>` tag)  | No-build / CMS / quick integration | IIFE bundle                  | ✅ v1.0.3              |
+| npm (unscoped)        | Current npm users                  | `social-share-button-aossie` | ✅ Needs fix (Phase 0) |
+| npm (scoped core)     | Framework-agnostic use             | `@social-share/core`         | 🚧 Phase 1             |
+| npm (framework)       | React / Vue / Next.js apps         | `@social-share/react` etc.   | 🎯 Phase 2             |
+| npm (analytics)       | Apps needing share tracking        | `@social-share/analytics`    | 🎯 Phase 3             |
+| npm (theme)           | Theme Designer consumers           | `@social-share/theme`        | 🎯 Phase 4             |
+| Server-side templates | Rails, Django, Laravel, WP         | CDN + thin wrapper           | 🎯 Phase 5             |
 
 ---
 
-*This roadmap is a living document. Phases may shift based on contributor capacity and community feedback. Open a GitHub Discussion to propose changes.*
+_This roadmap is a living document. Phases may shift based on contributor capacity and community feedback. Open a GitHub Discussion to propose changes._

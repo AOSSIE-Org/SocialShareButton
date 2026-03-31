@@ -24,7 +24,9 @@ class SocialShareButton {
         "reddit",
         "pinterest",
       ],
-      theme: options.theme || "dark",
+      theme: options.theme || "dark", // supports "dark", "light", and "auto"
+      displayMode: options.displayMode || "inline", // "inline" or "floating"
+      floatingPosition: options.floatingPosition || "bottom-right",
       buttonText: options.buttonText || "Share",
       customClass: options.customClass || "",
       buttonColor: options.buttonColor || "",
@@ -85,7 +87,14 @@ class SocialShareButton {
     `;
 
     this.button = button;
-    if (this.options.container) {
+
+    if (this.options.displayMode === "floating" && typeof document !== "undefined") {
+      const wrapper = document.createElement("div");
+      wrapper.className = `social-share-floating-wrapper ${this.options.floatingPosition}`;
+      wrapper.appendChild(button);
+      document.body.appendChild(wrapper);
+      this.floatingWrapper = wrapper;
+    } else if (this.options.container) {
       const container =
         typeof this.options.container === "string"
           ? document.querySelector(this.options.container)
@@ -98,8 +107,28 @@ class SocialShareButton {
   }
 
   createModal() {
+    let resolvedTheme = this.options.theme;
+    if (resolvedTheme === "auto" && typeof window !== "undefined") {
+      resolvedTheme =
+        window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches
+          ? "light"
+          : "dark";
+
+      if (window.matchMedia) {
+        this.themeMediaQuery = window.matchMedia("(prefers-color-scheme: light)");
+        this.themeChangeHandler = (e) => {
+          if (!this.modal) return;
+          const newTheme = e.matches ? "light" : "dark";
+          const oldTheme = e.matches ? "dark" : "light";
+          this.modal.classList.remove(oldTheme);
+          this.modal.classList.add(newTheme);
+        };
+        this.themeMediaQuery.addEventListener("change", this.themeChangeHandler);
+      }
+    }
+
     const modal = document.createElement("div");
-    modal.className = `social-share-modal-overlay ${this.options.theme}`;
+    modal.className = `social-share-modal-overlay ${resolvedTheme}`;
     modal.style.display = "none";
     modal.innerHTML = `
       <div class="social-share-modal-content ${this.options.modalPosition}">
@@ -518,6 +547,12 @@ class SocialShareButton {
   }
 
   destroy() {
+    if (this.themeMediaQuery && this.themeChangeHandler) {
+      this.themeMediaQuery.removeEventListener("change", this.themeChangeHandler);
+      this.themeMediaQuery = null;
+      this.themeChangeHandler = null;
+    }
+
     if (this.handleKeydown) {
       if (typeof document !== "undefined") {
         document.removeEventListener("keydown", this.handleKeydown);
@@ -557,6 +592,9 @@ class SocialShareButton {
     // Remove DOM elements
     if (this.button && this.button.parentNode) {
       this.button.parentNode.removeChild(this.button);
+    }
+    if (this.floatingWrapper && this.floatingWrapper.parentNode) {
+      this.floatingWrapper.parentNode.removeChild(this.floatingWrapper);
     }
     if (this.modal && this.modal.parentNode) {
       this.modal.parentNode.removeChild(this.modal);
