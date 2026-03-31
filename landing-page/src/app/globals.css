@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  .dark, .dark:root {
+    --background: 0 0% 5%; /* Very dark gray/black #0d0d0d */
+    --foreground: 0 0% 98%;
+    --primary: 48 100% 50%; /* #FFCC00 */
+    --primary-foreground: 0 0% 0%;
+    --secondary: 145 100% 39%; /* #00C853 */
+    --secondary-foreground: 0 0% 100%;
+    --card: 0 0% 10%;
+    --card-foreground: 0 0% 98%;
+    --border: 0 0% 20%;
+  }
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
+    --primary: 48 100% 50%; /* #FFCC00 */
+    --primary-foreground: 0 0% 0%;
+    --secondary: 145 100% 39%; /* #00C853 */
+    --secondary-foreground: 0 0% 100%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 0%;
+    --border: 0 0% 0%;
+  }
+
+
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
