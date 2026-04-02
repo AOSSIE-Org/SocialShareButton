@@ -86,10 +86,15 @@ class SocialShareButton {
 
     this.button = button;
     if (this.options.container) {
-      const container =
-        typeof this.options.container === "string"
-          ? document.querySelector(this.options.container)
-          : this.options.container;
+      let container = null;
+      try {
+        container =
+          typeof this.options.container === "string"
+            ? document.querySelector(this.options.container)
+            : this.options.container;
+      } catch (error) {
+        this._debugWarn("Invalid container selector provided", error);
+      }
 
       if (container) {
         container.appendChild(button);
@@ -500,7 +505,8 @@ class SocialShareButton {
         copyBtn.classList.remove("copied");
         this.feedbackTimeout = null;
       }, 2000);
-    } catch (_err) {
+    } catch (error) {
+      this._debugWarn("Copy to clipboard failed", error);
       copyBtn.textContent = "Failed";
 
       // Clear any existing feedback timeout
@@ -684,9 +690,14 @@ class SocialShareButton {
   _getContainer() {
     if (!this.options.container) return null;
     if (typeof document === "undefined") return null;
-    return typeof this.options.container === "string"
-      ? document.querySelector(this.options.container)
-      : this.options.container;
+    try {
+      return typeof this.options.container === "string"
+        ? document.querySelector(this.options.container)
+        : this.options.container;
+    } catch (error) {
+      this._debugWarn("Invalid container selector provided in _getContainer", error);
+      return null;
+    }
   }
 
   /**
