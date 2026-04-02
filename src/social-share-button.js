@@ -680,14 +680,26 @@ class SocialShareButton {
   _getContainer() {
     if (!this.options.container) return null;
     if (typeof document === "undefined") return null;
+
+    let container = null;
     try {
-      return typeof this.options.container === "string"
-        ? document.querySelector(this.options.container)
-        : this.options.container;
+      container =
+        typeof this.options.container === "string"
+          ? document.querySelector(this.options.container)
+          : this.options.container;
     } catch (error) {
       this._debugWarn("Invalid container selector provided in _getContainer", error);
       return null;
     }
+
+    // Safety check: ensure the resolved value is actually a DOM Element.
+    // This prevents crashes if a user passes a non-DOM object to the container option.
+    if (container && !(container instanceof Element || container.nodeType === 1)) {
+      this._debugWarn("Provided container is not a valid DOM Element", { container });
+      return null;
+    }
+
+    return container;
   }
 
   /**
