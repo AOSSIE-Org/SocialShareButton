@@ -85,20 +85,10 @@ class SocialShareButton {
     `;
 
     this.button = button;
-    if (this.options.container) {
-      let container = null;
-      try {
-        container =
-          typeof this.options.container === "string"
-            ? document.querySelector(this.options.container)
-            : this.options.container;
-      } catch (error) {
-        this._debugWarn("Invalid container selector provided", error);
-      }
+    const container = this._getContainer();
 
-      if (container) {
-        container.appendChild(button);
-      }
+    if (container) {
+      container.appendChild(button);
     }
   }
 
