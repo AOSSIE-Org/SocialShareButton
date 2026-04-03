@@ -491,17 +491,19 @@ export default function Header() {
 
 ### Step 1: Enqueue in `functions.php`
 
-Add the following to your theme's `functions.php` to load the library from CDN:
+Add the following to your theme's `functions.php` to load the library directly from this repository via jsDelivr CDN:
+
+> **Note:** This package is not published to npm. Use the jsDelivr + GitHub CDN link below to load the correct distributable from the [AOSSIE-Org/SocialShareButton](https://github.com/AOSSIE-Org/SocialShareButton) repository.
 
 ```php
 function enqueue_social_share_button() {
     wp_enqueue_style(
         'social-share-button',
-        'https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.css'
+        'https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.css'
     );
     wp_enqueue_script(
         'social-share-button',
-        'https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.js',
+        'https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.js',
         [],
         null,
         true // Load in footer
@@ -512,7 +514,7 @@ add_action('wp_enqueue_scripts', 'enqueue_social_share_button');
 
 ### Step 2: Initialize in `functions.php` (Footer Hook)
 
-You can use the `wp_footer` hook to inject the container and initialization script:
+Use the `wp_footer` hook with a **priority of 21** to inject the container and initialization script. The priority must be higher than the default (10) so WordPress prints the enqueued footer scripts *before* this function runs:
 
 ```php
 function init_social_share_button() { ?>
@@ -527,7 +529,8 @@ function init_social_share_button() { ?>
       });
     </script>
 <?php }
-add_action('wp_footer', 'init_social_share_button');
+add_action('wp_footer', 'init_social_share_button', 21);
+// ↑ Priority 21 ensures wp_footer scripts are printed (priority 20) before this runs.
 ```
 
 </details>

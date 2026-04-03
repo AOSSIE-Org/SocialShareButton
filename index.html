@@ -494,11 +494,11 @@
 function enqueue_social_share_button() {
     wp_enqueue_style(
         'social-share-button',
-        'https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.css'
+        'https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.css'
     );
     wp_enqueue_script(
         'social-share-button',
-        'https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.js',
+        'https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.js',
         [],
         null,
         true // Load in footer
@@ -528,7 +528,7 @@ function init_social_share_button() { ?&gt;
       });
     &lt;/script&gt;
 &lt;?php }
-add_action('wp_footer', 'init_social_share_button');</code>
+add_action('wp_footer', 'init_social_share_button', 21);</code>
         </div>
       </div>
       <!-- CTA Section -->
