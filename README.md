@@ -72,7 +72,7 @@ Lightweight social sharing component for web applications. Zero dependencies, fr
 
 - 🌐 Multiple platforms: WhatsApp, Facebook, X, LinkedIn, Telegram, Reddit, Email, Pinterest
 - 🎯 Zero dependencies - pure vanilla JavaScript
-- ⚛️ Framework support: React, Preact, Next.js, Qwik, Vue, Angular, or plain HTML
+- ⚛️ Framework support: React, Preact, Next.js, Qwik, Vue, Angular, WordPress or plain HTML
 - 🔄 Auto-detects current URL and page title
 - 📱 Fully responsive and mobile-ready
 - 🎨 Customizable themes (dark/light)
@@ -105,9 +105,9 @@ No matter which framework you use, integration always follows the same 3 steps:
 
 | Step                 | What to do                                                   | Where                                                                                          |
 | -------------------- | ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------- |
-| **1️⃣ Load Library**  | Add CSS + JS (CDN links)                                     | Global layout file — `index.html` / `layout.tsx` / `_document.tsx`                             |
-| **2️⃣ Add Container** | Place `<div id="share-button"></div>`                        | The UI component where you want the button to appear                                           |
-| **3️⃣ Initialize**    | Call `new SocialShareButton({ container: "#share-button" })` | Inside that component, after the DOM is ready (e.g. `useEffect`, `mounted`, `ngAfterViewInit`) |
+| **1️⃣ Load Library**  | Add CSS + JS (CDN links)                                     | Global layout file — `index.html` / `layout.tsx` / `_document.tsx` / `functions.php`           |
+| **2️⃣ Add Container** | Place `<div id="share-button"></div>`                        | The UI component or WordPress `wp_footer` hook                                                 |
+| **3️⃣ Initialize**    | Call `new SocialShareButton({ container: "#share-button" })` | Inside that component or WordPress `wp_footer` hook                                            |
 
 > 💡 Pick your framework below for the full copy-paste snippet:
 
@@ -482,6 +482,52 @@ export default function Header() {
     </header>
   );
 }
+```
+
+</details>
+
+<details>
+<summary><b>🔷 WordPress</b></summary>
+
+### Step 1: Enqueue in `functions.php`
+
+Add the following to your theme's `functions.php` to load the library from CDN:
+
+```php
+function enqueue_social_share_button() {
+    wp_enqueue_style(
+        'social-share-button',
+        'https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.css'
+    );
+    wp_enqueue_script(
+        'social-share-button',
+        'https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.js',
+        [],
+        null,
+        true // Load in footer
+    );
+}
+add_action('wp_enqueue_scripts', 'enqueue_social_share_button');
+```
+
+### Step 2: Initialize in `functions.php` (Footer Hook)
+
+You can use the `wp_footer` hook to inject the container and initialization script:
+
+```php
+function init_social_share_button() { ?>
+    <div id="share-button"></div>
+    <script>
+      new SocialShareButton({
+        container: '#share-button',
+        url: window.location.href,
+        title: document.title,
+        theme: 'dark',
+        buttonText: 'Share'
+      });
+    </script>
+<?php }
+add_action('wp_footer', 'init_social_share_button');
 ```
 
 </details>
