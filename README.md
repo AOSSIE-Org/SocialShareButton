@@ -66,14 +66,13 @@ Lightweight social sharing component for web applications. Zero dependencies, fr
 [![npm version](https://img.shields.io/npm/v/social-share-button-aossie.svg)](https://www.npmjs.com/package/social-share-button-aossie)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 
-
 ---
 
 ## Features
 
 - 🌐 Multiple platforms: WhatsApp, Facebook, X, LinkedIn, Telegram, Reddit, Email, Pinterest
 - 🎯 Zero dependencies - pure vanilla JavaScript
-- ⚛️ Framework support: React, Preact, Next.js, Qwik, Vue, Angular, or plain HTML
+- ⚛️ Framework support: React, Preact, Next.js, Qwik, Vue, Angular, WordPress or plain HTML
 - 🔄 Auto-detects current URL and page title
 - 📱 Fully responsive and mobile-ready
 - 🎨 Customizable themes (dark/light)
@@ -106,9 +105,9 @@ No matter which framework you use, integration always follows the same 3 steps:
 
 | Step                 | What to do                                                   | Where                                                                                          |
 | -------------------- | ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------- |
-| **1️⃣ Load Library**  | Add CSS + JS (CDN links)                                     | Global layout file — `index.html` / `layout.tsx` / `_document.tsx`                             |
-| **2️⃣ Add Container** | Place `<div id="share-button"></div>`                        | The UI component where you want the button to appear                                           |
-| **3️⃣ Initialize**    | Call `new SocialShareButton({ container: "#share-button" })` | Inside that component, after the DOM is ready (e.g. `useEffect`, `mounted`, `ngAfterViewInit`) |
+| **1️⃣ Load Library**  | Add CSS + JS (CDN links)                                     | Global layout file — `index.html` / `layout.tsx` / `_document.tsx` / `functions.php`           |
+| **2️⃣ Add Container** | Place `<div id="share-button"></div>`                        | The UI component or WordPress `wp_footer` hook                                                 |
+| **3️⃣ Initialize**    | Call `new SocialShareButton({ container: "#share-button" })` | Inside that component or WordPress `wp_footer` hook                                            |
 
 > 💡 Pick your framework below for the full copy-paste snippet:
 
@@ -483,6 +482,55 @@ export default function Header() {
     </header>
   );
 }
+```
+
+</details>
+
+<details>
+<summary><b>🔷 WordPress</b></summary>
+
+### Step 1: Enqueue in `functions.php`
+
+Add the following to your theme's `functions.php` to load the library directly from this repository via jsDelivr CDN:
+
+> **Note:** This package is not published to npm. Use the jsDelivr + GitHub CDN link below to load the correct distributable from the [AOSSIE-Org/SocialShareButton](https://github.com/AOSSIE-Org/SocialShareButton) repository.
+
+```php
+function enqueue_social_share_button() {
+    wp_enqueue_style(
+        'social-share-button',
+        'https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.css'
+    );
+    wp_enqueue_script(
+        'social-share-button',
+        'https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.js',
+        [],
+        null,
+        true // Load in footer
+    );
+}
+add_action('wp_enqueue_scripts', 'enqueue_social_share_button');
+```
+
+### Step 2: Initialize in `functions.php` (Footer Hook)
+
+Use the `wp_footer` hook with a **priority of 21** to inject the container and initialization script. The priority must be higher than the default (10) so WordPress prints the enqueued footer scripts *before* this function runs:
+
+```php
+function init_social_share_button() { ?>
+    <div id="share-button"></div>
+    <script>
+      new SocialShareButton({
+        container: '#share-button',
+        url: window.location.href,
+        title: document.title,
+        theme: 'dark',
+        buttonText: 'Share'
+      });
+    </script>
+<?php }
+add_action('wp_footer', 'init_social_share_button', 21);
+// ↑ Priority 21 ensures wp_footer scripts are printed (priority 20) before this runs.
 ```
 
 </details>
