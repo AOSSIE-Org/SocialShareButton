@@ -810,8 +810,9 @@ add_action('wp_footer', 'init_social_share_button');</code>
 
         copyButtons.forEach((button) => {
           button.addEventListener("click", () => {
-            const codeBlock = button.closest(".code-block")?.querySelector("code");
-            const text = codeBlock ? codeBlock.innerText : "";
+            const codeBlockContainer = button.closest(".code-block");
+            const codeBlocks = codeBlockContainer ? codeBlockContainer.querySelectorAll("code") : [];
+            const text = Array.from(codeBlocks).map(code => code.textContent).join("\n");
             const originalText = button.textContent;
 
             const statusSpan = button.nextElementSibling;
