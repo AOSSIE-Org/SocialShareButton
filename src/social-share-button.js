@@ -495,8 +495,7 @@ class SocialShareButton {
         copyBtn.classList.remove("copied");
         this.feedbackTimeout = null;
       }, 2000);
-    } catch (error) {
-      this._debugWarn("Copy to clipboard failed", error);
+    } catch (_err) {
       copyBtn.textContent = "Failed";
 
       // Clear any existing feedback timeout
