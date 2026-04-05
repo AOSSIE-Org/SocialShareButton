@@ -587,11 +587,19 @@
         </div>
 
         <p>
-          <strong>Step 2:</strong> Register the component (auto-imported in Nuxt 3 if placed in
-          <code>components/</code>)
+          <strong>Step 2:</strong> Obtain the Nuxt wrapper component. Currently, the wrapper is not
+          available via CDN and must be added manually. Copy the
+          <code>src/social-share-button-nuxt.vue</code> file from this repository into your Nuxt
+          project's <code>components/</code> folder. Rename it to
+          <code>SocialShareButton.vue</code> to match the usage below.
         </p>
 
-        <p><strong>Step 3:</strong> Show usage in a <code>pages/index.vue</code> file</p>
+        <p>
+          <strong>Step 3:</strong> Register the component (automatically handled by Nuxt 3 when
+          placed in <code>components/</code>).
+        </p>
+
+        <p><strong>Step 4:</strong> Show usage in a <code>pages/index.vue</code> file</p>
         <div class="code-block">
           <button type="button" class="copy-btn" aria-label="Copy code">Copy</button>
           <span
