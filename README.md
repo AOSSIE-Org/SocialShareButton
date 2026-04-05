@@ -535,6 +535,46 @@ add_action('wp_footer', 'init_social_share_button', 21);
 
 </details>
 
+<details>
+<summary><b>💚 Nuxt.js</b></summary>
+
+### Step 1: Add CDN to your layout file (e.g., `app.vue` or `layouts/default.vue`)
+
+```html
+<head>
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css"
+  />
+</head>
+<body>
+  <script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js"></script>
+</body>
+```
+
+### Step 2: Obtain the Nuxt wrapper component
+Currently, the wrapper is not available via CDN and must be added manually. Copy the `src/social-share-button-nuxt.vue` file from this repository into your Nuxt project's `components/` folder. Rename it to `SocialShareButton.vue` to match the usage below.
+
+### Step 3: Use the component in your page or component
+Open an **existing** page — typically `pages/index.vue`. Since the component is in the `components/` folder, Nuxt 3 will auto-import it.
+
+```vue
+<template>
+  <SocialShareButton
+    url="https://your-website.com"
+    title="Check this out!"
+    theme="dark"
+    buttonText="Share"
+  />
+</template>
+
+<script setup>
+// Component is auto-imported from components/ in Nuxt 3
+</script>
+```
+
+</details>
+
 ---
 
 ## Configuration

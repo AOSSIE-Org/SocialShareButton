@@ -621,11 +621,17 @@
         <p>Use the component inside a Next.js page</p>
 
         <div class="code-block">
-          <code
-            >import SocialShareButton from 'social-share-button'; export default function Home() {
+          <button type="button" class="copy-btn" aria-label="Copy code">Copy</button>
+          <span
+            class="copy-status"
+            aria-live="polite"
+            style="position: absolute; left: -9999px"
+          ></span>
+          <code>
+            import SocialShareButton from 'social-share-button'; export default function Home() {
             return ( &lt;SocialShareButton url="https://your-website.com" title="Check this out!"
-            /&gt; ); }</code
-          >
+            /&gt; ); }
+          </code>
         </div>
       </div>
 
@@ -634,11 +640,17 @@
         <p>Use inside a Vue component</p>
 
         <div class="code-block">
-          <code
-            >&lt;template&gt; &lt;SocialShareButton url="https://your-website.com" title="Check this
+          <button type="button" class="copy-btn" aria-label="Copy code">Copy</button>
+          <span
+            class="copy-status"
+            aria-live="polite"
+            style="position: absolute; left: -9999px"
+          ></span>
+          <code>
+            &lt;template&gt; &lt;SocialShareButton url="https://your-website.com" title="Check this
             out!" /&gt; &lt;/template&gt; &lt;script setup&gt; import SocialShareButton from
-            'social-share-button' &lt;/script&gt;</code
-          >
+            'social-share-button' &lt;/script&gt;
+          </code>
         </div>
       </div>
 
@@ -647,10 +659,16 @@
         <p>Use inside an Angular component template</p>
 
         <div class="code-block">
-          <code
-            >&lt;social-share-button [url]="'https://your-website.com'" [title]="'Check this out!'"
-            &gt; &lt;/social-share-button&gt;</code
-          >
+          <button type="button" class="copy-btn" aria-label="Copy code">Copy</button>
+          <span
+            class="copy-status"
+            aria-live="polite"
+            style="position: absolute; left: -9999px"
+          ></span>
+          <code>
+            &lt;social-share-button [url]="'https://your-website.com'" [title]="'Check this out!'"
+            &gt; &lt;/social-share-button&gt;
+          </code>
         </div>
       </div>
     </div>
