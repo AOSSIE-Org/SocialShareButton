@@ -694,7 +694,7 @@ class SocialShareButton {
     // Safety check: ensure the resolved value is actually a DOM Element.
     // This prevents crashes if a user passes a non-DOM object to the container option.
     if (container && !(container instanceof Element || container.nodeType === 1)) {
-      this._debugWarn("Provided container is not a valid DOM Element", { container });
+      this._debugWarn(`Provided container is not a valid DOM Element: ${container}`, null);
       return null;
     }
 
