@@ -491,20 +491,13 @@
             style="position: absolute; left: -9999px"
           ></span>
           <code>
-function enqueue_social_share_button() {
-    wp_enqueue_style(
-        'social-share-button',
-        'https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.css'
-    );
-    wp_enqueue_script(
-        'social-share-button',
-        'https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.js',
-        [],
-        null,
-        true // Load in footer
-    );
-}
-add_action('wp_enqueue_scripts', 'enqueue_social_share_button');</code>
+            function enqueue_social_share_button() { wp_enqueue_style( 'social-share-button',
+            'https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.css'
+            ); wp_enqueue_script( 'social-share-button',
+            'https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.js',
+            [], null, true // Load in footer ); } add_action('wp_enqueue_scripts',
+            'enqueue_social_share_button');</code
+          >
         </div>
 
         <p><strong>Step 2:</strong> Initialize the button in the footer</p>
@@ -516,19 +509,12 @@ add_action('wp_enqueue_scripts', 'enqueue_social_share_button');</code>
             style="position: absolute; left: -9999px"
           ></span>
           <code>
-function init_social_share_button() { ?&gt;
-    &lt;div id="share-button"&gt;&lt;/div&gt;
-    &lt;script&gt;
-      new SocialShareButton({
-        container: '#share-button',
-        url: window.location.href,
-        title: document.title,
-        theme: 'dark',
-        buttonText: 'Share'
-      });
-    &lt;/script&gt;
-&lt;?php }
-add_action('wp_footer', 'init_social_share_button', 21);</code>
+            function init_social_share_button() { ?&gt; &lt;div id="share-button"&gt;&lt;/div&gt;
+            &lt;script&gt; new SocialShareButton({ container: '#share-button', url:
+            window.location.href, title: document.title, theme: 'dark', buttonText: 'Share' });
+            &lt;/script&gt; &lt;?php } add_action('wp_footer', 'init_social_share_button',
+            21);</code
+          >
         </div>
       </div>
       <!-- CTA Section -->
@@ -580,6 +566,48 @@ add_action('wp_footer', 'init_social_share_button', 21);</code>
         </div>
       </div>
 
+      <!-- Nuxt.js Integration -->
+      <div class="demo-section">
+        <h2>💚 Nuxt.js Integration</h2>
+        <p><strong>Step 1:</strong> Include CSS and JS via CDN</p>
+
+        <div class="code-block">
+          <button type="button" class="copy-btn" aria-label="Copy code">Copy</button>
+          <span
+            class="copy-status"
+            aria-live="polite"
+            style="position: absolute; left: -9999px"
+          ></span>
+          <code>
+            &lt;link rel="stylesheet"
+            href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.css"&gt;
+            &lt;script
+            src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.js"&gt;&lt;/script&gt;
+          </code>
+        </div>
+
+        <p>
+          <strong>Step 2:</strong> Register the component (auto-imported in Nuxt 3 if placed in
+          <code>components/</code>)
+        </p>
+
+        <p><strong>Step 3:</strong> Show usage in a <code>pages/index.vue</code> file</p>
+        <div class="code-block">
+          <button type="button" class="copy-btn" aria-label="Copy code">Copy</button>
+          <span
+            class="copy-status"
+            aria-live="polite"
+            style="position: absolute; left: -9999px"
+          ></span>
+          <code>
+            &lt;!-- pages/index.vue --&gt; &lt;template&gt; &lt;SocialShareButton
+            url="https://your-website.com" title="Check this out!" description="An amazing website"
+            theme="dark" button-text="Share" /&gt; &lt;/template&gt; &lt;script setup&gt; //
+            Component is auto-imported from components/ in Nuxt 3 &lt;/script&gt;
+          </code>
+        </div>
+      </div>
+
       <div class="demo-section">
         <h2>▲ Next.js Integration</h2>
         <p>Use the component inside a Next.js page</p>
@@ -617,8 +645,6 @@ add_action('wp_footer', 'init_social_share_button', 21);</code>
           >
         </div>
       </div>
-
-
     </div>
 
     <footer>
@@ -791,8 +817,12 @@ add_action('wp_footer', 'init_social_share_button', 21);</code>
         copyButtons.forEach((button) => {
           button.addEventListener("click", () => {
             const codeBlockContainer = button.closest(".code-block");
-            const codeBlocks = codeBlockContainer ? codeBlockContainer.querySelectorAll("code") : [];
-            const text = Array.from(codeBlocks).map(code => code.textContent).join("\n");
+            const codeBlocks = codeBlockContainer
+              ? codeBlockContainer.querySelectorAll("code")
+              : [];
+            const text = Array.from(codeBlocks)
+              .map((code) => code.textContent)
+              .join("\n");
             const originalText = button.textContent;
 
             const statusSpan = button.nextElementSibling;
