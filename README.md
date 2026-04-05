@@ -499,11 +499,11 @@ Add the following to your theme's `functions.php` to load the library directly f
 function enqueue_social_share_button() {
     wp_enqueue_style(
         'social-share-button',
-        'https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.css'
+        'https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css'
     );
     wp_enqueue_script(
         'social-share-button',
-        'https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.js',
+        'https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js',
         [],
         null,
         true // Load in footer
