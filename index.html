@@ -491,13 +491,21 @@
             style="position: absolute; left: -9999px"
           ></span>
           <code>
-            function enqueue_social_share_button() { wp_enqueue_style( 'social-share-button',
-            'https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css'
-            ); wp_enqueue_script( 'social-share-button',
-            'https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js',
-            [], null, true // Load in footer ); } add_action('wp_enqueue_scripts',
-            'enqueue_social_share_button');</code
-          >
+            function enqueue_social_share_button() {
+              wp_enqueue_style(
+                'social-share-button',
+                'https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css'
+              );
+              wp_enqueue_script(
+                'social-share-button',
+                'https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js',
+                [],
+                null,
+                true // Load in footer
+              );
+            }
+            add_action('wp_enqueue_scripts', 'enqueue_social_share_button');
+          </code>
         </div>
 
         <p><strong>Step 2:</strong> Initialize the button in the footer</p>
