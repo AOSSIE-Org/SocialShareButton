@@ -3,7 +3,8 @@
 @tailwind utilities;
 
 @layer base {
-  .dark, .dark:root {
+  .dark,
+  .dark:root {
     --background: 0 0% 5%; /* Very dark gray/black #0d0d0d */
     --foreground: 0 0% 98%;
     --primary: 48 100% 50%; /* #FFCC00 */
@@ -28,8 +29,6 @@
     --card-foreground: 0 0% 0%;
     --border: 0 0% 0%;
   }
-
-
 }
 
 @layer base {
@@ -45,7 +44,7 @@
   .text-balance {
     text-wrap: balance;
   }
-  
+
   .hide-scrollbar::-webkit-scrollbar {
     display: none;
   }

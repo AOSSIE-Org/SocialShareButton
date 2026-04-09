@@ -146,6 +146,7 @@ Push your branch:
 ### Code Quality Tools
 
 We use ESLint for linting and Prettier for formatting. Please run these before submitting a PR:
+
 - `npm run lint` — Check for code quality and style issues.
 - `npm run format` — Automatically format your code to project standards.
 - `npm run format:check` — Verify that files are correctly formatted.

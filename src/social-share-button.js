@@ -304,6 +304,7 @@ class SocialShareButton {
             .catch((err) => {
               // Fallback to modal if native share was cancelled or failed but without throwing exception
               if (err.name !== "AbortError") {
+                this._debugWarn("Native share failed", err);
                 this.openModal();
               }
             });
