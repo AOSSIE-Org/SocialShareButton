@@ -427,7 +427,7 @@ SocialShareButton.registerPlatform({
 
 ```typescript
 new SocialShareButton({
-  preferNativeShare: "mobile-only", // true | false | 'mobile-only'
+  useNativeShare: true, // true | false
 });
 // Falls back to custom modal when navigator.share() is unavailable
 ```
