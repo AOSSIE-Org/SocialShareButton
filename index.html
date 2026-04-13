@@ -592,7 +592,7 @@ import SocialShareButton from 'social-share-button'
       <h3>My Share Button</h3>
       <p>Custom example added by Sneha</p>
 
-      <!-- THIS IS IMPORTANT -->
+      <!-- Sneha's custom share button container -->
       <div id="share-button"></div>
 
     </div>
@@ -778,24 +778,25 @@ import SocialShareButton from 'social-share-button'
           buttonHoverColor: "#db2777",
           buttonText: "Share",
         });
-        new SocialShareButton({
-  container: "#share-button",
-  url: "https://github.com/AOSSIE-Org/SocialShareButton",
-  title: "Sneha's Project 🔥",
-  description: "Testing my custom integration 🚀",
-  buttonStyle: "primary",
-  buttonText: "Share My Project",
-});
+        const snehaBaseConfig = {
+          url: demoUrl,
+          title: "Sneha's Project 🔥",
+          buttonStyle: "primary",
+          buttonText: "Share My Project",
+        };
 
-// 🔥 Sneha Custom Demo
-new SocialShareButton({
-  container: "#demo-sneha",
-  url: "https://github.com/AOSSIE-Org/SocialShareButton",
-  title: "Sneha's Project 🔥",
-  description: "Custom demo added by Sneha 🚀",
-  buttonStyle: "primary",
-  buttonText: "Share My Project",
-});
+        new SocialShareButton({
+          ...snehaBaseConfig,
+          container: "#share-button",
+          description: "Testing my custom integration 🚀",
+        });
+
+        // Sneha Custom Demo
+        new SocialShareButton({
+          ...snehaBaseConfig,
+          container: "#demo-sneha",
+          description: "Custom demo added by Sneha 🚀",
+        });
 
         // Copy to Clipboard Functionality
         const copyButtons = document.querySelectorAll(".copy-btn");
