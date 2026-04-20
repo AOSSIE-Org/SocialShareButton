@@ -544,6 +544,7 @@
         <h2>⚡ Qwik / QwikCity Integration</h2>
         <p>Resumability-optimized wrapper for the fastest performance.</p>
 
+        <p><strong>Step 1: Add CDN to your layout</strong></p>
         <div class="code-block">
           <button class="copy-btn" type="button" aria-label="Copy code">Copy</button>
           <span
@@ -558,6 +559,16 @@
             src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js"
             defer&gt;&lt;/script&gt;
           </code>
+        </div>
+
+        <p><strong>Step 2: Use the component</strong></p>
+        <div class="code-block">
+          <button class="copy-btn" type="button" aria-label="Copy code">Copy</button>
+          <span
+            class="copy-status"
+            aria-live="polite"
+            style="position: absolute; left: -9999px"
+          ></span>
           <code>
             import { component$ } from '@builder.io/qwik'; import { SocialShareButton } from
             './social-share-button-qwik'; export default component$(() =&gt; ( &lt;SocialShareButton
@@ -694,7 +705,7 @@
             src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js"
             defer&gt;&lt;/script&gt; &lt;script&gt; window.addEventListener('DOMContentLoaded', ()
             =&gt; { new SocialShareButton({ container: '#share-button', url: window.location.href,
-            title: document.title, description: '{{ .Description }}', theme: 'dark' }); });
+            title: document.title, description: {{ .Description | jsonify }}, theme: 'dark' }); });
             &lt;/script&gt;
           </code>
         </div>
@@ -714,8 +725,8 @@
             src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js"
             defer&gt;&lt;/script&gt; &lt;script&gt; window.addEventListener('DOMContentLoaded', ()
             =&gt; { new SocialShareButton({ container: '#share-button', url: window.location.href,
-            title: document.title, description: '{{ page.description }}', theme: 'dark' }); });
-            &lt;/script&gt;
+            title: document.title, description: {{ page.description | jsonify }}, theme: 'dark' });
+            }); &lt;/script&gt;
           </code>
         </div>
       </div>

@@ -615,7 +615,7 @@ Place this script where you want the button to appear (e.g. at the bottom of a p
       container: "#share-button",
       url: window.location.href,
       title: document.title,
-      description: "{{ .Description }}",
+      description: {{ .Description | jsonify }},
       theme: "dark",
     });
   });
@@ -632,7 +632,7 @@ Place this script where you want the button to appear (e.g. at the bottom of a p
       container: "#share-button",
       url: window.location.href,
       title: document.title,
-      description: "{{ page.description }}",
+      description: {{ page.description | jsonify }},
       theme: "dark",
     });
   });

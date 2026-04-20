@@ -579,6 +579,18 @@ class SocialShareButton {
     this.eventsAttached = false; // Reset re-entrancy guard
   }
 
+  /**
+   * Updates specific library settings dynamically after initialization.
+   *
+   * NOTE: Currently, this method only supports updating non-structural properties:
+   * `url`, `buttonColor`, and `buttonHoverColor`.
+   * Changing structural or DOM-dependent options (such as `theme`, `buttonText`,
+   * `buttonStyle`, `platforms`, or `analytics`) will update the internal options
+   * object, but requires destroying and recreating the button instance to fully
+   * reflect the changes in the DOM.
+   *
+   * @param {Object} options - Partial options object to merge.
+   */
   updateOptions(options) {
     this.options = { ...this.options, ...options };
 
