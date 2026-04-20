@@ -72,7 +72,7 @@ Lightweight social sharing component for web applications. Zero dependencies, fr
 
 - 🌐 Multiple platforms: WhatsApp, Facebook, X, LinkedIn, Telegram, Reddit, Email, Pinterest
 - 🎯 Zero dependencies - pure vanilla JavaScript
-- ⚛️ Framework support: React, Preact, Next.js, Nuxt.js, Qwik, Vue, Angular, WordPress or plain HTML
+- ⚛️ Framework support: React, Preact, Next.js, Nuxt.js, Qwik, Vue, Angular, WordPress, Hugo, Jekyll or plain HTML
 - 🔄 Auto-detects current URL and page title
 - 📱 Fully responsive and mobile-ready
 - 🎨 Customizable themes (dark/light)
@@ -553,9 +553,11 @@ add_action('wp_footer', 'init_social_share_button', 21);
 ```
 
 ### Step 2: Obtain the Nuxt wrapper component
+
 Currently, the wrapper is not available via CDN and must be added manually. Copy the `src/social-share-button-nuxt.vue` file from this repository into your Nuxt project's `components/` folder. Rename it to `SocialShareButton.vue` to match the usage below.
 
 ### Step 3: Use the component in your page or component
+
 Open an **existing** page — typically `pages/index.vue`. Since the component is in the `components/` folder, Nuxt 3 will auto-import it.
 
 ```vue
@@ -570,6 +572,70 @@ Open an **existing** page — typically `pages/index.vue`. Since the component i
 
 <script setup>
 // Component is auto-imported from components/ in Nuxt 3
+</script>
+```
+
+</details>
+
+<details>
+<summary><b>📄 Hugo / Jekyll</b></summary>
+
+### Step 1: Add CDN to your base layout
+
+Hugo: `layouts/_default/baseof.html`  
+Jekyll: `_layouts/default.html`
+
+```html
+<head>
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css"
+  />
+</head>
+<body>
+  <!-- Your content -->
+  <script
+    src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js"
+    defer
+  ></script>
+</body>
+```
+
+### Step 2: Add the container and initialize
+
+Place this script where you want the button to appear (e.g. at the bottom of a post template).
+
+**Hugo (Post Template):**
+
+```html
+<div id="share-button"></div>
+<script>
+  window.addEventListener("DOMContentLoaded", () => {
+    new SocialShareButton({
+      container: "#share-button",
+      url: window.location.href,
+      title: document.title,
+      description: "{{ .Description }}",
+      theme: "dark",
+    });
+  });
+</script>
+```
+
+**Jekyll (Post Template):**
+
+```html
+<div id="share-button"></div>
+<script>
+  window.addEventListener("DOMContentLoaded", () => {
+    new SocialShareButton({
+      container: "#share-button",
+      url: window.location.href,
+      title: document.title,
+      description: "{{ page.description }}",
+      theme: "dark",
+    });
+  });
 </script>
 ```
 

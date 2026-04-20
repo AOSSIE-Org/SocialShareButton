@@ -491,20 +491,12 @@
             style="position: absolute; left: -9999px"
           ></span>
           <code>
-            function enqueue_social_share_button() {
-              wp_enqueue_style(
-                'social-share-button',
-                'https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css'
-              );
-              wp_enqueue_script(
-                'social-share-button',
-                'https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js',
-                [],
-                null,
-                true // Load in footer
-              );
-            }
-            add_action('wp_enqueue_scripts', 'enqueue_social_share_button');
+            function enqueue_social_share_button() { wp_enqueue_style( 'social-share-button',
+            'https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css'
+            ); wp_enqueue_script( 'social-share-button',
+            'https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js',
+            [], null, true // Load in footer ); } add_action('wp_enqueue_scripts',
+            'enqueue_social_share_button');
           </code>
         </div>
 
@@ -563,7 +555,8 @@
             &lt;link rel="stylesheet"
             href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css"&gt;
             &lt;script
-            src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js" defer&gt;&lt;/script&gt;
+            src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js"
+            defer&gt;&lt;/script&gt;
           </code>
           <code>
             import { component$ } from '@builder.io/qwik'; import { SocialShareButton } from
@@ -590,7 +583,8 @@
             &lt;link rel="stylesheet"
             href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css"&gt;
             &lt;script
-            src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js" defer&gt;&lt;/script&gt;
+            src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js"
+            defer&gt;&lt;/script&gt;
           </code>
         </div>
 
@@ -676,6 +670,52 @@
           <code>
             &lt;social-share-button [url]="'https://your-website.com'" [title]="'Check this out!'"
             &gt; &lt;/social-share-button&gt;
+          </code>
+        </div>
+      </div>
+
+      <!-- Hugo / Jekyll Integration -->
+      <div class="demo-section">
+        <h2>📄 Hugo / Jekyll Integration</h2>
+        <p>Drop-in integration for Static Site Generators (SSG).</p>
+
+        <p><strong>Hugo (layouts/_default/baseof.html):</strong></p>
+        <div class="code-block">
+          <button type="button" class="copy-btn" aria-label="Copy code">Copy</button>
+          <span
+            class="copy-status"
+            aria-live="polite"
+            style="position: absolute; left: -9999px"
+          ></span>
+          <code>
+            &lt;!-- In &lt;head&gt; --&gt; &lt;link rel="stylesheet"
+            href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css"&gt;
+            &lt;!-- Before &lt;/body&gt; --&gt; &lt;div id="share-button"&gt;&lt;/div&gt; &lt;script
+            src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js"
+            defer&gt;&lt;/script&gt; &lt;script&gt; window.addEventListener('DOMContentLoaded', ()
+            =&gt; { new SocialShareButton({ container: '#share-button', url: window.location.href,
+            title: document.title, description: '{{ .Description }}', theme: 'dark' }); });
+            &lt;/script&gt;
+          </code>
+        </div>
+
+        <p><strong>Jekyll (_layouts/default.html):</strong></p>
+        <div class="code-block">
+          <button type="button" class="copy-btn" aria-label="Copy code">Copy</button>
+          <span
+            class="copy-status"
+            aria-live="polite"
+            style="position: absolute; left: -9999px"
+          ></span>
+          <code>
+            &lt;!-- In &lt;head&gt; --&gt; &lt;link rel="stylesheet"
+            href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css"&gt;
+            &lt;!-- Before &lt;/body&gt; --&gt; &lt;div id="share-button"&gt;&lt;/div&gt; &lt;script
+            src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js"
+            defer&gt;&lt;/script&gt; &lt;script&gt; window.addEventListener('DOMContentLoaded', ()
+            =&gt; { new SocialShareButton({ container: '#share-button', url: window.location.href,
+            title: document.title, description: '{{ page.description }}', theme: 'dark' }); });
+            &lt;/script&gt;
           </code>
         </div>
       </div>
