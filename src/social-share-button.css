@@ -508,4 +508,10 @@
   .social-share-floating-wrapper.bottom-left {
     transform-origin: bottom left;
   }
+  .social-share-floating-wrapper.top-right {
+    transform-origin: top right;
+  }
+  .social-share-floating-wrapper.top-left {
+    transform-origin: top left;
+  }
 }

@@ -109,15 +109,19 @@ class SocialShareButton {
   createModal() {
     let resolvedTheme = this.options.theme;
     if (resolvedTheme === "auto" && typeof window !== "undefined") {
+      // Detect OS-level theme preference via matchMedia
+      // Default to "dark" if matchMedia is unavailable or preference is not "light"
       resolvedTheme =
         window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches
           ? "light"
           : "dark";
 
+      // Register a listener for live OS theme changes
+      // This ensures the modal theme updates dynamically without requiring a page reload
       if (window.matchMedia) {
         this.themeMediaQuery = window.matchMedia("(prefers-color-scheme: light)");
         this.themeChangeHandler = (e) => {
-          if (!this.modal) return;
+          if (!this.modal) return; // Prevent errors if modal is destroyed
           const newTheme = e.matches ? "light" : "dark";
           const oldTheme = e.matches ? "dark" : "light";
           this.modal.classList.remove(oldTheme);
