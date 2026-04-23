@@ -27,23 +27,24 @@ This section is the ground truth before any planning.
 
 ### ✅ What Already Exists
 
-| Feature                            | Status | Notes                                                           |
-| ---------------------------------- | ------ | --------------------------------------------------------------- |
-| CDN distribution (jsDelivr)        | ✅     | `v1.0.3`                                                        |
-| npm package                        | ✅     | Published as `social-share-button-aossie` (unscoped)            |
-| 7 share platforms                  | ✅     | WhatsApp, Facebook, X, LinkedIn, Telegram, Reddit, Email        |
-| `onShare` callback                 | ✅     | `(platform, url) => {}`                                         |
-| `onCopy` callback                  | ✅     | `(url) => {}`                                                   |
-| `theme: 'dark' \| 'light'`         | ✅     | Basic two-mode theming                                          |
-| `buttonColor` / `buttonHoverColor` | ✅     | Programmatic color overrides                                    |
-| `customClass`                      | ✅     | Escape hatch for custom CSS                                     |
-| `modalPosition`                    | ✅     | Modal placement config                                          |
-| `updateOptions()`                  | ✅     | SPA dynamic URL updates                                         |
-| React wrapper                      | ✅     | Exists as `src/social-share-button-react.jsx` (copy-paste only) |
-| TypeScript types                   | ❌     | None shipped                                                    |
-| Scoped npm package                 | ❌     | Not yet (`@social-share/core` etc.)                             |
-| Framework packages                 | ❌     | No installable Vue / Qwik / Solid packages                      |
-| Proper CSS build artifact          | ❌     | CSS imported from `src/` path — breaks in most bundlers         |
+| Feature                              | Status | Notes                                                           |
+| ------------------------------------ | ------ | --------------------------------------------------------------- |
+| CDN distribution (jsDelivr)          | ✅     | `v1.0.3`                                                        |
+| npm package                          | ✅     | Published as `social-share-button-aossie` (unscoped)            |
+| 7 share platforms                    | ✅     | WhatsApp, Facebook, X, LinkedIn, Telegram, Reddit, Email        |
+| `onShare` callback                   | ✅     | `(platform, url) => {}`                                         |
+| `onCopy` callback                    | ✅     | `(url) => {}`                                                   |
+| `theme: 'dark' \| 'light' \| 'auto'` | ✅     | Basic two-mode theming + OS-level auto-detection                |
+| `displayMode: 'floating'`            | ✅     | Configurable screen corner sticky positioning                   |
+| `buttonColor` / `buttonHoverColor`   | ✅     | Programmatic color overrides                                    |
+| `customClass`                        | ✅     | Escape hatch for custom CSS                                     |
+| `modalPosition`                      | ✅     | Modal placement config                                          |
+| `updateOptions()`                    | ✅     | SPA dynamic URL updates                                         |
+| React wrapper                        | ✅     | Exists as `src/social-share-button-react.jsx` (copy-paste only) |
+| TypeScript types                     | ❌     | None shipped                                                    |
+| Scoped npm package                   | ❌     | Not yet (`@social-share/core` etc.)                             |
+| Framework packages                   | ❌     | No installable Vue / Qwik / Solid packages                      |
+| Proper CSS build artifact            | ❌     | CSS imported from `src/` path — breaks in most bundlers         |
 
 ### ⚠️ Known Issues to Fix Before Any New Features
 

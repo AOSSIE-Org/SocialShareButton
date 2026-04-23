@@ -61,7 +61,7 @@ class SocialShareButton {
     this.eventsAttached = false; // Guard against multiple attachEvents() calls
     this.isDestroyed = false; // Track if instance has been destroyed (prevents async callbacks)
 
-    if (this.options.container) {
+    if (this.options.container || this.options.displayMode === "floating") {
       this.init();
     }
   }
@@ -629,11 +629,44 @@ class SocialShareButton {
   updateOptions(options) {
     this.options = { ...this.options, ...options };
 
-    // Update URL in modal if it exists
+    // Update URL and theme in modal if it exists
     if (this.modal) {
       const input = this.modal.querySelector(".social-share-link-input input");
       if (input) {
         input.value = this.options.url;
+      }
+
+      // Update theme
+      if ("theme" in options) {
+        // Clean up old listener
+        if (this.themeMediaQuery && this.themeChangeHandler) {
+          this.themeMediaQuery.removeEventListener("change", this.themeChangeHandler);
+          this.themeMediaQuery = null;
+          this.themeChangeHandler = null;
+        }
+
+        let resolvedTheme = options.theme;
+        if (resolvedTheme === "auto" && typeof window !== "undefined") {
+          resolvedTheme =
+            window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches
+              ? "light"
+              : "dark";
+
+          if (window.matchMedia) {
+            this.themeMediaQuery = window.matchMedia("(prefers-color-scheme: light)");
+            this.themeChangeHandler = (e) => {
+              if (!this.modal) return;
+              const newTheme = e.matches ? "light" : "dark";
+              const oldTheme = e.matches ? "dark" : "light";
+              this.modal.classList.remove(oldTheme);
+              this.modal.classList.add(newTheme);
+            };
+            this.themeMediaQuery.addEventListener("change", this.themeChangeHandler);
+          }
+        }
+
+        this.modal.classList.remove("light", "dark");
+        this.modal.classList.add(resolvedTheme);
       }
     }
 
