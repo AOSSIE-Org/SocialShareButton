@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>WordPress Demo - SocialShareButton</title>
+    <!-- SocialShareButton CSS (Branch CDN) - Enqueued via functions.php -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/amankv1234/SocialShareButton@feature/hugo-jekyll-demo-cdn-guide/src/social-share-button.css"
+    />
+    <style>
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell,
+          "Helvetica Neue", sans-serif;
+        background: #f0f0f1;
+        margin: 0;
+      }
+      .wp-site-blocks {
+        background: white;
+        max-width: 1200px;
+        margin: 0 auto;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      header {
+        background: #1d2327;
+        color: white;
+        padding: 2rem;
+      }
+      .entry-content {
+        padding: 4rem 15%;
+        flex-grow: 1;
+      }
+      h1 {
+        font-size: 3rem;
+        margin-top: 0;
+      }
+      .wp-block-group {
+        margin-top: 4rem;
+        padding: 2rem 0;
+        border-top: 1px solid #dcdcde;
+      }
+      footer {
+        background: #1d2327;
+        color: #dcdcde;
+        padding: 3rem;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body class="home blog wp-embed-responsive">
+    <div class="wp-site-blocks">
+      <header>
+        <div class="wp-block-site-title">My WordPress Site</div>
+      </header>
+
+      <main class="entry-content">
+        <h1>SocialShareButton WordPress Demo</h1>
+        <p>
+          This demo simulates the WordPress integration using the <code>wp_footer</code> hook method
+          described in the README.
+        </p>
+        <p>
+          In a real WordPress environment, the scripts would be enqueued via
+          <code>functions.php</code> and the button initialized in the footer.
+        </p>
+
+        <div class="wp-block-group">
+          <p>Share this page:</p>
+          <!-- SocialShareButton Container -->
+          <div id="share-button"></div>
+        </div>
+      </main>
+
+      <footer>
+        <p>Proudly powered by WordPress</p>
+      </footer>
+    </div>
+
+    <!-- SocialShareButton JS (Branch CDN) - Enqueued via functions.php -->
+    <script
+      src="https://cdn.jsdelivr.net/gh/amankv1234/SocialShareButton@feature/hugo-jekyll-demo-cdn-guide/src/social-share-button.js"
+      defer
+    ></script>
+
+    <!-- Initialization (wp_footer hook) -->
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        // Priority 21 hook logic
+        new SocialShareButton({
+          container: "#share-button",
+          url: window.location.href,
+          title: document.title,
+          theme: "dark",
+          buttonText: "Share Post",
+          buttonStyle: "primary",
+        });
+      });
+    </script>
+  </body>
+</html>
