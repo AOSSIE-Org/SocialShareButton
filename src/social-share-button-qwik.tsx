@@ -19,7 +19,7 @@ interface Props {
 export const SocialShareButton = component$<Props>((props) => {
   const containerRef = useSignal<HTMLDivElement>();
 
-  
+
   useVisibleTask$(({ cleanup }) => {
     if (typeof window !== 'undefined' && (window as any).SocialShareButton && containerRef.value) {
       const shareButton = new (window as any).SocialShareButton({
@@ -29,7 +29,7 @@ export const SocialShareButton = component$<Props>((props) => {
         description: props.description || '',
         hashtags: props.hashtags || [],
         via: props.via || '',
-        platforms: props.platforms || ['whatsapp', 'facebook', 'twitter', 'linkedin', 'telegram', 'reddit'],
+        platforms: props.platforms || ['whatsapp', 'facebook', 'twitter', 'linkedin', 'telegram', 'reddit', 'discord'],
         theme: props.theme || 'dark',
         buttonText: props.buttonText || 'Share',
         customClass: props.customClass || '',
