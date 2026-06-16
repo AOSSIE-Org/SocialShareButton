@@ -15,7 +15,7 @@ export default function SocialShareButton({
   description = "",
   hashtags = [],
   via = "",
-  platforms = ["whatsapp", "facebook", "twitter", "linkedin", "telegram", "reddit"],
+  platforms = ["whatsapp", "facebook", "twitter", "linkedin", "telegram", "reddit", "discord"],
   theme = "dark",
   buttonText = "Share",
   customClass = "",
@@ -97,7 +97,7 @@ export default function SocialShareButton({
     };
 
     // SSR Check: Ensure we're in a browser environment
-    if (typeof window === "undefined") return () => {};
+    if (typeof window === "undefined") return () => { };
 
     if (window.SocialShareButton) {
       // Core library is already loaded
@@ -135,8 +135,8 @@ export default function SocialShareButton({
    * Synchronizes prop changes from Preact down to the vanilla JS instance
    * without re-mounting the entire component.
    */
-
-  // Stringify array dependencies to prevent unnecessary re-runs when
+  
+  // Stringify array dependencies to prevent unnecessary re-runs when 
   // parent components pass fresh array literals on every render.
   const hashtagsDep = JSON.stringify(hashtags);
   const platformsDep = JSON.stringify(platforms);
