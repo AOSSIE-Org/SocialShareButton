@@ -916,8 +916,21 @@
               clearTimeout(button.copyResetTimer);
             }
 
+            if (!navigator.clipboard || !navigator.clipboard.writeText) {
+              button.textContent = originalText;
+              if (statusSpan && statusSpan.classList.contains("copy-status")) {
+                statusSpan.textContent = "Failed to copy to clipboard";
+              }
+              button.copyResetTimer = setTimeout(() => {
+                button.textContent = originalText;
+                if (statusSpan && statusSpan.classList.contains("copy-status")) {
+                  statusSpan.textContent = "";
+                }
+              }, 2000);
+              return;
+            }
+
             navigator.clipboard
-              .writeText(text)
               .then(() => {
                 if (statusSpan && statusSpan.classList.contains("copy-status")) {
                   statusSpan.textContent = "Code copied to clipboard";
