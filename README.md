@@ -496,11 +496,11 @@ export default function Header() {
 <head>
   <link
     rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.css"
+    href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css"
   />
 </head>
 <body>
-  <script src="https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js"></script>
   <!-- Add Alpine.js -->
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </body>
@@ -512,16 +512,22 @@ No wrapper component needed! Just use Alpine directives directly on your HTML el
 
 ```html
 <div
-  x-data="{ shareBtn: null }"
-  x-init="shareBtn = new SocialShareButton({
-    container: $el,
-    url: 'https://your-website.com',
-    title: 'Check this out!',
-    description: 'An amazing website',
-    theme: 'dark',
-    buttonText: 'Share'
-  })"
-  x-destroy="shareBtn && shareBtn.destroy()"
+  x-data="{ 
+    shareBtn: null,
+    init() {
+      this.shareBtn = new SocialShareButton({
+        container: $el,
+        url: 'https://your-website.com',
+        title: 'Check this out!',
+        description: 'An amazing website',
+        theme: 'dark',
+        buttonText: 'Share'
+      });
+    },
+    destroy() {
+      this.shareBtn && this.shareBtn.destroy();
+    }
+  }"
 ></div>
 ```
 
