@@ -73,7 +73,7 @@ Lightweight social sharing component for web applications. Zero dependencies, fr
 
 - 🌐 Multiple platforms: WhatsApp, Facebook, X, LinkedIn, Telegram, Reddit, Email, Pinterest, Discord
 - 🎯 Zero dependencies - pure vanilla JavaScript
-- ⚛️ Framework support: React, Preact, Next.js, Qwik, Vue, Angular, or plain HTML
+- ⚛️ Framework support: React, Preact, Next.js, Qwik, Vue, Angular, Alpine.js, or plain HTML
 - 🔄 Auto-detects current URL and page title
 - 📱 Fully responsive and mobile-ready
 - 🎨 Customizable themes (dark/light)
@@ -483,6 +483,46 @@ export default function Header() {
     </header>
   );
 }
+```
+
+</details>
+
+<details>
+<summary><b>🏔️ Alpine.js</b></summary>
+
+### Step 1: Add Dependencies to `index.html`
+
+```html
+<head>
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.css"
+  />
+</head>
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.js"></script>
+  <!-- Add Alpine.js -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</body>
+```
+
+### Step 2: Initialize via `x-data` and `x-init`
+
+No wrapper component needed! Just use Alpine directives directly on your HTML element.
+
+```html
+<div
+  x-data="{ shareBtn: null }"
+  x-init="shareBtn = new SocialShareButton({
+    container: $el,
+    url: 'https://your-website.com',
+    title: 'Check this out!',
+    description: 'An amazing website',
+    theme: 'dark',
+    buttonText: 'Share'
+  })"
+  x-destroy="shareBtn && shareBtn.destroy()"
+></div>
 ```
 
 </details>

@@ -17,7 +17,7 @@ export function Features() {
   {
     num: "03",
     title: "Framework Agnostic",
-    desc: "Use it with Vanilla JS, React, Vue, Angular, or any modern framework. It just works.",
+    desc: "Use it with Vanilla JS, React, Vue, Angular, Alpine.js, or any modern framework. It just works.",
     color: "bg-white dark:bg-neutral-900",
     textColor: "text-black dark:text-white",
   },

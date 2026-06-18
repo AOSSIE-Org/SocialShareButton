@@ -292,7 +292,7 @@
           <div class="feature-card">
             <div class="feature-icon">⚙️</div>
             <h3>Framework Agnostic</h3>
-            <p>Works with React, Vue, Angular, or vanilla JS</p>
+            <p>Works with React, Vue, Angular, Alpine.js, or vanilla JS</p>
           </div>
           <div class="feature-card">
             <div class="feature-icon">📐</div>
@@ -573,6 +573,36 @@ import SocialShareButton from 'social-share-button'
   [title]="'Check this out!'"
 &gt;
 &lt;/social-share-button&gt;</code>
+  </div>
+</div>
+
+<div class="demo-section">
+  <h2>🏔️ Alpine.js Integration</h2>
+  <p><strong>Step 1:</strong> Include SocialShareButton CSS and JS via CDN<br>
+  <strong>Step 2:</strong> Include Alpine.js via CDN<br>
+  <strong>Step 3:</strong> Initialize via x-data and x-init directives</p>
+
+  <div class="code-block">
+    <button class="copy-btn" type="button" aria-label="Copy code">Copy</button>
+    <span class="copy-status" aria-live="polite" style="position:absolute; left:-9999px;"></span>
+    <code>&lt;!-- Include dependencies --&gt;
+&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.css"&gt;
+&lt;script src="https://cdn.jsdelivr.net/npm/social-share-button/dist/social-share-button.js"&gt;&lt;/script&gt;
+&lt;script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"&gt;&lt;/script&gt;
+
+&lt;!-- Usage --&gt;
+&lt;div
+  x-data="{ shareBtn: null }"
+  x-init="shareBtn = new SocialShareButton({
+    container: $el,
+    url: 'https://your-website.com',
+    title: 'Check this out!',
+    description: 'An amazing website',
+    theme: 'dark',
+    buttonText: 'Share'
+  })"
+  x-destroy="shareBtn && shareBtn.destroy()"
+&gt;&lt;/div&gt;</code>
   </div>
 </div>
 
