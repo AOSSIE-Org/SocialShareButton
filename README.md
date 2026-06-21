@@ -644,7 +644,7 @@ new SocialShareButton({
 - **Email:** Subject = `title`, Body = `description` + link
 - **Pinterest:** `title` + `description` + `hashtags` + link
 - **Discord:** `title` + `description` + `hashtags` + link
-- 
+
 ### Customize Button Color & Appearance
 
 **Option 1: Use Pre-built Styles** (Easiest)

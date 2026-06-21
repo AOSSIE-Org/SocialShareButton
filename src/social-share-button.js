@@ -66,6 +66,10 @@ class SocialShareButton {
   }
 
   init() {
+    if (!this._getContainer()) {
+      return;
+    }
+
     if (this.options.showButton) {
       this.createButton();
     }
