@@ -902,6 +902,8 @@ new SocialShareButton({
 Open `index.html` in your browser to see all features.
 Tutorial: https://youtu.be/cLJaT-8rEvQ?si=CLipA0Db4WL0EqKM
 
+Nuxt.js Integration Demo: https://drive.google.com/file/d/1ItSRZnlNxMAeskWXpk-egVKyNs_Vrs2k/view?usp=sharing
+
 ---
 
 ## Contributing
