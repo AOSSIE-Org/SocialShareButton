@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  .dark, .dark:root {
+    --background: #212121;
+    --foreground: #fafafa;
+    --primary: #FFCC00;
+    --primary-foreground: #000000;
+    --secondary: #2E8B00;
+    --secondary-foreground: #ffffff;
+    --card: #292929;
+    --card-foreground: #fafafa;
+    --border: #333333;
+  }
+}
+
+@layer base {
+  :root {
+    --background: #ffffff;
+    --foreground: #000000;
+    --primary: #FFCC00;
+    --primary-foreground: #000000;
+    --secondary: #2E8B00;
+    --secondary-foreground: #ffffff;
+    --card: #ffffff;
+    --card-foreground: #000000;
+    --border: #000000;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
