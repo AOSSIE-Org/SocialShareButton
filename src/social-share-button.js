@@ -66,6 +66,10 @@ class SocialShareButton {
   }
 
   init() {
+    if (!this._getContainer()) {
+      return;
+    }
+
     if (this.options.showButton) {
       this.createButton();
     }
@@ -86,15 +90,10 @@ class SocialShareButton {
     `;
 
     this.button = button;
-    if (this.options.container) {
-      const container =
-        typeof this.options.container === "string"
-          ? document.querySelector(this.options.container)
-          : this.options.container;
+    const container = this._getContainer();
 
-      if (container) {
-        container.appendChild(button);
-      }
+    if (container) {
+      container.appendChild(button);
     }
   }
 
@@ -699,9 +698,26 @@ class SocialShareButton {
   _getContainer() {
     if (!this.options.container) return null;
     if (typeof document === "undefined") return null;
-    return typeof this.options.container === "string"
-      ? document.querySelector(this.options.container)
-      : this.options.container;
+
+    let container = null;
+    try {
+      container =
+        typeof this.options.container === "string"
+          ? document.querySelector(this.options.container)
+          : this.options.container;
+    } catch (error) {
+      this._debugWarn("Invalid container selector provided in _getContainer", error);
+      return null;
+    }
+
+    // Safety check: ensure the resolved value is actually a DOM Element.
+    // This prevents crashes if a user passes a non-DOM object to the container option.
+    if (container && !(container instanceof Element || container.nodeType === 1)) {
+      this._debugWarn(`Provided container is not a valid DOM Element: ${container}`, null);
+      return null;
+    }
+
+    return container;
   }
 
   /**

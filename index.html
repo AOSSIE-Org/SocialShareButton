@@ -42,6 +42,7 @@
         margin-bottom: 10px;
         font-weight: 700;
       }
+
       .brand {
         display: flex;
         align-items: center;
@@ -256,6 +257,7 @@
       }
     </style>
   </head>
+
   <body>
     <div class="container">
       <header>
@@ -451,9 +453,9 @@
           ></span>
           <code>
             &lt;link rel="stylesheet"
-            href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.css"&gt;
+            href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css"&gt;
             &lt;script
-            src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.js"&gt;&lt;/script&gt;
+            src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js"&gt;&lt;/script&gt;
           </code>
         </div>
 
@@ -472,6 +474,55 @@
             title="Check this out!" description="An amazing website" theme="dark" buttonText="Share"
             /&gt; ); }
           </code>
+        </div>
+      </div>
+
+      <!-- WordPress Integration -->
+      <div class="demo-section">
+        <h2>🔷 WordPress Integration</h2>
+        <p>Integrate SocialShareButton into your WordPress theme without any extra plugins.</p>
+
+        <p><strong>Step 1:</strong> Enqueue the CSS and JS in <code>functions.php</code></p>
+        <div class="code-block">
+          <button type="button" class="copy-btn" aria-label="Copy code">Copy</button>
+          <span
+            class="copy-status"
+            aria-live="polite"
+            style="position: absolute; left: -9999px"
+          ></span>
+          <code>
+            function enqueue_social_share_button() {
+              wp_enqueue_style(
+                'social-share-button',
+                'https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css'
+              );
+              wp_enqueue_script(
+                'social-share-button',
+                'https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js',
+                [],
+                null,
+                true // Load in footer
+              );
+            }
+            add_action('wp_enqueue_scripts', 'enqueue_social_share_button');
+          </code>
+        </div>
+
+        <p><strong>Step 2:</strong> Initialize the button in the footer</p>
+        <div class="code-block">
+          <button type="button" class="copy-btn" aria-label="Copy code">Copy</button>
+          <span
+            class="copy-status"
+            aria-live="polite"
+            style="position: absolute; left: -9999px"
+          ></span>
+          <code>
+            function init_social_share_button() { ?&gt; &lt;div id="share-button"&gt;&lt;/div&gt;
+            &lt;script&gt; new SocialShareButton({ container: '#share-button', url:
+            window.location.href, title: document.title, theme: 'dark', buttonText: 'Share' });
+            &lt;/script&gt; &lt;?php } add_action('wp_footer', 'init_social_share_button',
+            21);</code
+          >
         </div>
       </div>
       <!-- CTA Section -->
@@ -753,8 +804,13 @@
 
         copyButtons.forEach((button) => {
           button.addEventListener("click", () => {
-            const codeBlock = button.closest(".code-block")?.querySelector("code");
-            const text = codeBlock ? codeBlock.innerText : "";
+            const codeBlockContainer = button.closest(".code-block");
+            const codeBlocks = codeBlockContainer
+              ? codeBlockContainer.querySelectorAll("code")
+              : [];
+            const text = Array.from(codeBlocks)
+              .map((code) => code.textContent)
+              .join("\n");
             const originalText = button.textContent;
 
             const statusSpan = button.nextElementSibling;
