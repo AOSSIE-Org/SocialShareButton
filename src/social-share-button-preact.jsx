@@ -97,7 +97,7 @@ export default function SocialShareButton({
     };
 
     // SSR Check: Ensure we're in a browser environment
-    if (typeof window === "undefined") return () => { };
+    if (typeof window === "undefined") return () => {};
 
     if (window.SocialShareButton) {
       // Core library is already loaded

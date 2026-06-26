@@ -924,7 +924,7 @@
               button.copyResetTimer = setTimeout(() => {
                 button.textContent = originalText;
                 if (statusSpan && statusSpan.classList.contains("copy-status")) {
-                  statusSpan.textContent = "";
+                  statusSpan.textContent = "Code copied to clipboard";
                 }
               }, 2000);
               return;

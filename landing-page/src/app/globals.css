@@ -3,12 +3,13 @@
 @tailwind utilities;
 
 @layer base {
-  .dark, .dark:root {
+  .dark,
+  .dark:root {
     --background: #212121;
     --foreground: #fafafa;
-    --primary: #FFCC00;
+    --primary: #ffcc00;
     --primary-foreground: #000000;
-    --secondary: #2E8B00;
+    --secondary: #2e8b00;
     --secondary-foreground: #ffffff;
     --card: #292929;
     --card-foreground: #fafafa;
@@ -20,9 +21,9 @@
   :root {
     --background: #ffffff;
     --foreground: #000000;
-    --primary: #FFCC00;
+    --primary: #ffcc00;
     --primary-foreground: #000000;
-    --secondary: #2E8B00;
+    --secondary: #2e8b00;
     --secondary-foreground: #ffffff;
     --card: #ffffff;
     --card-foreground: #000000;

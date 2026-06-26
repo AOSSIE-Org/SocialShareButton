@@ -30,7 +30,7 @@ This section is the ground truth before any planning.
 | Feature                            | Status | Notes                                                           |
 | ---------------------------------- | ------ | --------------------------------------------------------------- |
 | CDN distribution (jsDelivr)        | ✅     | `v1.0.3`                                                        |
-| npm package                        | ✅     | Published as `social-share-button-aossie` (unscoped)            |
+| npm package                        | ✅     | Published as `@aossie-org/social-share-button` (scoped)         |
 | 7 share platforms                  | ✅     | WhatsApp, Facebook, X, LinkedIn, Telegram, Reddit, Email        |
 | `onShare` callback                 | ✅     | `(platform, url) => {}`                                         |
 | `onCopy` callback                  | ✅     | `(url) => {}`                                                   |
@@ -47,7 +47,7 @@ This section is the ground truth before any planning.
 
 ### ⚠️ Known Issues to Fix Before Any New Features
 
-- **CSS import path:** `import "social-share-button-aossie/src/social-share-button.css"` — `src/` is not a valid published path. Must export CSS from `dist/` via a `package.json` `exports` field.
+- **CSS import path:** `import "@aossie-org/social-share-button/src/social-share-button.css"` — `src/` is not a valid published path. Must export CSS from `dist/` via a `package.json` `exports` field.
 - **No TypeScript types:** The npm package ships no `.d.ts` files — TypeScript users get no autocomplete or type safety.
 - **React wrapper is copy-paste:** `src/social-share-button-react.jsx` is not installable — users copy it manually, making updates impossible.
 - **No `exports` field in `package.json`:** No named exports, no ESM/CJS split, no tree-shaking support.
@@ -141,7 +141,7 @@ social-share-button/               ← Turborepo monorepo root
 - [ ] Write regression tests for `updateOptions()` in SPA mode
 - [ ] Create `BACKWARD_COMPAT.md` — the locked API surface that must not change across versions
 
-**Exit Criteria:** `npm install social-share-button-aossie` + `import "social-share-button-aossie/style"` works in Vite, Next.js, and CRA without path errors.
+**Exit Criteria:** `npm install @aossie-org/social-share-button` + `import "@aossie-org/social-share-button/style"` works in Vite, Next.js, and CRA without path errors.
 
 ---
 
@@ -474,15 +474,15 @@ new SocialShareButton({
 
 ## 📊 Distribution Strategy
 
-| Path                  | Audience                           | Package                      | Status                 |
-| --------------------- | ---------------------------------- | ---------------------------- | ---------------------- |
-| CDN (`<script>` tag)  | No-build / CMS / quick integration | IIFE bundle                  | ✅ v1.0.3              |
-| npm (unscoped)        | Current npm users                  | `social-share-button-aossie` | ✅ Needs fix (Phase 0) |
-| npm (scoped core)     | Framework-agnostic use             | `@social-share/core`         | 🚧 Phase 1             |
-| npm (framework)       | React / Vue / Next.js apps         | `@social-share/react` etc.   | 🎯 Phase 2             |
-| npm (analytics)       | Apps needing share tracking        | `@social-share/analytics`    | 🎯 Phase 3             |
-| npm (theme)           | Theme Designer consumers           | `@social-share/theme`        | 🎯 Phase 4             |
-| Server-side templates | Rails, Django, Laravel, WP         | CDN + thin wrapper           | 🎯 Phase 5             |
+| Path                  | Audience                           | Package                             | Status                 |
+| --------------------- | ---------------------------------- | ----------------------------------- | ---------------------- |
+| CDN (`<script>` tag)  | No-build / CMS / quick integration | IIFE bundle                         | ✅ v1.0.3              |
+| npm (scoped)          | Current npm users                  | `@aossie-org/social-share-button`   | ✅ Needs fix (Phase 0) |
+| npm (scoped core)     | Framework-agnostic use             | `@social-share/core`                | 🚧 Phase 1             |
+| npm (framework)       | React / Vue / Next.js apps         | `@social-share/react` etc.          | 🎯 Phase 2             |
+| npm (analytics)       | Apps needing share tracking        | `@social-share/analytics`           | 🎯 Phase 3             |
+| npm (theme)           | Theme Designer consumers           | `@social-share/theme`               | 🎯 Phase 4             |
+| Server-side templates | Rails, Django, Laravel, WP         | CDN + thin wrapper                  | 🎯 Phase 5             |
 
 ---
 
