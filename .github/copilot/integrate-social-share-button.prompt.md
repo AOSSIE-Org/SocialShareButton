@@ -2,9 +2,9 @@
 agent: agent
 description: >
   Integrate SocialShareButton into any web project. Covers CDN (recommended),
-  npm (advanced), and React Wrapper Component (optional). Framework-specific
+  npm (advanced), and React/Preact/Qwik Wrapper Components (optional). Framework-specific
   steps for CRA, Next.js App Router, Next.js Pages Router, Vite/Vue/Angular,
-  and Vanilla HTML. Use this skill whenever a developer asks how to add the
+  Preact, Qwik, and Vanilla HTML. Use this skill whenever a developer asks how to add the
   share button to their project.
 ---
 
@@ -25,11 +25,11 @@ You are helping a developer integrate the **SocialShareButton** library
 
 The README defines **3 installation methods**. Ask (or infer) which the developer wants:
 
-| Method                                            | When to use                                                               |
-| ------------------------------------------------- | ------------------------------------------------------------------------- |
-| **Method 1 — CDN (Recommended)**                  | Most projects. No build step needed. Load via `<script>` tag.             |
-| **Method 2 — npm**                                | Bundler-based projects (Webpack, Vite, etc.) that prefer `import` syntax. |
-| **Method 3 — React Wrapper Component (Optional)** | Developer explicitly wants a reusable JSX component.                      |
+| Method                                                  | When to use                                                               |
+| ------------------------------------------------------- | ------------------------------------------------------------------------- |
+| **Method 1 — CDN (Recommended)**                        | Most projects. No build step needed. Load via `<script>` tag.             |
+| **Method 2 — npm**                                      | Bundler-based projects (Webpack, Vite, etc.) that prefer `import` syntax. |
+| **Method 3 — React / Preact / Qwik Wrapper Components** | Developer explicitly wants a reusable component wrapper.                  |
 
 These are **loading methods**, not tech stacks. CDN and npm both work with all frameworks.
 
@@ -387,6 +387,105 @@ new window.SocialShareButton({
 
 ---
 
+### CDN — Preact
+
+**Step 1:** Add CDN to root `index.html`:
+
+```html
+<head>
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css"
+  />
+</head>
+<body>
+  <div id="app"></div>
+  <script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js"></script>
+</body>
+```
+
+**Step 2:** Open your root or layout component (typically `src/components/Header.jsx` or your root `App.jsx`). Add a container element and initialize inside the `useEffect` hook:
+
+```jsx
+import { useEffect, useRef } from "preact/hooks";
+
+// ⬇️ Replace 'Header' with the name of the component where you want the
+// share button to appear — e.g. Navbar, MainLayout, App, etc.
+export default function Header() {
+  const shareButtonRef = useRef(null);
+  const containerRef = useRef(null);
+  const initRef = useRef(false);
+
+  useEffect(() => {
+    if (initRef.current || !window.SocialShareButton || !containerRef.current) return;
+
+    shareButtonRef.current = new window.SocialShareButton({
+      container: "#share-button",
+    });
+    initRef.current = true;
+
+    return () => {
+      if (shareButtonRef.current?.destroy) {
+        shareButtonRef.current.destroy();
+      }
+      initRef.current = false;
+    };
+  }, []);
+
+  return (
+    <header>
+      <div id="share-button" ref={containerRef}></div>
+    </header>
+  );
+}
+```
+
+---
+
+### CDN — Qwik
+
+**Step 1:** Add CDN to your root or layout page (e.g. `src/root.tsx` or layout index):
+
+```html
+<head>
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css"
+  />
+</head>
+<body>
+  <script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js"></script>
+</body>
+```
+
+**Step 2:** Create a container element and initialize the button in `useVisibleTask$`:
+
+```tsx
+import { component$, useVisibleTask$, useSignal } from "@builder.io/qwik";
+
+export default component$(() => {
+  const containerRef = useSignal<HTMLDivElement>();
+
+  useVisibleTask$(({ cleanup }) => {
+    if (typeof window !== "undefined" && (window as any).SocialShareButton && containerRef.value) {
+      const shareButton = new (window as any).SocialShareButton({
+        container: containerRef.value,
+      });
+
+      cleanup(() => {
+        if (shareButton && typeof shareButton.destroy === "function") {
+          shareButton.destroy();
+        }
+      });
+    }
+  });
+
+  return <div ref={containerRef} id="share-button"></div>;
+});
+```
+
+---
+
 ## Method 2 — npm (Advanced)
 
 Use when the project has a bundler (Webpack, Vite, etc.) and the developer prefers `import` syntax. Works in any framework.
@@ -402,48 +501,87 @@ new SocialShareButton({ container: "#share-button" });
 
 ---
 
-## Method 3 — React Wrapper Component (Optional)
+## Method 3 — React / Preact / Qwik Wrapper Components (Optional)
 
-Only use this when the developer **explicitly** wants a reusable JSX component.
+Only use this when the developer **explicitly** wants a reusable component wrapper.
 
-Tell them to copy `src/social-share-button-react.jsx` from the library into their project — **do not create a new file from scratch**.
+### React Wrapper Component
+
+Tell them to copy `src/social-share-button-react.jsx` from the library into their project:
 
 ```jsx
-import { SocialShareButton } from "./components/SocialShareButton";
+import SocialShareButton from "./components/SocialShareButton";
 
 function App() {
-  return <SocialShareButton platforms={["twitter", "linkedin"]} />;
+  return (
+    <SocialShareButton
+      platforms={["twitter", "linkedin"]}
+      buttonColor="#3b82f6"
+      buttonHoverColor="#2563eb"
+    />
+  );
 }
+```
+
+### Preact Wrapper Component
+
+Tell them to copy `src/social-share-button-preact.jsx` from the library into their project:
+
+```jsx
+import SocialShareButton from "./components/SocialShareButton";
+
+function App() {
+  return (
+    <SocialShareButton
+      platforms={["twitter", "linkedin"]}
+      buttonColor="#3b82f6"
+      buttonHoverColor="#2563eb"
+    />
+  );
+}
+```
+
+### Qwik Wrapper Component
+
+Tell them to copy `src/social-share-button-qwik.tsx` from the library into their project:
+
+```tsx
+import { component$ } from "@builder.io/qwik";
+import { SocialShareButton } from "./components/SocialShareButton";
+
+export default component$(() => {
+  return <SocialShareButton platforms={["twitter", "linkedin"]} />;
+});
 ```
 
 ---
 
 ## All constructor options
 
-| Option             | Type           | Default                | Description                                                |
-| ------------------ | -------------- | ---------------------- | ---------------------------------------------------------- |
-| `container`        | string/Element | —                      | **Required.** CSS selector or DOM element                  |
-| `url`              | string         | `window.location.href` | URL to share                                               |
-| `title`            | string         | `document.title`       | Share title/headline                                       |
-| `description`      | string         | `''`                   | Additional description text                                |
-| `hashtags`         | array          | `[]`                   | e.g. `['js', 'webdev']`                                    |
-| `via`              | string         | `''`                   | Twitter handle (without @)                                 |
-| `platforms`        | array          | All platforms          | `whatsapp facebook twitter linkedin telegram reddit email` |
-| `buttonText`       | string         | `'Share'`              | Button label text                                          |
-| `buttonStyle`      | string         | `'default'`            | `default` `primary` `compact` `icon-only`                  |
-| `buttonColor`      | string         | `''`                   | Custom button background color                             |
-| `buttonHoverColor` | string         | `''`                   | Custom button hover color                                  |
-| `customClass`      | string         | `''`                   | Additional CSS class for button                            |
-| `theme`            | string         | `'dark'`               | `dark` or `light`                                          |
-| `modalPosition`    | string         | `'center'`             | Modal position on screen                                   |
-| `showButton`       | boolean        | `true`                 | Show/hide the share button                                 |
-| `onShare`          | function       | `null`                 | `(platform, url) => void`                                  |
-| `onCopy`           | function       | `null`                 | `(url) => void`                                            |
-| `analytics`        | boolean        | `true`                 | Set `false` to disable all event emission                  |
-| `onAnalytics`      | function       | `null`                 | `(payload) => void` — direct analytics hook                |
-| `analyticsPlugins` | array          | `[]`                   | Adapter instances from `social-share-analytics.js`         |
-| `componentId`      | string         | `null`                 | Label this instance for analytics tracking                 |
-| `debug`            | boolean        | `false`                | Log analytics events to console                            |
+| Option             | Type           | Default                                                                       | Description                                                                                     |
+| ------------------ | -------------- | ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `container`        | string/Element | —                                                                             | **Required.** CSS selector or DOM element                                                       |
+| `url`              | string         | `window.location.href`                                                        | URL to share                                                                                    |
+| `title`            | string         | `document.title`                                                              | Share title/headline                                                                            |
+| `description`      | string         | `''`                                                                          | Additional description text                                                                     |
+| `hashtags`         | array          | `[]`                                                                          | e.g. `['js', 'webdev']`                                                                         |
+| `via`              | string         | `''`                                                                          | Twitter handle (without @)                                                                      |
+| `platforms`        | array          | `whatsapp, facebook, twitter, linkedin, telegram, reddit, pinterest, discord` | Platforms to show: `whatsapp facebook twitter linkedin telegram reddit email pinterest discord` |
+| `buttonText`       | string         | `'Share'`                                                                     | Button label text                                                                               |
+| `buttonStyle`      | string         | `'default'`                                                                   | `default` `primary` `compact` `icon-only`                                                       |
+| `buttonColor`      | string         | `''`                                                                          | Custom button background color                                                                  |
+| `buttonHoverColor` | string         | `''`                                                                          | Custom button hover color                                                                       |
+| `customClass`      | string         | `''`                                                                          | Additional CSS class for button                                                                 |
+| `theme`            | string         | `'dark'`                                                                      | `dark` or `light`                                                                               |
+| `modalPosition`    | string         | `'center'`                                                                    | Modal position on screen                                                                        |
+| `showButton`       | boolean        | `true`                                                                        | Show/hide the share button                                                                      |
+| `onShare`          | function       | `null`                                                                        | `(platform, url) => void`                                                                       |
+| `onCopy`           | function       | `null`                                                                        | `(url) => void`                                                                                 |
+| `analytics`        | boolean        | `true`                                                                        | Set `false` to disable all event emission                                                       |
+| `onAnalytics`      | function       | `null`                                                                        | `(payload) => void` — direct analytics hook                                                     |
+| `analyticsPlugins` | array          | `[]`                                                                          | Adapter instances from `social-share-analytics.js`                                              |
+| `componentId`      | string         | `null`                                                                        | Label this instance for analytics tracking                                                      |
+| `debug`            | boolean        | `false`                                                                       | Log analytics events to console                                                                 |
 
 ---
 
@@ -508,8 +646,8 @@ useEffect(() => {
 
 ## Output format
 
-- Ask the developer their **method** (CDN / npm / React Wrapper) and their **framework** (only needed for CDN).
+- Ask the developer their **method** (CDN / npm / Wrapper Component) and their **framework** (needed to select the correct CDN integration steps or wrapper component).
 - Show only the snippet(s) relevant to their choices.
-- Always modify **existing** files — never suggest creating new component files.
+- Always modify **existing** files — never suggest creating new component files (unless they explicitly ask for a Wrapper Component, in which case instruct them to copy the relevant file from `src/` to their components folder).
 - When modifying an existing file, mark additions with `// ADD THIS`.
 - Do not add abstractions, wrappers, or extra files beyond what the README shows.
