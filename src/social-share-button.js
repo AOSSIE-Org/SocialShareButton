@@ -23,6 +23,7 @@ class SocialShareButton {
         "telegram",
         "reddit",
         "pinterest",
+        "instagram",
         "discord",
       ],
       theme: options.theme || "dark",
@@ -173,6 +174,11 @@ class SocialShareButton {
         color: "#E60023",
         icon: '<path d="M12 0C5.372 0 0 5.373 0 12c0 4.99 3.052 9.267 7.386 11.059-.102-.94-.194-2.385.04-3.413.211-.904 1.356-5.752 1.356-5.752s-.346-.693-.346-1.717c0-1.608.932-2.808 2.093-2.808.987 0 1.463.741 1.463 1.63 0 .993-.632 2.476-.958 3.853-.273 1.155.58 2.098 1.718 2.098 2.062 0 3.646-2.174 3.646-5.31 0-2.778-1.997-4.722-4.847-4.722-3.304 0-5.242 2.478-5.242 5.039 0 .997.384 2.066.865 2.647.095.115.109.215.08.331-.088.365-.282 1.155-.321 1.316-.05.212-.165.257-.381.155-1.418-.66-2.305-2.733-2.305-4.397 0-3.579 2.601-6.867 7.497-6.867 3.936 0 6.998 2.805 6.998 6.557 0 3.91-2.466 7.058-5.892 7.058-1.15 0-2.232-.597-2.6-1.302l-.707 2.692c-.255.983-.946 2.215-1.408 2.966A12.002 12.002 0 0024 12C24 5.373 18.627 0 12 0z"/>',
       },
+      instagram: {
+        name: "Instagram",
+        color: "#E4405F",
+        icon: '<path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 2.75A5.25 5.25 0 1 1 6.75 12 5.256 5.256 0 0 1 12 6.75zm0 2A3.25 3.25 0 1 0 15.25 12 3.254 3.254 0 0 0 12 8.75zM17.5 5.5a1.25 1.25 0 1 1-1.25 1.25A1.25 1.25 0 0 1 17.5 5.5z"/>'
+      },
       discord: {
         name: "Discord",
         color: "#5865F2",
@@ -250,6 +256,7 @@ class SocialShareButton {
       reddit: `https://reddit.com/submit?url=${encodedUrl}&title=${encodedReddit}`,
       email: `mailto:?subject=${encodedTitle}&body=${encodedEmail}%20${encodedUrl}`,
       pinterest: `https://pinterest.com/pin/create/button/?url=${encodedUrl}&description=${encodedPinterest}`,
+      instagram: "https://www.instagram.com/",
       discord: "https://discord.com/channels/@me",
     };
 
@@ -420,7 +427,7 @@ class SocialShareButton {
       // Discord does not provide a native web-share intent; therefore, the most reliable
       // fallback is to copy the share URL to the clipboard and then navigate the user
       // towards Discord's direct messaging area.
-      if (platform === "discord") {
+      if (platform === "discord" || platform === "instagram") {
         this.copyLink();
         window.open(shareUrl, "_blank", "noopener,noreferrer");
       } else if (platform === "email") {

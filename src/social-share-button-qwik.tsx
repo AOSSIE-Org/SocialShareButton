@@ -29,7 +29,7 @@ export const SocialShareButton = component$<Props>((props) => {
         description: props.description || '',
         hashtags: props.hashtags || [],
         via: props.via || '',
-        platforms: props.platforms || ['whatsapp', 'facebook', 'twitter', 'linkedin', 'telegram', 'reddit', 'discord'],
+        platforms: props.platforms || ['whatsapp', 'facebook', 'twitter', 'linkedin', 'telegram', 'reddit', 'pinterest', 'instagram', 'discord'],
         theme: props.theme || 'dark',
         buttonText: props.buttonText || 'Share',
         customClass: props.customClass || '',

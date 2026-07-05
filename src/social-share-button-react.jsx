@@ -21,6 +21,7 @@ export const SocialShareButton = ({
     "telegram",
     "reddit",
     "pinterest",
+    "instagram",
     "discord",
   ],
   theme = "dark",
