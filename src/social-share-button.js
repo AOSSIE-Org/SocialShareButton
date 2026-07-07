@@ -418,7 +418,7 @@ class SocialShareButton {
 
       // Platform-specific sharing trigger logic:
       // Discord does not provide a native web-share intent; therefore, the most reliable
-      // fallback is to copy the share URL to the clipboard and then navigate the user 
+      // fallback is to copy the share URL to the clipboard and then navigate the user
       // towards Discord's direct messaging area.
       if (platform === "discord") {
         this.copyLink();

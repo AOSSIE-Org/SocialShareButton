@@ -39,7 +39,7 @@ export function Hero() {
           
           {/* Floating Mockup */}
           <div className="relative mx-auto w-full max-w-md lg:max-w-none lg:ml-auto perspective-1000">
-             <div className="rounded-xl border-2 border-[#FFCC00] bg-background p-6 shadow-[0_0_30px_rgba(255,204,0,0.15)] transform-gpu hover:-translate-y-2 transition-transform duration-500">
+             <div className="rounded-xl border-2 border-[#FFCC00] bg-card p-6 shadow-[0_0_30px_rgba(255,204,0,0.15)] transform-gpu hover:-translate-y-2 transition-transform duration-500">
                 <div className="flex items-center justify-between mb-8 cursor-move">
                   <h3 className="font-serif text-2xl font-bold text-center w-full text-[#00C853]">Share this Page</h3>
                   <button className="absolute right-4 top-4 text-neutral-400 hover:text-foreground">✕</button>

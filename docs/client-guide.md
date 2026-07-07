@@ -71,7 +71,7 @@ You see:
 Install takes under five minutes. Support is on [Discord](https://discord.com/channels/1022871757289422898/1479012884209078365).
 
 ```
-npm install social-share-button-aossie
+npm install @aossie-org/social-share-button
 ```
 
 or drop one `<script>` tag — your call.

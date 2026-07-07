@@ -63,9 +63,8 @@
 
 Lightweight social sharing component for web applications. Zero dependencies, framework-agnostic.
 
-[![npm version](https://img.shields.io/npm/v/social-share-button-aossie.svg)](https://www.npmjs.com/package/social-share-button-aossie)
+[![npm version](https://img.shields.io/npm/v/@aossie-org/social-share-button.svg)](https://www.npmjs.com/package/@aossie-org/social-share-button)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
-
 
 ---
 
@@ -602,7 +601,8 @@ new SocialShareButton({
 - **Email:** Subject = `title`, Body = `description` + link
 - **Pinterest:** `title` + `description` + `hashtags` + link
 - **Discord:** `title` + `description` + `hashtags` + link
-- 
+-
+
 ### Customize Button Color & Appearance
 
 **Option 1: Use Pre-built Styles** (Easiest)
@@ -708,8 +708,8 @@ new SocialShareButton({
 ### Using npm Package
 
 ```javascript
-import SocialShareButton from "social-share-button-aossie";
-import "social-share-button-aossie/src/social-share-button.css";
+import SocialShareButton from "@aossie-org/social-share-button";
+import "@aossie-org/social-share-button/src/social-share-button.css";
 
 new SocialShareButton({
   container: "#share-button",

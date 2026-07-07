@@ -9,7 +9,7 @@ export function CodeShowcase() {
           
           <div className="max-w-xl">
             <span className="text-[#00C853] font-mono text-sm mb-4 block font-bold">
-              ~ npm install social-share-button-aossie
+              ~ npm install @aossie-org/social-share-button
             </span>
             <h2 className="text-4xl md:text-5xl font-serif font-bold tracking-tight text-balance mb-6">
               30-second<br />setup.<br />Any framework.
@@ -51,7 +51,7 @@ export function CodeShowcase() {
                   <code className="text-[#00C853]">import</code>{" "}
                   <code className="text-white">{"{ "}SocialShare{" }"}</code>{" "}
                   <code className="text-[#00C853]">from</code>{" "}
-                  <code className="text-[#FFCC00]">"social-share-button-aossie"</code>
+                  <code className="text-[#FFCC00]">"@aossie-org/social-share-button"</code>
                   <code className="text-white">;</code>
                   {"\n\n"}
                   <code className="text-[#00C853]">export default function</code>{" "}

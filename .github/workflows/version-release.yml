@@ -1,0 +1,200 @@
+name: Version Release
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'VERSION'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    if: ${{ github.repository_owner == 'AOSSIE-Org' }}
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    outputs:
+      version: ${{ steps.get_version.outputs.version }}
+      released: ${{ steps.publish_release.outputs.released }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Verify actor is a maintainer
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { data: permission } = await github.rest.repos.getCollaboratorPermissionLevel({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              username: context.actor,
+            }).catch(() => ({ data: { permission: 'none' } }));
+            
+            if (permission.permission !== 'admin' && permission.permission !== 'write') {
+              core.setFailed(`Actor '${context.actor}' does not have write access to this repository. Aborting release.`);
+            } else {
+              console.log(`✓ Actor '${context.actor}' is a verified repository maintainer.`);
+            }
+
+      - name: Read and Validate VERSION
+        id: get_version
+        run: |
+          VERSION=$(cat VERSION | tr -d '[:space:]')
+          if ! [[ $VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Error: VERSION must follow semantic versioning (e.g., 1.0.0)"
+            exit 1
+          fi
+          echo "✓ Version format is valid: $VERSION"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Create and push tag
+        run: |
+          VERSION="${{ steps.get_version.outputs.version }}"
+          if git show-ref --tags --verify --quiet "refs/tags/v$VERSION"; then
+            if [ "$(git rev-parse HEAD)" = "$(git rev-parse refs/tags/v$VERSION^{commit})" ]; then
+              echo "Tag v$VERSION already exists and points to the current commit. Proceeding."
+            else
+              echo "Error: Tag v$VERSION already exists but points to a different commit"
+              exit 1
+            fi
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git tag -a "v$VERSION" -m "Release version $VERSION"
+            git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}
+            git push origin "v$VERSION"
+            echo "✓ Created and pushed tag v$VERSION"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Find and Publish Draft Release
+        id: publish_release
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const version = 'v${{ steps.get_version.outputs.version }}';
+
+            // Get all releases
+            const { data: releases } = await github.rest.repos.listReleases({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            });
+
+            // Find the draft release matching this version
+            const draftRelease = releases.find(release => release.draft === true && release.name.includes(version));
+
+            if (draftRelease) {
+              console.log(`Found matching draft release: ${draftRelease.name}`);
+
+              // Update and publish the draft release
+              await github.rest.repos.updateRelease({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                release_id: draftRelease.id,
+                tag_name: version,
+                name: version,
+                draft: false,
+              });
+
+              console.log(`✓ Published draft release as ${version}`);
+              core.setOutput('released', 'true');
+            } else {
+              console.log('⚠️ No draft release found matching version ' + version + '. Creating release automatically.');
+
+              await github.rest.repos.createRelease({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                tag_name: version,
+                name: version,
+                body: `## Release ${version}\n\nThis release was automatically created when the VERSION file was updated.`,
+                draft: false,
+                prerelease: false,
+              });
+
+              console.log(`✓ Created and published release ${version}`);
+              core.setOutput('released', 'true');
+            }
+
+      - name: Release Summary
+        run: |
+          echo "### Release Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Version:** v${{ steps.get_version.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Tag Created:** ✓" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ steps.publish_release.outputs.released }}" = "true" ]; then
+            echo "- **GitHub Release:** ✓" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- **GitHub Release:** ✗ (no draft found)" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  publish:
+    needs: release
+    if: ${{ github.repository_owner == 'AOSSIE-Org' && needs.release.outputs.released == 'true' }}
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          persist-credentials: false
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@fe02f34f77f8bf5c4f0454116efcf40eac0258b4 # v3
+        with:
+          version: 10
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run linting
+        run: pnpm run lint
+
+      - name: Sync version from VERSION file
+        run: |
+          VERSION="${{ needs.release.outputs.version }}"
+          echo "Syncing package.json version to $VERSION"
+          npm version "$VERSION" --no-git-tag-version --allow-same-version
+          echo "✓ package.json version set to $VERSION"
+
+      - name: Verify package contents
+        run: npm pack --dry-run
+
+      - name: Publish to npm
+        run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPMJS_TOKEN }}
+
+      - name: Publish Summary
+        run: |
+          echo "### npm Publish Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Package:** @aossie-org/social-share-button" >> $GITHUB_STEP_SUMMARY
+          echo "- **Version:** ${{ needs.release.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Registry:** https://www.npmjs.com/package/@aossie-org/social-share-button" >> $GITHUB_STEP_SUMMARY
+          echo "- **Provenance:** ✓ (supply-chain attestation enabled)" >> $GITHUB_STEP_SUMMARY
