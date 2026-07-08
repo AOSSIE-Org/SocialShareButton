@@ -54,7 +54,7 @@ If the agent has terminal and browser execution capability:
    npm start
    ```
 3. Use the browser subagent or Puppeteer MCP server tool:
-   - Navigate to the local server URL (typically `http://localhost:8080`).
+   - Navigate to the local server URL (typically `http://localhost:8085`).
    - Interact with the social sharing buttons: click each button (Facebook, Twitter, LinkedIn, etc.) and verify they trigger correct sharing URLs.
    - Capture a screenshot of each button interaction state.
    - Retrieve console logs and check for runtime errors or warnings.

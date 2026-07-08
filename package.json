@@ -19,7 +19,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "check-size": "size-limit",
-    "start": "http-server -p 8080"
+    "start": "http-server . -p 8085"
   },
   "repository": {
     "type": "git",
