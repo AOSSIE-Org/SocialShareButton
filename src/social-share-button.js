@@ -59,6 +59,7 @@ class SocialShareButton {
     this.ownsBodyLock = false; // Track if this instance owns the body overflow lock
     this.eventsAttached = false; // Guard against multiple attachEvents() calls
     this.isDestroyed = false; // Track if instance has been destroyed (prevents async callbacks)
+    this.containerObserver = null; // MutationObserver for deferred container attachment
 
     if (this.options.container) {
       this.init();
@@ -90,9 +91,11 @@ class SocialShareButton {
       if (typeof this.options.container === "string") {
         const attachToContainer = () => {
           const container = document.querySelector(this.options.container);
-          if (container && !container.contains(button)) {
-            container.appendChild(button);
-            return true;
+          if (container) {
+            if (!container.contains(button)) {
+              container.appendChild(button);
+            }
+            return true; // Container found — observer can stop
           }
           return false;
         };
@@ -100,13 +103,19 @@ class SocialShareButton {
         // Try to attach immediately
         if (!attachToContainer() && typeof document !== "undefined") {
           // If not found, wait for it to appear in the DOM
-          const observer = new MutationObserver((mutations, obs) => {
+          this.containerObserver = new MutationObserver((mutations, obs) => {
+            if (this.isDestroyed) { // Abort if instance was destroyed while waiting
+              obs.disconnect();
+              this.containerObserver = null;
+              return;
+            }
             if (attachToContainer()) {
               obs.disconnect(); // Stop watching once attached
+              this.containerObserver = null;
             }
           });
           if (document.body) {
-            observer.observe(document.body, { childList: true, subtree: true });
+            this.containerObserver.observe(document.body, { childList: true, subtree: true });
           }
         }
       } else {
@@ -608,6 +617,12 @@ class SocialShareButton {
         document.body.style.overflow = SocialShareButton.originalBodyOverflow || "";
         SocialShareButton.originalBodyOverflow = null;
       }
+    }
+
+    // Disconnect deferred container observer to prevent post-destroy attachment
+    if (this.containerObserver) {
+      this.containerObserver.disconnect();
+      this.containerObserver = null;
     }
 
     // Clear references (makes destroy idempotent)
