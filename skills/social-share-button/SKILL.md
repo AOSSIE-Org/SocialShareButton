@@ -36,21 +36,28 @@ A skill governing technical standards and developer workflows in the `SocialShar
 
 **Steps:**
 
-1. Guide the contributor to run ESLint checks:
+### Agent-Only Auto Verification (Preferred)
+If the agent has terminal and browser execution capability:
+1. Run ESLint checks and format rules automatically:
    ```bash
    npm run lint
-   ```
-2. Guide the contributor to format files to project standards:
-   ```bash
    npm run format
    ```
-3. Guide the contributor to perform manual verification:
-   - Open `index.html` in a web browser.
-   - Click and test all social sharing buttons.
-   - Check the developer console for errors or warnings.
-   - Resize the window to verify mobile responsiveness.
+2. Serve the project locally (e.g., using a lightweight static server, or start the dev server if configured).
+3. Use the browser subagent or Puppeteer MCP server tool:
+   - Navigate to the local server URL or open the static `index.html` file path.
+   - Interact with the social sharing buttons: click each button (Facebook, Twitter, LinkedIn, etc.) and verify they trigger correct sharing URLs.
+   - Capture a screenshot of each button interaction state.
+   - Retrieve console logs and check for runtime errors or warnings.
+4. Save the screenshots locally and prepare them to be embedded directly into the Pull Request description.
 
-- **Completion Criterion:** The agent has verified that code quality checks (`lint` and `format:check`) pass, and the contributor has completed manual browser testing.
+### Contributor Manual Verification (Fallback)
+If the agent lacks browser execution or is running in a constrained environment:
+1. Guide the contributor to run ESLint and format checks.
+2. Instruct the contributor to open `index.html` in their browser, test all social sharing buttons manually, inspect the developer console, and verify responsiveness.
+
+- **Completion Criterion:** The agent has verified that linting and formatting are complete, and either successfully auto-verified visual behavior using browser tools or walked the human contributor through manual verification.
+
 
 ## 4. Submission Prep
 
@@ -59,7 +66,10 @@ A skill governing technical standards and developer workflows in the `SocialShar
 **Steps:**
 
 1. Guide the contributor to rebase with upstream `main` and push their branch.
-2. Format the PR description incorporating the **AI Policy** disclosure block and linking the related issue.
+2. Format the PR description:
+   - Incorporate the **AI Policy** disclosure block.
+   - Link the related issue.
+   - Attach and embed the captured button interaction screenshots (taken during Step 3) directly into the Pull Request description. This gives the maintainers immediate visual context of what changes were made and how they function.
 3. Output the Discord notification template pointing to the `#development` channel.
 
-- **Completion Criterion:** The PR template draft and Discord message are generated and ready for use.
+- **Completion Criterion:** The PR template draft (complete with embedded screenshots and AI disclosure) and Discord message are generated and ready for use.

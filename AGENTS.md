@@ -32,5 +32,7 @@ These skills govern AI agent behavior and policy constraints globally:
 11. [skills/project-template/SKILL.md](../skills/project-template/SKILL.md) — Shared architecture patterns.
 12. [skills/contributor-onboarding/SKILL.md](../skills/contributor-onboarding/SKILL.md) — Core onboarding flow.
 13. [skills/GLOSSARY.md](../skills/GLOSSARY.md) — Definitions for framework terminology.
+14. [skills/mcp-integration/SKILL.md](../skills/mcp-integration/SKILL.md) — Guides MCP integration for auto-PRs and UI testing.
 
 - **Completion Criterion:** The agent has loaded the onboarding skill and confirmed compliance with all project instructions before writing any code.
+
