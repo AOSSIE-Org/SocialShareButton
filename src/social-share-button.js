@@ -87,13 +87,31 @@ class SocialShareButton {
 
     this.button = button;
     if (this.options.container) {
-      const container =
-        typeof this.options.container === "string"
-          ? document.querySelector(this.options.container)
-          : this.options.container;
+      if (typeof this.options.container === "string") {
+        const attachToContainer = () => {
+          const container = document.querySelector(this.options.container);
+          if (container && !container.contains(button)) {
+            container.appendChild(button);
+            return true;
+          }
+          return false;
+        };
 
-      if (container) {
-        container.appendChild(button);
+        // Try to attach immediately
+        if (!attachToContainer() && typeof document !== "undefined") {
+          // If not found, wait for it to appear in the DOM
+          const observer = new MutationObserver((mutations, obs) => {
+            if (attachToContainer()) {
+              obs.disconnect(); // Stop watching once attached
+            }
+          });
+          if (document.body) {
+            observer.observe(document.body, { childList: true, subtree: true });
+          }
+        }
+      } else {
+        // Container is already a DOM node
+        this.options.container.appendChild(button);
       }
     }
   }
