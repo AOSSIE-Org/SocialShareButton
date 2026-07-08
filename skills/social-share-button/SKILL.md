@@ -40,13 +40,15 @@ A skill governing technical standards and developer workflows in the `SocialShar
 
 If the agent has terminal and browser execution capability:
 
-1. Run ESLint, formatting, and unit tests automatically:
+1. Run ESLint, formatting, unit tests, and size-limit audits automatically:
    ```bash
    npm run lint
    npm run format
    npm run test
+   npm run check-size
    ```
    - Ensure all DOM unit tests pass successfully.
+   - Verify that file sizes remain within strict budgets (JS < 10KB, CSS < 5KB).
 2. Serve the project locally (e.g., using a lightweight static server, or start the dev server if configured).
 3. Use the browser subagent or Puppeteer MCP server tool:
    - Navigate to the local server URL or open the static `index.html` file path.
@@ -59,15 +61,16 @@ If the agent has terminal and browser execution capability:
 
 If the agent lacks browser execution or is running in a constrained environment:
 
-1. Guide the contributor to run ESLint, format, and unit test checks:
+1. Guide the contributor to run ESLint, formatting, unit testing, and size-limit checks:
    ```bash
    npm run lint
    npm run format
    npm run test
+   npm run check-size
    ```
 2. Instruct the contributor to open `index.html` in their browser, test all social sharing buttons manually, inspect the developer console, and verify responsiveness.
 
-- **Completion Criterion:** The agent has verified that linting, formatting, and unit tests are complete, and either successfully auto-verified visual behavior using browser tools or walked the human contributor through manual verification.
+- **Completion Criterion:** The agent has verified that linting, formatting, unit tests, and size-limit checks are complete, and either successfully auto-verified visual behavior using browser tools or walked the human contributor through manual verification.
 
 ## 4. Submission Prep
 

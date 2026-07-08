@@ -17,7 +17,8 @@
     "format": "prettier --write \"**/*.{js,jsx,json,css,md,html}\"",
     "format:check": "prettier --check \"**/*.{js,jsx,json,css,md,html}\"",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "check-size": "size-limit"
   },
   "repository": {
     "type": "git",
@@ -44,12 +45,24 @@
   "homepage": "https://github.com/AOSSIE-Org/SocialShareButton#readme",
   "devDependencies": {
     "@eslint/js": "^9.39.4",
+    "@size-limit/preset-small-lib": "^12.1.0",
     "eslint": "^9.39.4",
     "globals": "^17.4.0",
     "happy-dom": "^20.10.6",
     "prettier": "^3.2.4",
+    "size-limit": "^12.1.0",
     "vitest": "^4.1.10"
   },
   "type": "module",
-  "packageManager": "pnpm@10.26.1+sha512.664074abc367d2c9324fdc18037097ce0a8f126034160f709928e9e9f95d98714347044e5c3164d65bd5da6c59c6be362b107546292a8eecb7999196e5ce58fa"
+  "packageManager": "pnpm@10.26.1+sha512.664074abc367d2c9324fdc18037097ce0a8f126034160f709928e9e9f95d98714347044e5c3164d65bd5da6c59c6be362b107546292a8eecb7999196e5ce58fa",
+  "size-limit": [
+    {
+      "path": "src/social-share-button.js",
+      "limit": "10 KB"
+    },
+    {
+      "path": "src/social-share-button.css",
+      "limit": "5 KB"
+    }
+  ]
 }
