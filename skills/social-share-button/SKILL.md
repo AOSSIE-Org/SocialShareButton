@@ -49,9 +49,12 @@ If the agent has terminal and browser execution capability:
    ```
    - Ensure all DOM unit tests pass successfully.
    - Verify that file sizes remain within strict budgets (JS < 10KB, CSS < 5KB).
-2. Serve the project locally (e.g., using a lightweight static server, or start the dev server if configured).
+2. Serve the project locally using the start script:
+   ```bash
+   npm start
+   ```
 3. Use the browser subagent or Puppeteer MCP server tool:
-   - Navigate to the local server URL or open the static `index.html` file path.
+   - Navigate to the local server URL (typically `http://localhost:8080`).
    - Interact with the social sharing buttons: click each button (Facebook, Twitter, LinkedIn, etc.) and verify they trigger correct sharing URLs.
    - Capture a screenshot of each button interaction state.
    - Retrieve console logs and check for runtime errors or warnings.

@@ -18,7 +18,8 @@
     "format:check": "prettier --check \"**/*.{js,jsx,json,css,md,html}\"",
     "test": "vitest run",
     "test:watch": "vitest",
-    "check-size": "size-limit"
+    "check-size": "size-limit",
+    "start": "http-server -p 8080"
   },
   "repository": {
     "type": "git",
@@ -49,6 +50,7 @@
     "eslint": "^9.39.4",
     "globals": "^17.4.0",
     "happy-dom": "^20.10.6",
+    "http-server": "^14.1.1",
     "prettier": "^3.2.4",
     "size-limit": "^12.1.0",
     "vitest": "^4.1.10"
