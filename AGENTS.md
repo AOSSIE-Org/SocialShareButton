@@ -18,14 +18,19 @@ To avoid unnecessary **context load**, load and read only the files relevant to 
 7. [.agent/instructions/testing.md](.agent/instructions/testing.md) — Manual verification standards.
 8. [.agent/info/operational-data.md](.agent/info/operational-data.md) — Maintainer roster (@kpj2006), Discord links, and update templates.
 
-## 2. Organization-Wide Skills
+## 2. Project-Specific Skills
+
+This skill governs repository-specific workflows:
+
+9. [skills/social-share-button/SKILL.md](skills/social-share-button/SKILL.md) — Local skill for SocialShareButton development and testing.
+
+## 3. Organization-Wide Skills
 
 These skills govern AI agent behavior and policy constraints globally:
 
-9. [skills/GIT-DIS-AIPolicy/SKILL.md](../skills/GIT-DIS-AIPolicy/SKILL.md) — Governs the **AI Policy**, PR disclosures, and communication.
-10. [skills/project-template/SKILL.md](../skills/project-template/SKILL.md) — Shared architecture patterns.
-11. [skills/contributor-onboarding/SKILL.md](../skills/contributor-onboarding/SKILL.md) — Core onboarding flow.
-12. [skills/social-share-button/SKILL.md](../skills/social-share-button/SKILL.md) — Project-specific skill for SocialShareButton.
+10. [skills/GIT-DIS-AIPolicy/SKILL.md](../skills/GIT-DIS-AIPolicy/SKILL.md) — Governs the **AI Policy**, PR disclosures, and communication.
+11. [skills/project-template/SKILL.md](../skills/project-template/SKILL.md) — Shared architecture patterns.
+12. [skills/contributor-onboarding/SKILL.md](../skills/contributor-onboarding/SKILL.md) — Core onboarding flow.
 13. [skills/GLOSSARY.md](../skills/GLOSSARY.md) — Definitions for framework terminology.
 
 - **Completion Criterion:** The agent has loaded the onboarding skill and confirmed compliance with all project instructions before writing any code.

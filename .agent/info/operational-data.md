@@ -2,7 +2,7 @@
 
 > **Agent Instruction:** Use this file to provide required context when a contributor raises a PR or issue. Provide the correct channel, message template, and mentor tags so contributors communicate properly.
 >
-> **Bold terms** are defined in [GLOSSARY.md](../../skills/GLOSSARY.md); look them up there for the full meaning.
+> **Bold terms** are defined in [GLOSSARY.md](../../../skills/GLOSSARY.md); look them up there for the full meaning.
 
 ## Project Endpoints
 

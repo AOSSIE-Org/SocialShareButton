@@ -2,7 +2,7 @@
 
 > **Agent Instruction:** This file contains specific errors previously made by AI agents in this project. You MUST check this file before writing new code to avoid repeating historical mistakes. This is a living document — maintainers add entries whenever an agent makes a significant mistake in a PR.
 >
-> **Bold terms** are defined in [GLOSSARY.md](../../skills/GLOSSARY.md); look them up there for the full meaning.
+> **Bold terms** are defined in [GLOSSARY.md](../../../skills/GLOSSARY.md); look them up there for the full meaning.
 
 ## 🔴 Critical — Will Break Things
 
