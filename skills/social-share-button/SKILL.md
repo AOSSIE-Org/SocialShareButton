@@ -37,12 +37,16 @@ A skill governing technical standards and developer workflows in the `SocialShar
 **Steps:**
 
 ### Agent-Only Auto Verification (Preferred)
+
 If the agent has terminal and browser execution capability:
-1. Run ESLint checks and format rules automatically:
+
+1. Run ESLint, formatting, and unit tests automatically:
    ```bash
    npm run lint
    npm run format
+   npm run test
    ```
+   - Ensure all DOM unit tests pass successfully.
 2. Serve the project locally (e.g., using a lightweight static server, or start the dev server if configured).
 3. Use the browser subagent or Puppeteer MCP server tool:
    - Navigate to the local server URL or open the static `index.html` file path.
@@ -52,12 +56,18 @@ If the agent has terminal and browser execution capability:
 4. Save the screenshots locally and prepare them to be embedded directly into the Pull Request description.
 
 ### Contributor Manual Verification (Fallback)
+
 If the agent lacks browser execution or is running in a constrained environment:
-1. Guide the contributor to run ESLint and format checks.
+
+1. Guide the contributor to run ESLint, format, and unit test checks:
+   ```bash
+   npm run lint
+   npm run format
+   npm run test
+   ```
 2. Instruct the contributor to open `index.html` in their browser, test all social sharing buttons manually, inspect the developer console, and verify responsiveness.
 
-- **Completion Criterion:** The agent has verified that linting and formatting are complete, and either successfully auto-verified visual behavior using browser tools or walked the human contributor through manual verification.
-
+- **Completion Criterion:** The agent has verified that linting, formatting, and unit tests are complete, and either successfully auto-verified visual behavior using browser tools or walked the human contributor through manual verification.
 
 ## 4. Submission Prep
 

@@ -35,4 +35,3 @@ These skills govern AI agent behavior and policy constraints globally:
 14. [skills/mcp-integration/SKILL.md](../skills/mcp-integration/SKILL.md) — Guides MCP integration for auto-PRs and UI testing.
 
 - **Completion Criterion:** The agent has loaded the onboarding skill and confirmed compliance with all project instructions before writing any code.
-
