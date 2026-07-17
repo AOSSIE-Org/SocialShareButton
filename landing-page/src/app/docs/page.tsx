@@ -132,23 +132,7 @@ export default function Docs() {
                     How to Get Started
                   </h2>
 
-                  <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8">
-                    You have exactly <span className="font-bold text-[#00C853]">three steps</span> between you and a live share button.
-                  </p>
-
-                  <div className="bg-[#00C853]/10 dark:bg-[#00C853]/5 rounded-2xl p-4 sm:p-6 mb-6 sm:mb-8 border-l-4 border-[#00C853]">
-                    <pre className="text-sm sm:text-base md:text-lg font-mono whitespace-pre-wrap">
-                      1.  Load the library   →   one line in your HTML or package install
-                      2.  Drop a div         →   place it wherever you want the button
-                      3.  Initialize         →   one line of JavaScript
-                    </pre>
-                  </div>
-
-                  <p className="text-base sm:text-lg text-muted-foreground mb-6 sm:mb-8">
-                    That's it. No accounts. No API keys. No configuration files.
-                  </p>
-
-                  <div className="bg-[#FFCC00]/10 dark:bg-[#FFCC00]/5 rounded-2xl p-4 sm:p-6 border-2 border-[#FFCC00]">
+                  <div className="bg-[#FFCC00]/10 dark:bg-[#FFCC00]/5 rounded-2xl p-4 sm:p-6 mb-6 sm:mb-8 border-2 border-[#FFCC00]">
                     <p className="text-xs sm:text-sm font-bold text-[#FFCC00] mb-2">Using GitHub Copilot?</p>
                     <p className="text-sm sm:text-base mb-4">
                       Open the chat, type <code className="bg-black dark:bg-white text-white dark:text-black px-2 py-1 rounded text-sm">@workspace</code>, then copy the public prompt from:
@@ -165,6 +149,22 @@ export default function Docs() {
                       Copilot will walk through each step for your exact framework automatically.
                     </p>
                   </div>
+
+                  <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8">
+                    You have exactly <span className="font-bold text-[#00C853]">three steps</span> between you and a live share button.
+                  </p>
+
+                  <div className="bg-[#00C853]/10 dark:bg-[#00C853]/5 rounded-2xl p-4 sm:p-6 mb-6 sm:mb-8 border-l-4 border-[#00C853]">
+                    <pre className="text-sm sm:text-base md:text-lg font-mono whitespace-pre-wrap">
+                      1.  Load the library   →   one line in your HTML or package install
+                      2.  Drop a div         →   place it wherever you want the button
+                      3.  Initialize         →   one line of JavaScript
+                    </pre>
+                  </div>
+
+                  <p className="text-base sm:text-lg text-muted-foreground mb-6 sm:mb-8">
+                    That's it. No accounts. No API keys. No configuration files.
+                  </p>
                 </div>
               </div>
 
