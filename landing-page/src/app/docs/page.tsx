@@ -132,6 +132,8 @@ export default function Docs() {
                     How to Get Started
                   </h2>
 
+                  <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">1. By AI-Agent</h3>
+
                   <div className="bg-[#FFCC00]/10 dark:bg-[#FFCC00]/5 rounded-2xl p-4 sm:p-6 mb-6 sm:mb-8 border-2 border-[#FFCC00]">
                     <p className="text-xs sm:text-sm font-bold text-[#FFCC00] mb-2">Using GitHub Copilot?</p>
                     <p className="text-sm sm:text-base mb-4">
@@ -149,6 +151,8 @@ export default function Docs() {
                       Copilot will walk through each step for your exact framework automatically.
                     </p>
                   </div>
+
+                  <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">2. Manually</h3>
 
                   <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8">
                     You have exactly <span className="font-bold text-[#00C853]">three steps</span> between you and a live share button.
