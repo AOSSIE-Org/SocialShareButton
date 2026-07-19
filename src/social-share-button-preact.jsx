@@ -1,13 +1,13 @@
 import { useEffect, useRef } from "preact/hooks";
 
 /**
-* SocialShareButton Preact Wrapper
-*
-* Provides a lightweight Preact functional component that wraps the core
-* SocialShareButton vanilla JS library. Handles lifecycle, dynamic updates,
-* and browser-only initialization.
-*
-*/
+ * SocialShareButton Preact Wrapper
+ *
+ * Provides a lightweight Preact functional component that wraps the core
+ * SocialShareButton vanilla JS library. Handles lifecycle, dynamic updates,
+ * and browser-only initialization.
+ *
+ */
 
 export default function SocialShareButton({
   url = "",
@@ -74,9 +74,9 @@ export default function SocialShareButton({
 
   /**
    * Initialization Effect
-   * 
+   *
    * Handles the setup of the vanilla JS instance once the component mounts.
-   * Includes a polling mechanism to wait for the core library if it's loaded 
+   * Includes a polling mechanism to wait for the core library if it's loaded
    * asynchronously (e.g., via a CDN script tag).
    */
   useEffect(() => {
@@ -97,7 +97,7 @@ export default function SocialShareButton({
     };
 
     // SSR Check: Ensure we're in a browser environment
-    if (typeof window === "undefined") return () => { };
+    if (typeof window === "undefined") return () => {};
 
     if (window.SocialShareButton) {
       // Core library is already loaded
@@ -131,12 +131,12 @@ export default function SocialShareButton({
 
   /**
    * Update Effect
-   * 
-   * Synchronizes prop changes from Preact down to the vanilla JS instance 
+   *
+   * Synchronizes prop changes from Preact down to the vanilla JS instance
    * without re-mounting the entire component.
    */
 
-  // Stringify array dependencies to prevent unnecessary re-runs when 
+  // Stringify array dependencies to prevent unnecessary re-runs when
   // parent components pass fresh array literals on every render.
   const hashtagsDep = JSON.stringify(hashtags);
   const platformsDep = JSON.stringify(platforms);

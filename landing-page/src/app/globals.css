@@ -3,12 +3,13 @@
 @tailwind utilities;
 
 @layer base {
-  .dark, .dark:root {
+  .dark,
+  .dark:root {
     --background: #212121;
     --foreground: #fafafa;
-    --primary: #FFCC00;
+    --primary: #ffcc00;
     --primary-foreground: #000000;
-    --secondary: #2E8B00;
+    --secondary: #2e8b00;
     --secondary-foreground: #ffffff;
     --card: #292929;
     --card-foreground: #fafafa;
@@ -20,9 +21,9 @@
   :root {
     --background: #ffffff;
     --foreground: #000000;
-    --primary: #FFCC00;
+    --primary: #ffcc00;
     --primary-foreground: #000000;
-    --secondary: #2E8B00;
+    --secondary: #2e8b00;
     --secondary-foreground: #ffffff;
     --card: #ffffff;
     --card-foreground: #000000;
@@ -34,6 +35,14 @@
   * {
     @apply border-border;
   }
+  html {
+    scroll-behavior: smooth;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
   body {
     @apply bg-background text-foreground;
   }
@@ -43,7 +52,7 @@
   .text-balance {
     text-wrap: balance;
   }
-  
+
   .hide-scrollbar::-webkit-scrollbar {
     display: none;
   }
@@ -51,4 +60,66 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  @keyframes shine {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .animate-shine {
+    animation: shine 1.5s ease-in-out infinite;
+  }
+
+  @keyframes scroll-left {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+
+  .animate-scroll-left {
+    animation: scroll-left 40s linear infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-scroll-left,
+    .animate-float,
+    .animate-shine {
+      animation: none !important;
+    }
+  }
 }
+@keyframes marquee-right {
+    0% {
+      transform: translateX(-50%);
+    }
+    100% {
+      transform: translateX(0%);
+    }
+  }
+  .animate-marquee-right {
+    animation: marquee-right 32s linear infinite;
+  }
+@media (prefers-reduced-motion: reduce) {
+    .animate-marquee-right {      animation: none;
+  }
+  }

@@ -495,105 +495,94 @@
           Join Discord
         </a>
       </div>
+
+      <!--Qwik/QwikCity Integration-->
+      <div class="demo-section">
+        <h2>⚡ Qwik / QwikCity Integration</h2>
+        <p>Resumability-optimized wrapper for the fastest performance.</p>
+
+        <div class="code-block">
+          <button class="copy-btn" type="button" aria-label="Copy code">Copy</button>
+          <span
+            class="copy-status"
+            aria-live="polite"
+            style="position: absolute; left: -9999px"
+          ></span>
+          <code>
+            &lt;link rel="stylesheet"
+            href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.css"&gt;
+            &lt;script
+            src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.js"&gt;&lt;/script&gt;
+          </code>
+          <code>
+            import { component$ } from '@builder.io/qwik'; import { SocialShareButton } from
+            './social-share-button-qwik'; export default component$(() => ( &lt;SocialShareButton
+            url="https://your-website.com" theme="light" buttonText="Share Now"
+            buttonStyle="primary" /&gt; ));</code
+          >
+        </div>
+      </div>
+
+      <div class="demo-section">
+        <h2>▲ Next.js Integration</h2>
+        <p>Use the component inside a Next.js page</p>
+
+        <div class="code-block">
+          <code
+            >import SocialShareButton from 'social-share-button'; export default function Home() {
+            return ( &lt;SocialShareButton url="https://your-website.com" title="Check this out!"
+            /&gt; ); }</code
+          >
+        </div>
+      </div>
+
+      <div class="demo-section">
+        <h2>🟢 Vue / Vite Integration</h2>
+        <p>Use inside a Vue component</p>
+
+        <div class="code-block">
+          <code
+            >&lt;template&gt; &lt;SocialShareButton url="https://your-website.com" title="Check this
+            out!" /&gt; &lt;/template&gt; &lt;script setup&gt; import SocialShareButton from
+            'social-share-button' &lt;/script&gt;</code
+          >
+        </div>
+      </div>
+
+      <div class="demo-section">
+        <h2>🅰️ Angular Integration</h2>
+        <p>Use inside an Angular component template</p>
+
+        <div class="code-block">
+          <code
+            >&lt;social-share-button [url]="'https://your-website.com'" [title]="'Check this out!'"
+            &gt; &lt;/social-share-button&gt;</code
+          >
+        </div>
+      </div>
+
+      <!-- CTA Section -->
+      <div class="cta-section">
+        <h2 style="color: #fff; margin-bottom: 20px">Ready to Get Started?</h2>
+        <a
+          href="https://github.com/AOSSIE-Org/SocialShareButton"
+          class="cta-button"
+          target="_blank"
+          rel="noopener"
+        >
+          View on GitHub →
+        </a>
+
+        <a
+          href="https://discord.gg/prMM922G"
+          class="cta-button discord-btn"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Join Discord
+        </a>
+      </div>
     </div>
-
-
-  <!--Qwik/QwikCity Integration-->
-  <div class="demo-section">
-  <h2>⚡ Qwik / QwikCity Integration</h2>
-  <p>Resumability-optimized wrapper for the fastest performance.</p>
-  
-  <div class="code-block">
-    <button class="copy-btn" type="button" aria-label="Copy code">Copy</button>
-    <span class="copy-status" aria-live="polite" style="position:absolute; left:-9999px;"></span>
-    <code>
-    &lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.css"&gt;
-    &lt;script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.js"&gt;&lt;/script&gt;
-    </code>
-    <code>
-    import { component$ } from '@builder.io/qwik';
-    import { SocialShareButton } from './social-share-button-qwik';
-
-    export default component$(() => (
-    &lt;SocialShareButton
-    url="https://your-website.com"
-    theme="light"
-    buttonText="Share Now"
-    buttonStyle="primary"
-    /&gt;
-  ));</code>
-  </div>
-</div>
-
-
-
-    <div class="demo-section">
-  <h2>▲ Next.js Integration</h2>
-  <p>Use the component inside a Next.js page</p>
-
-  <div class="code-block">
-<code>import SocialShareButton from 'social-share-button';
-
-export default function Home() {
-  return (
-    &lt;SocialShareButton
-      url="https://your-website.com"
-      title="Check this out!"
-    /&gt;
-  );
-}</code>
-  </div>
-</div>
-
-<div class="demo-section">
-  <h2>🟢 Vue / Vite Integration</h2>
-  <p>Use inside a Vue component</p>
-
-  <div class="code-block">
-<code>&lt;template&gt;
-  &lt;SocialShareButton
-    url="https://your-website.com"
-    title="Check this out!"
-  /&gt;
-&lt;/template&gt;
-
-&lt;script setup&gt;
-import SocialShareButton from 'social-share-button'
-&lt;/script&gt;</code>
-  </div>
-</div>
-
-<div class="demo-section">
-  <h2>🅰️ Angular Integration</h2>
-  <p>Use inside an Angular component template</p>
-
-  <div class="code-block">
-<code>&lt;social-share-button
-  [url]="'https://your-website.com'"
-  [title]="'Check this out!'"
-&gt;
-&lt;/social-share-button&gt;</code>
-  </div>
-</div>
-
-
-
-    <!-- CTA Section -->
-    <div class="cta-section">
-      <h2 style="color: #fff; margin-bottom: 20px;">Ready to Get Started?</h2>
-      <a href="https://github.com/AOSSIE-Org/SocialShareButton" class="cta-button" target="_blank" rel="noopener">
-        View on GitHub →
-      </a>
-
-    <a href="https://discord.gg/prMM922G"
-   class="cta-button discord-btn"
-   target="_blank"
-   rel="noopener noreferrer">
-   Join Discord
-</a>
-  </div>
-
-</div>
 
     <footer>
       <p>Made with ❤️ by the AOSSIE community</p>
@@ -774,37 +763,40 @@ import SocialShareButton from 'social-share-button'
               clearTimeout(button.copyResetTimer);
             }
 
-            navigator.clipboard.writeText(text).then(() => {
-              if (statusSpan && statusSpan.classList.contains("copy-status")) {
-                statusSpan.textContent = "Code copied to clipboard";
-              }
+            navigator.clipboard
+              .writeText(text)
+              .then(() => {
+                if (statusSpan && statusSpan.classList.contains("copy-status")) {
+                  statusSpan.textContent = "Code copied to clipboard";
+                }
 
-              button.textContent = "Copied!";
+                button.textContent = "Copied!";
 
-              button.copyResetTimer = setTimeout(() => {
+                button.copyResetTimer = setTimeout(() => {
+                  button.textContent = originalText;
+
+                  if (statusSpan && statusSpan.classList.contains("copy-status")) {
+                    statusSpan.textContent = "";
+                  }
+                }, 2000);
+              })
+              .catch((error) => {
+                console.error("Failed to copy to clipboard", error);
+
                 button.textContent = originalText;
 
                 if (statusSpan && statusSpan.classList.contains("copy-status")) {
-                  statusSpan.textContent = "";
+                  statusSpan.textContent = "Failed to copy to clipboard";
                 }
-              }, 2000);
-            }).catch((error) => {
-              console.error("Failed to copy to clipboard", error);
 
-              button.textContent = originalText;
+                button.copyResetTimer = setTimeout(() => {
+                  button.textContent = originalText;
 
-              if (statusSpan && statusSpan.classList.contains("copy-status")) {
-                statusSpan.textContent = "Failed to copy to clipboard";
-              }
-
-              button.copyResetTimer = setTimeout(() => {
-                button.textContent = originalText;
-
-                if (statusSpan && statusSpan.classList.contains("copy-status")) {
-                  statusSpan.textContent = "";
-                }
-              }, 2000);
-            });
+                  if (statusSpan && statusSpan.classList.contains("copy-status")) {
+                    statusSpan.textContent = "";
+                  }
+                }, 2000);
+              });
           });
         });
       });

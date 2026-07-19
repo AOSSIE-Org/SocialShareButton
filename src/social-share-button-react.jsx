@@ -3,8 +3,8 @@ import { useEffect, useRef } from "react";
 /**
  * SocialShareButton React Wrapper
  *
- * Provides a React functional component that wraps the core SocialShareButton 
- * vanilla JS library. Handles lifecycle, dynamic updates, and provides 
+ * Provides a React functional component that wraps the core SocialShareButton
+ * vanilla JS library. Handles lifecycle, dynamic updates, and provides
  * sensible defaults for all sharing options.
  */
 export const SocialShareButton = ({
@@ -13,10 +13,21 @@ export const SocialShareButton = ({
   description = "",
   hashtags = [],
   via = "",
-  platforms = ["whatsapp", "facebook", "twitter", "linkedin", "telegram", "reddit", "pinterest", "discord"],
+  platforms = [
+    "whatsapp",
+    "facebook",
+    "twitter",
+    "linkedin",
+    "telegram",
+    "reddit",
+    "pinterest",
+    "discord",
+  ],
   theme = "dark",
   buttonText = "Share",
   customClass = "",
+  buttonColor = "",
+  buttonHoverColor = "",
   onShare = null,
   onCopy = null,
   buttonStyle = "default",
@@ -41,7 +52,7 @@ export const SocialShareButton = ({
 
   /**
    * Initialization Effect
-   * 
+   *
    * Sets up the vanilla JS component once the React component mounts.
    * Includes a safe check for the global SocialShareButton class.
    */
@@ -59,6 +70,8 @@ export const SocialShareButton = ({
           theme,
           buttonText,
           customClass,
+          buttonColor,
+          buttonHoverColor,
           onShare,
           onCopy,
           buttonStyle,
@@ -82,8 +95,8 @@ export const SocialShareButton = ({
 
   /**
    * Update Effect
-   * 
-   * Synchronizes React prop changes with the underlying vanilla JS instance 
+   *
+   * Synchronizes React prop changes with the underlying vanilla JS instance
    * without re-mounting the entire component.
    */
 
@@ -100,6 +113,8 @@ export const SocialShareButton = ({
         theme,
         buttonText,
         customClass,
+        buttonColor,
+        buttonHoverColor,
         onShare,
         onCopy,
         buttonStyle,
@@ -121,6 +136,8 @@ export const SocialShareButton = ({
     theme,
     buttonText,
     customClass,
+    buttonColor,
+    buttonHoverColor,
     onShare,
     onCopy,
     buttonStyle,
