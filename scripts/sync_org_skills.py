@@ -13,7 +13,7 @@ repo_root = script_dir.parent
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger("org-skills-sync")
 
-# Global org-wide skills to keep in skills/shared
+# Global org-wide skills to keep in org-wide-skills
 ORG_SKILLS = [
     "GIT-DIS-AIPolicy",
     "contributor-onboarding",
@@ -23,7 +23,7 @@ ORG_SKILLS = [
 ]
 
 SKILLS_REPO_ZIP = "https://github.com/AOSSIE-Org/Skills/archive/refs/heads/main.zip"
-TARGET_DIR = repo_root / "skills" / "shared"
+TARGET_DIR = repo_root / "org-wide-skills"
 
 
 def sync_org_skills():
@@ -56,7 +56,7 @@ def sync_org_skills():
                     shutil.copytree(src, dst)
                 else:
                     shutil.copy2(src, dst)
-                logger.info(f"Copied {item} -> skills/shared/{item}")
+                logger.info(f"Copied {item} -> org-wide-skills/{item}")
                 copied_count += 1
             else:
                 logger.warning(f"Item '{item}' not found in Skills repository.")

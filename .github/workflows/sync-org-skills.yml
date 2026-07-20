@@ -30,9 +30,9 @@ jobs:
 
       - name: Commit and Push updates
         run: |
-          git add skills/shared
+          git add org-wide-skills
           if ! git diff --staged --quiet; then
-            git commit -m "sync: update org-wide skills in skills/shared"
+            git commit -m "sync: update org-wide skills in org-wide-skills"
             git push origin HEAD
           else
             echo "No changes in org skills to push."
