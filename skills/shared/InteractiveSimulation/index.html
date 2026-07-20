@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AOSSIE Skill Ecosystem Simulator</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Background glow elements for rich aesthetics -->
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+    <div class="bg-glow bg-glow-3"></div>
+
+    <div class="step-indicator" id="step-indicator" style="display: none;">
+        <span id="step-text">Ready</span>
+    </div>
+
+    <div class="app-container">
+        <!-- SVG Canvas for animated flow lines -->
+        <svg class="connections-canvas" id="connections-canvas">
+            <defs>
+                <!-- Gradients for connection paths -->
+                <linearGradient id="grad-repo-bot" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#3B82F6" />
+                    <stop offset="100%" stop-color="#8B5CF6" />
+                </linearGradient>
+                <linearGradient id="grad-core-bot" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#10B981" />
+                    <stop offset="100%" stop-color="#8B5CF6" />
+                </linearGradient>
+                <linearGradient id="grad-repo-dash" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#3B82F6" />
+                    <stop offset="100%" stop-color="#06B6D4" />
+                </linearGradient>
+                <linearGradient id="grad-core-dash" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#10B981" />
+                    <stop offset="100%" stop-color="#06B6D4" />
+                </linearGradient>
+                <linearGradient id="grad-bot-updater" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#8B5CF6" />
+                    <stop offset="100%" stop-color="#F59E0B" />
+                </linearGradient>
+                <linearGradient id="grad-dash-updater" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#06B6D4" />
+                    <stop offset="100%" stop-color="#F59E0B" />
+                </linearGradient>
+                <linearGradient id="grad-updater-repo" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#F59E0B" />
+                    <stop offset="100%" stop-color="#3B82F6" />
+                </linearGradient>
+                <linearGradient id="grad-updater-core" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#F59E0B" />
+                    <stop offset="100%" stop-color="#10B981" />
+                </linearGradient>
+                
+                <!-- Glowing filters -->
+                <filter id="glow-repo" x="-20%" y="-20%" width="140%" height="140%">
+                    <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#3B82F6" flood-opacity="0.6"/>
+                </filter>
+                <filter id="glow-core" x="-20%" y="-20%" width="140%" height="140%">
+                    <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#10B981" flood-opacity="0.6"/>
+                </filter>
+                <filter id="glow-bot" x="-20%" y="-20%" width="140%" height="140%">
+                    <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#8B5CF6" flood-opacity="0.6"/>
+                </filter>
+                <filter id="glow-dash" x="-20%" y="-20%" width="140%" height="140%">
+                    <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#06B6D4" flood-opacity="0.6"/>
+                </filter>
+                <filter id="glow-updater" x="-20%" y="-20%" width="140%" height="140%">
+                    <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#F59E0B" flood-opacity="0.6"/>
+                </filter>
+            </defs>
+            
+            <!-- Connection Paths -->
+            <path id="path-repo-bot" d="" fill="none" stroke="url(#grad-repo-bot)" stroke-width="3" stroke-dasharray="8 6" />
+            <path id="path-core-bot" d="" fill="none" stroke="url(#grad-core-bot)" stroke-width="2" stroke-dasharray="4 4" opacity="0.6" />
+            <path id="path-repo-dash" d="" fill="none" stroke="url(#grad-repo-dash)" stroke-width="3" stroke-dasharray="8 6" />
+            <path id="path-core-dash" d="" fill="none" stroke="url(#grad-core-dash)" stroke-width="2" stroke-dasharray="4 4" opacity="0.6" />
+            <path id="path-bot-updater" d="" fill="none" stroke="url(#grad-bot-updater)" stroke-width="3" stroke-dasharray="8 6" />
+            <path id="path-dash-updater" d="" fill="none" stroke="url(#grad-dash-updater)" stroke-width="3" stroke-dasharray="8 6" />
+            <path id="path-updater-repo" d="" fill="none" stroke="url(#grad-updater-repo)" stroke-width="3" stroke-dasharray="8 6" />
+            <path id="path-updater-core" d="" fill="none" stroke="url(#grad-updater-core)" stroke-width="2" stroke-dasharray="4 4" opacity="0.6" />
+
+            <!-- Animated flowing packets (circles) -->
+            <circle id="packet-repo-bot" r="6" fill="#3B82F6" filter="url(#glow-repo)" style="display: none;"></circle>
+            <circle id="packet-core-bot" r="5" fill="#10B981" filter="url(#glow-core)" style="display: none;"></circle>
+            <circle id="packet-repo-dash" r="6" fill="#3B82F6" filter="url(#glow-repo)" style="display: none;"></circle>
+            <circle id="packet-core-dash" r="5" fill="#10B981" filter="url(#glow-core)" style="display: none;"></circle>
+            <circle id="packet-bot-updater" r="6" fill="#8B5CF6" filter="url(#glow-bot)" style="display: none;"></circle>
+            <circle id="packet-dash-updater" r="6" fill="#06B6D4" filter="url(#glow-dash)" style="display: none;"></circle>
+            <circle id="packet-updater-repo" r="6" fill="#F59E0B" filter="url(#glow-updater)" style="display: none;"></circle>
+            <circle id="packet-updater-core" r="5" fill="#F59E0B" filter="url(#glow-updater)" style="display: none;"></circle>
+        </svg>
+
+        <!-- Main Header -->
+        <header class="app-header">
+            <div class="brand">
+                <img src="../public/aossie-logo.svg" alt="AOSSIE Logo" class="brand-logo" onerror="this.src='https://raw.githubusercontent.com/kpj2006/Template-Repo/main/public/aossie-logo.svg'">
+                <div class="brand-text">
+                    <h1>AOSSIE Skill Ecosystem</h1>
+                    <p class="subtitle">Closed-Loop Interactive Agent Governance & Knowledge Simulation</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <button class="btn btn-help" id="btn-toggle-guide">
+                    <i class="fa-solid fa-circle-question"></i> Show User Guide
+                </button>
+                <div class="system-status">
+                    <div class="status-indicator">
+                        <span class="status-dot pulsing"></span>
+                        <span class="status-text">SYSTEM SIMULATION RUNNING</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Simulation Scenario Controller -->
+        <section class="simulation-controls">
+            <div class="control-label">
+                <i class="fa-solid fa-play"></i> Select Simulation Scenario:
+            </div>
+            <div class="scenario-buttons">
+                <button class="btn btn-scenario active" id="btn-scenario-a" data-scenario="a">
+                    <span class="scenario-number">Scenario A</span>
+                    <span class="scenario-name">Discord Chat & Gap Flow (Skill Bot)</span>
+                </button>
+                <button class="btn btn-scenario" id="btn-scenario-b" data-scenario="b">
+                    <span class="scenario-number">Scenario B</span>
+                    <span class="scenario-name">PR Analysis & Staleness Flow (PR Dashboard)</span>
+                </button>
+                <button class="btn btn-scenario" id="btn-scenario-c" data-scenario="c">
+                    <span class="scenario-number">Scenario C</span>
+                    <span class="scenario-name">Discussion to Update Loop (Skill Updater)</span>
+                </button>
+            </div>
+            <div class="control-actions">
+                <button class="btn btn-primary" id="btn-trigger-action">
+                    <i class="fa-solid fa-bolt"></i> Trigger Step
+                </button>
+                <button class="btn btn-secondary" id="btn-autoplay">
+                    <i class="fa-solid fa-play"></i> Auto-Play
+                </button>
+                <button class="btn btn-secondary" id="btn-reset">
+                    <i class="fa-solid fa-arrow-rotate-left"></i> Reset
+                </button>
+            </div>
+        </section>
+
+        <!-- Main Dashboard Grid -->
+        <main class="dashboard-grid">
+            
+            <!-- 1. PER-REPOSITORY SKILLS (Blue/Teal) -->
+            <article class="card card-repo" id="card-repo">
+                <div class="card-header">
+                    <div class="header-title">
+                        <i class="fa-solid fa-folder-tree icon-repo"></i>
+                        <h2>Per-Repository Skills</h2>
+                    </div>
+                    <span class="badge badge-repo">LOCAL CONTEXT (.agent/)</span>
+                </div>
+                <p class="card-desc">Project-specific local context, rules, boundaries, and setup instructions. 90% of bot/PR tasks are resolved directly here.</p>
+                
+                <div class="core-explorer">
+                    <!-- File Explorer List -->
+                    <div class="file-tree" id="file-tree-repo">
+                        <div class="tree-header">Local Repo Context</div>
+                        <button type="button" class="tree-item active" data-file="architecture" data-tree="repo">
+                            <i class="fa-solid fa-file-lines text-blue"></i> .agent/core/architecture.md
+                        </button>
+                        <button type="button" class="tree-item" data-file="edge-cases" data-tree="repo">
+                            <i class="fa-solid fa-file-lines text-blue"></i> .agent/core/edge-cases.md
+                        </button>
+                        <button type="button" class="tree-item" data-file="setup" data-tree="repo">
+                            <i class="fa-solid fa-file-lines text-blue"></i> .agent/instructions/setup.md
+                        </button>
+                        <button type="button" class="tree-item" data-file="testing" data-tree="repo">
+                            <i class="fa-solid fa-file-lines text-blue"></i> .agent/instructions/testing.md
+                        </button>
+                        <button type="button" class="tree-item" data-file="operational" data-tree="repo">
+                            <i class="fa-solid fa-file-lines text-blue"></i> .agent/info/operational-data.md
+                        </button>
+                    </div>
+                    <!-- File Editor Panel -->
+                    <div class="file-editor">
+                        <div class="editor-header" id="editor-filename-repo">.agent/core/architecture.md</div>
+                        <pre class="editor-content" id="editor-body-repo">Loading...</pre>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 2. SKILLS CORE (Green) -->
+            <article class="card card-core" id="card-core">
+                <div class="card-header">
+                    <div class="header-title">
+                        <i class="fa-solid fa-database icon-core"></i>
+                        <h2>Skills Core</h2>
+                    </div>
+                    <span class="badge badge-core">ORG-WIDE SKILLS</span>
+                </div>
+                <p class="card-desc">Global organization-wide skills (like AI Policy & onboarding flows). Unified and synced to repos via Git Subtrees.</p>
+                
+                <div class="core-explorer">
+                    <!-- File Explorer List -->
+                    <div class="file-tree" id="file-tree-core">
+                        <div class="tree-header">Org-Wide Core Skills</div>
+                        <button type="button" class="tree-item" data-file="policy" data-tree="core">
+                            <i class="fa-solid fa-file-shield text-green"></i> GIT-DIS-AIPolicy/SKILL.md
+                        </button>
+                        <button type="button" class="tree-item" data-file="onboarding" data-tree="core">
+                            <i class="fa-solid fa-file-shield text-green"></i> onboarding/SKILL.md
+                        </button>
+                        <button type="button" class="tree-item" data-file="mcp" data-tree="core">
+                            <i class="fa-solid fa-file-shield text-green"></i> mcp-integration/SKILL.md
+                        </button>
+                        <button type="button" class="tree-item" data-file="glossary" data-tree="core">
+                            <i class="fa-solid fa-file-lines text-green"></i> GLOSSARY.md
+                        </button>
+                    </div>
+                    <!-- File Editor Panel -->
+                    <div class="file-editor">
+                        <div class="editor-header" id="editor-filename-core">GIT-DIS-AIPolicy/SKILL.md</div>
+                        <pre class="editor-content" id="editor-body-core">Loading...</pre>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 3. SKILL BOT (Purple) -->
+            <article class="card card-bot" id="card-bot">
+                <div class="card-header">
+                    <div class="header-title">
+                        <i class="fa-brands fa-discord icon-bot"></i>
+                        <h2>Skill Bot</h2>
+                    </div>
+                    <span class="badge badge-bot">DISCORD ASSISTANT</span>
+                </div>
+                <p class="card-desc">Grounded in local Per-Repository Skills. Intercepts contributor questions, asks clarifying questions, and emits Gap Signals when local rules are insufficient.</p>
+                
+                <div class="discord-simulator">
+                    <div class="discord-header">
+                        <div class="discord-channel"><i class="fa-solid fa-hashtag"></i> ai-chat</div>
+                        <div class="discord-thread-indicator" id="discord-thread-indicator"><i class="fa-solid fa-network-wired"></i> Thread: Setup Queries</div>
+                    </div>
+                    <div class="discord-messages" id="discord-messages">
+                        <div class="discord-message">
+                            <div class="avatar user-avatar"><i class="fa-solid fa-user"></i></div>
+                            <div class="msg-content">
+                                <div class="author-name">Contributor_XYZ</div>
+                                <div class="msg-text">How do I set up this repository for development?</div>
+                            </div>
+                        </div>
+                        <div class="discord-message bot-msg">
+                            <div class="avatar bot-avatar"><i class="fa-solid fa-robot"></i></div>
+                            <div class="msg-content">
+                                <div class="author-name">SkillBot <span class="bot-badge">BOT</span></div>
+                                <div class="msg-text">Welcome! Let me check the local repository context for setup steps...</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Option Selectors / Quick Prompt Triggers -->
+                    <div class="prompt-choices" id="prompt-choices" style="display: none;">
+                        <button class="choice-btn" data-choice="clarify">Option A: Ask Clarifying Question (Roadmap Phase 1)</button>
+                        <button class="choice-btn" data-choice="gap">Option B: Fallback to General LLM & Log Gap Signal</button>
+                    </div>
+                    <div class="discord-input">
+                        <input type="text" id="discord-text-input" placeholder="Type a message or trigger scenario above..." disabled>
+                        <button class="send-btn" disabled><i class="fa-solid fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 4. PR DASHBOARD (Blue) -->
+            <article class="card card-dash" id="card-dash">
+                <div class="card-header">
+                    <div class="header-title">
+                        <i class="fa-solid fa-code-pull-request icon-dash"></i>
+                        <h2>PR Dashboard</h2>
+                    </div>
+                    <span class="badge badge-dash">MAINTAINER SYSTEM</span>
+                </div>
+                <p class="card-desc">Queries local Per-Repository Skills to inject architectural boundaries, analyze open PRs, detect semantic conflicts, and signal staleness.</p>
+                
+                <div class="dashboard-simulator">
+                    <div class="dashboard-tabs" role="tablist" aria-label="PR Analysis Views">
+                        <button type="button" class="dash-tab active" id="tab-dag" role="tab" aria-selected="true" aria-controls="panel-dag" data-tab="dag">Conflict DAG</button>
+                        <button type="button" class="dash-tab" id="tab-isolated" role="tab" aria-selected="false" aria-controls="panel-isolated" data-tab="isolated">Isolated PRs</button>
+                    </div>
+                    <div class="tab-panel active" id="panel-dag" role="tabpanel" aria-labelledby="tab-dag">
+                        <div class="dag-container">
+                            <div class="dag-node main-node">
+                                <div class="node-title">main branch</div>
+                                <div class="node-meta">Target State</div>
+                            </div>
+                            
+                            <div class="dag-connector-v"></div>
+                            
+                            <div class="dag-row">
+                                <div class="dag-node pr-node conflict" id="dag-pr-41">
+                                    <div class="node-title">PR #41: Add Postgres</div>
+                                    <div class="node-meta">Author: Alice</div>
+                                </div>
+                                <div class="dag-node-h-connect text-red"><i class="fa-solid fa-arrows-left-right-to-line"></i> Semantic Conflict</div>
+                                <div class="dag-node pr-node conflict" id="dag-pr-42">
+                                    <div class="node-title">PR #42: Database ORM</div>
+                                    <div class="node-meta">Author: Bob</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="conflict-explanation" id="conflict-explanation">
+                            <strong>Conflict Reasoning (Ollama + Local Architecture):</strong> Alice adds pg-client utilities directly in controllers, violating Layer 1 architecture rules. Bob sets up Prisma ORM in `backend/models`. 
+                            <span class="recommendation">Recommendation: Merge Bob (PR #42) first, then rewrite Alice (PR #41) to use Prisma model layer.</span>
+                        </div>
+                    </div>
+                    <div class="tab-panel" id="panel-isolated" style="display: none;" role="tabpanel" aria-labelledby="tab-isolated">
+                        <div class="isolated-list">
+                            <div class="isolated-card">
+                                <div class="isolated-header">
+                                    <h4>PR #45: Fix Landing Page CSS alignment</h4>
+                                    <span class="safe-badge"><i class="fa-solid fa-circle-check"></i> Safe to Merge</span>
+                                </div>
+                                <p>Simple CSS adjustment in UI component. Zero conflicts with open PRs.</p>
+                            </div>
+                            <div class="isolated-card">
+                                <div class="isolated-header">
+                                    <h4>PR #48: Add Lint configuration rule</h4>
+                                    <span class="safe-badge"><i class="fa-solid fa-circle-check"></i> Safe to Merge</span>
+                                </div>
+                                <p>Updates static linters. No overlapping code logic.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 5. SKILL UPDATER (Amber) -->
+            <article class="card card-updater" id="card-updater">
+                <div class="card-header">
+                    <div class="header-title">
+                        <i class="fa-solid fa-arrows-spin icon-updater"></i>
+                        <h2>Skill Updater</h2>
+                    </div>
+                    <span class="badge badge-updater">KNOWLEDGE EVOLUTION</span>
+                </div>
+                <p class="card-desc">Processes Discord conversations, gap logs, and staleness logs. Groups them semantically via BERTopic to generate Git patches that update Per-Repository Skills.</p>
+                
+                <div class="updater-simulator">
+                    <div class="pipeline-flow">
+                        <!-- Step 1: Input Sources -->
+                        <div class="pipeline-step" id="step-poll">
+                            <div class="step-icon"><i class="fa-solid fa-arrows-down-to-people"></i></div>
+                            <div class="step-info">
+                                <h5>1. Fetch & Poll</h5>
+                                <p id="updater-input-src">Idle. Awaiting signal...</p>
+                            </div>
+                        </div>
+                        <div class="pipeline-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                        <!-- Step 2: Topic Clustering -->
+                        <div class="pipeline-step" id="step-cluster">
+                            <div class="step-icon"><i class="fa-solid fa-tags"></i></div>
+                            <div class="step-info">
+                                <h5>2. Semantic Cluster</h5>
+                                <p id="updater-cluster-info">BERTopic Online Model</p>
+                            </div>
+                        </div>
+                        <div class="pipeline-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                        <!-- Step 3: Git Patch Apply -->
+                        <div class="pipeline-step" id="step-patch">
+                            <div class="step-icon"><i class="fa-solid fa-file-pen"></i></div>
+                            <div class="step-info">
+                                <h5>3. Auto-Patch Apply</h5>
+                                <p id="updater-patch-info">Git-backed repo update</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="patch-preview-container" style="display: none;" id="patch-preview-container">
+                        <div class="patch-header">Generated Git Diff Patch</div>
+                        <pre class="patch-diff" id="patch-diff-content">No active patches.</pre>
+                    </div>
+                </div>
+            </article>
+
+        </main>
+
+        <!-- Real-time Console Log / Under the Hood Execution Terminal -->
+        <footer class="console-section">
+            <div class="console-header">
+                <div class="console-title">
+                    <i class="fa-solid fa-terminal"></i>
+                    <h3>Ecosystem Under the Hood Console</h3>
+                </div>
+                <div class="console-controls">
+                    <span class="console-tag">ollama: nomic-embed-text & llama3</span>
+                    <button class="console-clear-btn" id="console-clear"><i class="fa-solid fa-trash-can"></i> Clear</button>
+                </div>
+            </div>
+            <div class="console-terminal" id="console-terminal">
+                <div class="log-line system-log">[SYSTEM] AOSSIE Skill Ecosystem Simulation initialized. Select a scenario above to trace data flows.</div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- User Guide Modal Overlay -->
+    <div class="guide-modal-overlay" id="guide-modal" style="display: none;">
+        <div class="guide-modal">
+            <div class="guide-modal-header">
+                <h2><i class="fa-solid fa-compass"></i> AOSSIE Skills Ecosystem Simulator Guide</h2>
+                <button class="close-guide-btn" id="btn-close-guide"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="guide-modal-body">
+                <div class="guide-intro">
+                    <p>Welcome to the <strong>AOSSIE Skills Ecosystem Simulator</strong>!</p>
+                    <p>This is a scalable, end-to-end repository governance system designed to ensure zero knowledge loss. It automatically catches insights from developer discussions to update repository skill files, runs community bots to resolve contributor questions, and displays a dashboard that highlights conflict warnings, suggested replies for ambiguous contributor PRs, and recommended merge sequences. If any knowledge is missing, it logs a gap signal to capture it later.</p>
+                    <p><strong>🔒 Local-First, Private & Scalable:</strong> Tested on servers with over 8,000+ members, the entire system is free, open-source, and runs fully on local LLMs—meaning zero info leaks, absolute data privacy, and zero SaaS costs, all while keeping a human in the loop.</p>
+                </div>
+                
+                <div class="guide-section">
+                    <h3><i class="fa-solid fa-cubes"></i> Core Architecture</h3>
+                    <div class="architecture-grid">
+                        <div class="arch-box">
+                            <span class="arch-tag tag-repo"><i class="fa-solid fa-folder-tree"></i> Per-Repository Customization</span>
+                            <p>Local config files (<code>.agent/</code> and <code>AGENTS.md</code>) unique to each project. They store setup, testing, and architecture boundaries to resolve 90% of contributor queries locally.</p>
+                        </div>
+                        <div class="arch-box">
+                            <span class="arch-tag tag-core"><i class="fa-solid fa-database"></i> Organization-Wide Skills Core</span>
+                            <p>Global, shared skills (such as AI Policy & onboarding flows) that remain consistent across all repositories, synchronized via Git Subtrees.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="guide-section">
+                    <h3><i class="fa-solid fa-triangle-exclamation"></i> Real-World Challenges Solved</h3>
+                    <div class="challenges-list" style="display: flex; flex-direction: column; gap: 0.6rem; margin-top: 0.5rem;">
+                        <div><strong>1. Unstructured AI Contributions:</strong> Prevents generic AI tools from suggesting incorrect code or violating project size/design limits.</div>
+                        <div><strong>2. Repetitive Queries:</strong> Instantly answers developer FAQs about setup, formatting, and onboarding.</div>
+                        <div><strong>3. Ephemeral Knowledge Loss:</strong> Automatically captures maintainer decisions discussed in Discord threads into Git-tracked documentation.</div>
+                        <div><strong>4. PR Merge Overhead:</strong> Clusters open PRs and flags code conflicts, drawing an optimal merge DAG.</div>
+                        <div><strong>5. Review Delays:</strong> Solves reviewer bottlenecks for sub-projects that lack dedicated maintainers.</div>
+                    </div>
+                </div>
+
+                <div class="guide-section">
+                    <h3><i class="fa-solid fa-gears"></i> Core Ecosystem Modules</h3>
+                    <div class="modules-grid" style="display: flex; flex-direction: column; gap: 0.6rem; margin-top: 0.5rem;">
+                        <div class="module-item"><strong>Skill Bot:</strong> Discord assistant that intercepts contributor queries, runs semantic vector searches against local/global skills, and logs knowledge gaps for maintainers.</div>
+                        <div class="module-item"><strong>PR Dashboard:</strong> Local developer dashboard that clusters open Pull Requests, injects skill rules, and checks local code boundaries to render a Conflict DAG.</div>
+                        <div class="module-item"><strong>Skill Updater:</strong> Background pipeline that semantically clusters developer discussions using BERTopic to draft Git patches updating the codebase skills.</div>
+                    </div>
+                </div>
+
+                <div class="guide-section">
+                    <h3><i class="fa-solid fa-play"></i> Running the Simulation</h3>
+                    <p>Select a scenario at the top (<strong>A, B, or C</strong>) and click <strong>Trigger Step</strong> or <strong>Auto-Play</strong> to watch data flows trace in real-time between Per-Repository Skills, Skills Core, Skill Bot, PR Dashboard, and the Skill Updater.</p>
+                </div>
+            </div>
+            <div class="guide-modal-footer">
+                <button class="btn btn-primary" id="btn-start-guide">Got It, Let's Play!</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

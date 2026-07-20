@@ -1,0 +1,133 @@
+name: CodeRabbit Approval Handler
+
+on:
+  pull_request_review:
+    types: [submitted]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  remove-pending-label:
+    if: ${{ github.repository_owner == 'AOSSIE-Org' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if CodeRabbit approved
+        id: check-approval
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.EXTERNAL_LABELLER_TOKEN || secrets.GITHUB_TOKEN }}
+          script: |
+            const review = context.payload.review;
+            const reviewer = review.user.login;
+            const state = review.state;
+            const prNumber = context.payload.pull_request.number;
+            
+            console.log(`Reviewer: ${reviewer}`);
+            console.log(`Review state: ${state}`);
+            console.log(`PR number: ${prNumber}`);
+            
+            // Check if the reviewer is CodeRabbit and the review is approved
+            const isCodeRabbit = reviewer === 'coderabbitai' || reviewer === 'coderabbitai[bot]';
+            const isApproved = state === 'approved';
+            
+            core.setOutput('is_coderabbit_approved', isCodeRabbit && isApproved);
+            
+            return {
+              isCodeRabbit,
+              isApproved,
+              shouldRemoveLabel: isCodeRabbit && isApproved
+            };
+
+      - name: Remove pending CodeRabbit review label
+        id: remove-label
+        if: steps.check-approval.outputs.is_coderabbit_approved == 'true'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.EXTERNAL_LABELLER_TOKEN || secrets.GITHUB_TOKEN }}
+          script: |
+            const prNumber = context.payload.pull_request.number;
+            const labelToRemove = 'pending-coderabbit-review';
+            
+            try {
+              // Check if label exists on the PR
+              const pr = await github.rest.issues.get({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber
+              });
+              
+              const hasLabel = pr.data.labels.some(label => label.name === labelToRemove);
+              
+              if (hasLabel) {
+                console.log(`Removing label: ${labelToRemove}`);
+                
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: prNumber,
+                  name: labelToRemove
+                });
+                
+                console.log(`✅ Successfully removed '${labelToRemove}' label from PR #${prNumber}`);
+                core.setOutput('label_was_present', 'true');
+              } else {
+                console.log(`Label '${labelToRemove}' not found on PR #${prNumber}`);
+                core.setOutput('label_was_present', 'false');
+              }
+            } catch (error) {
+              if (error.status === 404) {
+                console.log(`Label '${labelToRemove}' does not exist on PR #${prNumber}`);
+                core.setOutput('label_was_present', 'false');
+              } else {
+                console.error(`Error removing label: ${error.message}`);
+                throw error;
+              }
+            }
+
+      - name: Add CodeRabbit approved label
+        if: steps.check-approval.outputs.is_coderabbit_approved == 'true'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.EXTERNAL_LABELLER_TOKEN || secrets.GITHUB_TOKEN }}
+          script: |
+            const prNumber = context.payload.pull_request.number;
+            
+            try {
+              console.log('Adding coderabbit-approved label');
+              
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                labels: ['coderabbit-approved']
+              });
+              
+              console.log(`✅ Added 'coderabbit-approved' label to PR #${prNumber}`);
+            } catch (error) {
+              console.error(`Error adding label: ${error.message}`);
+              throw error;
+            }
+
+      - name: Summary
+        if: steps.check-approval.outputs.is_coderabbit_approved == 'true'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.EXTERNAL_LABELLER_TOKEN || secrets.GITHUB_TOKEN }}
+          script: |
+            const prNumber = context.payload.pull_request.number;
+            const labelWasPresent = '${{ steps.remove-label.outputs.label_was_present }}' === 'true';
+            
+            console.log('='.repeat(50));
+            console.log('CodeRabbit Approval Handler Complete');
+            console.log('='.repeat(50));
+            console.log(`✅ PR #${prNumber} has been approved by CodeRabbit`);
+            if (labelWasPresent) {
+              console.log(`✅ Removed 'pending-coderabbit-review' label`);
+            } else {
+              console.log(`ℹ️  'pending-coderabbit-review' label was not present`);
+            }
+            console.log(`✅ Added 'coderabbit-approved' label`);
+            console.log('='.repeat(50));
