@@ -1,4 +1,4 @@
-name: Sync Git Subtrees
+name: Sync Org Skills
 
 on:
   schedule:
@@ -14,8 +14,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -27,9 +25,15 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Sync subtrees
-        run: python scripts/update_subtrees.py
+      - name: Sync Org Skills
+        run: python scripts/sync_org_skills.py
 
-      - name: Push updates
+      - name: Commit and Push updates
         run: |
-          git push origin HEAD || echo "No changes to push"
+          git add skills/shared
+          if ! git diff --staged --quiet; then
+            git commit -m "sync: update org-wide skills in skills/shared"
+            git push origin HEAD
+          else
+            echo "No changes in org skills to push."
+          fi
