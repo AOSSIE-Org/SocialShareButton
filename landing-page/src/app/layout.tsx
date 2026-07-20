@@ -9,6 +9,10 @@ const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfa
 export const metadata: Metadata = {
   title: "SocialShareButton",
   description: "Lightweight social share button library",
+  icons: {
+    icon: "/SocialShare_logo.webp",
+    apple: "/apple-icon.png",
+  },
 };
 
 export default function RootLayout({
@@ -26,7 +30,7 @@ export default function RootLayout({
             
             {/* Left fixed panel */}
             <div className="hidden lg:block w-[120px] shrink-0">
-            <div className="fixed top-0 left-0 w-[120px] h-full bg-[#e8e8e8] dark:bg-[#111111] border-r border-neutral-200 dark:border-neutral-900 z-40" />
+              <div className="fixed top-0 left-0 w-[120px] h-full bg-[#e8e8e8] dark:bg-[#111111] border-r border-neutral-200 dark:border-neutral-900 z-40" />
             </div>
 
             {/* Main content */}
@@ -36,7 +40,7 @@ export default function RootLayout({
 
             {/* Right fixed panel */}
             <div className="hidden lg:block w-[120px] shrink-0">
-<div className="fixed top-0 right-0 w-[120px] h-full bg-[#e8e8e8] dark:bg-[#111111] border-l border-neutral-200 dark:border-neutral-900 z-40" />
+              <div className="fixed top-0 right-0 w-[120px] h-full bg-[#e8e8e8] dark:bg-[#111111] border-l border-neutral-200 dark:border-neutral-900 z-40" />
             </div>
 
           </div>

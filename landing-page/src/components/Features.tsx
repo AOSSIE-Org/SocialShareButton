@@ -1,5 +1,52 @@
+"use client";
+
+import Link from "next/link";
+
+import { useState, useRef, useEffect } from "react";
+
+interface FeatureCardProps {
+  card: { num: string; title: string; desc: string; color: string; textColor: string };
+  index: number;
+  rotatedCard: number | null;
+  handleCardClick: (index: number) => void;
+}
+
+function FeatureCard({ card, index, rotatedCard, handleCardClick }: FeatureCardProps) {
+  return (
+    <div
+      onClick={() => handleCardClick(index)}
+      className={`snap-center shrink-0 w-[280px] sm:w-[300px] md:w-[350px] lg:w-[400px] rounded-[32px] p-6 sm:p-8 md:p-10 relative flex flex-col transition-all duration-700 ease-in-out border-[3px] border-black dark:border-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] dark:shadow-[8px_8px_0px_0px_rgba(255,255,255,1)] ${card.color} ${card.textColor} aspect-square cursor-pointer
+        hover:-translate-y-4 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[12px_12px_0px_0px_rgba(255,255,255,1)]
+        hover:rotate-3
+        ${rotatedCard === index ? 'rotate-[360deg] scale-110 shadow-[16px_16px_0px_0px_rgba(0,0,0,1)] dark:shadow-[16px_16px_0px_0px_rgba(255,255,255,1)]' : ''}`}
+      style={{
+        transformStyle: 'preserve-3d',
+        perspective: '1000px',
+      }}
+    >
+      <span className={`text-5xl sm:text-6xl md:text-7xl font-serif opacity-30 absolute top-4 sm:top-6 right-6 sm:right-8 font-bold ${card.textColor}`}>
+        {card.num}
+      </span>
+
+      <div className="mt-auto pt-8 sm:pt-12">
+        <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-3 sm:mb-4 pr-4">{card.title}</h3>
+        <p className={`text-[12px] sm:text-[14px] md:text-[15px] opacity-90 leading-relaxed font-semibold mb-6 sm:mb-8`}>
+          {card.desc}
+        </p>
+
+        <div>
+          <Link href="/docs" className="inline-block text-xs sm:text-sm font-bold px-4 sm:px-6 py-2 sm:py-3 bg-black text-white dark:bg-white dark:text-black rounded-full shadow-sm hover:opacity-80 transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black dark:focus:ring-white">
+            Learn more
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export function Features() {
+  const [rotatedCard, setRotatedCard] = useState<number | null>(null);
+
   const cards = [{
     num: "01",
     title: "Lightweight & Fast",
@@ -30,6 +77,27 @@ export function Features() {
   },
   ];
 
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
+  const handleCardClick = (index: number) => {
+    setRotatedCard(index);
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = setTimeout(() => {
+      setRotatedCard(null);
+      timeoutRef.current = null;
+    }, 1500);
+  };
+
   return (
     <div className="py-24 bg-background border-t-2 border-black dark:border-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -43,30 +111,17 @@ export function Features() {
           </h2>
         </div>
 
-        <div className="flex gap-6 md:gap-8 overflow-x-auto pb-12 pt-4 snap-x hide-scrollbar">
-          {cards.map((card, i) => (
-            <div
-              key={i}
-              className={`snap-center shrink-0 w-[300px] md:w-[350px] lg:w-[400px] rounded-[32px] p-8 md:p-10 relative flex flex-col transition-transform hover:-translate-y-2 border-[3px] border-black dark:border-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] dark:shadow-[8px_8px_0px_0px_rgba(255,255,255,1)] ${card.color} ${card.textColor} aspect-square`}
-            >
-              <span className={`text-6xl md:text-7xl font-serif opacity-30 absolute top-6 right-8 font-bold ${card.textColor}`}>
-                {card.num}
-              </span>
-
-              <div className="mt-auto pt-12">
-                <h3 className="text-xl md:text-2xl font-bold mb-4 pr-4">{card.title}</h3>
-                <p className={`text-[14px] md:text-[15px] opacity-90 leading-relaxed font-semibold mb-8`}>
-                  {card.desc}
-                </p>
-
-                <div>
-                  <span className="text-sm font-bold px-6 py-3 bg-black text-white dark:bg-white dark:text-black rounded-full shadow-sm hover:opacity-80 transition cursor-pointer">
-                    Learn more
-                  </span>
-                </div>
-              </div>
-            </div>
-          ))}
+        <div className="overflow-hidden pb-12 pt-4 relative group flex">
+          <div className="flex gap-4 sm:gap-6 md:gap-8 w-max animate-scroll-left group-hover:[animation-play-state:paused] pr-4 sm:pr-6 md:pr-8">
+            {cards.map((card, i) => (
+              <FeatureCard key={i} card={card} index={i} rotatedCard={rotatedCard} handleCardClick={handleCardClick} />
+            ))}
+          </div>
+          <div className="flex gap-4 sm:gap-6 md:gap-8 w-max animate-scroll-left group-hover:[animation-play-state:paused] pr-4 sm:pr-6 md:pr-8" aria-hidden="true">
+            {cards.map((card, i) => (
+              <FeatureCard key={`dup-${i}`} card={card} index={i} rotatedCard={rotatedCard} handleCardClick={handleCardClick} />
+            ))}
+          </div>
         </div>
 
       </div>
