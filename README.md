@@ -12,9 +12,9 @@
 > **Maintainer:** @kpj2006
 
 <!-- Organization Logo -->
-<div align="center" style="display: flex; align-items: center; justify-content: center; gap: 16px;">
-  <img alt="Stability Nexus" src="public/aossie_logo.svg" width="175">
-  <!-- <img src="public/todo-project-logo.svg" width="175" /> -->
+<div align="center" style="display: flex; align-items: flex-end; justify-content: center; gap: 16px;">
+  <img alt="Social Share Button" src="public/socialshare.png" height="150">
+  <img alt="AOSSIE" src="public/aossie_logo.svg" height="130">
 </div>
 
 &nbsp;
@@ -87,9 +87,9 @@ Lightweight social sharing component for web applications. Zero dependencies, fr
 ```html
 <link
   rel="stylesheet"
-  href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css"
+  href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.css"
 />
-<script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.js"></script>
 ```
 
 ---
@@ -120,12 +120,12 @@ No matter which framework you use, integration always follows the same 3 steps:
 <head>
   <link
     rel="stylesheet"
-    href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css"
+    href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.css"
   />
 </head>
 <body>
   <div id="root"></div>
-  <script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.js"></script>
 </body>
 ```
 
@@ -194,13 +194,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link
           rel="stylesheet"
-          href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css"
+          href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.css"
         />
       </head>
       <body>
         {children}
         <Script
-          src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js"
+          src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.js"
           strategy="beforeInteractive"
         />
       </body>
@@ -304,13 +304,13 @@ export default function Document() {
       <Head>
         <link
           rel="stylesheet"
-          href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css"
+          href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.css"
         />
       </Head>
       <body>
         <Main />
         <NextScript />
-        <script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.js"></script>
       </body>
     </Html>
   );
@@ -405,12 +405,12 @@ declare global {
 <head>
   <link
     rel="stylesheet"
-    href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css"
+    href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.css"
   />
 </head>
 <body>
   <div id="app"></div>
-  <script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.js"></script>
 </body>
 ```
 

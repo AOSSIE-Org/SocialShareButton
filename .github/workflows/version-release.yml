@@ -157,7 +157,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@fe02f34f77f8bf5c4f0454116efcf40eac0258b4 # v3
+        uses: pnpm/action-setup@008330803749db0355799c700092d9a85fd074e9 # v6.0.9
         with:
           version: 10
           run_install: false
