@@ -3,7 +3,7 @@
 > You are operating under the AOSSIE Contributor Skills Framework.
 > Before doing ANY work, you MUST read and follow the files listed below in sequence.
 
-**Bold terms** are defined in [GLOSSARY.md](../skills/GLOSSARY.md); look them up there for the full meaning.
+**Bold terms** are defined in [GLOSSARY.md](skills/shared/GLOSSARY.md); look them up there for the full meaning.
 
 ## 1. Project-Specific Local Context
 
@@ -28,10 +28,10 @@ This skill governs repository-specific workflows:
 
 These skills govern AI agent behavior and policy constraints globally:
 
-10. [skills/GIT-DIS-AIPolicy/SKILL.md](../skills/GIT-DIS-AIPolicy/SKILL.md) — Governs the **AI Policy**, PR disclosures, and communication.
-11. [skills/project-template/SKILL.md](../skills/project-template/SKILL.md) — Shared architecture patterns.
-12. [skills/contributor-onboarding/SKILL.md](../skills/contributor-onboarding/SKILL.md) — Core onboarding flow.
-13. [skills/GLOSSARY.md](../skills/GLOSSARY.md) — Definitions for framework terminology.
-14. [skills/mcp-integration/SKILL.md](../skills/mcp-integration/SKILL.md) — Guides MCP integration for auto-PRs and UI testing.
+10. [skills/shared/GIT-DIS-AIPolicy/SKILL.md](skills/shared/GIT-DIS-AIPolicy/SKILL.md) — Governs the **AI Policy**, PR disclosures, and communication.
+11. [skills/shared/project-template/SKILL.md](skills/shared/project-template/SKILL.md) — Shared architecture patterns.
+12. [skills/shared/contributor-onboarding/SKILL.md](skills/shared/contributor-onboarding/SKILL.md) — Core onboarding flow.
+13. [skills/shared/GLOSSARY.md](skills/shared/GLOSSARY.md) — Definitions for framework terminology.
+14. [skills/shared/mcp-integration/SKILL.md](skills/shared/mcp-integration/SKILL.md) — Guides MCP integration for auto-PRs and UI testing.
 
 - **Completion Criterion:** The agent has loaded the onboarding skill and confirmed compliance with all project instructions before writing any code.
