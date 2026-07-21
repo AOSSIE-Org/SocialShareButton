@@ -45,11 +45,12 @@ A skill serving as the org-wide entry gate for all contributors to AOSSIE reposi
 
 - **Completion Criterion:** Local dev environment is confirmed working and contributor has an assigned issue.
 
-## 4. Hand Off to Do-Work Workflow
+## 4. Ready for Contribution
 
-**Trigger:** Local environment confirmed, issue assigned.
+**Trigger:** Local environment confirmed and issue assigned.
 
 **Steps:**
-1. Load [`.agent/workflows/do-work.md`](.agent/workflows/do-work.md) and follow it from Phase 1.
+1. Instruct the contributor to begin coding on their feature or bug fix branch.
+2. Direct them to consult `.agent/core/architecture.md` and `.agent/core/examples.md` as needed while implementing changes.
 
-- **Completion Criterion:** Agent is actively running the do-work workflow.
+- **Completion Criterion:** Contributor has environment ready and assigned issue.
