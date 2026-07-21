@@ -1,53 +1,55 @@
 ---
 name: aossie-contributor-onboarding
-description: Orchestrator for contributor onboarding. Use when a contributor connects for the first time, asks "how do I start", "what should I read", or begins any contribution-related conversation.
+description: Org-level entry gate for all AOSSIE contributors. Use when a contributor asks "how do I start", "what should I read", or begins any contribution-related conversation.
 ---
 
-A skill serving as the entry gate for all contributors to AOSSIE repositories. It enforces a structured onboarding process to minimize **cognitive load** and ensure the agent runs with complete local context.
+A skill serving as the org-wide entry gate for all contributors to AOSSIE repositories.
 
 **Bold terms** are defined in [GLOSSARY.md](../GLOSSARY.md); look them up there for the full meaning.
 
-## 1. Initialize Context
+## 1. Read Local Project Context
 
 **Trigger:** The contributor starts a new session or asks how to begin contributing.
 
 **Steps:**
-1. Check the local workspace for `.agent/core/architecture.md`, `.agent/core/edge-cases.md`, and `.agent/instructions/setup.md`.
-2. Load all three files to establish project-specific context.
+1. Read the local project context files in this order:
+   - [`.agent/core/architecture.md`](.agent/core/architecture.md) — what the project does and its boundaries.
+   - [`.agent/core/edge-cases.md`](.agent/core/edge-cases.md) — past agent mistakes to avoid.
+   - [`.agent/instructions/setup.md`](.agent/instructions/setup.md) — local setup commands.
+2. Confirm understanding of the project's **architectural boundaries** before suggesting any code.
 
-* **Completion Criterion:** The agent has loaded and verified the contents of these three files before suggesting any code.
+- **Completion Criterion:** All three files loaded. Agent can describe the project architecture and core constraints.
 
 ## 2. Establish Policy
 
-**Trigger:** Context files are loaded successfully.
+**Trigger:** Project context is loaded.
 
 **Steps:**
 1. Inform the contributor that all work is governed by the AOSSIE Contributor Skills Framework.
-2. Outline the core rules of the **AI Policy**:
-   - Forbid blind issue generation.
-   - Mandate AI usage disclosure in pull requests.
-   - Enforce **architectural boundaries**.
-   - Primary communication is on Discord (`#development`).
+2. Read [GIT-DIS-AIPolicy/SKILL.md](../GIT-DIS-AIPolicy/SKILL.md) and outline its core rules:
+   - Blind issue generation is forbidden.
+   - AI usage must be disclosed in all pull requests.
+   - All changes must stay within the **architectural boundaries** documented in `.agent/core/architecture.md`.
+   - Primary communication is on Discord `#development`.
 
-* **Completion Criterion:** The agent has printed the core policy guidelines and requested confirmation from the contributor.
+- **Completion Criterion:** Policy rules communicated and contributor has confirmed understanding.
 
 ## 3. Project Setup Check
 
-**Trigger:** Policy rules are established.
+**Trigger:** Policy rules established.
 
 **Steps:**
 1. Ask the contributor if they have successfully built and run the project locally.
-2. If NOT: Load `.agent/instructions/setup.md` as a **context pointer** and guide the contributor through local installation. Remind them to use `#help` channel on Discord if stuck.
-3. If YES: Ask the contributor for the assigned Issue number (recommending they coordinate on Discord first if unassigned).
+2. If NOT: Follow the setup commands in [`.agent/instructions/setup.md`](.agent/instructions/setup.md). If stuck, direct them to Discord `#help`.
+3. If YES: Ask the contributor for their assigned GitHub issue number.
 
-* **Completion Criterion:** The agent has verified that the local dev environment is fully functional or guide the contributor to achieve this state.
+- **Completion Criterion:** Local dev environment is confirmed working and contributor has an assigned issue.
 
-## 4. Transition to Development
+## 4. Hand Off to Do-Work Workflow
 
-**Trigger:** Local environment setup is confirmed, and issue assignment is verified.
+**Trigger:** Local environment confirmed, issue assigned.
 
 **Steps:**
-1. Guide the contributor to begin coding.
-2. Activate the `aossie-ai-policy` and `aossie-project-template` skills to monitor progress.
+1. Load [`.agent/workflows/do-work.md`](.agent/workflows/do-work.md) and follow it from Phase 1.
 
-* **Completion Criterion:** The agent transitions to coding assistance under the active governance of the AI policy.
+- **Completion Criterion:** Agent is actively running the do-work workflow.
