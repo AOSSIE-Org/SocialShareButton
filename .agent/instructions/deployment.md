@@ -1,7 +1,5 @@
 # Deployment & CI/CD
 
-> **Agent Instruction:** Do NOT guess deployment steps. Use ONLY what is documented here. If deployment info is missing, tell the contributor to consult maintainers.
-
 ## Environments
 
 | Environment    | Delivery Mechanism                        | Source Directory |

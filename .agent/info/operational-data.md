@@ -1,7 +1,5 @@
 # Operational Data
 
-> **Agent Instruction:** Use this file to provide required context when a contributor raises a PR or issue. Provide the correct channel, message template, and mentor tags so contributors communicate properly.
-
 ## Project Endpoints
 
 | Resource          | URL                                                                                    |

@@ -1,7 +1,5 @@
 # Edge Cases & Agent Lessons Learned
 
-> **Agent Instruction:** This file contains specific errors previously made by AI agents in this project. Check this file before writing code to avoid repeating historical mistakes. Maintainers add entries whenever significant mistakes occur.
-
 ## 🔴 Critical — Will Break Things
 
 - **Framework Double Rendering:** In React/Preact/Qwik, strict mode or standard state updates can trigger component re-renders. If `SocialShareButton` is instantiated without a `useRef` guard or cleanup routine, duplicate buttons or modal overlays will populate the DOM. You MUST implement and document the `destroy()` call on unmount.

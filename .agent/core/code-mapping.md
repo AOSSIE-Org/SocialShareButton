@@ -1,7 +1,5 @@
 # Code-to-Structure Mapping
 
-> **Agent Instruction:** Before creating, moving, or deleting any file, consult this mapping. If a directory isn't listed here, do NOT create it without explicit maintainer approval.
-
 ## Directory Map
 
 | Directory       | Purpose                                         | Tech            |
@@ -28,6 +26,7 @@
 
 ## Rules
 
+- Do NOT create unlisted top-level directories without maintainer approval.
 - Any new social platforms must be added directly to the core lists in `src/social-share-button.js` (with corresponding SVGs if needed).
 - Never place user-specific CSS rules inside `src/social-share-button.css`. All formatting should be modular.
 - Do NOT create a `dist/` or `build/` directory for the core library. Users fetch raw assets from the CDN or use npm modules directly.

@@ -1,7 +1,5 @@
 # Testing Strategy & Commands
 
-> **Agent Instruction:** Every new feature or bug fix MUST include validation tests. Follow the testing patterns below. Do NOT skip verification steps.
-
 ## Test Commands
 
 Since the project uses manual validation and code quality enforcement:

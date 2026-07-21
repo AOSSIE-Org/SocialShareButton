@@ -1,7 +1,5 @@
 # Code Examples & Patterns
 
-> **Agent Instruction:** Follow the approved patterns below. If you find yourself writing something that looks like an anti-pattern, stop and reconsider.
-
 ## ✅ Approved Patterns
 
 ### Core Class Instantiation (Vanilla JS)

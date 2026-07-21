@@ -1,7 +1,5 @@
 # Project Setup & Local Development
 
-> **Agent Instruction:** Do NOT hallucinate infrastructure setup. Use ONLY the commands listed here. If a contributor asks about setup that isn't documented, tell them to ask in the `#development` Discord channel.
-
 ## Prerequisites
 
 - Node.js 18+ (verified via `node --version`)
