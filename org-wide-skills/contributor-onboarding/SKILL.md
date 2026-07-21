@@ -5,8 +5,6 @@ description: Org-level entry gate for all AOSSIE contributors. Use when a contri
 
 A skill serving as the org-wide entry gate for all contributors to AOSSIE repositories.
 
-**Bold terms** are defined in [GLOSSARY.md](../GLOSSARY.md); look them up there for the full meaning.
-
 ## 1. Read Local Project Context
 
 **Trigger:** The contributor starts a new session or asks how to begin contributing.

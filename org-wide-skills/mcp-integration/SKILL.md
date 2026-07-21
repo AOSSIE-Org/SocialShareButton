@@ -7,8 +7,6 @@ description: Guides developer agents on how to leverage and initialize Model Con
 
 A skill outlining the protocol and triggers for contributor-side AI agents to discover, initialize, and use Model Context Protocol (MCP) servers to automate tasks.
 
-**Bold terms** are defined in [GLOSSARY.md](../GLOSSARY.md); look them up there for the full meaning.
-
 ## 1. Discovering Available MCP Servers
 
 **Trigger:** The agent begins execution on any task in an AOSSIE repository.

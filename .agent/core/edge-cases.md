@@ -1,8 +1,6 @@
 # Edge Cases & Agent Lessons Learned
 
-> **Agent Instruction:** This file contains specific errors previously made by AI agents in this project. You MUST check this file before writing new code to avoid repeating historical mistakes. This is a living document — maintainers add entries whenever an agent makes a significant mistake in a PR.
->
-> **Bold terms** are defined in [GLOSSARY.md](../../org-wide-skills/GLOSSARY.md); look them up there for the full meaning.
+> **Agent Instruction:** This file contains specific errors previously made by AI agents in this project. Check this file before writing code to avoid repeating historical mistakes. Maintainers add entries whenever significant mistakes occur.
 
 ## 🔴 Critical — Will Break Things
 

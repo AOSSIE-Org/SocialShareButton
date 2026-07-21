@@ -1,8 +1,6 @@
 # Testing Strategy & Commands
 
 > **Agent Instruction:** Every new feature or bug fix MUST include validation tests. Follow the testing patterns below. Do NOT skip verification steps.
->
-> **Bold terms** are defined in [GLOSSARY.md](../../org-wide-skills/GLOSSARY.md); look them up there for the full meaning.
 
 ## Test Commands
 

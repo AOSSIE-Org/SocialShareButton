@@ -1,9 +1,5 @@
 # Core Project Architecture
 
-> **Agent Instruction:** Do NOT guess or invent the project architecture. You MUST consult this file before adding features, creating files, or suggesting structural changes. If something isn't documented here, ask the contributor to check with maintainers — do NOT assume.
->
-> **Bold terms** are defined in [GLOSSARY.md](../../org-wide-skills/GLOSSARY.md); look them up there for the full meaning. This file enforces the project's **architectural boundaries**.
-
 ## Architecture Overview
 
 SocialShareButton is a lightweight, framework-agnostic social sharing library designed to have a **zero-dependency core** and remain under a bundled/gzipped size of **10KB**.

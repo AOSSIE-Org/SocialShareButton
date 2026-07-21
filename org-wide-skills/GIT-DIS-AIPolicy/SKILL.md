@@ -5,8 +5,6 @@ description: Governance and behavior constraints for contributor-side AI agents 
 
 A skill enforcing the **AI Policy** for contributors working on AOSSIE projects. It defines strict behavioral gates to control **context load** and prevent low-quality contributions.
 
-**Bold terms** are defined in [GLOSSARY.md](../GLOSSARY.md); look them up there for the full meaning.
-
 ## 1. Issue Generation Check
 
 **Trigger:** The user asks to "scan codebase for bugs", "find issues to fix", or "create bugs".

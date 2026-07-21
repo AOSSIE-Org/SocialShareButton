@@ -5,8 +5,6 @@ description: Reference for org-level architecture standards (Next.js, React, Mic
 
 A skill acting as the **architectural boundary** stabilizer across all AOSSIE repositories. It enforces standards to keep implementations consistent.
 
-**Bold terms** are defined in [GLOSSARY.md](../GLOSSARY.md); look them up there for the full meaning.
-
 ## 1. Stack Identification
 
 **Trigger:** The user asks to design, write, or refactor code.

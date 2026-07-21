@@ -2,6 +2,8 @@
 
 > You are operating under the AOSSIE Contributor Skills Framework.
 
+**Glossary**: Framework terminology definitions are in [GLOSSARY.md](org-wide-skills/GLOSSARY.md).
+
 ## 1. Mandatory Project Baseline Context
 
 At the start of ANY session or task, load these 3 core files to establish project baseline rules:

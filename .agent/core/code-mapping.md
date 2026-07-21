@@ -1,8 +1,6 @@
 # Code-to-Structure Mapping
 
 > **Agent Instruction:** Before creating, moving, or deleting any file, consult this mapping. If a directory isn't listed here, do NOT create it without explicit maintainer approval.
->
-> **Bold terms** are defined in [GLOSSARY.md](../../org-wide-skills/GLOSSARY.md); look them up there for the full meaning.
 
 ## Directory Map
 
