@@ -1,35 +1,35 @@
 # AOSSIE Contributor Agent Framework
 
 > You are operating under the AOSSIE Contributor Skills Framework.
-> Read the section matching your current task intent.
 
-**Glossary**: Terminology definitions are in [GLOSSARY.md](org-wide-skills/GLOSSARY.md).
+## 1. Mandatory Project Baseline Context
 
-## Task-Based Intent Router
+At the start of ANY session or task, load these 3 core files to establish project baseline rules:
+- [.agent/core/architecture.md](.agent/core/architecture.md) — Zero-dependency constraint & architectural boundaries.
+- [.agent/core/code-mapping.md](.agent/core/code-mapping.md) — Directory layout (`src/`, `public/`, `landing-page/`).
+- [.agent/core/edge-cases.md](.agent/core/edge-cases.md) — Historical agent mistakes & size budget restrictions.
 
-### Onboarding & First Setup
-Load when a contributor asks "how do I start", "what should I read", or is new to the project:
-- [org-wide-skills/contributor-onboarding/SKILL.md](org-wide-skills/contributor-onboarding/SKILL.md) — Entry gate: reads local context, establishes policy, and verifies setup.
+## 2. Task Intent Router
+
+Load additional files as needed based on the user's current request:
+
+### Onboarding & Setup
+- [org-wide-skills/contributor-onboarding/SKILL.md](org-wide-skills/contributor-onboarding/SKILL.md) — Entry gate & setup guidance.
+- [.agent/instructions/setup.md](.agent/instructions/setup.md) — Local installation commands.
 
 ### Writing & Modifying Code
-Load individual files as needed during coding:
-- [.agent/core/architecture.md](.agent/core/architecture.md) — Zero-dependency constraint and architectural boundaries.
-- [.agent/core/code-mapping.md](.agent/core/code-mapping.md) — Directory layout (`src/`, `public/`, `landing-page/`).
 - [.agent/core/examples.md](.agent/core/examples.md) — Approved code patterns vs anti-patterns.
-- [org-wide-skills/project-template/SKILL.md](org-wide-skills/project-template/SKILL.md) — Shared architecture standards by stack.
+- [org-wide-skills/project-template/SKILL.md](org-wide-skills/project-template/SKILL.md) — Shared org architecture standards.
 
-### Testing & Debugging
-Load when running verification checks or fixing errors:
-- [.agent/instructions/testing.md](.agent/instructions/testing.md) — ESLint, formatting, and visual browser verification steps.
-- [.agent/core/edge-cases.md](.agent/core/edge-cases.md) — Historical agent mistakes and size-budget restrictions.
+### Testing & Verification
+- [.agent/instructions/testing.md](.agent/instructions/testing.md) — ESLint, formatting, and visual browser testing.
 - [org-wide-skills/mcp-integration/SKILL.md](org-wide-skills/mcp-integration/SKILL.md) — Automated UI browser testing via MCP.
 
 ### Pull Requests & Deployment
-Load when opening a PR or preparing a release:
-- [org-wide-skills/GIT-DIS-AIPolicy/SKILL.md](org-wide-skills/GIT-DIS-AIPolicy/SKILL.md) — Mandatory AI disclosure, PR formatting, issue assignment rules.
+- [org-wide-skills/GIT-DIS-AIPolicy/SKILL.md](org-wide-skills/GIT-DIS-AIPolicy/SKILL.md) — Mandatory AI disclosures, PR rules, issue verification.
 - [.agent/info/operational-data.md](.agent/info/operational-data.md) — Maintainer contacts (@kpj2006), Discord channels, and message templates.
 - [.agent/instructions/deployment.md](.agent/instructions/deployment.md) — CDN release checklist and npm publishing steps.
 
 ---
 
-- **Completion Criterion:** Confirm compliance with the files loaded for the active task before completing work.
+- **Completion Criterion:** Confirm compliance with mandatory baseline rules and active task files before completing work.
