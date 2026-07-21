@@ -2,7 +2,7 @@
 
 > **Agent Instruction:** Follow the approved patterns below. If you find yourself writing something that looks like an anti-pattern, stop and reconsider.
 >
-> **Bold terms** are defined in [GLOSSARY.md](../../../skills/GLOSSARY.md); look them up there for the full meaning.
+> **Bold terms** are defined in [GLOSSARY.md](../../org-wide-skills/GLOSSARY.md); look them up there for the full meaning.
 
 ## ✅ Approved Patterns
 

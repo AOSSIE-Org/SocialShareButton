@@ -2,7 +2,7 @@
 
 > **Agent Instruction:** Do NOT hallucinate infrastructure setup. Use ONLY the commands listed here. If a contributor asks about setup that isn't documented, tell them to ask in the `#development` Discord channel.
 >
-> **Bold terms** are defined in [GLOSSARY.md](../../../skills/GLOSSARY.md); look them up there for the full meaning.
+> **Bold terms** are defined in [GLOSSARY.md](../../org-wide-skills/GLOSSARY.md); look them up there for the full meaning.
 
 ## Prerequisites
 

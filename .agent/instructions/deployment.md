@@ -2,7 +2,7 @@
 
 > **Agent Instruction:** Do NOT guess deployment steps. Use ONLY what is documented here. If deployment info is missing, tell the contributor to consult maintainers.
 >
-> **Bold terms** are defined in [GLOSSARY.md](../../../skills/GLOSSARY.md); look them up there for the full meaning.
+> **Bold terms** are defined in [GLOSSARY.md](../../org-wide-skills/GLOSSARY.md); look them up there for the full meaning.
 
 ## Environments
 
