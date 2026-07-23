@@ -1,33 +1,42 @@
-# Deployment & CI/CD
+# Version Release Instructions (Maintainers Only)
 
-## Environments
+> **Access Note:** Not for external contributors. Version releasing, tag creation, and npm publishing are strictly restricted to repository maintainers with write/admin access.
 
-| Environment    | Delivery Mechanism                        | Source Directory |
-| -------------- | ----------------------------------------- | ---------------- |
-| Development    | Local `index.html` file                   | `/`              |
-| CDN Staging    | jsDelivr raw branch                       | `src/`           |
-| Production CDN | jsDelivr release tag                      | `src/`           |
-| npm Package    | npm registry (social-share-button-aossie) | `src/`           |
+## Environments & Release Artifacts
 
-## Release Checklist
+| Environment    | Delivery Mechanism                                      | Source Directory | Access / Trigger                                      |
+| -------------- | ------------------------------------------------------- | ---------------- | ----------------------------------------------------- |
+| CDN Staging    | jsDelivr raw branch                                     | `src/`           | Automatic via `main` branch                           |
+| Production CDN | jsDelivr release tag (e.g., `@v1.0.4`)                  | `src/`           | Triggered by Git release tag `vX.Y.Z`                 |
+| npm Registry   | `@aossie-org/social-share-button`                       | `src/`           | Manual `npm publish` by maintainer                    |
+| Release Action | `.github/workflows/version-release.yml`                 | Root             | Pushing `VERSION` file changes to `main` (Maintainers)|
 
-Before releasing a new version:
+## Maintainer Version Release Checklist
 
-- [ ] All ESLint checks pass (`npm run lint`)
-- [ ] Code is formatted (`npm run format`)
-- [ ] Version bump in `package.json`
-- [ ] Version bump in `VERSION` file
-- [ ] Update CDN links in `README.md` to match the new version tag (e.g. `@v1.0.4`)
-- [ ] Merge to `main` and push the Git tag (e.g. `v1.0.4`)
+Follow these steps when preparing and releasing a new version:
+
+1. **Pre-Release Quality Verification**:
+   ```bash
+   npm run lint
+   npm run format:check
+   npm run test
+   npm run check-size
+   ```
+2. **Version Bumping**:
+   - Update `"version"` in `package.json` (e.g., `"1.0.5"`).
+   - Update the semver version string in the `VERSION` file (e.g., `1.0.5`).
+3. **Trigger Automated Release Workflow**:
+   - Push commit updating `VERSION` to `main`.
+   - The automated GitHub Action `.github/workflows/version-release.yml` verifies maintainer permissions, creates tag `v1.0.5`, and publishes the GitHub release.
 
 ## Publishing to npm
 
-Only project administrators publish packages to the npm registry:
+Publishing to the npm registry (`@aossie-org/social-share-button`) is performed by maintainers:
 
 ```bash
-# Verify contents to pack
+# 1. Verify files included in package (specified in package.json "files")
 npm pack --dry-run
 
-# Publish version (requires credentials)
-npm publish
+# 2. Publish package to npm registry (requires maintainer credentials)
+npm publish --access public
 ```

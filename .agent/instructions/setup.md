@@ -2,44 +2,39 @@
 
 ## Prerequisites
 
-- Node.js 18+ (verified via `node --version`)
-- npm / pnpm / yarn (checked via `npm --version`)
-- Git
+Verify local development environment tools before installing dependencies:
 
-## Local Development
+```bash
+# Verify Node.js version (must be >= 18.0.0)
+node --version
+
+# Verify Package Manager & Git
+npm --version
+git --version
+```
+
+## Local Development Setup
 
 ### 1. Install Project Dependencies
 
-Run this command from the root of the `SocialShareButton` folder to install linting and formatting dev dependencies:
+Run this command from the root of the `SocialShareButton` folder to install dev dependencies:
 
 ```bash
 npm install
 ```
 
-### 2. Run/View the Local Test Harness
+### 2. Run/Preview the Local Test Harness
 
-Since there is no production build step for the core library, you can test modifications directly in the browser:
+Since there is no production build step for the core library, you can preview and test modifications directly in the browser:
 
 - Open `index.html` directly in your browser.
-- Alternatively, spin up a simple static server (e.g. `npx serve .` or `npx live-server`) to preview changes.
+- Alternatively, spin up a simple static server:
+  ```bash
+  npm start
+  ```
 
-### 3. Verify Code Quality
+## Issue Assignment Check Before Coding
 
-Always check formatting and rules before requesting reviews:
-
-```bash
-# Run ESLint check
-npm run lint
-
-# Format files using Prettier
-npm run format
-```
-
-## Common Commands
-
-| Command                | Purpose                                             |
-| ---------------------- | --------------------------------------------------- |
-| `npm run lint`         | Run ESLint check                                    |
-| `npm run lint:fix`     | Automatically resolve minor lint rules              |
-| `npm run format`       | Run formatting check and overwrite files            |
-| `npm run format:check` | Verify formatting consistency without modifications |
+Before writing code or opening PRs:
+1. Confirm your assigned GitHub issue number.
+2. If unassigned, join the project Discord channel ([`.agent/info/operational-data.md`](../info/operational-data.md)) to discuss and get assigned before starting work.

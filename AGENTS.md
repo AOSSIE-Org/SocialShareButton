@@ -16,8 +16,7 @@ At the start of ANY session or task, load these 3 core files to establish projec
 Load additional files as needed based on the user's current request:
 
 ### Onboarding & Setup
-- [org-wide-skills/contributor-onboarding/SKILL.md](org-wide-skills/contributor-onboarding/SKILL.md) — Entry gate & setup guidance.
-- [.agent/instructions/setup.md](.agent/instructions/setup.md) — Local installation commands.
+- [.agent/instructions/setup.md](.agent/instructions/setup.md) — Local installation commands & issue assignment check.
 
 ### Writing & Modifying Code
 - [.agent/core/examples.md](.agent/core/examples.md) — Approved code patterns vs anti-patterns.
@@ -25,12 +24,12 @@ Load additional files as needed based on the user's current request:
 
 ### Testing & Verification
 - [.agent/instructions/testing.md](.agent/instructions/testing.md) — ESLint, formatting, and visual browser testing.
+- [.agent/instructions/ci-cd.md](.agent/instructions/ci-cd.md) — Load when user explicitly asks to debug failing CI, provides a PR link/number, or pastes CI logs.
 - [org-wide-skills/mcp-integration/SKILL.md](org-wide-skills/mcp-integration/SKILL.md) — Automated UI browser testing via MCP.
 
-### Pull Requests & Deployment
+### Pull Requests & Community
 - [org-wide-skills/GIT-DIS-AIPolicy/SKILL.md](org-wide-skills/GIT-DIS-AIPolicy/SKILL.md) — Mandatory AI disclosures, PR rules, issue verification.
-- [.agent/info/operational-data.md](.agent/info/operational-data.md) — Maintainer contacts (@kpj2006), Discord channels, and message templates.
-- [.agent/instructions/deployment.md](.agent/instructions/deployment.md) — CDN release checklist and npm publishing steps.
+- [.agent/info/operational-data.md](.agent/info/operational-data.md) — Maintainer contacts, Discord channels, and message templates.
 
 ---
 
