@@ -1,6 +1,17 @@
+"use client";
 import Link from "next/link";
+import { useState } from "react";
 
 export function Hero() {
+  const [copied, setCopied] = useState(false);
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(
+      "https://social-share-button.aossie.org"
+    );
+
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
   return (
     <div className="pt-32 pb-16 sm:pt-40 sm:pb-24 overflow-hidden relative">
       {/* Background glow effects */}
@@ -80,8 +91,8 @@ export function Hero() {
 
               <div className="flex items-center gap-2 bg-background rounded-full p-1 pl-4 border-2 border-[#FFCC00]">
                 <span className="text-xs md:text-sm text-neutral-500 truncate flex-1 hidden sm:block">social-share-button.aossie.org</span>
-                <button className="bg-[#FFCC00] text-black px-4 py-2 rounded-full text-sm font-bold">
-                  Copy Link
+                <button className="bg-[#FFCC00] text-black px-4 py-2 rounded-full text-sm font-bold" onClick={handleCopy}>
+                  {copied ? "Copied!" : "Copy Link"}
                 </button>
               </div>
 
