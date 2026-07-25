@@ -533,7 +533,8 @@ class SocialShareButton {
         copyBtn.classList.remove("copied");
         this.feedbackTimeout = null;
       }, 2000);
-    } catch (_err) {
+    } catch (error) {
+      this._debugWarn("fallbackCopy failed", error);
       copyBtn.textContent = "Failed";
 
       // Clear any existing feedback timeout
@@ -732,10 +733,19 @@ class SocialShareButton {
   // ---------------------------------------------------------------------------
 
   // Resolves a raw container value (string or Element) to a DOM Element, or null if absent/SSR.
+  
   static _resolveContainer(raw) {
     if (!raw) return null;
     if (typeof document === "undefined") return null;
-    return typeof raw === "string" ? document.querySelector(raw) : raw;
+    if (typeof raw !== "string") return raw;
+  
+    try {
+      return document.querySelector(raw);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.warn("[SocialShareButton] Invalid container selector:", raw, error);
+      return null;
+    }
   }
 
   // Returns the cached host container element, or null.
