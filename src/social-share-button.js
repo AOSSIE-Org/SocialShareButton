@@ -10,7 +10,10 @@ const ANALYTICS_SCHEMA_VERSION = "1.0";
 class SocialShareButton {
   constructor(options = {}) {
     // Resolve container element early to prevent duplicate instances
-    const containerEl = SocialShareButton._resolveContainer(options.container);
+    const containerEl = SocialShareButton._resolveContainer(
+      options.container,
+      options.debug
+    );
 
     if (containerEl && containerEl._socialShareButtonInstance) {
       return containerEl._socialShareButtonInstance;
@@ -734,7 +737,7 @@ class SocialShareButton {
 
   // Resolves a raw container value (string or Element) to a DOM Element, or null if absent/SSR.
   
-  static _resolveContainer(raw) {
+  static _resolveContainer(raw, debug = false) {
     if (!raw) return null;
     if (typeof document === "undefined") return null;
     if (typeof raw !== "string") return raw;
@@ -742,8 +745,12 @@ class SocialShareButton {
     try {
       return document.querySelector(raw);
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.warn("[SocialShareButton] Invalid container selector:", raw, error);
+      if (debug) {
+        // Invalid selectors are only logged when debug mode is enabled.
+        // eslint-disable-next-line no-console
+        console.warn("[SocialShareButton] Invalid container selector:", raw, error);
+      }
+  
       return null;
     }
   }
@@ -754,16 +761,16 @@ class SocialShareButton {
   }
 
   /**
-   * Logs analytics warnings only when debug mode is enabled.
-   * @param {string} message - Description of the failed analytics path.
-   * @param {Error} err - The caught error instance.
-   */
-  _debugWarn(message, err) {
-    // _debugWarn: emit analytics warnings only in debug mode for visibility.
-    if (!this.options.debug) return;
-    // eslint-disable-next-line no-console
-    console.warn("[SocialShareButton Analytics]", message, err);
-  }
+ * Logs debug warnings only when debug mode is enabled.
+ * @param {string} message - Warning message.
+ * @param {Error} err - The caught error instance.
+ */
+_debugWarn(message, err) {
+  if (!this.options.debug) return;
+
+  // eslint-disable-next-line no-console
+  console.warn("[SocialShareButton]", message, err);
+}
 
   /**
    * Emits an analytics event through all configured delivery paths.
