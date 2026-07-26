@@ -114,7 +114,7 @@ No matter which framework you use, integration always follows the same 3 steps:
 <details>
 <summary><b>📦 Create React App</b></summary>
 
-### Step 1: Add CDN to `public/index.html`
+### Create React App — Step 1: Add CDN to `public/index.html`
 
 ```html
 <head>
@@ -129,7 +129,7 @@ No matter which framework you use, integration always follows the same 3 steps:
 </body>
 ```
 
-### Step 2: Add to your layout or header component
+### Create React App — Step 2: Add to your layout or header component
 
 Open an **existing** component that renders on every page — typically `src/components/Header.jsx`, `src/layouts/MainLayout.jsx`, or your root `App.jsx`. Add the snippet below to that component so the share button is consistently available across your app.
 
@@ -183,7 +183,7 @@ function Header() {
 <details>
 <summary><b>▲ Next.js (App Router)</b></summary>
 
-### Step 1: Add CDN to `app/layout.tsx`
+### Next.js (App Router) — Step 1: Add CDN to `app/layout.tsx`
 
 ```tsx
 import Script from "next/script";
@@ -209,7 +209,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 }
 ```
 
-### Step 2: Add to a Client Component (Header, Navbar, or similar)
+### Next.js (App Router) — Step 2: Add to a Client Component (Header, Navbar, or similar)
 
 Because `SocialShareButton` manipulates the DOM, it must run inside a **Client Component** (note the `"use client"` directive at the top). Add the snippet below to an existing component such as `app/components/Header.tsx` or `app/components/Navbar.tsx` — any component already included in your layout.
 
@@ -293,7 +293,7 @@ declare global {
 <details>
 <summary><b>📄 Next.js (Pages Router)</b></summary>
 
-### Step 1: Add CDN to `pages/_document.tsx`
+### Next.js (Pages Router) — Step 1: Add CDN to `pages/_document.tsx`
 
 ```tsx
 import { Html, Head, Main, NextScript } from "next/document";
@@ -317,7 +317,7 @@ export default function Document() {
 }
 ```
 
-### Step 2: Add to your Header, Navbar, or shared layout component
+### Next.js (Pages Router) — Step 2: Add to your Header, Navbar, or shared layout component
 
 Open an existing component that is rendered on every page — typically `components/Header.tsx`, `components/Navbar.tsx`, or `components/Layout.tsx`. Since `_document.tsx` loads the script globally, the button is ready to initialize in any of these components.
 
@@ -399,7 +399,7 @@ declare global {
 <details>
 <summary><b>⚡ Vite / Vue / Angular</b></summary>
 
-### Step 1: Add CDN to `index.html`
+### Vite / Vue / Angular — Step 1: Add CDN to `index.html`
 
 ```html
 <head>
@@ -414,7 +414,7 @@ declare global {
 </body>
 ```
 
-### Step 2: Add a container element and initialize in your component
+### Vite / Vue / Angular — Step 2: Add a container element and initialize in your component
 
 Open your root or layout component (e.g., `App.vue`, `app.component.html`, or `App.jsx`). Add a container `<div>` where you want the button to appear, then initialize the button after the DOM is ready:
 
@@ -431,7 +431,7 @@ new window.SocialShareButton({
 <details>
 <summary><b>⚛️ Preact</b></summary>
 
-### Step 1: Add CDN to `index.html`
+### Preact — Step 1: Add CDN to `index.html`
 
 ```html
 <head>
@@ -446,7 +446,7 @@ new window.SocialShareButton({
 </body>
 ```
 
-### Step 2: Add to a layout or header component
+### Preact — Step 2: Add to a layout or header component
 
 Open an **existing** component that renders on every page — typically `src/components/Header.jsx`, `src/components/Navbar.jsx`, or your root `App.jsx`. Add the snippet below to that component so the share button is consistently available across your app.
 

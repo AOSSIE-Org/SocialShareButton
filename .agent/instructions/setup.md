@@ -29,6 +29,7 @@ Since there is no production build step for the core library, you can preview an
 
 - Open `index.html` directly in your browser.
 - Alternatively, spin up a simple static server:
+
   ```bash
   npm start
   ```
