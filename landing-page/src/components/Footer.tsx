@@ -49,7 +49,7 @@ export function Footer() {
               className="flex items-center justify-between bg-transparent border border-neutral-800 hover:border-neutral-600 rounded-xl p-4 transition-colors group"
             >
               <div className="flex items-center gap-4">
-                <div className="w-8 h-8 rounded-lg bg-[#FFCC00] flex items-center justify-center flex-shrink-0">
+                <div className="w-8 h-8 rounded-lg bg-[#FFCC00] flex items-center justify-center shrink-0">
                   <Github className="w-5 h-5 text-black" />
                 </div>
                 <span className="text-sm font-bold text-white group-hover:text-[#FFCC00] transition-colors">
@@ -66,7 +66,7 @@ export function Footer() {
               className="flex items-center justify-between bg-transparent border border-neutral-800 hover:border-neutral-600 rounded-xl p-4 transition-colors group"
             >
               <div className="flex items-center gap-4">
-                <div className="w-8 h-8 rounded-lg bg-[#00C853] flex items-center justify-center flex-shrink-0">
+                <div className="w-8 h-8 rounded-lg bg-[#00C853] flex items-center justify-center shrink-0">
                   <svg
                     width="24"
                     height="24"
