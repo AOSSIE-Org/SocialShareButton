@@ -4,6 +4,7 @@
 import { motion } from 'framer-motion'
 import { Github, Mail, Linkedin, Youtube } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
 import logo from '../../../public/socialshare.png'
 
 // Lucide doesn't ship brand logos for Discord, so a small inline SVG covers it.
@@ -61,8 +62,8 @@ export function Footer() {
               </span>
             </a>
 
-            <a
-              href="./docs"
+            <Link
+              href="/docs"
               className="flex items-center justify-between bg-transparent border border-neutral-800 hover:border-neutral-600 rounded-xl p-4 transition-colors group"
             >
               <div className="flex items-center gap-4">
@@ -88,7 +89,7 @@ export function Footer() {
               <span className="text-neutral-600 group-hover:text-neutral-400">
                 →
               </span>
-            </a>
+            </Link>
           </div>
         </div>
       </div>

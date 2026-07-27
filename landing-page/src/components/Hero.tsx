@@ -14,7 +14,7 @@ export function Hero() {
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-neutral-100 dark:bg-neutral-800/50 border border-neutral-200 dark:border-neutral-700 text-xs font-medium mb-6">
               <span className="text-primary px-1">★</span>
-              v1.0.3 IS OUT NOW
+              v1.0.4 IS OUT NOW
             </div>
 
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-serif font-bold tracking-tight text-balance leading-[1.1] mb-6">

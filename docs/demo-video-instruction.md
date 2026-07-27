@@ -11,7 +11,7 @@ Your demo must show SocialShareButton integrated into a **brand new project crea
 
 ### ⚠️ Important Note for PR Testing
 
-If you are adding a new file in your PR, the new wrapper files exist **only in the contributor's PR branch** and are **not included in the latest CDN release (e.g., v1.0.3)**. Using the released CDN may load **older code**, which can break the integration demo.
+If you are adding a new file in your PR, the new wrapper files exist **only in the contributor's PR branch** and are **not included in the latest CDN release (e.g., v1.0.4)**. Using the released CDN may load **older code**, which can break the integration demo.
 
 For demo recording, contributors should use **jsDelivr with their branch name**.
 
