@@ -732,28 +732,29 @@ class SocialShareButton {
   // ---------------------------------------------------------------------------
 
   // Resolves a raw container value (string or Element) to a DOM Element, or null if absent/SSR.
-  static _resolveContainer(raw) {
+  static _resolveContainer(raw, debug) {
     if (!raw) return null;
     if (typeof document === "undefined") return null;
-    return typeof raw === "string" ? document.querySelector(raw) : raw;
+    if (typeof raw !== "string") return raw;
+    try {
+      return document.querySelector(raw);
+    } catch (error) {
+      SocialShareButton._debugWarn(debug, "Invalid container selector:", raw, error);
+      return null;
+    }
   }
-
-  // Returns the cached host container element, or null.
-  _getContainer() {
-    return this._containerEl || null;
-  }
-
-  /**
-   * Logs analytics warnings only when debug mode is enabled.
-   * @param {string} message - Description of the failed analytics path.
-   * @param {Error} err - The caught error instance.
+/**
+   * Logs warnings only when debug mode is enabled.
+   * @param {boolean} debug - Whether debug mode is on.
+   * @param {string} message - Description of the failed path.
+   * @param {Error} [err] - The caught error instance, if any.
    */
-  _debugWarn(message, err) {
-    // _debugWarn: emit analytics warnings only in debug mode for visibility.
-    if (!this.options.debug) return;
-    // eslint-disable-next-line no-console
-    console.warn("[SocialShareButton Analytics]", message, err);
-  }
+static _debugWarn(debug, message, err) {
+  if (!debug) return;
+  // eslint-disable-next-line no-console
+  console.warn("[SocialShareButton]", message, err);
+}
+  
 
   /**
    * Emits an analytics event through all configured delivery paths.
@@ -814,7 +815,7 @@ class SocialShareButton {
         const el = this._getContainer();
         (el || document).dispatchEvent(domEvent);
       } catch (err) {
-        this._debugWarn("DOM event dispatch failed", err);
+        SocialShareButton._debugWarn(this.options.debug, message, err);
       }
     }
 
@@ -823,7 +824,7 @@ class SocialShareButton {
       try {
         this.options.onAnalytics(payload);
       } catch (err) {
-        this._debugWarn("onAnalytics callback failed", err);
+        SocialShareButton._debugWarn(this.options.debug, message, err);
       }
     }
 
@@ -834,7 +835,7 @@ class SocialShareButton {
           try {
             plugin.track(payload);
           } catch (err) {
-            this._debugWarn("plugin.track() failed", err);
+            SocialShareButton._debugWarn(this.options.debug, message, err);
           }
         }
       }
