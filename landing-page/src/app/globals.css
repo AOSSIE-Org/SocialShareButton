@@ -17,7 +17,7 @@
 }
 
 /* Override dark mode to use class strategy (for next-themes) */
-`@custom-variant` dark (&:where(.dark, .dark *));
+@custom-variant dark (&:where(.dark, .dark *));
 
 /* --- CSS variable definitions for light/dark themes --- */
 :root {
