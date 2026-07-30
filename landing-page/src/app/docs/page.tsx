@@ -75,7 +75,7 @@ export default function Docs() {
             <div className="col-span-4 lg:col-span-3 space-y-8 sm:space-y-12 lg:space-y-16">
               {/* Overview Section */}
               <div id="overview" className="space-y-6 sm:space-y-8 scroll-mt-24">
-                <div className="bg-gradient-to-br from-[#FFCC00]/20 to-[#00C853]/20 rounded-3xl p-6 sm:p-8 md:p-12 border-2 border-black dark:border-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] dark:shadow-[8px_8px_0px_0px_rgba(255,255,255,1)] hover:-translate-y-1 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[12px_12px_0px_0px_rgba(255,255,255,1)] transition-all duration-300">
+                <div className="bg-linear-to-br from-[#FFCC00]/20 to-[#00C853]/20 rounded-3xl p-6 sm:p-8 md:p-12 border-2 border-black dark:border-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] dark:shadow-[8px_8px_0px_0px_rgba(255,255,255,1)] hover:-translate-y-1 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[12px_12px_0px_0px_rgba(255,255,255,1)] transition-all duration-300">
                   <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold mb-4 sm:mb-6">
                     Get Your Share Button Live in Minutes
                   </h1>
@@ -265,7 +265,7 @@ export default function Docs() {
 
               {/* Install Section */}
               <div id="install" className="space-y-6 sm:space-y-8 scroll-mt-24">
-                <div className="bg-gradient-to-br from-[#00C853]/20 to-[#FFCC00]/20 rounded-3xl p-6 sm:p-8 md:p-12 border-2 border-black dark:border-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] dark:shadow-[8px_8px_0px_0px_rgba(255,255,255,1)] hover:-translate-y-1 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[12px_12px_0px_0px_rgba(255,255,255,1)] transition-all duration-300">
+                <div className="bg-linear-to-br from-[#00C853]/20 to-[#FFCC00]/20 rounded-3xl p-6 sm:p-8 md:p-12 border-2 border-black dark:border-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] dark:shadow-[8px_8px_0px_0px_rgba(255,255,255,1)] hover:-translate-y-1 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[12px_12px_0px_0px_rgba(255,255,255,1)] transition-all duration-300">
                   <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif font-bold mb-6 sm:mb-8">
                     Ready to Go?
                   </h2>

@@ -29,7 +29,7 @@ export function ComparisonTable() {
           <div className="bg-[#111] rounded-xl p-2 sm:p-6 text-white border-2 border-transparent shadow-2xl overflow-hidden relative">
             <div className="grid grid-cols-4 gap-4 px-4 py-4 border-b border-neutral-800 text-sm font-bold text-neutral-400 relative z-10">
               <div className="col-span-1">Feature</div>
-              <div className="text-center text-black bg-[#FFCC00] rounded px-2 relative font-extrabold shadow-sm">
+              <div className="text-center text-black bg-[#FFCC00] rounded px-2 relative font-extrabold shadow-xs">
                 AOSSIE Share
               </div>
               <div className="text-center">Legacy 1</div>

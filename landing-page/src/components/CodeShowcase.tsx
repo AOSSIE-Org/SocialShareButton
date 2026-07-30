@@ -93,7 +93,7 @@ export function CodeShowcase() {
             </div>
             
             {/* Decorative element behind code window if needed */}
-            <div className="absolute -inset-1 bg-gradient-to-tr from-[#00C853] to-[#FFCC00] blur-2xl opacity-10 -z-10 rounded-xl" />
+            <div className="absolute -inset-1 bg-linear-to-tr from-[#00C853] to-[#FFCC00] blur-2xl opacity-10 -z-10 rounded-xl" />
           </div>
           
         </div>

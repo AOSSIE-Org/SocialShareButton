@@ -1,39 +1,54 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-@layer base {
-  .dark,
-  .dark:root {
-    --background: #212121;
-    --foreground: #fafafa;
-    --primary: #ffcc00;
-    --primary-foreground: #000000;
-    --secondary: #2e8b00;
-    --secondary-foreground: #ffffff;
-    --card: #292929;
-    --card-foreground: #fafafa;
-    --border: #333333;
-  }
+/* --- CSS-first theme configuration (replaces tailwind.config.ts) --- */
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-border: var(--border);
+
+  --font-sans: var(--font-inter), sans-serif;
+  --font-serif: var(--font-playfair), serif;
 }
 
-@layer base {
-  :root {
-    --background: #ffffff;
-    --foreground: #000000;
-    --primary: #ffcc00;
-    --primary-foreground: #000000;
-    --secondary: #2e8b00;
-    --secondary-foreground: #ffffff;
-    --card: #ffffff;
-    --card-foreground: #000000;
-    --border: #000000;
-  }
+/* Override dark mode to use class strategy (for next-themes) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* --- CSS variable definitions for light/dark themes --- */
+:root {
+  --background: #ffffff;
+  --foreground: #000000;
+  --primary: #ffcc00;
+  --primary-foreground: #000000;
+  --secondary: #2e8b00;
+  --secondary-foreground: #ffffff;
+  --card: #ffffff;
+  --card-foreground: #000000;
+  --border: #000000;
 }
 
+.dark,
+.dark:root {
+  --background: #212121;
+  --foreground: #fafafa;
+  --primary: #ffcc00;
+  --primary-foreground: #000000;
+  --secondary: #2e8b00;
+  --secondary-foreground: #ffffff;
+  --card: #292929;
+  --card-foreground: #fafafa;
+  --border: #333333;
+}
+
+/* --- Base styles --- */
 @layer base {
   * {
-    @apply border-border;
+    border-color: var(--color-border);
   }
   html {
     scroll-behavior: smooth;
@@ -44,82 +59,83 @@
     }
   }
   body {
-    @apply bg-background text-foreground;
+    background-color: var(--color-background);
+    color: var(--color-foreground);
   }
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-
-  .hide-scrollbar::-webkit-scrollbar {
+/* --- Custom utilities --- */
+@utility hide-scrollbar {
+  &::-webkit-scrollbar {
     display: none;
   }
-  .hide-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
 
-  @keyframes float {
-    0%, 100% {
-      transform: translateY(0px);
-    }
-    50% {
-      transform: translateY(-10px);
-    }
-  }
+@utility text-balance {
+  text-wrap: balance;
+}
 
-  @keyframes shine {
-    0% {
-      transform: translateX(-100%);
-    }
-    100% {
-      transform: translateX(100%);
-    }
+/* --- Animations --- */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
   }
-
-  .animate-float {
-    animation: float 3s ease-in-out infinite;
-  }
-
-  .animate-shine {
-    animation: shine 1.5s ease-in-out infinite;
-  }
-
-  @keyframes scroll-left {
-    0% {
-      transform: translateX(0);
-    }
-    100% {
-      transform: translateX(-100%);
-    }
-  }
-
-  .animate-scroll-left {
-    animation: scroll-left 40s linear infinite;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .animate-scroll-left,
-    .animate-float,
-    .animate-shine {
-      animation: none !important;
-    }
+  50% {
+    transform: translateY(-10px);
   }
 }
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
 @keyframes marquee-right {
-    0% {
-      transform: translateX(-50%);
-    }
-    100% {
-      transform: translateX(0%);
-    }
+  0% {
+    transform: translateX(-50%);
   }
-  .animate-marquee-right {
-    animation: marquee-right 32s linear infinite;
+  100% {
+    transform: translateX(0%);
   }
+}
+
+@utility animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@utility animate-shine {
+  animation: shine 1.5s ease-in-out infinite;
+}
+
+@utility animate-scroll-left {
+  animation: scroll-left 40s linear infinite;
+}
+
+@utility animate-marquee-right {
+  animation: marquee-right 32s linear infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
-    .animate-marquee-right {      animation: none;
+  .animate-scroll-left,
+  .animate-float,
+  .animate-shine,
+  .animate-marquee-right {
+    animation: none !important;
   }
-  }
+}
