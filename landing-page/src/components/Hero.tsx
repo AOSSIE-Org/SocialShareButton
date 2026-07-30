@@ -7,6 +7,9 @@ export function Hero() {
   const router = useRouter();
 
   const handleNavigate = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (e.ctrlKey || e.metaKey || e.shiftKey || e.altKey || e.button !== 0) {
+      return;
+    }
     e.preventDefault();
     setTimeout(() => {
       router.push(href);
