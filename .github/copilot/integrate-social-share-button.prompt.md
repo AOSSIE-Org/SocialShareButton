@@ -38,7 +38,9 @@ Run the correct install command based on the package manager detected:
 
 ### Step 4 — Ask the user ONE question
 Before placing the button, ask:
-> "Where would you like to place the Social Share Button?(header/footer/or any other part of the file and also mention the file name and location)
+> "Where would you like to place the Social Share Button?(header/footer/or any other part of the file and also mention the file name and location),
+>Which integration method do you prefer?
+>Options: CDN | npm
 > Also, which style do you prefer?
 > Options: Round | Square | Default"
 Wait for the user's response before proceeding.
