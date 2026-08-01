@@ -40,7 +40,7 @@ Ask: *"Where would you like to place the Social Share Button? Options: npm | CDN
 ### 5. Mandatory Integration Rules
 
 - **ESM Import**: MUST use default import `import SocialShareButton from "@aossie-org/social-share-button";` (Do NOT use named `{ SocialShareButton }`).
-- **CSS Import**: Include `@aossie-org/social-share-button/src/social-share-button.css` or CDN CSS.
+- **CSS Import**: Include `@aossie-org/social-share-button/css` or CDN CSS.
 - **Next.js Client Components**: Include `"use client";` at top of files using hooks (`useEffect`, `useRef`).
 - **No `as any` in `.js`/`.jsx`**: Do NOT use TypeScript assertions in JavaScript files.
 
@@ -62,7 +62,7 @@ Create wrapper component (`src/components/ShareButton.jsx`):
 "use client";
 import { useEffect, useRef } from "react";
 import SocialShareButton from "@aossie-org/social-share-button";
-import "@aossie-org/social-share-button/src/social-share-button.css";
+import "@aossie-org/social-share-button/css";
 
 export default function ShareButton({ style = "default", url, title, theme = "dark" }) {
   const containerRef = useRef(null);
@@ -141,7 +141,7 @@ Create component (`src/components/ShareButton.jsx`):
 ```jsx
 import { useEffect, useRef } from "preact/hooks";
 import SocialShareButton from "@aossie-org/social-share-button";
-import "@aossie-org/social-share-button/src/social-share-button.css";
+import "@aossie-org/social-share-button/css";
 
 export default function ShareButton({ style = "default", url, title, theme = "dark" }) {
   const containerRef = useRef(null);
@@ -246,7 +246,7 @@ export default component$<Props>(({ style = "default", url, title }) => {
 <script setup>
 import { ref, onMounted, onUnmounted, watch } from "vue";
 import SocialShareButton from "@aossie-org/social-share-button";
-import "@aossie-org/social-share-button/src/social-share-button.css";
+import "@aossie-org/social-share-button/css";
 
 const props = defineProps({ style: { type: String, default: "default" }, url: String, title: String });
 const containerRef = ref(null);
@@ -280,16 +280,16 @@ Add CDN `<link>` & `<script>` tags to `index.html`. In `onMounted`, verify `wind
 Component file (`share-button.component.ts`):
 
 ```typescript
-import { Component, ElementRef, Input, AfterViewInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, AfterViewInit, OnChanges, OnDestroy, SimpleChanges, ViewChild } from '@angular/core';
 // @ts-ignore
 import SocialShareButton from '@aossie-org/social-share-button';
 
 @Component({
   selector: 'app-share-button',
   template: `<div #container class="social-share-wrapper"></div>`,
-  styleUrls: ['../../node_modules/@aossie-org/social-share-button/src/social-share-button.css']
+  styleUrls: ['../../node_modules/@aossie-org/social-share-button/css']
 })
-export class ShareButtonComponent implements AfterViewInit, OnDestroy {
+export class ShareButtonComponent implements AfterViewInit, OnChanges, OnDestroy {
   @ViewChild('container') container!: ElementRef;
   @Input() buttonStyle: string = 'default';
   @Input() url?: string;
@@ -307,6 +307,24 @@ export class ShareButtonComponent implements AfterViewInit, OnDestroy {
     }
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.instance) {
+      if (this.instance.updateOptions) {
+        this.instance.updateOptions({ buttonStyle: this.buttonStyle, url: this.url, title: this.title });
+      } else {
+        this.instance.destroy?.();
+        if (this.container?.nativeElement) {
+          this.instance = new SocialShareButton({
+            container: this.container.nativeElement,
+            buttonStyle: this.buttonStyle,
+            url: this.url,
+            title: this.title,
+          });
+        }
+      }
+    }
+  }
+
   ngOnDestroy(): void { this.instance?.destroy?.(); }
 }
 ```
@@ -321,7 +339,7 @@ Entry module (`src/main.js`):
 
 ```javascript
 import SocialShareButton from "@aossie-org/social-share-button";
-import "@aossie-org/social-share-button/src/social-share-button.css";
+import "@aossie-org/social-share-button/css";
 
 new SocialShareButton({ container: "#share-button", buttonStyle: "default" });
 ```
