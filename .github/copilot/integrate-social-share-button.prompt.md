@@ -27,10 +27,8 @@ Integrate `@aossie-org/social-share-button` into a client web project with zero 
 
 ### 3. Install Package (npm method)
 
-- npm: `npm i @aossie-org/social-share-button`
-- pnpm: `pnpm add @aossie-org/social-share-button`
-- yarn: `yarn add @aossie-org/social-share-button`
-- bun: `bun add @aossie-org/social-share-button`
+- npm: `npm i @aossie-org/social-share-button` | pnpm: `pnpm add @aossie-org/social-share-button`
+- yarn: `yarn add @aossie-org/social-share-button` | bun: `bun add @aossie-org/social-share-button`
 *(Skip if CDN method requested).*
 
 ### 4. Ask User Placement (If Unspecified)
@@ -71,13 +69,7 @@ export default function ShareButton({ style = "default", url, title, theme = "da
   useEffect(() => {
     if (!containerRef.current) return;
     instanceRef.current?.destroy?.();
-    instanceRef.current = new SocialShareButton({
-      container: containerRef.current,
-      buttonStyle: style,
-      url,
-      title,
-      theme,
-    });
+    instanceRef.current = new SocialShareButton({ container: containerRef.current, buttonStyle: style, url, title, theme });
     return () => instanceRef.current?.destroy?.();
   }, [style, url, title, theme]);
 
@@ -107,21 +99,13 @@ export default function ShareButton({ style = "default", url, title }) {
     const init = () => {
       if (!window.SocialShareButton || !containerRef.current) return;
       instanceRef.current?.destroy?.();
-      instanceRef.current = new window.SocialShareButton({
-        container: containerRef.current,
-        buttonStyle: style,
-        url,
-        title,
-      });
+      instanceRef.current = new window.SocialShareButton({ container: containerRef.current, buttonStyle: style, url, title });
     };
 
     if (window.SocialShareButton) init();
     else timer = setInterval(() => { if (window.SocialShareButton) { clearInterval(timer); init(); } }, 100);
 
-    return () => {
-      if (timer) clearInterval(timer);
-      instanceRef.current?.destroy?.();
-    };
+    return () => { if (timer) clearInterval(timer); instanceRef.current?.destroy?.(); };
   }, [style, url, title]);
 
   return <div ref={containerRef} className="social-share-wrapper"></div>;
@@ -150,13 +134,7 @@ export default function ShareButton({ style = "default", url, title, theme = "da
   useEffect(() => {
     if (!containerRef.current) return;
     instanceRef.current?.destroy?.();
-    instanceRef.current = new SocialShareButton({
-      container: containerRef.current,
-      buttonStyle: style,
-      url,
-      title,
-      theme,
-    });
+    instanceRef.current = new SocialShareButton({ container: containerRef.current, buttonStyle: style, url, title, theme });
     return () => instanceRef.current?.destroy?.();
   }, [style, url, title, theme]);
 
@@ -182,21 +160,13 @@ export default function ShareButton({ style = "default", url, title }) {
     const init = () => {
       if (!window.SocialShareButton || !containerRef.current) return;
       instanceRef.current?.destroy?.();
-      instanceRef.current = new window.SocialShareButton({
-        container: containerRef.current,
-        buttonStyle: style,
-        url,
-        title,
-      });
+      instanceRef.current = new window.SocialShareButton({ container: containerRef.current, buttonStyle: style, url, title });
     };
 
     if (window.SocialShareButton) init();
     else timer = setInterval(() => { if (window.SocialShareButton) { clearInterval(timer); init(); } }, 100);
 
-    return () => {
-      if (timer) clearInterval(timer);
-      instanceRef.current?.destroy?.();
-    };
+    return () => { if (timer) clearInterval(timer); instanceRef.current?.destroy?.(); };
   }, [style, url, title]);
 
   return <div ref={containerRef} class="social-share-wrapper"></div>;
@@ -255,12 +225,7 @@ let instance = null;
 const init = () => {
   if (!containerRef.value) return;
   instance?.destroy?.();
-  instance = new SocialShareButton({
-    container: containerRef.value,
-    buttonStyle: props.style,
-    url: props.url,
-    title: props.title,
-  });
+  instance = new SocialShareButton({ container: containerRef.value, buttonStyle: props.style, url: props.url, title: props.title });
 };
 
 onMounted(init);
@@ -298,12 +263,7 @@ export class ShareButtonComponent implements AfterViewInit, OnChanges, OnDestroy
 
   ngAfterViewInit(): void {
     if (this.container?.nativeElement) {
-      this.instance = new SocialShareButton({
-        container: this.container.nativeElement,
-        buttonStyle: this.buttonStyle,
-        url: this.url,
-        title: this.title,
-      });
+      this.instance = new SocialShareButton({ container: this.container.nativeElement, buttonStyle: this.buttonStyle, url: this.url, title: this.title });
     }
   }
 
@@ -314,12 +274,7 @@ export class ShareButtonComponent implements AfterViewInit, OnChanges, OnDestroy
       } else {
         this.instance.destroy?.();
         if (this.container?.nativeElement) {
-          this.instance = new SocialShareButton({
-            container: this.container.nativeElement,
-            buttonStyle: this.buttonStyle,
-            url: this.url,
-            title: this.title,
-          });
+          this.instance = new SocialShareButton({ container: this.container.nativeElement, buttonStyle: this.buttonStyle, url: this.url, title: this.title });
         }
       }
     }
