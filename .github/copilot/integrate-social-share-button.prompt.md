@@ -17,12 +17,12 @@ Integrate `@aossie-org/social-share-button` into a client web project with zero 
 
 ### 1. Inspect Repo & Identify Frontend
 
-- Locate frontend `package.json` (look for React, Next.js, Vue, Angular, Qwik, Preact, Vanilla).
+- Locate frontend `package.json` and scan dependencies using deterministic specific-to-generic framework matching (identify Next.js before React, and Preact before React, so projects containing both select the specific framework template).
 - In monorepos (`apps/`, `packages/`), target the frontend app directory only. Never modify backend projects.
 
 ### 2. Lock File & Tech Detection
 
-- Check `package-lock.json`, `pnpm-lock.yaml`, `yarn.lock`, or `bun.lockb` for package manager (`npm`|`pnpm`|`yarn`|`bun`).
+- Check `package-lock.json`, `pnpm-lock.yaml`, `yarn.lock`, or `bun.lock`/`bun.lockb` for package manager (`npm`|`pnpm`|`yarn`|`bun`, classifying `bun.lock` or `bun.lockb` as Bun).
 - **CRITICAL DIRECTIVE**: Skip directly to the detected framework in **Technology Guides** below. Ignore all other guides.
 
 ### 3. Install Package (npm method)
@@ -134,7 +134,7 @@ export default function ShareButton({ style = "default", url, title }) {
 
 #### npm Method
 
-Import hooks from `preact/hooks` (or ensure `preact/compat` is aliased to `react` in bundler config):
+Import hooks from `preact/hooks` (or ensure `react` and `react-dom` are aliased to `preact/compat` in bundler config):
 
 Create component (`src/components/ShareButton.jsx`):
 
