@@ -102,6 +102,7 @@ class SocialShareButton {
 
   _applyThemeClasses() {
     const theme = this.options.theme || "dark";
+    // Toggle light theme class on trigger button
     if (this.button) {
       if (theme === "light") {
         this.button.classList.add("theme-light");
@@ -109,6 +110,7 @@ class SocialShareButton {
         this.button.classList.remove("theme-light");
       }
     }
+    // Replace modal overlay theme classes while preserving active visibility state
     if (this.modal) {
       const activeState = this.modal.classList.contains("active") ? " active" : "";
       this.modal.className = `social-share-modal-overlay ${theme}${activeState}`;
@@ -659,6 +661,7 @@ class SocialShareButton {
 
     this.options = { ...this.options, ...options };
 
+    // Reapply theme classes to button and modal after merging updated options
     this._applyThemeClasses();
 
     // Update URL in modal if it exists
