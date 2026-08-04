@@ -100,9 +100,25 @@ class SocialShareButton {
     this.applyCustomColors();
   }
 
+  _applyThemeClasses() {
+    const theme = this.options.theme || "dark";
+    if (this.button) {
+      if (theme === "light") {
+        this.button.classList.add("theme-light");
+      } else {
+        this.button.classList.remove("theme-light");
+      }
+    }
+    if (this.modal) {
+      const activeState = this.modal.classList.contains("active") ? " active" : "";
+      this.modal.className = `social-share-modal-overlay ${theme}${activeState}`;
+    }
+  }
+
   createButton() {
     const button = document.createElement("button");
-    button.className = `social-share-btn ${this.options.buttonStyle} ${this.options.customClass}`;
+    const themeClass = this.options.theme === "light" ? "theme-light" : "";
+    button.className = `social-share-btn ${this.options.buttonStyle} ${this.options.customClass} ${themeClass}`.trim();
     button.setAttribute("aria-label", "Share");
     button.innerHTML = `
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="share-icon">
@@ -116,9 +132,11 @@ class SocialShareButton {
       this._containerEl.appendChild(button);
     }
   }
+
   createModal() {
     const modal = document.createElement("div");
-    modal.className = `social-share-modal-overlay ${this.options.theme}`;
+    const themeClass = this.options.theme || "dark";
+    modal.className = `social-share-modal-overlay ${themeClass}`;
     modal.style.display = "none";
     modal.innerHTML = `
       <div class="social-share-modal-content ${this.options.modalPosition}">
@@ -640,6 +658,8 @@ class SocialShareButton {
     }
 
     this.options = { ...this.options, ...options };
+
+    this._applyThemeClasses();
 
     // Update URL in modal if it exists
     if (this.modal) {
