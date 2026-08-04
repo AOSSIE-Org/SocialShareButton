@@ -70,7 +70,7 @@ Lightweight social sharing component for web applications. Zero dependencies, fr
 
 ## Features
 
-- 🌐 Multiple platforms: WhatsApp, Facebook, X, LinkedIn, Telegram, Reddit, Email, Pinterest, Discord
+- 🌐 Multiple platforms: WhatsApp, Facebook, X, LinkedIn, Telegram, Reddit, Email, Pinterest, Discord, QR Code
 - 🎯 Zero dependencies - pure vanilla JavaScript
 - ⚛️ Framework support: React, Preact, Next.js, Qwik, Vue, Angular, or plain HTML
 - 🔄 Auto-detects current URL and page title
@@ -527,7 +527,7 @@ new SocialShareButton({
 | `onCopy`           | function       | `null`                 | Callback when user copies link: `(url) => {}`      |
 
 **Available Platforms:**  
-`whatsapp`, `facebook`, `twitter`, `linkedin`, `telegram`, `reddit`, `email`, `pinterest`, `discord`
+`whatsapp`, `facebook`, `twitter`, `linkedin`, `telegram`, `reddit`, `email`, `pinterest`, `discord`, `qrcode`
 
 ### Customize Share Message/Post Text
 
@@ -658,6 +658,21 @@ new SocialShareButton({
 ---
 
 ## Advanced Usage
+
+### Using the QR Code Extension
+
+To enable the QR Code feature, you must include the extension script in your HTML along with the main script:
+
+```html
+<!-- Main CSS and JS -->
+<link rel="stylesheet" href="path/to/social-share-button.css" />
+<script src="path/to/social-share-button.js"></script>
+
+<!-- QR Code Extension -->
+<script src="path/to/social-share-button-qr.js"></script>
+```
+
+When you pass `qrcode` in the `platforms` array, a QR code generation panel will be rendered inline inside the share modal when clicked.
 
 ### Using npm Package
 
