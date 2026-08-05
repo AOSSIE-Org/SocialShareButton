@@ -683,7 +683,7 @@ The QR code feature is an **optional extension**. The core library has zero runt
 import "@aossie-org/social-share-button/src/social-share-button-qr.js";
 ```
 
-The extension will dynamically inject `qrcode-generator` from jsDelivr the first time the QR platform is initialised.
+The extension will dynamically inject `qrcode-generator` from jsDelivr the first time a user clicks the QR platform.
 
 #### Self-hosting under a strict CSP
 

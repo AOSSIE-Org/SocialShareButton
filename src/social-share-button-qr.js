@@ -4,34 +4,22 @@
  */
 
 (function () {
-  /**
-   * Shared bootstrap error helper for the QR extension.
-   * Keeps all console output in one place so it can be easily
-   * swapped for a project-level logger without touching call sites.
-   *
-   * @param {string} message
-   */
+  // Shared bootstrap error helper for the QR extension.
+  // Keeps all console output in one place for easy logger swapping.
   function _qrWarn(message) {
+    /* eslint-disable no-console */
     if (typeof console !== "undefined" && typeof console.warn === "function") {
       console.warn("[SocialShareButton QR] " + message);
     }
+    /* eslint-enable no-console */
   }
 
-  /**
-   * Cached Promise for the qrcode-generator CDN load.
-   * Guarantees only one <script> tag is ever injected regardless of
-   * how many QR clicks happen before the first load completes.
-   * @type {Promise<void>|null}
-   */
+  // Cached Promise for the qrcode-generator CDN load.
+  // Guarantees only one <script> tag is ever injected.
   var _generatorPromise = null;
 
-  /**
-   * Returns a Promise that resolves once window.qrcode is available.
-   * If the library is already present (e.g. self-hosted) it resolves immediately.
-   * Subsequent calls return the same cached Promise.
-   *
-   * @returns {Promise<void>}
-   */
+  // Returns a Promise that resolves once window.qrcode is available.
+  // Resolves immediately if self-hosted. Subsequent calls return the same cached Promise.
   function getQRCodeGenerator() {
     if (_generatorPromise) return _generatorPromise;
 
@@ -76,6 +64,8 @@
     window.SocialShareButton.prototype.share = function (platform) {
       if (platform === "qrcode") {
         var self = this;
+        this._qrRenderRequestId = (this._qrRenderRequestId || 0) + 1;
+        var requestToken = this._qrRenderRequestId;
 
         this._emit("social_share_click", "share", { platform: platform });
 
@@ -90,6 +80,11 @@
 
         getQRCodeGenerator()
           .then(function () {
+            // Abort if the user closed the modal or clicked again while loading
+            if (self._qrRenderRequestId !== requestToken || !self.modal) {
+              return;
+            }
+
             var rendered = self.renderQRPanel();
             // Only emit success and invoke callback after rendering succeeds
             if (rendered !== false) {
@@ -103,8 +98,8 @@
             // CDN failed — warning already logged inside getQRCodeGenerator
           })
           .then(function () {
-            // Restore button regardless of success or failure (acts as .finally)
-            if (qrBtn) {
+            // Restore button only if this is still the active request
+            if (self._qrRenderRequestId === requestToken && qrBtn) {
               qrBtn.disabled = false;
               qrBtn.removeAttribute("aria-busy");
             }
@@ -210,6 +205,9 @@
     };
 
     window.SocialShareButton.prototype.closeModal = function () {
+      // Invalidate any pending QR renders
+      this._qrRenderRequestId = (this._qrRenderRequestId || 0) + 1;
+
       if (this.modal) {
         var qrPanel = this.modal.querySelector(".social-share-qr-panel");
         if (qrPanel) {
