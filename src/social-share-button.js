@@ -31,7 +31,6 @@ class SocialShareButton {
         "reddit",
         "pinterest",
         "discord",
-        "qrcode",
       ],
       theme: options.theme || "dark",
       buttonText: options.buttonText || "Share",

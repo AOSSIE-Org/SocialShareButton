@@ -4,9 +4,65 @@
  */
 
 (function () {
+  /**
+   * Shared bootstrap error helper for the QR extension.
+   * Keeps all console output in one place so it can be easily
+   * swapped for a project-level logger without touching call sites.
+   *
+   * @param {string} message
+   */
+  function _qrWarn(message) {
+    if (typeof console !== "undefined" && typeof console.warn === "function") {
+      console.warn("[SocialShareButton QR] " + message);
+    }
+  }
+
+  /**
+   * Cached Promise for the qrcode-generator CDN load.
+   * Guarantees only one <script> tag is ever injected regardless of
+   * how many QR clicks happen before the first load completes.
+   * @type {Promise<void>|null}
+   */
+  var _generatorPromise = null;
+
+  /**
+   * Returns a Promise that resolves once window.qrcode is available.
+   * If the library is already present (e.g. self-hosted) it resolves immediately.
+   * Subsequent calls return the same cached Promise.
+   *
+   * @returns {Promise<void>}
+   */
+  function getQRCodeGenerator() {
+    if (_generatorPromise) return _generatorPromise;
+
+    if (typeof window.qrcode !== "undefined") {
+      _generatorPromise = Promise.resolve();
+      return _generatorPromise;
+    }
+
+    _generatorPromise = new Promise(function (resolve, reject) {
+      var script = document.createElement("script");
+      script.src = "https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js";
+      script.onload = resolve;
+      script.onerror = function () {
+        // Reset so a retry (e.g. after fixing CSP) can attempt the load again
+        _generatorPromise = null;
+        _qrWarn(
+          "Failed to load qrcode-generator from CDN (https://cdn.jsdelivr.net). " +
+          "Check your network connection or Content Security Policy. " +
+          "To self-host, load qrcode.min.js before social-share-button-qr.js."
+        );
+        reject(new Error("qrcode-generator CDN load failed"));
+      };
+      document.head.appendChild(script);
+    });
+
+    return _generatorPromise;
+  }
+
   function applyQRPatch() {
     if (typeof window === "undefined" || !window.SocialShareButton) {
-      console.warn("SocialShareButton core must be loaded before QR extension");
+      _qrWarn("SocialShareButton core must be loaded before the QR extension.");
       return;
     }
 
@@ -19,13 +75,41 @@
 
     window.SocialShareButton.prototype.share = function (platform) {
       if (platform === "qrcode") {
-        this._emit("social_share_click", "share", { platform });
-        this.renderQRPanel();
-        this._emit("social_share_success", "share", { platform });
+        var self = this;
 
-        if (this.options.onShare) {
-          this.options.onShare(platform, this.options.url);
+        this._emit("social_share_click", "share", { platform: platform });
+
+        // Show a pending/disabled state on the QR button while the library loads
+        var qrBtn = this.modal
+          ? this.modal.querySelector('[data-platform="qrcode"]')
+          : null;
+        if (qrBtn) {
+          qrBtn.disabled = true;
+          qrBtn.setAttribute("aria-busy", "true");
         }
+
+        getQRCodeGenerator()
+          .then(function () {
+            var rendered = self.renderQRPanel();
+            // Only emit success and invoke callback after rendering succeeds
+            if (rendered !== false) {
+              self._emit("social_share_success", "share", { platform: platform });
+              if (self.options.onShare) {
+                self.options.onShare(platform, self.options.url);
+              }
+            }
+          })
+          .catch(function () {
+            // CDN failed — warning already logged inside getQRCodeGenerator
+          })
+          .then(function () {
+            // Restore button regardless of success or failure (acts as .finally)
+            if (qrBtn) {
+              qrBtn.disabled = false;
+              qrBtn.removeAttribute("aria-busy");
+            }
+          });
+
         return;
       }
 
@@ -34,14 +118,14 @@
     };
 
     window.SocialShareButton.prototype.renderQRPanel = function () {
-      if (!this.modal) return;
+      if (!this.modal) return false;
 
       // Do not render twice
       if (this.modal.querySelector(".social-share-qr-panel")) return;
 
       if (typeof window.qrcode === "undefined") {
-        console.error("qrcode-generator failed to load.");
-        return;
+        _qrWarn("qrcode-generator is not available. The QR panel cannot be rendered.");
+        return false;
       }
 
       // --- Generate QR data ---
@@ -53,7 +137,7 @@
 
       var moduleCount = qr.getModuleCount();
       var cellSize = Math.max(3, Math.floor(180 / moduleCount));
-      var margin = 2;
+      var margin = 4;
       var size = moduleCount * cellSize + margin * 2 * cellSize;
 
       // --- Build DOM ---
@@ -146,31 +230,14 @@
     };
   } // end applyQRPatch
 
-  function loadQRCodeGenerator(callback) {
-    if (typeof window.qrcode !== "undefined") {
-      callback();
-      return;
-    }
-
-    var script = document.createElement("script");
-    script.src = "https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js";
-    script.onload = callback;
-    script.onerror = function () {
-      console.error("Failed to load qrcode-generator from CDN.");
-    };
-    document.head.appendChild(script);
-  }
-
-  function init() {
-    loadQRCodeGenerator(function () {
+  // Patch prototype immediately — CDN load is deferred to first QR click.
+  // Guard against SSR environments (Next.js, Nuxt, etc.) where window/document
+  // are undefined at import time.
+  if (typeof window !== "undefined" && typeof document !== "undefined") {
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", applyQRPatch);
+    } else {
       applyQRPatch();
-    });
-  }
-
-  // Wait for all deferred scripts to finish evaluating before loading and patching.
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
-  } else {
-    init();
+    }
   }
 })();
