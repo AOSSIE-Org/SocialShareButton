@@ -140,7 +140,8 @@
       qrPanel.className = "social-share-qr-panel";
 
       var title = document.createElement("h4");
-      title.textContent = "Scan QR Code";
+      var titleText = (this.options.labels && this.options.labels.qrScanTitle) || "Scan QR Code";
+      title.textContent = titleText;
 
       var canvas = document.createElement("canvas");
       canvas.className = "social-share-qr-canvas";
@@ -170,7 +171,8 @@
 
       var downloadBtn = document.createElement("button");
       downloadBtn.className = "social-share-qr-download";
-      downloadBtn.textContent = "Download QR";
+      var downloadText = (this.options.labels && this.options.labels.qrDownload) || "Download QR";
+      downloadBtn.textContent = downloadText;
 
       var self = this;
       var downloadHandler = function () {
