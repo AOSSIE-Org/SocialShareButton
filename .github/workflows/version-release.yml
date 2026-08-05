@@ -141,14 +141,13 @@ jobs:
             echo "- **GitHub Release:** ✗ (no draft found)" >> $GITHUB_STEP_SUMMARY
           fi
 
-  publish:
+  build:
     needs: release
     if: ${{ github.repository_owner == 'AOSSIE-Org' && needs.release.outputs.released == 'true' }}
     runs-on: ubuntu-latest
 
     permissions:
       contents: read
-      id-token: write
 
     steps:
       - name: Checkout code
@@ -166,7 +165,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-          registry-url: 'https://registry.npmjs.org'
           cache: 'pnpm'
 
       - name: Install dependencies
@@ -175,9 +173,6 @@ jobs:
       - name: Run linting
         run: pnpm run lint
 
-      - name: Update npm for Trusted Publishing
-        run: npm install -g npm@11.5.1
-
       - name: Sync version from VERSION file
         run: |
           VERSION="${{ needs.release.outputs.version }}"
@@ -185,11 +180,43 @@ jobs:
           npm version "$VERSION" --no-git-tag-version --allow-same-version
           echo "✓ package.json version set to $VERSION"
 
-      - name: Verify package contents
-        run: npm pack --dry-run
+      - name: Pack package
+        run: npm pack --pack-destination /tmp/pack
+
+      - name: Upload package tarball
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: npm-package
+          path: /tmp/pack/*.tgz
+          retention-days: 1
+
+  publish:
+    needs: [release, build]
+    if: ${{ github.repository_owner == 'AOSSIE-Org' && needs.release.outputs.released == 'true' }}
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Download package tarball
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: npm-package
+          path: /tmp/pack
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Update npm for Trusted Publishing
+        run: npm install -g npm@11.5.1
 
       - name: Publish to npm
-        run: npm publish --provenance --access public
+        run: npm publish /tmp/pack/*.tgz --provenance --access public
 
       - name: Publish Summary
         run: |
