@@ -175,6 +175,9 @@ jobs:
       - name: Run linting
         run: pnpm run lint
 
+      - name: Update npm for Trusted Publishing
+        run: npm install -g npm@11.5.1
+
       - name: Sync version from VERSION file
         run: |
           VERSION="${{ needs.release.outputs.version }}"
@@ -187,8 +190,6 @@ jobs:
 
       - name: Publish to npm
         run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPMJS_TOKEN }}
 
       - name: Publish Summary
         run: |
