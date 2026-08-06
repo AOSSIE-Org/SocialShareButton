@@ -1,22 +1,22 @@
 import type { Metadata } from "next";
-import { getTranslation } from "@/lib/i18n";
-
-const t = getTranslation();
 
 export const metadata: Metadata = {
-  title: t.manual.title,
-  description: t.manual.description,
+  title: "Manual Installation Guide",
+  description:
+    "Step-by-step guide to manually add SocialShareButton to your website with a single script tag — no build tools or bundler required.",
   alternates: {
     canonical: "/docs/manual",
   },
   openGraph: {
-    title: `${t.manual.title} | ${t.common.siteName}`,
-    description: t.manual.description,
-    url: `${t.common.url}/docs/manual`,
+    title: "Manual Installation Guide | SocialShareButton",
+    description:
+      "Step-by-step guide to manually add SocialShareButton to your website with a single script tag — no build tools or bundler required.",
+    url: "https://social-share-button.aossie.org/docs/manual",
   },
   twitter: {
-    title: `${t.manual.title} | ${t.common.siteName}`,
-    description: t.manual.description,
+    title: "Manual Installation Guide | SocialShareButton",
+    description:
+      "Step-by-step guide to manually add SocialShareButton to your website with a single script tag — no build tools or bundler required.",
   },
 };
 

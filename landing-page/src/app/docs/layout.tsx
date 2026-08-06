@@ -1,22 +1,22 @@
 import type { Metadata } from "next";
-import { getTranslation } from "@/lib/i18n";
-
-const t = getTranslation();
 
 export const metadata: Metadata = {
-  title: t.docs.title,
-  description: t.docs.description,
+  title: "Documentation",
+  description:
+    "Complete setup guide for SocialShareButton — installation, AI-agent-assisted setup, and manual integration for React, Preact, Qwik, and vanilla JavaScript projects.",
   alternates: {
     canonical: "/docs",
   },
   openGraph: {
-    title: `${t.docs.title} | ${t.common.siteName}`,
-    description: t.docs.description,
-    url: `${t.common.url}/docs`,
+    title: "Documentation | SocialShareButton",
+    description:
+      "Complete setup guide for SocialShareButton — installation, AI-agent-assisted setup, and manual integration for React, Preact, Qwik, and vanilla JavaScript projects.",
+    url: "https://social-share-button.aossie.org/docs",
   },
   twitter: {
-    title: `${t.docs.title} | ${t.common.siteName}`,
-    description: t.docs.description,
+    title: "Documentation | SocialShareButton",
+    description:
+      "Complete setup guide for SocialShareButton — installation, AI-agent-assisted setup, and manual integration for React, Preact, Qwik, and vanilla JavaScript projects.",
   },
 };
 

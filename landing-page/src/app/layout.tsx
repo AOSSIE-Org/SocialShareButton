@@ -3,38 +3,45 @@ import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
-import { getTranslation } from "@/lib/i18n";
-
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair" });
 
-const t = getTranslation();
-
 export const metadata: Metadata = {
-  metadataBase: new URL(t.common.url),
+  metadataBase: new URL("https://social-share-button.aossie.org"),
   title: {
-    default: t.metadata.title,
-    template: t.metadata.titleTemplate,
+    default: "SocialShareButton — Lightweight Social Share Button Library",
+    template: "%s | SocialShareButton",
   },
-  description: t.metadata.description,
-  keywords: t.metadata.keywords,
-  authors: [{ name: t.common.author }],
-  creator: t.common.author,
-  publisher: t.common.author,
+  description:
+    "Add native-feeling social share buttons (WhatsApp, Facebook, X, LinkedIn, Telegram) to any website with one script. Zero dependencies, cross-platform, fast, secure, and open source.",
+  keywords: [
+    "social share button",
+    "share button library",
+    "javascript share widget",
+    "add to any website share button",
+    "open source social share",
+    "react share button",
+    "preact share button",
+    "cross platform share widget",
+  ],
+  authors: [{ name: "AOSSIE" }],
+  creator: "AOSSIE",
+  publisher: "AOSSIE",
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: t.metadata.ogTitle,
-    description: t.metadata.ogDescription,
-    url: t.common.url,
-    siteName: t.common.siteName,
+    title: "SocialShareButton — Lightweight Social Share Button Library",
+    description:
+      "Zero-dependency, cross-platform social share button widget. Add it to your site with one script.",
+    url: "https://social-share-button.aossie.org",
+    siteName: "SocialShareButton",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: t.metadata.ogImageAlt,
+        alt: "SocialShareButton — Lightweight Social Share Button Library",
       },
     ],
     type: "website",
@@ -42,8 +49,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: t.metadata.twitterTitle,
-    description: t.metadata.twitterDescription,
+    title: "SocialShareButton — Lightweight Social Share Button Library",
+    description: "Zero-dependency social share button widget for any website.",
     images: ["/og-image.png"],
   },
   robots: {
@@ -65,19 +72,20 @@ export const metadata: Metadata = {
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  name: t.common.siteName,
+  name: "SocialShareButton",
   applicationCategory: "DeveloperApplication",
   operatingSystem: "Any",
-  description: t.metadata.jsonLdDescription,
+  description:
+    "Lightweight, zero-dependency social share button library for modern websites. Supports WhatsApp, Facebook, X, LinkedIn, and Telegram.",
   offers: {
     "@type": "Offer",
     price: "0",
     priceCurrency: "USD",
   },
-  url: t.common.url,
+  url: "https://social-share-button.aossie.org",
   author: {
     "@type": "Organization",
-    name: t.common.author,
+    name: "AOSSIE",
   },
 };
 
