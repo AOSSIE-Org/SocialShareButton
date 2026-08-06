@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     template: "%s | SocialShareButton",
   },
   description:
-    "Add native-feeling social share buttons (WhatsApp, Facebook, X, LinkedIn, Telegram) to any website with one script. Zero dependencies, cross-platform, fast, secure, and open source.",
+    "Add native-feeling share buttons (WhatsApp, Facebook, X, LinkedIn, Telegram) to any site with one script. Zero dependencies, fast, secure, open source.",
   keywords: [
     "social share button",
     "share button library",
@@ -64,7 +64,10 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: "/SocialShare_logo.webp",
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/SocialShare_logo.webp", type: "image/webp" },
+    ],
     apple: "/apple-icon.png",
   },
 };
