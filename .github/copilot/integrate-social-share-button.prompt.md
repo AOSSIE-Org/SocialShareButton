@@ -29,11 +29,11 @@ Integrate `@aossie-org/social-share-button` into a client web project with zero 
 
 - npm: `npm i @aossie-org/social-share-button` | pnpm: `pnpm add @aossie-org/social-share-button`
 - yarn: `yarn add @aossie-org/social-share-button` | bun: `bun add @aossie-org/social-share-button`
-*(Skip if CDN method requested).*
+  _(Skip if CDN method requested)._
 
 ### 4. Ask User Placement (If Unspecified)
 
-Ask: *"Where would you like to place the Social Share Button? Options: npm | CDN. Style: default | round | square."*
+Ask: _"Where would you like to place the Social Share Button? Options: npm | CDN. Style: default | round | square."_
 
 ### 5. Mandatory Integration Rules
 
@@ -105,7 +105,13 @@ export default function ShareButton({ style = "default", url, title, theme = "da
   useEffect(() => {
     if (!containerRef.current) return;
     instanceRef.current?.destroy?.();
-    instanceRef.current = new SocialShareButton({ container: containerRef.current, buttonStyle: style, url, title, theme });
+    instanceRef.current = new SocialShareButton({
+      container: containerRef.current,
+      buttonStyle: style,
+      url,
+      title,
+      theme,
+    });
     return () => instanceRef.current?.destroy?.();
   }, [style, url, title, theme]);
 
@@ -135,13 +141,25 @@ export default function Header() {
     const init = () => {
       if (!window.SocialShareButton || !shareContainerRef.current) return;
       shareInstanceRef.current?.destroy?.();
-      shareInstanceRef.current = new window.SocialShareButton({ container: shareContainerRef.current, buttonStyle: "default" });
+      shareInstanceRef.current = new window.SocialShareButton({
+        container: shareContainerRef.current,
+        buttonStyle: "default",
+      });
     };
 
     if (window.SocialShareButton) init();
-    else timer = setInterval(() => { if (window.SocialShareButton) { clearInterval(timer); init(); } }, 100);
+    else
+      timer = setInterval(() => {
+        if (window.SocialShareButton) {
+          clearInterval(timer);
+          init();
+        }
+      }, 100);
 
-    return () => { if (timer) clearInterval(timer); shareInstanceRef.current?.destroy?.(); };
+    return () => {
+      if (timer) clearInterval(timer);
+      shareInstanceRef.current?.destroy?.();
+    };
   }, []);
 
   return (
@@ -173,7 +191,10 @@ export default function Header() {
   useEffect(() => {
     if (!shareContainerRef.current) return;
     shareInstanceRef.current?.destroy?.();
-    shareInstanceRef.current = new SocialShareButton({ container: shareContainerRef.current, buttonStyle: "default" });
+    shareInstanceRef.current = new SocialShareButton({
+      container: shareContainerRef.current,
+      buttonStyle: "default",
+    });
     return () => shareInstanceRef.current?.destroy?.();
   }, []);
 
@@ -201,7 +222,13 @@ export default function ShareButton({ style = "default", url, title, theme = "da
   useEffect(() => {
     if (!containerRef.current) return;
     instanceRef.current?.destroy?.();
-    instanceRef.current = new SocialShareButton({ container: containerRef.current, buttonStyle: style, url, title, theme });
+    instanceRef.current = new SocialShareButton({
+      container: containerRef.current,
+      buttonStyle: style,
+      url,
+      title,
+      theme,
+    });
     return () => instanceRef.current?.destroy?.();
   }, [style, url, title, theme]);
 
@@ -239,7 +266,10 @@ let shareInstance = null;
 
 onMounted(() => {
   if (!shareContainerRef.value) return;
-  shareInstance = new SocialShareButton({ container: shareContainerRef.value, buttonStyle: "default" });
+  shareInstance = new SocialShareButton({
+    container: shareContainerRef.value,
+    buttonStyle: "default",
+  });
 });
 
 onUnmounted(() => shareInstance?.destroy?.());
@@ -260,14 +290,23 @@ import { ref, onMounted, onUnmounted, watch } from "vue";
 import SocialShareButton from "@aossie-org/social-share-button";
 import "@aossie-org/social-share-button/css";
 
-const props = defineProps({ style: { type: String, default: "default" }, url: String, title: String });
+const props = defineProps({
+  style: { type: String, default: "default" },
+  url: String,
+  title: String,
+});
 const containerRef = ref(null);
 let instance = null;
 
 const init = () => {
   if (!containerRef.value) return;
   instance?.destroy?.();
-  instance = new SocialShareButton({ container: containerRef.value, buttonStyle: props.style, url: props.url, title: props.title });
+  instance = new SocialShareButton({
+    container: containerRef.value,
+    buttonStyle: props.style,
+    url: props.url,
+    title: props.title,
+  });
 };
 
 onMounted(init);
@@ -275,6 +314,10 @@ watch(() => [props.style, props.url, props.title], init);
 onUnmounted(() => instance?.destroy?.());
 </script>
 ```
+
+#### CDN Method
+
+Add CDN `<link>` to `<head>` and `<script>` to `<body>` in `index.html`. In `onMounted`, verify `window.SocialShareButton` exists before instantiating `shareInstance = new window.SocialShareButton({ container: shareContainerRef.value, buttonStyle: "default" })`, and add `onUnmounted(() => shareInstance?.destroy?.())` to safely dispose the instance.
 
 ---
 
@@ -285,31 +328,36 @@ onUnmounted(() => instance?.destroy?.());
 Add directly into an existing Angular component (e.g. `header.component.ts` & template):
 
 ```typescript
-import { Component, ElementRef, AfterViewInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, ElementRef, AfterViewInit, OnDestroy, ViewChild } from "@angular/core";
 // @ts-ignore
-import SocialShareButton from '@aossie-org/social-share-button';
+import SocialShareButton from "@aossie-org/social-share-button";
 
 @Component({
-  selector: 'app-header',
+  selector: "app-header",
   template: `
     <header>
       <!-- Existing template content -->
       <div #shareContainer class="social-share-wrapper"></div>
     </header>
   `,
-  styleUrls: ['../../node_modules/@aossie-org/social-share-button/css']
+  styleUrls: ["../../node_modules/@aossie-org/social-share-button/css"],
 })
 export class HeaderComponent implements AfterViewInit, OnDestroy {
-  @ViewChild('shareContainer') shareContainer!: ElementRef;
+  @ViewChild("shareContainer") shareContainer!: ElementRef;
   private shareInstance: any;
 
   ngAfterViewInit(): void {
     if (this.shareContainer?.nativeElement) {
-      this.shareInstance = new SocialShareButton({ container: this.shareContainer.nativeElement, buttonStyle: 'default' });
+      this.shareInstance = new SocialShareButton({
+        container: this.shareContainer.nativeElement,
+        buttonStyle: "default",
+      });
     }
   }
 
-  ngOnDestroy(): void { this.shareInstance?.destroy?.(); }
+  ngOnDestroy(): void {
+    this.shareInstance?.destroy?.();
+  }
 }
 ```
 
@@ -318,42 +366,67 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
 Create component file (`share-button.component.ts`) ONLY for new projects or explicit requests:
 
 ```typescript
-import { Component, ElementRef, Input, AfterViewInit, OnChanges, OnDestroy, SimpleChanges, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  AfterViewInit,
+  OnChanges,
+  OnDestroy,
+  SimpleChanges,
+  ViewChild,
+} from "@angular/core";
 // @ts-ignore
-import SocialShareButton from '@aossie-org/social-share-button';
+import SocialShareButton from "@aossie-org/social-share-button";
 
 @Component({
-  selector: 'app-share-button',
+  selector: "app-share-button",
   template: `<div #container class="social-share-wrapper"></div>`,
-  styleUrls: ['../../node_modules/@aossie-org/social-share-button/css']
+  styleUrls: ["../../node_modules/@aossie-org/social-share-button/css"],
 })
 export class ShareButtonComponent implements AfterViewInit, OnChanges, OnDestroy {
-  @ViewChild('container') container!: ElementRef;
-  @Input() buttonStyle: string = 'default';
+  @ViewChild("container") container!: ElementRef;
+  @Input() buttonStyle: string = "default";
   @Input() url?: string;
   @Input() title?: string;
   private instance: any;
 
   ngAfterViewInit(): void {
     if (this.container?.nativeElement) {
-      this.instance = new SocialShareButton({ container: this.container.nativeElement, buttonStyle: this.buttonStyle, url: this.url, title: this.title });
+      this.instance = new SocialShareButton({
+        container: this.container.nativeElement,
+        buttonStyle: this.buttonStyle,
+        url: this.url,
+        title: this.title,
+      });
     }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.instance) {
       if (this.instance.updateOptions) {
-        this.instance.updateOptions({ buttonStyle: this.buttonStyle, url: this.url, title: this.title });
+        this.instance.updateOptions({
+          buttonStyle: this.buttonStyle,
+          url: this.url,
+          title: this.title,
+        });
       } else {
         this.instance.destroy?.();
         if (this.container?.nativeElement) {
-          this.instance = new SocialShareButton({ container: this.container.nativeElement, buttonStyle: this.buttonStyle, url: this.url, title: this.title });
+          this.instance = new SocialShareButton({
+            container: this.container.nativeElement,
+            buttonStyle: this.buttonStyle,
+            url: this.url,
+            title: this.title,
+          });
         }
       }
     }
   }
 
-  ngOnDestroy(): void { this.instance?.destroy?.(); }
+  ngOnDestroy(): void {
+    this.instance?.destroy?.();
+  }
 }
 ```
 
@@ -364,11 +437,13 @@ export class ShareButtonComponent implements AfterViewInit, OnChanges, OnDestroy
 #### Existing Project (Inline into existing entry/template - DEFAULT)
 
 Add container element into existing HTML (e.g. `index.html`):
+
 ```html
 <div id="share-button"></div>
 ```
 
 Instantiate directly in existing JS module (e.g. `src/main.js`):
+
 ```javascript
 import SocialShareButton from "@aossie-org/social-share-button";
 import "@aossie-org/social-share-button/css";
@@ -379,7 +454,10 @@ new SocialShareButton({ container: "#share-button", buttonStyle: "default" });
 #### CDN Method (Pure HTML - Inline)
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.css" />
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.css"
+/>
 <div id="share-button"></div>
 <script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.js"></script>
 <script>
