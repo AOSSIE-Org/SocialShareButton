@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { SiteNavbar } from "@/components/SiteNavbar";
+import { CodeBox } from "@/components/CodeBox";
 
 export default function Docs() {
   const [copied, setCopied] = useState(false);
@@ -74,7 +75,7 @@ export default function Docs() {
             <div className="col-span-4 lg:col-span-3 space-y-8 sm:space-y-12 lg:space-y-16">
               {/* Overview Section */}
               <div id="overview" className="space-y-6 sm:space-y-8 scroll-mt-24">
-                <div className="bg-gradient-to-br from-[#FFCC00]/20 to-[#00C853]/20 rounded-3xl p-6 sm:p-8 md:p-12 border-2 border-black dark:border-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] dark:shadow-[8px_8px_0px_0px_rgba(255,255,255,1)] hover:-translate-y-1 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[12px_12px_0px_0px_rgba(255,255,255,1)] transition-all duration-300">
+                <div className="bg-linear-to-br from-[#FFCC00]/20 to-[#00C853]/20 rounded-3xl p-6 sm:p-8 md:p-12 border-2 border-black dark:border-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] dark:shadow-[8px_8px_0px_0px_rgba(255,255,255,1)] hover:-translate-y-1 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[12px_12px_0px_0px_rgba(255,255,255,1)] transition-all duration-300">
                   <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold mb-4 sm:mb-6">
                     Get Your Share Button Live in Minutes
                   </h1>
@@ -132,38 +133,38 @@ export default function Docs() {
                     How to Get Started
                   </h2>
 
-                  <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8">
-                    You have exactly <span className="font-bold text-[#00C853]">three steps</span> between you and a live share button.
-                  </p>
+                  <h3 id="ai-agent" className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 scroll-mt-24">1. By AI-Agent</h3>
 
-                  <div className="bg-[#00C853]/10 dark:bg-[#00C853]/5 rounded-2xl p-4 sm:p-6 mb-6 sm:mb-8 border-l-4 border-[#00C853]">
-                    <pre className="text-sm sm:text-base md:text-lg font-mono whitespace-pre-wrap">
-                      1.  Load the library   →   one line in your HTML or package install
-                      2.  Drop a div         →   place it wherever you want the button
-                      3.  Initialize         →   one line of JavaScript
-                    </pre>
+                  <div className="bg-[#FFCC00]/10 dark:bg-[#FFCC00]/5 rounded-2xl p-4 sm:p-6 mb-6 sm:mb-8 border-2 border-[#FFCC00]">
+                    <p className="text-xs sm:text-sm font-bold text-[#FFCC00] mb-2">Using Cursor, Copilot, or Claude?</p>
+                    <p className="text-sm sm:text-base mb-4">
+                      Copy the prompt below and paste it directly into your AI assistant. It will automatically read the official instructions and implement the button in your project perfectly.
+                    </p>
+                    
+                    <CodeBox code={`@workspace Integrate the AOSSIE Social Share Button into my project.\n\nRead the official integration instructions here:\nhttps://raw.githubusercontent.com/AOSSIE-Org/SocialShareButton/main/.github/copilot/integrate-social-share-button.prompt.md\n\nAnalyze my project structure and place the share button in an appropriate location (like a Navbar or Footer).`} />
+                    
+                    <p className="text-sm sm:text-base mt-2 text-muted-foreground">
+                      The AI will handle everything — from adding the CDN links to placing the <code className="bg-neutral-200 dark:bg-neutral-800 px-2 py-1 rounded text-foreground">data-social-share</code> div in your specific framework.
+                    </p>
                   </div>
 
-                  <p className="text-base sm:text-lg text-muted-foreground mb-6 sm:mb-8">
-                    That's it. No accounts. No API keys. No configuration files.
+                  <h3 id="manual-install" className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 scroll-mt-24">2. Manually</h3>
+
+                  <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8">
+                    Adding the button manually takes less than 2 minutes. We've prepared detailed instructions for <span className="font-bold text-[#00C853]">React, Next.js, Vue, Angular</span> and Vanilla HTML.
                   </p>
 
-                  <div className="bg-[#FFCC00]/10 dark:bg-[#FFCC00]/5 rounded-2xl p-4 sm:p-6 border-2 border-[#FFCC00]">
-                    <p className="text-xs sm:text-sm font-bold text-[#FFCC00] mb-2">Using GitHub Copilot?</p>
-                    <p className="text-sm sm:text-base mb-4">
-                      Open the chat, type <code className="bg-black dark:bg-white text-white dark:text-black px-2 py-1 rounded text-sm">@workspace</code>, then copy the public prompt from:
-                    </p>
-                    <a
-                      href="https://github.com/AOSSIE-Org/SocialShareButton/blob/main/.github/copilot/integrate-social-share-button.prompt.md"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-[#00C853] hover:underline break-all text-sm sm:text-base"
+                  <div className="bg-neutral-50 dark:bg-neutral-900/50 rounded-2xl p-6 border-2 border-neutral-200 dark:border-neutral-800 flex flex-col sm:flex-row items-center justify-between gap-4 mb-6 sm:mb-8">
+                    <div>
+                      <h4 className="text-lg sm:text-xl font-bold mb-2">View Manual Integration Guide</h4>
+                      <p className="text-sm sm:text-base text-muted-foreground">Get exact copy-paste snippets for your tech stack.</p>
+                    </div>
+                    <Link
+                      href="/docs/manual"
+                      className="bg-[#00C853] text-white px-6 py-3 rounded-full font-bold hover:brightness-110 transition-all border-2 border-transparent dark:border-none flex items-center gap-2 whitespace-nowrap"
                     >
-                      https://github.com/AOSSIE-Org/SocialShareButton/blob/main/.github/copilot/integrate-social-share-button.prompt.md
-                    </a>
-                    <p className="text-sm sm:text-base mt-4">
-                      Copilot will walk through each step for your exact framework automatically.
-                    </p>
+                      Choose Framework →
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -264,7 +265,7 @@ export default function Docs() {
 
               {/* Install Section */}
               <div id="install" className="space-y-6 sm:space-y-8 scroll-mt-24">
-                <div className="bg-gradient-to-br from-[#00C853]/20 to-[#FFCC00]/20 rounded-3xl p-6 sm:p-8 md:p-12 border-2 border-black dark:border-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] dark:shadow-[8px_8px_0px_0px_rgba(255,255,255,1)] hover:-translate-y-1 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[12px_12px_0px_0px_rgba(255,255,255,1)] transition-all duration-300">
+                <div className="bg-linear-to-br from-[#00C853]/20 to-[#FFCC00]/20 rounded-3xl p-6 sm:p-8 md:p-12 border-2 border-black dark:border-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] dark:shadow-[8px_8px_0px_0px_rgba(255,255,255,1)] hover:-translate-y-1 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[12px_12px_0px_0px_rgba(255,255,255,1)] transition-all duration-300">
                   <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif font-bold mb-6 sm:mb-8">
                     Ready to Go?
                   </h2>

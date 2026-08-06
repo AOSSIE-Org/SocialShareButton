@@ -213,7 +213,7 @@ export function Playground() {
                        onClick={() => setTheme("light")}
                        className={`flex-1 py-2 text-sm rounded transition-colors ${
                          theme === "light"
-                           ? "font-bold text-black bg-[#FFCC00] shadow-sm"
+                           ? "font-bold text-black bg-[#FFCC00] shadow-xs"
                            : "font-medium text-neutral-500 dark:text-neutral-400"
                        }`}
                      >
@@ -223,7 +223,7 @@ export function Playground() {
                        onClick={() => setTheme("dark")}
                        className={`flex-1 py-2 text-sm rounded transition-colors ${
                          theme === "dark"
-                           ? "font-bold text-black bg-[#FFCC00] shadow-sm"
+                           ? "font-bold text-black bg-[#FFCC00] shadow-xs"
                            : "font-medium text-neutral-500 dark:text-neutral-400"
                        }`}
                      >
@@ -242,7 +242,7 @@ export function Playground() {
                          onClick={() => setStyle(s.key)}
                          className={`py-2 text-sm rounded-md transition-colors ${
                            style === s.key
-                             ? "font-bold text-black bg-[#FFCC00] shadow-sm"
+                             ? "font-bold text-black bg-[#FFCC00] shadow-xs"
                              : "font-medium text-neutral-500 dark:text-neutral-400 border border-neutral-200 dark:border-neutral-800"
                          }`}
                        >
