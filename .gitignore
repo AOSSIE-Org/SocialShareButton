@@ -14,3 +14,10 @@ coverage/
 .env.development.local
 .env.test.local
 .env.production.local
+
+# Agent Runtime & Local Scratch Directories (Structure tracked, content ignored)
+.agent/scratch/*
+!.agent/scratch/.gitkeep
+
+.agent/logs/*
+!.agent/logs/.gitkeep
