@@ -21,7 +21,7 @@ Transform SocialShareButton from a CDN-first widget into a **production-grade, f
 
 ---
 
-## 📍 Actual Current State (v1.0.3)
+## 📍 Actual Current State (v1.0.4)
 
 This section is the ground truth before any planning.
 
@@ -29,7 +29,7 @@ This section is the ground truth before any planning.
 
 | Feature                            | Status | Notes                                                           |
 | ---------------------------------- | ------ | --------------------------------------------------------------- |
-| CDN distribution (jsDelivr)        | ✅     | `v1.0.3`                                                        |
+| CDN distribution (jsDelivr)        | ✅     | `v1.0.4`                                                        |
 | npm package                        | ✅     | Published as `@aossie-org/social-share-button` (scoped)         |
 | 7 share platforms                  | ✅     | WhatsApp, Facebook, X, LinkedIn, Telegram, Reddit, Email        |
 | `onShare` callback                 | ✅     | `(platform, url) => {}`                                         |
@@ -474,15 +474,15 @@ new SocialShareButton({
 
 ## 📊 Distribution Strategy
 
-| Path                  | Audience                           | Package                             | Status                 |
-| --------------------- | ---------------------------------- | ----------------------------------- | ---------------------- |
-| CDN (`<script>` tag)  | No-build / CMS / quick integration | IIFE bundle                         | ✅ v1.0.3              |
-| npm (scoped)          | Current npm users                  | `@aossie-org/social-share-button`   | ✅ Needs fix (Phase 0) |
-| npm (scoped core)     | Framework-agnostic use             | `@social-share/core`                | 🚧 Phase 1             |
-| npm (framework)       | React / Vue / Next.js apps         | `@social-share/react` etc.          | 🎯 Phase 2             |
-| npm (analytics)       | Apps needing share tracking        | `@social-share/analytics`           | 🎯 Phase 3             |
-| npm (theme)           | Theme Designer consumers           | `@social-share/theme`               | 🎯 Phase 4             |
-| Server-side templates | Rails, Django, Laravel, WP         | CDN + thin wrapper                  | 🎯 Phase 5             |
+| Path                  | Audience                           | Package                           | Status                 |
+| --------------------- | ---------------------------------- | --------------------------------- | ---------------------- |
+| CDN (`<script>` tag)  | No-build / CMS / quick integration | IIFE bundle                       | ✅ v1.0.4              |
+| npm (scoped)          | Current npm users                  | `@aossie-org/social-share-button` | ✅ Needs fix (Phase 0) |
+| npm (scoped core)     | Framework-agnostic use             | `@social-share/core`              | 🚧 Phase 1             |
+| npm (framework)       | React / Vue / Next.js apps         | `@social-share/react` etc.        | 🎯 Phase 2             |
+| npm (analytics)       | Apps needing share tracking        | `@social-share/analytics`         | 🎯 Phase 3             |
+| npm (theme)           | Theme Designer consumers           | `@social-share/theme`             | 🎯 Phase 4             |
+| Server-side templates | Rails, Django, Laravel, WP         | CDN + thin wrapper                | 🎯 Phase 5             |
 
 ---
 

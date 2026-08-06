@@ -1,6 +1,21 @@
+"use client";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 
 export function Hero() {
+  const router = useRouter();
+
+  const handleNavigate = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (e.ctrlKey || e.metaKey || e.shiftKey || e.altKey || e.button !== 0) {
+      return;
+    }
+    e.preventDefault();
+    setTimeout(() => {
+      router.push(href);
+    }, 200);
+  };
+
   return (
     <div className="pt-32 pb-16 sm:pt-40 sm:pb-24 overflow-hidden relative">
       {/* Background glow effects */}
@@ -14,7 +29,7 @@ export function Hero() {
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-neutral-100 dark:bg-neutral-800/50 border border-neutral-200 dark:border-neutral-700 text-xs font-medium mb-6">
               <span className="text-primary px-1">★</span>
-              v1.0.3 IS OUT NOW
+              v1.0.4 IS OUT NOW
             </div>
 
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-serif font-bold tracking-tight text-balance leading-[1.1] mb-6">
@@ -27,15 +42,25 @@ export function Hero() {
             </p>
 
             <div className="flex flex-wrap gap-3 sm:gap-4">
-              <Link
-                href="/docs"
-                className="bg-[#FFCC00] text-black px-6 py-3 rounded-full font-bold hover:brightness-110 transition-all border-2 border-transparent dark:border-none"
+              <motion.a
+                whileTap={{ scale: 0.9 }}
+                href="/docs#ai-agent"
+                onClick={(e) => handleNavigate(e, '/docs#ai-agent')}
+                className="bg-[#FFCC00] text-black px-6 py-3 rounded-full font-bold hover:brightness-110 transition-all border-2 border-transparent dark:border-none flex items-center gap-2 cursor-pointer group"
               >
-                Get Started →
-              </Link>
+                Add with AI Agent <span className="group-hover:translate-x-1 transition-transform">→</span>
+              </motion.a>
+              <motion.a
+                whileTap={{ scale: 0.9 }}
+                href="/docs/manual"
+                onClick={(e) => handleNavigate(e, '/docs/manual')}
+                className="bg-[#00C853] text-white px-6 py-3 rounded-full font-bold hover:brightness-110 transition-all border-2 border-transparent dark:border-none flex items-center gap-2 cursor-pointer group"
+              >
+                Add Manually <span className="group-hover:translate-x-1 transition-transform">→</span>
+              </motion.a>
               <Link
                 href="#playground"
-                className="bg-[#00C853] text-white px-6 py-3 rounded-full font-bold hover:brightness-110 transition-all border-2 border-transparent dark:border-none"
+                className="px-6 py-3 rounded-full font-bold border-2 border-black dark:border-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all flex items-center gap-2"
               >
                 Try demo →
               </Link>

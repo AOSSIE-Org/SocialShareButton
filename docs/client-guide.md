@@ -19,6 +19,15 @@ Your audience is already sharing. Give them a button worth clicking.
 
 ## How to Get Started
 
+### 1. By AI-Agent
+
+> **Using GitHub Copilot?**
+> Open the chat, type `@workspace`, then copy the public prompt from:
+> https://github.com/AOSSIE-Org/SocialShareButton/blob/main/.github/copilot/integrate-social-share-button.prompt.md
+> Copilot will walk through each step for your exact framework automatically.
+
+### 2. Manually
+
 You have exactly **three steps** between you and a live share button.
 
 ```text
@@ -28,11 +37,6 @@ You have exactly **three steps** between you and a live share button.
 ```
 
 That's it. No accounts. No API keys. No configuration files.
-
-> **Using GitHub Copilot?**
-> Open the chat, type `@workspace`, then copy the public prompt from:
-> https://github.com/AOSSIE-Org/SocialShareButton/blob/main/.github/copilot/integrate-social-share-button.prompt.md
-> Copilot will walk through each step for your exact framework automatically.
 
 ---
 

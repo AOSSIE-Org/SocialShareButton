@@ -1,6 +1,6 @@
 /**
  * SocialShareButton - A lightweight, customizable social sharing component
- * @version 1.0.3
+ * @version 1.0.4
  * @license GPL-3.0
  */
 
