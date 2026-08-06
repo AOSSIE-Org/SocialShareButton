@@ -149,11 +149,6 @@
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
-
-/* -----------------------------------------------------------------------------
-   THEMES: LIGHT, GLASSMORPHISM, CYBERPUNK, DRACULA, NORD
-   ----------------------------------------------------------------------------- */
-
 /* Light Theme */
 .social-share-modal-overlay.light {
   background-color: rgba(0, 0, 0, 0.6);
