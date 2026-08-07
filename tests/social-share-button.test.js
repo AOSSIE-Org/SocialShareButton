@@ -23,10 +23,12 @@ beforeEach(async () => {
   // Reset module registry so each test gets a fresh class with clean statics
   vi.resetModules();
   const mod = await import("../src/social-share-button.js");
-  SocialShareButton = mod.default || window.SocialShareButton;
+  vi.useFakeTimers();
+  SocialShareButton = mod.default;
 });
 
 afterEach(() => {
+  vi.useRealTimers();
   // Clean up any instances and DOM nodes
   if (SocialShareButton && SocialShareButton.instances) {
     // Copy to array to avoid mutation during iteration
@@ -69,8 +71,8 @@ describe("Security: Trusted Types & CSP compliance", () => {
     // Read the source file content — we check at the string level
     // to guarantee no innerHTML slips in during future edits
     const fs = await import("fs");
-    const path = await import("path");
-    const sourceFile = path.resolve("src/social-share-button.js");
+    const { fileURLToPath, URL: NodeURL } = await import("url");
+    const sourceFile = fileURLToPath(new NodeURL("../src/social-share-button.js", import.meta.url));
     const source = fs.readFileSync(sourceFile, "utf-8");
 
     // Match innerHTML assignments (not just the word in comments/strings)
@@ -202,9 +204,7 @@ describe("Focus Management", () => {
     instance.button.focus();
 
     instance.openModal();
-
-    // The focus is moved in a setTimeout(…, 10), so we need to wait
-    await new Promise((resolve) => setTimeout(resolve, 20));
+    vi.advanceTimersByTime(20);
 
     const activeEl = document.activeElement;
     expect(instance.modal.contains(activeEl)).toBe(true);
@@ -215,19 +215,18 @@ describe("Focus Management", () => {
     instance.button.focus();
 
     instance.openModal();
-    await new Promise((resolve) => setTimeout(resolve, 20));
+    vi.advanceTimersByTime(20);
 
     instance.closeModal();
-    // closeModal has a 200ms timeout
-    await new Promise((resolve) => setTimeout(resolve, 250));
+    vi.advanceTimersByTime(250);
 
     expect(document.activeElement).toBe(instance.button);
   });
 
-  it("should trap focus on Tab at the last element", async () => {
+  it("should trap focus on Tab at the last element", () => {
     const instance = createInstance();
     instance.openModal();
-    await new Promise((resolve) => setTimeout(resolve, 20));
+    vi.advanceTimersByTime(20);
 
     const focusable = instance.modal.querySelectorAll(
       'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
@@ -250,10 +249,10 @@ describe("Focus Management", () => {
     expect(document.activeElement).toBe(firstEl);
   });
 
-  it("should trap focus on Shift+Tab at the first element", async () => {
+  it("should trap focus on Shift+Tab at the first element", () => {
     const instance = createInstance();
     instance.openModal();
-    await new Promise((resolve) => setTimeout(resolve, 20));
+    vi.advanceTimersByTime(20);
 
     const focusable = instance.modal.querySelectorAll(
       'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
@@ -277,10 +276,10 @@ describe("Focus Management", () => {
     expect(document.activeElement).toBe(lastEl);
   });
 
-  it("should close the modal on Escape key", async () => {
+  it("should close the modal on Escape key", () => {
     const instance = createInstance();
     instance.openModal();
-    await new Promise((resolve) => setTimeout(resolve, 20));
+    vi.advanceTimersByTime(20);
 
     expect(instance.isModalOpen).toBe(true);
 
@@ -291,10 +290,32 @@ describe("Focus Management", () => {
     });
     document.dispatchEvent(escEvent);
 
-    // closeModal is called synchronously, but the display:none is in a 200ms timeout
-    await new Promise((resolve) => setTimeout(resolve, 250));
+    vi.advanceTimersByTime(250);
 
     expect(instance.isModalOpen).toBe(false);
+  });
+  it("should move focus into the modal if activeElement is outside", () => {
+    const instance = createInstance();
+    instance.openModal();
+    vi.advanceTimersByTime(20);
+
+    const focusable = instance.modal.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    const firstEl = focusable[0];
+
+    // Move focus completely outside the modal
+    instance.button.focus();
+    expect(document.activeElement).toBe(instance.button);
+
+    const tabEvent = new KeyboardEvent("keydown", {
+      key: "Tab",
+      bubbles: true,
+      cancelable: true,
+    });
+    document.dispatchEvent(tabEvent);
+
+    expect(document.activeElement).toBe(firstEl);
   });
 });
 
@@ -344,10 +365,8 @@ describe("Event Delegation", () => {
   });
 
   it("should use fewer event listeners than the number of platforms", () => {
-    const platformCount = 8;
-    const instance = createInstance({
-      platforms: ["whatsapp", "facebook", "twitter", "linkedin", "telegram", "reddit", "pinterest", "discord"],
-    });
+    const platforms = ["whatsapp", "facebook", "twitter", "linkedin", "telegram", "reddit", "pinterest", "discord"];
+    const instance = createInstance({ platforms });
 
     // Count listeners registered on platform buttons
     const platformListeners = instance.listeners.filter(
@@ -384,12 +403,12 @@ describe("Modal Lifecycle", () => {
     expect(instance.isModalOpen).toBe(true);
   });
 
-  it("should hide the modal on closeModal() after transition delay", async () => {
+  it("should hide the modal on closeModal() after transition delay", () => {
     const instance = createInstance();
     instance.openModal();
     instance.closeModal();
 
-    await new Promise((resolve) => setTimeout(resolve, 250));
+    vi.advanceTimersByTime(250);
 
     expect(instance.modal.style.display).toBe("none");
     expect(instance.isModalOpen).toBe(false);
@@ -400,11 +419,7 @@ describe("Modal Lifecycle", () => {
     const closeModalSpy = vi.spyOn(instance, "closeModal");
 
     instance.openModal();
-
-    // Simulate clicking the overlay (the modal element itself)
-    const clickEvent = new MouseEvent("click", { bubbles: true });
-    Object.defineProperty(clickEvent, "target", { value: instance.modal });
-    instance.modal.dispatchEvent(clickEvent);
+    instance.modal.click();
 
     expect(closeModalSpy).toHaveBeenCalled();
   });
@@ -463,25 +478,22 @@ describe("Public API backward compatibility", () => {
     ).not.toThrow();
   });
 
-  it("should expose openModal() and closeModal() as public methods", () => {
+  it("should expose the expected public API shape", () => {
     const instance = createInstance();
     expect(typeof instance.openModal).toBe("function");
     expect(typeof instance.closeModal).toBe("function");
-  });
-
-  it("should expose share() as a public method", () => {
-    const instance = createInstance();
     expect(typeof instance.share).toBe("function");
-  });
-
-  it("should expose destroy() as a public method", () => {
-    const instance = createInstance();
     expect(typeof instance.destroy).toBe("function");
+    expect(typeof instance.updateOptions).toBe("function");
   });
 
-  it("should expose updateOptions() as a public method", () => {
-    const instance = createInstance();
-    expect(typeof instance.updateOptions).toBe("function");
+  it("should update options and sync UI", () => {
+    const instance = createInstance({ url: "old-url" });
+    const input = instance.modal.querySelector(".social-share-link-input input");
+    expect(input.value).toBe("old-url");
+    
+    instance.updateOptions({ url: "new-url" });
+    expect(input.value).toBe("new-url");
   });
 
   it("should track instances in the static instances Set", () => {
@@ -552,6 +564,7 @@ describe("SVG Visual Parity", () => {
     const instance = createInstance({ platforms: ["whatsapp"] });
     const platformSvg = instance.modal.querySelector(".social-share-platform-icon svg");
     expect(platformSvg.getAttribute("fill")).toBe("white");
+    expect(platformSvg.querySelector("path").hasAttribute("fill")).toBe(false);
   });
 
   it("should set viewBox='0 0 24 24' on all SVGs", () => {
