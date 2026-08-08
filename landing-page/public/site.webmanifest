@@ -3,8 +3,8 @@
   "short_name": "Social Share",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#ffffff",
+  "background_color": "#212121",
+  "theme_color": "#212121",
   "icons": [
     {
       "src": "/SocialShare_logo.webp",
