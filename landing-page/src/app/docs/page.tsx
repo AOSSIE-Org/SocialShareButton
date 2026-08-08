@@ -5,6 +5,25 @@ import { useState } from "react";
 import { SiteNavbar } from "@/components/SiteNavbar";
 import { CodeBox } from "@/components/CodeBox";
 
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "Home",
+      item: "https://social-share-button.aossie.org",
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Documentation",
+      item: "https://social-share-button.aossie.org/docs",
+    },
+  ],
+};
+
 export default function Docs() {
   const [copied, setCopied] = useState(false);
 
@@ -36,6 +55,10 @@ export default function Docs() {
 
   return (
     <div className="min-h-screen selection:bg-[#FFCC00]/30">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <SiteNavbar variant="docs" />
 
       <main className="pt-20 sm:pt-24 pb-12 sm:pb-16">
@@ -80,7 +103,8 @@ export default function Docs() {
                     Get Your Share Button Live in Minutes
                   </h1>
                   <p className="text-base sm:text-lg md:text-xl text-muted-foreground leading-relaxed">
-                    Add beautiful, privacy-first social sharing to any website — no backend, no complexity, no compromise.
+                    Add beautiful, privacy-first social sharing to any website — no backend, no
+                    complexity, no compromise.
                   </p>
                 </div>
 
@@ -104,8 +128,12 @@ export default function Docs() {
                     <table className="w-full">
                       <thead>
                         <tr className="border-b-2 border-black dark:border-white">
-                          <th className="text-left py-3 sm:py-4 px-3 sm:px-4 text-lg sm:text-xl font-bold">What you get</th>
-                          <th className="text-left py-3 sm:py-4 px-3 sm:px-4 text-lg sm:text-xl font-bold">What you skip</th>
+                          <th className="text-left py-3 sm:py-4 px-3 sm:px-4 text-lg sm:text-xl font-bold">
+                            What you get
+                          </th>
+                          <th className="text-left py-3 sm:py-4 px-3 sm:px-4 text-lg sm:text-xl font-bold">
+                            What you skip
+                          </th>
                         </tr>
                       </thead>
                       <tbody>
@@ -115,9 +143,16 @@ export default function Docs() {
                           ["Fully customizable", "Lock-in or licensing fees"],
                           ["Lightweight & fast", "Build step (CDN option)"],
                         ].map((row, i) => (
-                          <tr key={i} className="border-b border-neutral-200 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-900/50 transition-colors">
-                            <td className="py-3 sm:py-4 px-3 sm:px-4 text-base sm:text-lg">{row[0]}</td>
-                            <td className="py-3 sm:py-4 px-3 sm:px-4 text-base sm:text-lg text-muted-foreground">{row[1]}</td>
+                          <tr
+                            key={i}
+                            className="border-b border-neutral-200 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-900/50 transition-colors"
+                          >
+                            <td className="py-3 sm:py-4 px-3 sm:px-4 text-base sm:text-lg">
+                              {row[0]}
+                            </td>
+                            <td className="py-3 sm:py-4 px-3 sm:px-4 text-base sm:text-lg text-muted-foreground">
+                              {row[1]}
+                            </td>
                           </tr>
                         ))}
                       </tbody>
@@ -133,31 +168,58 @@ export default function Docs() {
                     How to Get Started
                   </h2>
 
-                  <h3 id="ai-agent" className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 scroll-mt-24">1. By AI-Agent</h3>
+                  <h3
+                    id="ai-agent"
+                    className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 scroll-mt-24"
+                  >
+                    1. By AI-Agent
+                  </h3>
 
                   <div className="bg-[#FFCC00]/10 dark:bg-[#FFCC00]/5 rounded-2xl p-4 sm:p-6 mb-6 sm:mb-8 border-2 border-[#FFCC00]">
-                    <p className="text-xs sm:text-sm font-bold text-[#FFCC00] mb-2">Using Cursor, Copilot, or Claude?</p>
-                    <p className="text-sm sm:text-base mb-4">
-                      Copy the prompt below and paste it directly into your AI assistant. It will automatically read the official instructions and implement the button in your project perfectly.
+                    <p className="text-xs sm:text-sm font-bold text-[#FFCC00] mb-2">
+                      Using Cursor, Copilot, or Claude?
                     </p>
-                    
-                    <CodeBox code={`@workspace Integrate the AOSSIE Social Share Button into my project.\n\nRead the official integration instructions here:\nhttps://raw.githubusercontent.com/AOSSIE-Org/SocialShareButton/main/.github/copilot/integrate-social-share-button.prompt.md\n\nAnalyze my project structure and place the share button in an appropriate location (like a Navbar or Footer).`} />
-                    
+                    <p className="text-sm sm:text-base mb-4">
+                      Copy the prompt below and paste it directly into your AI assistant. It will
+                      automatically read the official instructions and implement the button in your
+                      project perfectly.
+                    </p>
+
+                    <CodeBox
+                      code={`@workspace Integrate the AOSSIE Social Share Button into my project.\n\nRead the official integration instructions here:\nhttps://raw.githubusercontent.com/AOSSIE-Org/SocialShareButton/main/.github/copilot/integrate-social-share-button.prompt.md\n\nAnalyze my project structure and place the share button in an appropriate location (like a Navbar or Footer).`}
+                    />
+
                     <p className="text-sm sm:text-base mt-2 text-muted-foreground">
-                      The AI will handle everything — from adding the CDN links to placing the <code className="bg-neutral-200 dark:bg-neutral-800 px-2 py-1 rounded text-foreground">data-social-share</code> div in your specific framework.
+                      The AI will handle everything — from adding the CDN links to placing the{" "}
+                      <code className="bg-neutral-200 dark:bg-neutral-800 px-2 py-1 rounded text-foreground">
+                        data-social-share
+                      </code>{" "}
+                      div in your specific framework.
                     </p>
                   </div>
 
-                  <h3 id="manual-install" className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 scroll-mt-24">2. Manually</h3>
+                  <h3
+                    id="manual-install"
+                    className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 scroll-mt-24"
+                  >
+                    2. Manually
+                  </h3>
 
                   <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8">
-                    Adding the button manually takes less than 2 minutes. We've prepared detailed instructions for <span className="font-bold text-[#00C853]">React, Next.js, Vue, Angular</span> and Vanilla HTML.
+                    Adding the button manually takes less than 2 minutes. We've prepared detailed
+                    instructions for{" "}
+                    <span className="font-bold text-[#00C853]">React, Next.js, Vue, Angular</span>{" "}
+                    and Vanilla HTML.
                   </p>
 
                   <div className="bg-neutral-50 dark:bg-neutral-900/50 rounded-2xl p-6 border-2 border-neutral-200 dark:border-neutral-800 flex flex-col sm:flex-row items-center justify-between gap-4 mb-6 sm:mb-8">
                     <div>
-                      <h4 className="text-lg sm:text-xl font-bold mb-2">View Manual Integration Guide</h4>
-                      <p className="text-sm sm:text-base text-muted-foreground">Get exact copy-paste snippets for your tech stack.</p>
+                      <h4 className="text-lg sm:text-xl font-bold mb-2">
+                        View Manual Integration Guide
+                      </h4>
+                      <p className="text-sm sm:text-base text-muted-foreground">
+                        Get exact copy-paste snippets for your tech stack.
+                      </p>
                     </div>
                     <Link
                       href="/docs/manual"
@@ -177,7 +239,10 @@ export default function Docs() {
                   </h2>
 
                   <p className="text-base sm:text-lg mb-6 sm:mb-8">
-                    SocialShareButton emits rich events locally — you forward them to whatever analytics tool you already use (Google Analytics, Mixpanel, Plausible, or your own). <span className="font-bold">Zero extra vendors. Zero new data contracts.</span>
+                    SocialShareButton emits rich events locally — you forward them to whatever
+                    analytics tool you already use (Google Analytics, Mixpanel, Plausible, or your
+                    own).{" "}
+                    <span className="font-bold">Zero extra vendors. Zero new data contracts.</span>
                   </p>
 
                   <div className="bg-[#00C853]/10 dark:bg-[#00C853]/5 rounded-2xl p-4 sm:p-6 mb-6 sm:mb-8">
@@ -198,7 +263,9 @@ export default function Docs() {
                   </div>
 
                   <div className="bg-[#FFCC00]/10 dark:bg-[#FFCC00]/5 rounded-2xl p-4 sm:p-6 border-2 border-[#FFCC00]">
-                    <p className="text-xs sm:text-sm font-bold text-[#FFCC00] mb-2">Using GitHub Copilot?</p>
+                    <p className="text-xs sm:text-sm font-bold text-[#FFCC00] mb-2">
+                      Using GitHub Copilot?
+                    </p>
                     <p className="text-sm sm:text-base mb-4">
                       Open and copy the analytics prompt from:
                     </p>
@@ -255,7 +322,9 @@ export default function Docs() {
                         key={i}
                         className={`${useCase.color} ${useCase.textColor} rounded-2xl p-4 sm:p-6 border-2 border-black dark:border-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[6px_6px_0px_0px_rgba(255,255,255,1)] transition-all duration-300 cursor-pointer`}
                       >
-                        <h3 className="text-base sm:text-lg lg:text-xl font-bold mb-2">{useCase.title}</h3>
+                        <h3 className="text-base sm:text-lg lg:text-xl font-bold mb-2">
+                          {useCase.title}
+                        </h3>
                         <p className="text-sm sm:text-base opacity-90">{useCase.desc}</p>
                       </div>
                     ))}
@@ -271,7 +340,7 @@ export default function Docs() {
                   </h2>
 
                   <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8">
-                    Install takes under five minutes. Support is on{' '}
+                    Install takes under five minutes. Support is on{" "}
                     <a
                       href="https://discord.com/channels/1022871757289422898/1479012884209078365"
                       target="_blank"
@@ -279,7 +348,8 @@ export default function Docs() {
                       className="text-[#00C853] hover:underline font-bold"
                     >
                       Discord
-                    </a>.
+                    </a>
+                    .
                   </p>
 
                   <div className="bg-black dark:bg-white rounded-2xl p-4 sm:p-6 mb-4 sm:mb-6 relative group">
@@ -295,7 +365,11 @@ export default function Docs() {
                   </div>
 
                   <p className="text-base sm:text-lg text-muted-foreground">
-                    or drop one <code className="bg-neutral-200 dark:bg-neutral-800 px-2 py-1 rounded text-sm sm:text-base">&lt;script&gt;</code> tag — your call.
+                    or drop one{" "}
+                    <code className="bg-neutral-200 dark:bg-neutral-800 px-2 py-1 rounded text-sm sm:text-base">
+                      &lt;script&gt;
+                    </code>{" "}
+                    tag — your call.
                   </p>
                 </div>
 

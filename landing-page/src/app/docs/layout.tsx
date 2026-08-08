@@ -29,33 +29,6 @@ export async function generateMetadata(
   };
 }
 
-const breadcrumbJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  itemListElement: [
-    {
-      "@type": "ListItem",
-      position: 1,
-      name: "Home",
-      item: "https://social-share-button.aossie.org",
-    },
-    {
-      "@type": "ListItem",
-      position: 2,
-      name: "Documentation",
-      item: "https://social-share-button.aossie.org/docs",
-    },
-  ],
-};
-
 export default function DocsLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
-      />
-      {children}
-    </>
-  );
+  return children;
 }
