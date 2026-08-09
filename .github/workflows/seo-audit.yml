@@ -27,7 +27,7 @@ jobs:
       - name: Audit Broken Links and Images
         uses: ScholliYT/Broken-Links-Crawler-Action@eae8503903cf448c01ada8a6b0dcc471e66ca87a # GayanPradeep/broken-links-crawler@v1 is 404, using ScholliYT
         with:
-          website-url: 'https://social-share-button.aossie.org/'
+          website_url: 'https://social-share-button.aossie.org/'
 
       # 2. RUN LIGHTHOUSE SEO + PERFORMANCE + ACCESSIBILITY AUDIT (no API key needed)
       - name: Run Lighthouse Audit
