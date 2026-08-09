@@ -55,7 +55,7 @@ jobs:
           python - <<EOF
           import requests
           from bs4 import BeautifulSoup
-          import extruct
+          import json
 
           url = "https://social-share-button.aossie.org/"
           response = requests.get(url, headers={"User-Agent": "Googlebot"}, timeout=(10, 30))
@@ -90,8 +90,16 @@ jobs:
           assert len(h1s) == 1, "SEO Error: Landing page must have exactly ONE <h1> tag."
 
           # Test 4: Schema Markup Verification
-          data = extruct.extract(response.text, base_url=url, syntaxes=['json-ld'])
-          json_ld = data.get('json-ld', [])
+          script_tags = soup.find_all('script', type='application/ld+json')
+          json_ld = []
+          for tag in script_tags:
+              try:
+                  if tag.string:
+                      data = json.loads(tag.string)
+                      json_ld.append(data)
+              except Exception as e:
+                  assert False, f"CRITICAL: Invalid JSON-LD schema found! Error: {e}"
+                  
           print(f"Structured Data: Found {len(json_ld)} JSON-LD blocks.")
           assert len(json_ld) > 0, "Warning: No Structured Schema found on page."
 
