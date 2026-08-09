@@ -74,12 +74,12 @@ jobs:
           canonicals = soup.find_all('link', rel='canonical')
           assert len(canonicals) > 0, "CRITICAL: Missing rel='canonical' tag!"
           assert len(canonicals) == 1, f"CRITICAL: Duplicate canonical tags found ({len(canonicals)}). Expected exactly 1!"
-          
+
           canonical_href = canonicals[0].get('href', '').strip()
           print(f"Canonical URL found: {canonical_href if canonical_href else 'Empty'}")
-          
+
           assert canonical_href, "CRITICAL: The rel='canonical' tag has an empty or missing 'href' attribute!"
-          
+
           normalized_href = canonical_href.rstrip('/')
           normalized_url = url.rstrip('/')
           assert normalized_href == normalized_url, f"CRITICAL: Canonical URL '{canonical_href}' does not match the expected base URL '{url}'!"
@@ -92,14 +92,18 @@ jobs:
           # Test 4: Schema Markup Verification
           script_tags = soup.find_all('script', type='application/ld+json')
           json_ld = []
-          for tag in script_tags:
+          for index, tag in enumerate(script_tags, start=1):
+              raw_json_ld = tag.get_text(strip=True)
+              assert raw_json_ld, f"CRITICAL: JSON-LD block {index} is empty."
+
               try:
-                  if tag.string:
-                      data = json.loads(tag.string)
-                      json_ld.append(data)
-              except Exception as e:
-                  assert False, f"CRITICAL: Invalid JSON-LD schema found! Error: {e}"
-                  
+                  data = json.loads(raw_json_ld)
+                  json_ld.append(data)
+              except json.JSONDecodeError as error:
+                  raise AssertionError(
+                      f"CRITICAL: JSON-LD block {index} is invalid: {error}"
+                  ) from error
+
           print(f"Structured Data: Found {len(json_ld)} JSON-LD blocks.")
           assert len(json_ld) > 0, "Warning: No Structured Schema found on page."
 
