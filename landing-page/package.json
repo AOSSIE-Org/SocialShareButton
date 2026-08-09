@@ -23,7 +23,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",
-    "eslint-config-next": "14.2.16",
+    "eslint-config-next": "16.3.0",
     "gh-pages": "^6.3.0",
     "postcss": "^8",
     "tailwindcss": "^4.3.3",
