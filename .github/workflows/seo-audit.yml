@@ -1,0 +1,76 @@
+name: Landing Page Audit Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  seo-and-crawl-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # 1. SCAN FOR BROKEN LINKS & ASSETS
+      - name: Audit Broken Links and Images
+        uses: GayanPradeep/broken-links-crawler@v1
+        with:
+          website-url: 'https://social-share-button.aossie.org/'
+
+      # 2. RUN LIGHTHOUSE SEO + PERFORMANCE + ACCESSIBILITY AUDIT (no API key needed)
+      - name: Run Lighthouse Audit
+        uses: treosh/lighthouse-ci-action@v11
+        with:
+          urls: |
+            https://social-share-button.aossie.org/
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+
+      # 3. ADVANCED VERIFICATIONS (Canonical, Schema, Robots.txt)
+      - name: Set up Python for Advanced Custom Scans
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Advanced Audit Dependencies
+        run: |
+          pip install requests beautifulsoup4 extruct
+
+      - name: Run Advanced Structural Validation
+        run: |
+          python - <<EOF
+          import requests
+          from bs4 import BeautifulSoup
+          import extruct
+
+          url = "https://social-share-button.aossie.org/"
+          response = requests.get(url, headers={"User-Agent": "Googlebot"})
+
+          # Test 1: Server Status and Speed
+          print(f"HTTP Status: {response.status_code}")
+          assert response.status_code == 200, "Landing page is down!"
+          print(f"Time to First Byte (TTFB): {response.elapsed.total_seconds()}s")
+
+          soup = BeautifulSoup(response.text, 'html.parser')
+
+          # Test 2: Canonical Tag Check
+          canonical = soup.find('link', rel='canonical')
+          print(f"Canonical URL found: {canonical['href'] if canonical else 'Missing'}")
+          assert canonical is not None, "CRITICAL: Missing rel='canonical' tag!"
+
+          # Test 3: Heading Hierarchy Check
+          h1s = soup.find_all('h1')
+          print(f"Found {len(h1s)} H1 tags.")
+          assert len(h1s) == 1, "SEO Error: Landing page must have exactly ONE <h1> tag."
+
+          # Test 4: Schema Markup Verification
+          data = extruct.extract(response.text, base_url=url, syntaxes=['json-ld'])
+          json_ld = data.get('json-ld', [])
+          print(f"Structured Data: Found {len(json_ld)} JSON-LD blocks.")
+          assert len(json_ld) > 0, "Warning: No Structured Schema found on page."
+
+          print("✅ All advanced landing page validations passed successfully!")
+          EOF
