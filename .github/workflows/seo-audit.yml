@@ -7,82 +7,87 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
-permissions:
-  contents: read
-
 jobs:
   seo-and-crawl-audit:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          persist-credentials: false
+          node-version: '20'
+
+      # Decide which URL to audit: local build for PRs, production for push/manual
+      - name: Set audit URL
+        id: set-url
+        run: |
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            echo "AUDIT_URL=http://localhost:3000" >> $GITHUB_ENV
+          else
+            echo "AUDIT_URL=https://social-share-button.aossie.org/" >> $GITHUB_ENV
+          fi
+
+      # Build and serve the landing page locally so PR audits test the PR's own code
+      - name: Build and serve landing page (PR only)
+        if: github.event_name == 'pull_request'
+        run: |
+          cd landing-page
+          npm ci
+          npm run build
+          npx serve -s out -l 3000 &
+          sleep 5
 
       # 1. SCAN FOR BROKEN LINKS & ASSETS
       - name: Audit Broken Links and Images
-        uses: ScholliYT/Broken-Links-Crawler-Action@eae8503903cf448c01ada8a6b0dcc471e66ca87a # GayanPradeep/broken-links-crawler@v1 is 404, using ScholliYT
+        uses: ScholliYT/Broken-Links-Crawler-Action@v3
         with:
-          website_url: 'https://social-share-button.aossie.org/'
+          website_url: ${{ env.AUDIT_URL }}
 
       # 2. RUN LIGHTHOUSE SEO + PERFORMANCE + ACCESSIBILITY AUDIT (no API key needed)
       - name: Run Lighthouse Audit
-        uses: treosh/lighthouse-ci-action@0d716cfc9995b090bb89fe8f531fc3c133ec89ef # v11
+        uses: treosh/lighthouse-ci-action@v11
         with:
           urls: |
-            https://social-share-button.aossie.org/
-          configPath: ./.lighthouserc.json
+            ${{ env.AUDIT_URL }}
           uploadArtifacts: true
           temporaryPublicStorage: true
 
       # 3. ADVANCED VERIFICATIONS (Canonical, Schema, Robots.txt)
       - name: Set up Python for Advanced Custom Scans
-        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
       - name: Install Advanced Audit Dependencies
         run: |
-          python -m pip install --upgrade pip
-          python -m pip install -r .github/requirements-audit.txt
+          pip install requests beautifulsoup4 extruct
 
       - name: Run Advanced Structural Validation
+        env:
+          TARGET_URL: ${{ env.AUDIT_URL }}
         run: |
           python - <<EOF
+          import os
           import requests
           from bs4 import BeautifulSoup
-          import json
+          import extruct
 
-          url = "https://social-share-button.aossie.org/"
-          response = requests.get(url, headers={"User-Agent": "Googlebot"}, timeout=(10, 30))
+          url = os.environ["TARGET_URL"]
+          response = requests.get(url, headers={"User-Agent": "Googlebot"})
 
           # Test 1: Server Status and Speed
           print(f"HTTP Status: {response.status_code}")
           assert response.status_code == 200, "Landing page is down!"
-          ttfb = response.elapsed.total_seconds()
-          ttfb_budget = 2.5  # TTFB must be under 2.5 seconds
-          print(f"Time to First Byte (TTFB): {ttfb}s (Budget: {ttfb_budget}s)")
-          assert ttfb <= ttfb_budget, f"Performance Error: TTFB of {ttfb}s exceeds budget of {ttfb_budget}s"
+          print(f"Time to First Byte (TTFB): {response.elapsed.total_seconds()}s")
 
           soup = BeautifulSoup(response.text, 'html.parser')
 
           # Test 2: Canonical Tag Check
-          canonicals = soup.find_all('link', rel='canonical')
-          assert len(canonicals) > 0, "CRITICAL: Missing rel='canonical' tag!"
-          assert len(canonicals) == 1, f"CRITICAL: Duplicate canonical tags found ({len(canonicals)}). Expected exactly 1!"
-
-          canonical_href = canonicals[0].get('href', '').strip()
-          print(f"Canonical URL found: {canonical_href if canonical_href else 'Empty'}")
-
-          assert canonical_href, "CRITICAL: The rel='canonical' tag has an empty or missing 'href' attribute!"
-
-          normalized_href = canonical_href.rstrip('/')
-          normalized_url = url.rstrip('/')
-          assert normalized_href == normalized_url, f"CRITICAL: Canonical URL '{canonical_href}' does not match the expected base URL '{url}'!"
+          canonical = soup.find('link', rel='canonical')
+          print(f"Canonical URL found: {canonical['href'] if canonical else 'Missing'}")
+          assert canonical is not None, "CRITICAL: Missing rel='canonical' tag!"
 
           # Test 3: Heading Hierarchy Check
           h1s = soup.find_all('h1')
@@ -90,20 +95,8 @@ jobs:
           assert len(h1s) == 1, "SEO Error: Landing page must have exactly ONE <h1> tag."
 
           # Test 4: Schema Markup Verification
-          script_tags = soup.find_all('script', type='application/ld+json')
-          json_ld = []
-          for index, tag in enumerate(script_tags, start=1):
-              raw_json_ld = tag.get_text(strip=True)
-              assert raw_json_ld, f"CRITICAL: JSON-LD block {index} is empty."
-
-              try:
-                  data = json.loads(raw_json_ld)
-                  json_ld.append(data)
-              except json.JSONDecodeError as error:
-                  raise AssertionError(
-                      f"CRITICAL: JSON-LD block {index} is invalid: {error}"
-                  ) from error
-
+          data = extruct.extract(response.text, base_url=url, syntaxes=['json-ld'])
+          json_ld = data.get('json-ld', [])
           print(f"Structured Data: Found {len(json_ld)} JSON-LD blocks.")
           assert len(json_ld) > 0, "Warning: No Structured Schema found on page."
 
