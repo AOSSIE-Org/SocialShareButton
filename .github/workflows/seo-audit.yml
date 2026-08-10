@@ -42,10 +42,14 @@ jobs:
           sleep 5
 
       # 1. SCAN FOR BROKEN LINKS & ASSETS
+      # Docker-based actions cannot reach localhost on the runner.
+      # linkchecker runs directly on the runner, so it works for both
+      # localhost (PR builds) and the production URL (push/manual).
+      - name: Install Link Checker
+        run: pip install linkchecker
+
       - name: Audit Broken Links and Images
-        uses: ScholliYT/Broken-Links-Crawler-Action@21eab52f98097989d343116dbbd46dc4541b849b # v3
-        with:
-          website_url: ${{ env.AUDIT_URL }}
+        run: linkchecker "${{ env.AUDIT_URL }}" --check-extern --no-warnings
 
       # 2. RUN LIGHTHOUSE SEO + PERFORMANCE + ACCESSIBILITY AUDIT (no API key needed)
       - name: Run Lighthouse Audit
