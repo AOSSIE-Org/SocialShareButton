@@ -9,7 +9,7 @@ README.md
 LICENSE
 
 # GitHub workflows are not synced by default due to GitHub policy
-# .github/workflows/
+.github/workflows/**
 
 # Add more patterns to exclude specific files or directories
 # Examples:
