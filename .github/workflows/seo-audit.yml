@@ -61,6 +61,18 @@ jobs:
           uploadArtifacts: true
           temporaryPublicStorage: true
 
+      - name: Generate Lighthouse Badges
+        run: node scripts/generate-badges.cjs
+
+      - name: Commit and Push Badges
+        if: github.event_name != 'pull_request'
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add badges/
+          git commit -m "docs: update Lighthouse badges" || echo "No changes to commit"
+          git push
+
       # 3. ADVANCED VERIFICATIONS (Canonical, Schema, Robots.txt)
       - name: Set up Python for Advanced Custom Scans
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
