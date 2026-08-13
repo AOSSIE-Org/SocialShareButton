@@ -24,6 +24,14 @@
 
 [![Static Badge](https://img.shields.io/badge/AOSSIE-Social_Share_Button-228B22?style=for-the-badge&labelColor=FFC517)](https://github.com/AOSSIE-Org/SocialShareButton)
 
+<br/>
+
+![Lighthouse Performance](./badges/lighthouse-performance.svg)
+![Lighthouse Accessibility](./badges/lighthouse-accessibility.svg)
+![Lighthouse Best Practices](./badges/lighthouse-best-practices.svg)
+![Lighthouse SEO](./badges/lighthouse-seo.svg)
+![Lighthouse PWA](./badges/lighthouse-pwa.svg)
+
 <!-- Correct deployed url to be added -->
 
 </div>
