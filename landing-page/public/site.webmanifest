@@ -1,0 +1,15 @@
+{
+  "name": "Social Share Button",
+  "short_name": "Social Share",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#212121",
+  "theme_color": "#212121",
+  "icons": [
+    {
+      "src": "/SocialShare_logo.webp",
+      "sizes": "any",
+      "type": "image/webp"
+    }
+  ]
+}

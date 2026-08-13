@@ -5,7 +5,7 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const parentMetadata = await parent;
-  
+
   return {
     title: "Documentation",
     description:
