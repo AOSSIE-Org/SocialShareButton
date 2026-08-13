@@ -1,198 +1,541 @@
-# Contributing to SocialShareButton
+# Contributing to TODO: Project Name
 
-Thank you for your interest in contributing to **SocialShareButton**! 🚀
-We welcome contributions from everyone.
+⭐ First off, thank you for considering contributing to this project! ⭐
 
-This document provides guidelines to help you contribute effectively and keep the project clean and maintainable.
+We welcome contributions from everyone. By participating in this project, you agree to abide by our Code of Conduct.
 
----
+## � IMPORTANT: Discord Communication is Mandatory
 
-## 🚨 Important: Discord Communication
+**All project communication MUST happen on Discord. We do not pay attention to GitHub notifications.**
 
 - Join our [Discord server](https://discord.gg/hjUhu33uAn) before starting any work
-- All project communication must happen on Discord.
-- Please post PR/issue updates in the relevant Discord channel.
-- PRs without Discord updates may face delays.
+- Post your PR/issue updates in the relevant Discord channel (**MANDATORY**)
+- All discussions, questions, and updates should be on Discord
+- GitHub is for code only - Discord is for communication
 
-## 📋 Table of Contents
+**PRs without Discord updates will not be reviewed or may face delays.**
 
-- [Ways to Contribute](#-ways-to-contribute)
-- [Getting Started](#-getting-started)
-- [Pull Request Guidelines](#-pull-request-guidelines)
-- [Community Guidelines](#-community-guidelines)
-- [Getting Help](#-getting-help)
-- [Issue Assignment](#-issue-assignment)
+## �📋 Table of Contents
 
-## 📌 Ways to Contribute
+- [How Can I Contribute?](#how-can-i-contribute)
+- [Coding with AI](#coding-with-ai)
+- [Getting Started](#getting-started)
+- [Development Workflow](#development-workflow)
+- [Pull Request Guidelines](#pull-request-guidelines)
+- [Code Style Guidelines](#code-style-guidelines)
+- [Debugging Pre-commit Hooks](#debugging-pre-commit-hooks)
+- [Community Guidelines](#community-guidelines)
 
-You can contribute in many ways:
+## 🤝 How Can I Contribute?
 
-- 🐛 Fixing bugs
-- ✨ Adding new features
-- 📚 Improving documentation
-- 🎨 Enhancing UI/UX
-- ⚡ Optimizing performance
-- 🧪 Improving testing or code quality
+### Reporting Bugs
 
----
+Before creating bug reports, please check existing issues to avoid duplicates. When creating a bug report, include:
 
-### 📌 Before Starting Work
+- Clear and descriptive title
+- Steps to reproduce the issue
+- Expected behavior vs actual behavior
+- Screenshots/Video (if applicable)
+- Environment details (OS, browser, versions, etc.)
 
-- Please create or comment on an issue first.
-- Wait for assignment before starting (preferable).
-- Unrelated PRs may be closed.
+### Suggesting Features
+
+Feature suggestions are welcome! Please:
+
+- Check if the feature has already been suggested
+- Provide a clear description of the feature
+- Explain why this feature would be useful
+- Include examples of how it would work
+### Contributing Code
+
+1. **Submit an Issue First**: For features, bugs, or enhancements, create an issue first
+2. **Get Assigned**: Wait to be assigned before starting work(preferable)
+3. **Submit Your PR**: Once assigned, create a PR addressing the issue
+4. **Unrelated PRs**: Pull requests unrelated to issues may be closed or take longer to review
+
+## 🤖 Coding with AI
+
+We accept the use of AI-powered tools (GitHub Copilot, ChatGPT, Claude, Cursor, etc.) for contributions, whether for code, tests, or documentation.
+
+⚠️ However, transparency is required: if you use AI assistance, please mention it in your PR description. This helps maintainers during code review and ensure the quality of contributions.
+
+What we expect:
+- **Disclose AI usage**: A simple note like "Used GitHub Copilot for autocompletion" or "Generated initial test structure with ChatGPT" is sufficient.
+- **Specify the scope**: Indicate which parts of your contribution involved AI assistance.
+- **Review AI-generated content**: Ensure you understand and have verified any AI-generated code before submitting.
 
 ## 🚀 Getting Started
 
-### 1️⃣ Fork the Repository
+### Prerequisites
 
-Click the **Fork** button on the top-right of the repository page.
+TODO: List prerequisites specific to your project
 
-Then clone your fork locally:
+### Setup
 
-```bash
-git clone https://github.com/YOUR_USERNAME/SocialShareButton.git
-```
+1. **Fork the Repository**
+   ```bash
+   # Click the 'Fork' button at the top right of this page
+   ```
 
-- Add upstream remote:
+2. **Clone Your Fork**
+   ```bash
+   git clone https://github.com/YOUR_USERNAME/TODO.git
+   cd TODO
+   ```
 
-```bash
-git remote add upstream https://github.com/AOSSIE-Org/SocialShareButton.git
-```
+3. **Add Upstream Remote**
+   ```bash
+   git remote add upstream https://github.com/AOSSIE-Org/TODO.git
+   ```
 
-### 2️⃣ Create a New Branch
+4. **Install Dependencies**
+   ```bash
+   npm install
+   # or yarn install
+   # or pnpm install
+   ```
 
-Always create a new branch for your changes:
+5. **Run the Project**
+   ```bash
+   npm run dev
+   ```
+
+## 🔄 Development Workflow
+
+### 1. Create a Feature Branch
+
+Always work on a new branch, never on `main` or `dev`:
 
 ```bash
 git checkout -b feature/your-feature-name
+# or
+git checkout -b fix/your-bug-fix
 ```
 
-**Examples:**
+### 2. Make Your Changes
 
-- `feature/add-linkedin-support`
-- `fix/button-alignment-issue`
-- `docs/update-readme`
+- Write clean, readable code
+- Follow the project's code style
+- Add comments where necessary
+- Update documentation if needed
 
-### 3️⃣ Follow Project Standards
+### 3. Test Your Changes
 
-- Keep the project lightweight and dependency-free.
+TODO: Add project-specific testing instructions
 
-- Follow the existing code style.
-
-- Avoid unnecessary libraries.
-
-- Write clean, readable, and modular code.
-
-- Do not break existing functionality.
-
-### 4️⃣ Test Your Changes
-
-- Before submitting a Pull Request:
-
-- Open index.html in your browser.
-
-- Test all social share buttons.
-
-- Ensure no console errors appear.
-
-- Check responsiveness on different screen sizes.
-
-### 5️⃣ Commit Your Changes
-
-- Use clear and meaningful commit messages.
-
-**Format:**
-
-```
-type: short description
+```bash
+npm test
+# or
+npm run lint
 ```
 
-**Examples:**
+### 4. Commit Your Changes
 
+Write clear, concise commit messages:
+
+```bash
+git add .
+git commit -m "feat: add user authentication"
+# or
+git commit -m "fix: resolve navigation bug"
 ```
-feat: add Twitter share support
-fix: resolve mobile button spacing issue
-docs: improve README installation section
-```
 
-### 6️⃣ Push and Open a Pull Request
+**Commit Message Format:**
+- `feat:` for new features
+- `fix:` for bug fixes
+- `docs:` for documentation changes
+- `style:` for formatting changes
+- `refactor:` for code refactoring
+- `test:` for adding tests
+- `chore:` for maintenance tasks
 
-Before pushing, sync with upstream:
+### 5. Keep Your Branch Updated
 
 ```bash
 git fetch upstream
-```
-
-```bash
 git rebase upstream/main
+# or upstream/dev depending on the project
 ```
 
-Push your branch:
+### 6. Push Your Changes
 
 ```bash
- git push origin feature/your-feature-name
+git push origin feature/your-feature-name
 ```
 
-## 🛠️ Development Workflow
+## 📤 Pull Request Guidelines
 
-### Local Development
+### Before Submitting
 
-1. Install dependencies: `npm install`
-2. Open `index.html` in your browser to see the local demo.
-3. Make changes to files in the `src/` directory.
-4. Refresh the browser to see your changes (no build step is required for the core library).
+- [ ] Your code follows the project's style guidelines
+- [ ] You've tested your changes thoroughly
+- [ ] You've updated relevant documentation
+- [ ] Your commits are clean and well-organized
+- [ ] You've rebased with the latest upstream changes
+- [ ] You've thought from the reviewer's perspective and made your PR easy to review
 
-### Code Quality Tools
+### Submitting a Pull Request
 
-We use ESLint for linting and Prettier for formatting. Please run these before submitting a PR:
+1. Go to the original repository on GitHub
+2. Click "New Pull Request"
+3. Select your fork and branch
+4. Fill out the PR template with:
+   - Clear description of changes
+   - Link to related issue(s)
+   - Screenshots (if UI changes)
+   - Testing steps
 
-- `npm run lint` — Check for code quality and style issues.
-- `npm run format` — Automatically format your code to project standards.
-- `npm run format:check` — Verify that files are correctly formatted.
+### PR Description Template
 
-- Then open a Pull Request including:
+```markdown
+## Description
+Brief description of what this PR does
 
-- What changes were made
+## Related Issue
+Closes #issue_number
 
-- Why the change is needed
 
-- Screenshots (if UI changes)
+## Screenshots/Video (if applicable)
+Add screenshots here
 
-- Any relevant issue reference
+## Testing(if applicable)
+Steps to test the changes
 
-## 📋 Pull Request Guidelines
-
-### ✅ Before Submitting
-
-- [ ] Code tested
+## Checklist
+- [ ] Code follows style guidelines
+- [ ] Self-review completed
 - [ ] Documentation updated
-- [ ] Linked related issue
-- [ ] Branch rebased with upstream
-- [ ] Keep PRs small and focused.
-- [ ] One feature or fix per PR.
-- [ ] Avoid large unrelated changes.
-- [ ] Ensure documentation is updated if needed.
-- [ ] Be responsive to review feedback.
+- [ ] Tests added/updated
+```
+
+### After Submission
+
+- Post your PR in the project's Discord channel for visibility(**IMPORTANT**)
+- Respond to review comments promptly
+- Make requested changes in new commits
+- Be patient - maintainers will review when available
+- Use `[WIP]` in your PR title for incomplete PRs. Don't use this as a way to gatekeep; focus on one change until it gets merged.
+
+### Reviewing PRs
+
+- Instead of opening duplicate PRs, help review and improve existing ones.
+- When reviewing, assess whether the change is actually necessary before diving into implementation details and functionality testing.
+
+## 📝 Code Style Guidelines
+
+TODO: Add project-specific code style guidelines
+
+### General Guidelines
+
+- Use meaningful variable and function names
+- Keep functions small and focused
+- Add comments for complex logic
+- Remove console.logs before committing
+- Avoid code duplication
+- Avoid unnecessary complexity and minor over-optimization
+
+### JavaScript/TypeScript
+- Use ES6+ syntax
+- Prefer `const` over `let`, avoid `var`
+- Use arrow functions where appropriate
+- Follow ESLint rules
+
+### Python
+- Follow PEP 8 style guide
+- Use type hints where applicable
+- Write docstrings for functions/classes
+
+## 🔧 Debugging Pre-commit Hooks
+
+Pre-commit hooks help maintain code quality by running automated checks before each commit. This section helps you troubleshoot common issues.
+
+### Initial Setup
+
+If pre-commit is configured in this project, install it first:
+
+```bash
+pip install pre-commit
+pre-commit install
+```
+
+### Common Errors and Solutions
+
+#### 1. **Pre-commit Hook Failed: Trailing Whitespace**
+
+**Error:**
+```text
+Trim Trailing Whitespace.................................................Failed
+- hook id: trailing-whitespace
+- exit code: 1
+- files were modified by this hook
+```
+
+**Solution:**
+```bash
+# Pre-commit automatically fixes this. Just re-stage and commit:
+git add .
+git commit -m "your message"
+```
+
+#### 2. **Pre-commit Hook Failed: End of File Fixer**
+
+**Error:**
+```text
+Fix End of Files.........................................................Failed
+- hook id: end-of-file-fixer
+- exit code: 1
+- files were modified by this hook
+```
+
+**Solution:**
+```bash
+# Files are automatically fixed. Re-add and commit:
+git add .
+git commit -m "your message"
+```
+
+#### 3. **Pre-commit Hook Failed: Check YAML/JSON/TOML**
+
+**Error:**
+```text
+Check Yaml..........................................Failed
+- hook id: check-yaml
+- exit code: 1
+
+File .github/workflows/test.yml: mapping values are not allowed here
+```
+
+**Solution:**
+```bash
+# Fix the syntax error in the file (check line number in error)
+# Common issues:
+# - Incorrect indentation
+# - Missing colons
+# - Invalid characters
+# Then commit again
+```
+
+#### 4. **Pre-commit Hook Failed: Detect Secrets**
+
+**Error:**
+```text
+detect-secrets...........................................................Failed
+- hook id: detect-secrets
+- exit code: 1
+
+Potential secrets about to be added to git repo:
+
+  Secret Type: AWS Access Key
+  Location:    config/settings.py:42
+```
+
+**Solution:**
+```bash
+# Option 1: Remove the secret and use environment variables
+# Replace hardcoded secrets with:
+# API_KEY = os.getenv('API_KEY')
+
+# Option 2: If it's a false positive, update baseline:
+# detect-secrets scan > .secrets.baseline
+# git add .secrets.baseline
+```
+
+#### 5. **Pre-commit Hook Failed: Mixed Line Endings**
+
+**Error:**
+```text
+Mixed line ending........................................................Failed
+- hook id: mixed-line-ending
+- exit code: 1
+- files were modified by this hook
+```
+
+**Solution:**
+```bash
+# Automatically fixed to LF. Re-add and commit:
+git add .
+git commit -m "your message"
+```
+
+#### 6. **Pre-commit Hook Failed: Large Files**
+
+**Error:**
+```text
+Check for added large files..............................................Failed
+- hook id: check-added-large-files
+- exit code: 1
+
+large.zip (5.2 MB) exceeds 500 KB
+```
+
+**Solution:**
+```bash
+# Option 1: Remove large files
+git rm --cached large.zip
+
+# Option 2: Use Git LFS for large files
+git lfs install
+git lfs track "*.zip"
+git add .gitattributes
+
+# Option 3: Increase limit (not recommended)
+# Edit .pre-commit-config.yaml:
+# args: ['--maxkb=10000']  # 10MB
+```
+
+#### 7. **Pre-commit Hook Failed: Merge Conflict Markers**
+
+**Error:**
+```text
+Check for merge conflicts................................................Failed
+- hook id: check-merge-conflict
+- exit code: 1
+
+Merge conflict markers found in:
+  src/main.js:45
+```
+
+**Solution:**
+```bash
+# Open the file and remove conflict markers:
+# <<<<<<< HEAD
+# =======
+# >>>>>>> branch-name
+
+# Then commit again
+```
+
+#### 8. **Pre-commit Not Running**
+
+**Problem:** Commits go through without pre-commit checks
+
+**Solution:**
+```bash
+# Reinstall pre-commit hooks
+pre-commit uninstall
+pre-commit install
+
+# Verify installation
+pre-commit run --all-files
+```
+
+#### 9. **Pre-commit Takes Too Long**
+
+**Problem:** Pre-commit is slow on every commit
+
+**Solution:**
+```bash
+# Run only on changed files (default behavior)
+git commit -m "message"
+
+# Skip pre-commit for quick commits (use sparingly!)
+git commit --no-verify -m "message"
+
+# Update pre-commit hooks
+pre-commit autoupdate
+```
+
+#### 10. **Hook Installation Failed**
+
+**Error:**
+```text
+An error has occurred: InvalidManifestError:
+=====> /path/to/.pre-commit-config.yaml does not exist
+```
+
+**Solution:**
+```bash
+# Ensure you're in the project root directory
+cd /path/to/project/root
+
+# Verify config file exists
+ls -la .pre-commit-config.yaml
+
+# Reinstall
+pre-commit install
+```
+
+### Bypassing Pre-commit (Emergency Only)
+
+**⚠️ Use only when absolutely necessary:**
+
+```bash
+# Skip pre-commit hooks for a single commit
+git commit --no-verify -m "emergency fix"
+
+# Or use the short flag
+git commit -n -m "emergency fix"
+```
+
+**Note:** This should be rare. If you need to bypass frequently, discuss with maintainers.
+
+### Running Pre-commit Manually
+
+```bash
+# Run all hooks on all files
+pre-commit run --all-files
+
+# Run a specific hook
+pre-commit run trailing-whitespace --all-files
+
+# Run on specific files
+pre-commit run --files src/main.js src/utils.js
+```
+
+### Updating Pre-commit Hooks
+
+```bash
+# Update to latest versions
+pre-commit autoupdate
+
+# Clean and reinstall
+pre-commit clean
+pre-commit install
+```
+
+### Getting Help
+
+If you encounter issues not covered here:
+
+1. Check [pre-commit documentation](https://pre-commit.com/)
+2. Review the error message carefully (it usually tells you what's wrong)
+3. Ask in the project's Discord channel
+4. Search for similar issues in the repository
+
+**Remember:** Pre-commit hooks are there to help you maintain code quality. Don't fight them - fix the issues they find!
 
 ## 🌟 Community Guidelines
 
-- Be respectful and constructive.
-- Communicate progress on Discord.
-- Inactive issues may be reassigned.
+### Communication
 
-## 🙋 Getting Help
+- Be respectful and inclusive
+- Provide constructive feedback
+- Help others when you can
+- Ask questions - no question is too small!
 
-- Review the README and existing documentation first.
-- Search open and closed issues before creating a new one.
-- Ask questions in the project's Discord server.
-- If your PR is not reviewed for 1–2 weeks, politely follow up on Discord.
+### Progress Updates
+
+- If your work is taking longer than expected, comment on the discord with updates
+- Issues should be completed within 5-30 days depending on complexity
+- If you can no longer work on an issue, let maintainers know on discord
+
+### Getting Help
+
+- Check existing documentation first
+- Search closed issues for similar problems
+- Ask in Discord 
+- Tag maintainers if your PR is unattended for 1-2 weeks on discord
 
 ## 🎯 Issue Assignment
 
-- One contributor per issue (unless stated otherwise).
-- Please wait for assignment before starting work (preferred).
-- If inactive for an extended period, the issue may be reassigned.
-- Check for existing PRs before starting to avoid duplication.
+- One contributor per issue (unless specified otherwise)
+<!--
+- Wait for assignment before starting work
+- Issues will be reassigned if inactive for extended periods
+-->
+- If there are no active PRs for an issue for 2+ days, mention your intent under the issue and begin
+- Avoid working on issues which are assigned to someone, even if they are inactive
+- Check for existing PRs before starting to avoid duplication, as there might PRs that didn't mention the related issue
 
-### Thank you for helping improve SocialShareButton! 🎉
+
+Thank you for contributing to TODO! Your efforts help make this project better for everyone. 🚀

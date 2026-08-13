@@ -7,6 +7,20 @@ language: en
 # Enable experimental features (currently not using any specific early_access features)
 early_access: true
 
+# Multi-repo analysis: lets CodeRabbit use other repositories as context when reviewing PRs.
+# Most useful when linking tightly coupled repos, e.g.:
+#   - Frontend ↔ backend (API contract changes)
+#   - Service ↔ shared library (ripple-effect on consumers)
+#   - Microservices sharing a database schema
+# Avoid configuring this at org level — link only the repos relevant to this project.
+# See: https://docs.coderabbit.ai/knowledge-base/multi-repo-analysis
+#
+# To enable, uncomment the block below and replace the example values with your repos.
+# knowledge_base:
+#   linked_repositories:
+#     - repository: "AOSSIE-Org/backend-api"
+#       instructions: "Contains REST API endpoints and database models"
+
 chat:
   # CodeRabbit will automatically respond to @coderabbitai mentions in PR comments
   auto_reply: true
@@ -278,16 +292,46 @@ reviews:
         - Proper @2x and @3x variants for different screen densities
         - SVG assets are optimized
         - Font files are licensed and optimized
-    
-    # Path-based review instructions for specific files/patterns
-    - path: "src/**/*.{js,jsx}"
+
+    # Dependency manifest and lock files (e.g. updated by Dependabot, Renovate)
+    - path: >-
+        **/{package.json,package-lock.json,yarn.lock,pnpm-lock.yaml,npm-shrinkwrap.json,requirements.txt,Pipfile,Pipfile.lock,pyproject.toml,poetry.lock,go.mod,go.sum,Cargo.toml,Cargo.lock,pom.xml,build.gradle,build.gradle.kts,gradle.lockfile,*.gemspec,Gemfile,Gemfile.lock}
       instructions: |
-        Ensure newly added or modified methods and properties have brief inline comments:
-        
-        - Use minimal, concise inline comments (not JSDoc style)
-        - Add comments for logical blocks explaining what they do
-        - Add comments for edge cases and non-obvious logic (safety checks, race condition prevention, re-entrancy guards, cleanup callbacks, etc.)
-        - No need to document parameters or return values
-        - Not every function needs comments - only add where it aids understanding
-        
-        Flag any newly added or modified function or property that lacks descriptive inline comments for non-obvious logic or edge cases.
+        This file may be modified by a dependency bot (e.g., Dependabot, Renovate).
+        Perform a structured dependency upgrade analysis:
+
+        **1. Version Change Assessment**
+        - Identify all version bumps (major, minor, patch) and flag major/minor upgrades explicitly.
+        - Check the official release notes, changelog, or migration guide for each upgraded package.
+
+        **2. Breaking Change Detection**
+        - Breaking changes: removed or renamed APIs, changed function signatures, altered behavior.
+        - Deprecated APIs: warn if the codebase uses anything deprecated in the new version.
+        - Configuration changes: new required env vars, config keys, or file structure changes.
+        - Security fixes: highlight CVE patches and confirm they address known vulnerabilities.
+
+        **3. Codebase Compatibility Check**
+        - Locate all files in the repo that import or use the upgraded dependency.
+        - For each usage, verify:
+          - No removed or renamed imports/functions are referenced.
+          - Constructor/function call signatures are compatible.
+          - Any default behavior changes do not silently break existing logic.
+
+        **4. Risk Analysis**
+        - Runtime errors: type mismatches, missing attributes, changed return types.
+        - API incompatibility: breaking interface/type changes (critical for TypeScript).
+        - Logical bugs: subtle behavior changes that don't throw errors but alter outcomes.
+        - Performance regressions: flag if release notes mention perf impacts.
+
+        **5. Edge Cases to Verify**
+        - Backward compatibility with currently pinned peer dependencies.
+        - Changes in default behavior or environment assumptions.
+        - Peer requirement conflicts introduced by the new version.
+        - For TypeScript: type/interface changes that may require type assertion updates.
+
+        **6. Migration Guidance**
+        - If official docs provide migration steps, summarize the required changes and flag
+          specific files in this repo that need updates.
+        - If no migration is required, confirm this explicitly.
+
+        Conclude with a **risk level**: Low / Medium / High, with justification.
