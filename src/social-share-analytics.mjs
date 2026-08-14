@@ -8,6 +8,7 @@ import adapters from "./social-share-analytics.js";
 
 export default adapters;
 export const {
+  SocialShareAnalyticsPlugin,
   GoogleAnalyticsAdapter,
   MixpanelAdapter,
   SegmentAdapter,
