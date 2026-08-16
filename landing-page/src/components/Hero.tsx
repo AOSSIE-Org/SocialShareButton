@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { copyTextToClipboard } from "../lib/copyTextToClipboard";
 
 const SHARE_DEMO_URL = "https://social-share-button.aossie.org";
@@ -10,6 +10,7 @@ const SHARE_DEMO_URL = "https://social-share-button.aossie.org";
 export function Hero() {
   const router = useRouter();
   const [copyLabel, setCopyLabel] = useState("Copy Link");
+  const copyRequestId = useRef(0);
 
   const handleNavigate = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     if (e.ctrlKey || e.metaKey || e.shiftKey || e.altKey || e.button !== 0) {
@@ -22,9 +23,18 @@ export function Hero() {
   };
 
   const handleCopyLink = async () => {
+    const requestId = ++copyRequestId.current;
     const ok = await copyTextToClipboard(SHARE_DEMO_URL);
+    if (requestId !== copyRequestId.current) {
+      return;
+    }
     setCopyLabel(ok ? "Copied!" : "Failed");
-    window.setTimeout(() => setCopyLabel("Copy Link"), 2000);
+    window.setTimeout(() => {
+      if (requestId !== copyRequestId.current) {
+        return;
+      }
+      setCopyLabel("Copy Link");
+    }, 2000);
   };
 
   return (

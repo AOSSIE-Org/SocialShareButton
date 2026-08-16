@@ -16,11 +16,13 @@ export async function copyTextToClipboard(text: string): Promise<boolean> {
     textArea.style.position = "absolute";
     textArea.style.left = "-9999px";
     document.body.appendChild(textArea);
-    textArea.select();
-    textArea.setSelectionRange(0, text.length);
-    const ok = document.execCommand("copy");
-    document.body.removeChild(textArea);
-    return ok;
+    try {
+      textArea.select();
+      textArea.setSelectionRange(0, text.length);
+      return document.execCommand("copy");
+    } finally {
+      document.body.removeChild(textArea);
+    }
   } catch {
     return false;
   }

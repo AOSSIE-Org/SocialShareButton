@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { copyTextToClipboard } from "../lib/copyTextToClipboard";
 
 type ButtonStyleKey = "default" | "primary" | "compact" | "icon-only";
@@ -48,14 +48,24 @@ export function Playground() {
   const [color, setColor] = useState<string>(COLORS[0]);
   const [platforms, setPlatforms] = useState(INITIAL_PLATFORMS);
   const [copyLabel, setCopyLabel] = useState("Copy Link");
+  const copyRequestId = useRef(0);
 
   const textColor = textColorFor(color);
   const activePlatforms = platforms.filter((p) => p.active);
 
   const handleCopyLink = async () => {
+    const requestId = ++copyRequestId.current;
     const ok = await copyTextToClipboard(PLAYGROUND_SHARE_URL);
+    if (requestId !== copyRequestId.current) {
+      return;
+    }
     setCopyLabel(ok ? "Copied!" : "Failed");
-    window.setTimeout(() => setCopyLabel("Copy Link"), 2000);
+    window.setTimeout(() => {
+      if (requestId !== copyRequestId.current) {
+        return;
+      }
+      setCopyLabel("Copy Link");
+    }, 2000);
   };
 
   const togglePlatform = (name: string) => {
