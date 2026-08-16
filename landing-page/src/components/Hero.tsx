@@ -2,9 +2,14 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import { useState } from "react";
+import { copyTextToClipboard } from "../lib/copyTextToClipboard";
+
+const SHARE_DEMO_URL = "https://social-share-button.aossie.org";
 
 export function Hero() {
   const router = useRouter();
+  const [copyLabel, setCopyLabel] = useState("Copy Link");
 
   const handleNavigate = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     if (e.ctrlKey || e.metaKey || e.shiftKey || e.altKey || e.button !== 0) {
@@ -14,6 +19,12 @@ export function Hero() {
     setTimeout(() => {
       router.push(href);
     }, 200);
+  };
+
+  const handleCopyLink = async () => {
+    const ok = await copyTextToClipboard(SHARE_DEMO_URL);
+    setCopyLabel(ok ? "Copied!" : "Failed");
+    window.setTimeout(() => setCopyLabel("Copy Link"), 2000);
   };
 
   return (
@@ -105,8 +116,12 @@ export function Hero() {
 
               <div className="flex items-center gap-2 bg-background rounded-full p-1 pl-4 border-2 border-[#FFCC00]">
                 <span className="text-xs md:text-sm text-neutral-500 truncate flex-1 hidden sm:block">social-share-button.aossie.org</span>
-                <button className="bg-[#FFCC00] text-black px-4 py-2 rounded-full text-sm font-bold">
-                  Copy Link
+                <button
+                  type="button"
+                  onClick={handleCopyLink}
+                  className="bg-[#FFCC00] text-black px-4 py-2 rounded-full text-sm font-bold"
+                >
+                  {copyLabel}
                 </button>
               </div>
 

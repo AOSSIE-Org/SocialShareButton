@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { copyTextToClipboard } from "../lib/copyTextToClipboard";
 
 type ButtonStyleKey = "default" | "primary" | "compact" | "icon-only";
 
@@ -18,6 +19,8 @@ const COLORS = [
   "#a855f7",
   "#ffffff",
 ];
+
+const PLAYGROUND_SHARE_URL = "https://socialsharebutton.com";
 
 const INITIAL_PLATFORMS = [
   { name: "WhatsApp", icon: "W", active: true, color: "#25D366" },
@@ -44,9 +47,16 @@ export function Playground() {
   const [style, setStyle] = useState<ButtonStyleKey>("default");
   const [color, setColor] = useState<string>(COLORS[0]);
   const [platforms, setPlatforms] = useState(INITIAL_PLATFORMS);
+  const [copyLabel, setCopyLabel] = useState("Copy Link");
 
   const textColor = textColorFor(color);
   const activePlatforms = platforms.filter((p) => p.active);
+
+  const handleCopyLink = async () => {
+    const ok = await copyTextToClipboard(PLAYGROUND_SHARE_URL);
+    setCopyLabel(ok ? "Copied!" : "Failed");
+    window.setTimeout(() => setCopyLabel("Copy Link"), 2000);
+  };
 
   const togglePlatform = (name: string) => {
     setPlatforms((prev) =>
@@ -150,6 +160,8 @@ export function Playground() {
                     https://socialsharebutton.com
                   </span>
                   <button
+                    type="button"
+                    onClick={handleCopyLink}
                     className={`px-6 py-2 rounded-full text-sm font-bold transition-colors ${isPrimary ? "border-2" : ""}`}
                     style={
                       isPrimary
@@ -161,7 +173,7 @@ export function Playground() {
                           }
                     }
                   >
-                    Copy Link
+                    {copyLabel}
                   </button>
                 </div>
               )}
