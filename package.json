@@ -1,58 +1,32 @@
 {
-  "name": "@aossie-org/social-share-button",
-  "version": "1.0.4",
-  "description": "Lightweight social sharing component for web applications",
+  "name": "social-share-button",
+  "version": "1.0.0",
   "type": "module",
-  "main": "./dist/social-share-button.umd.js",
+  "main": "./dist/social-share-button.umd.cjs",
   "module": "./dist/social-share-button.es.js",
   "exports": {
     ".": {
       "import": "./dist/social-share-button.es.js",
-      "require": "./dist/social-share-button.umd.js"
+      "require": "./dist/social-share-button.umd.cjs"
     },
-    "./src/social-share-button.css": "./src/social-share-button.css"
+    "./css": "./dist/style.css"
   },
   "files": [
-    "dist",
-    "src/social-share-button.css",
-    "README.md",
-    "LICENSE"
+    "dist"
   ],
   "scripts": {
-    "build": "vite build",
-    "lint": "eslint src/**/*.{js,jsx} --max-warnings=0",
-    "lint:fix": "eslint src/**/*.{js,jsx} --fix",
-    "format": "prettier --write \"**/*.{js,jsx,json,css,md,html}\"",
-    "format:check": "prettier --check \"**/*.{js,jsx,json,css,md,html}\""
+    "build": "vite build"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com"
   },
-  "keywords": [
-    "social-share",
-    "share-button",
-    "vanilla-js",
-    "react",
-    "zero-dependencies",
-    "social-media",
-    "share",
-    "whatsapp",
-    "facebook",
-    "twitter",
-    "linkedin"
-  ],
-  "author": "AOSSIE",
-  "license": "GPL-3.0",
   "bugs": {
     "url": "https://github.com"
   },
   "homepage": "https://github.com",
+  "dependencies": {},
   "devDependencies": {
-    "@eslint/js": "^9.39.4",
-    "eslint": "^9.39.4",
-    "globals": "^17.4.0",
-    "prettier": "^3.2.4",
-    "vite": "^5.0.0"
+    "vite": "^8.2.1"
   }
 }
