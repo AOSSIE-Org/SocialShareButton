@@ -1,6 +1,6 @@
 {
-  "name": "social-share-button",
-  "version": "1.0.0",
+  "name": "@aossie-org/social-share-button",
+  "version": "1.0.4",
   "type": "module",
   "main": "./dist/social-share-button.umd.cjs",
   "module": "./dist/social-share-button.es.js",
@@ -16,17 +16,5 @@
   ],
   "scripts": {
     "build": "vite build"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com"
-  },
-  "bugs": {
-    "url": "https://github.com"
-  },
-  "homepage": "https://github.com",
-  "dependencies": {},
-  "devDependencies": {
-    "vite": "^8.2.1"
   }
 }
