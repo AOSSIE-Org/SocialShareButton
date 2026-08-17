@@ -1,5 +1,6 @@
 import { defineConfig, build } from 'vite';
 import path from 'path';
+import fs from 'fs';
 
 const entries = {
   'social-share-button': path.resolve(import.meta.dirname, 'src/social-share-button.js'),
@@ -31,6 +32,7 @@ export default defineConfig({
               rollupOptions: {
                 external: ['preact', '@builder.io/qwik', 'react'],
                 output: {
+                  exports: 'named',
                   globals: {
                     preact: 'Preact',
                     '@builder.io/qwik': 'Qwik',
@@ -40,6 +42,11 @@ export default defineConfig({
               }
             }
           });
+        }
+
+        const tempFile = path.resolve(import.meta.dirname, 'dist/temporary.js');
+        if (fs.existsSync(tempFile)) {
+          fs.unlinkSync(tempFile);
         }
       }
     }
