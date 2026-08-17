@@ -2,16 +2,24 @@
   "name": "@aossie-org/social-share-button",
   "version": "1.0.4",
   "description": "Lightweight social sharing component for web applications",
-  "main": "src/social-share-button.js",
+  "type": "module",
+  "main": "./dist/social-share-button.umd.js",
+  "module": "./dist/social-share-button.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/social-share-button.es.js",
+      "require": "./dist/social-share-button.umd.js"
+    },
+    "./src/social-share-button.css": "./src/social-share-button.css"
+  },
   "files": [
-    "src/social-share-button.js",
+    "dist",
     "src/social-share-button.css",
-    "src/social-share-button-react.jsx",
-    "src/social-share-analytics.js",
     "README.md",
     "LICENSE"
   ],
   "scripts": {
+    "build": "vite build",
     "lint": "eslint src/**/*.{js,jsx} --max-warnings=0",
     "lint:fix": "eslint src/**/*.{js,jsx} --fix",
     "format": "prettier --write \"**/*.{js,jsx,json,css,md,html}\"",
@@ -19,7 +27,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AOSSIE-Org/SocialShareButton.git"
+    "url": "git+https://github.com"
   },
   "keywords": [
     "social-share",
@@ -37,15 +45,14 @@
   "author": "AOSSIE",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/AOSSIE-Org/SocialShareButton/issues"
+    "url": "https://github.com"
   },
-  "homepage": "https://github.com/AOSSIE-Org/SocialShareButton#readme",
+  "homepage": "https://github.com",
   "devDependencies": {
     "@eslint/js": "^9.39.4",
     "eslint": "^9.39.4",
     "globals": "^17.4.0",
-    "prettier": "^3.2.4"
-  },
-  "type": "module",
-  "packageManager": "pnpm@10.26.1+sha512.664074abc367d2c9324fdc18037097ce0a8f126034160f709928e9e9f95d98714347044e5c3164d65bd5da6c59c6be362b107546292a8eecb7999196e5ce58fa"
+    "prettier": "^3.2.4",
+    "vite": "^5.0.0"
+  }
 }
