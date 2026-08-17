@@ -9,6 +9,18 @@
       "import": "./dist/social-share-button.es.js",
       "require": "./dist/social-share-button.umd.cjs"
     },
+    "./preact": {
+      "import": "./dist/social-share-button-preact.es.js",
+      "require": "./dist/social-share-button-preact.umd.cjs"
+    },
+    "./qwik": {
+      "import": "./dist/social-share-button-qwik.es.js",
+      "require": "./dist/social-share-button-qwik.umd.cjs"
+    },
+    "./react": {
+      "import": "./dist/social-share-button-react.es.js",
+      "require": "./dist/social-share-button-react.umd.cjs"
+    },
     "./css": "./dist/style.css"
   },
   "files": [
@@ -16,5 +28,12 @@
   ],
   "scripts": {
     "build": "vite build"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "vite": "^8.2.1",
+    "preact": "^10.0.0",
+    "react": "^18.0.0",
+    "@builder.io/qwik": "^1.0.0"
   }
 }
