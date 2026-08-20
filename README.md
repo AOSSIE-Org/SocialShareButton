@@ -72,7 +72,7 @@ Lightweight social sharing component for web applications. Zero dependencies, fr
 
 - 🌐 Multiple platforms: WhatsApp, Facebook, X, LinkedIn, Telegram, Reddit, Email, Pinterest, Discord
 - 🎯 Zero dependencies - pure vanilla JavaScript
-- ⚛️ Framework support: React, Preact, Next.js, Qwik, Vue, Angular, or plain HTML
+- ⚛️ Framework support: React, Preact, Next.js, Nuxt.js, Qwik, Vue, Angular, WordPress, Hugo, Jekyll or plain HTML
 - 🔄 Auto-detects current URL and page title
 - 📱 Fully responsive and mobile-ready
 - 🎨 Customizable themes (dark/light)
@@ -103,11 +103,11 @@ Lightweight social sharing component for web applications. Zero dependencies, fr
 
 No matter which framework you use, integration always follows the same 3 steps:
 
-| Step                 | What to do                                                   | Where                                                                                          |
-| -------------------- | ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------- |
-| **1️⃣ Load Library**  | Add CSS + JS (CDN links)                                     | Global layout file — `index.html` / `layout.tsx` / `_document.tsx`                             |
-| **2️⃣ Add Container** | Place `<div id="share-button"></div>`                        | The UI component where you want the button to appear                                           |
-| **3️⃣ Initialize**    | Call `new SocialShareButton({ container: "#share-button" })` | Inside that component, after the DOM is ready (e.g. `useEffect`, `mounted`, `ngAfterViewInit`) |
+| Step                 | What to do                                                   | Where                                                                                |
+| -------------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------------------ |
+| **1️⃣ Load Library**  | Add CSS + JS (CDN links)                                     | Global layout file — `index.html` / `layout.tsx` / `_document.tsx` / `functions.php` |
+| **2️⃣ Add Container** | Place `<div id="share-button"></div>`                        | The UI component or WordPress `wp_footer` hook                                       |
+| **3️⃣ Initialize**    | Call `new SocialShareButton({ container: "#share-button" })` | Inside that component or WordPress `wp_footer` hook                                  |
 
 > 💡 Pick your framework below for the full copy-paste snippet:
 
@@ -437,12 +437,12 @@ new window.SocialShareButton({
 <head>
   <link
     rel="stylesheet"
-    href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.css"
+    href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css"
   />
 </head>
 <body>
   <div id="app"></div>
-  <script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js"></script>
 </body>
 ```
 
@@ -482,6 +482,161 @@ export default function Header() {
     </header>
   );
 }
+```
+
+</details>
+
+<details>
+<summary><b>🔷 WordPress</b></summary>
+
+### Step 1: Enqueue in `functions.php`
+
+Add the following to your theme's `functions.php` to load the library directly from this repository via jsDelivr CDN:
+
+> **Note:** This package is not published to npm. Use the jsDelivr + GitHub CDN link below to load the correct distributable from the [AOSSIE-Org/SocialShareButton](https://github.com/AOSSIE-Org/SocialShareButton) repository.
+
+```php
+function enqueue_social_share_button() {
+    wp_enqueue_style(
+        'social-share-button',
+        'https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css'
+    );
+    wp_enqueue_script(
+        'social-share-button',
+        'https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js',
+        [],
+        null,
+        true // Load in footer
+    );
+}
+add_action('wp_enqueue_scripts', 'enqueue_social_share_button');
+```
+
+### Step 2: Initialize in `functions.php` (Footer Hook)
+
+Use the `wp_footer` hook with a **priority of 21** to inject the container and initialization script. The priority must be higher than the default (10) so WordPress prints the enqueued footer scripts _before_ this function runs:
+
+```php
+function init_social_share_button() { ?>
+    <div id="share-button"></div>
+    <script>
+      new SocialShareButton({
+        container: '#share-button',
+        url: window.location.href,
+        title: document.title,
+        theme: 'dark',
+        buttonText: 'Share'
+      });
+    </script>
+<?php }
+add_action('wp_footer', 'init_social_share_button', 21);
+// ↑ Priority 21 ensures wp_footer scripts are printed (priority 20) before this runs.
+```
+
+</details>
+
+<details>
+<summary><b>💚 Nuxt.js</b></summary>
+
+### Step 1: Add CDN to your layout file (e.g., `app.vue` or `layouts/default.vue`)
+
+```html
+<head>
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css"
+  />
+</head>
+<body>
+  <script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js"></script>
+</body>
+```
+
+### Step 2: Obtain the Nuxt wrapper component
+
+Currently, the wrapper is not available via CDN and must be added manually. Copy the `src/social-share-button-nuxt.vue` file from this repository into your Nuxt project's `components/` folder. Rename it to `SocialShareButton.vue` to match the usage below.
+
+### Step 3: Use the component in your page or component
+
+Open an **existing** page — typically `pages/index.vue`. Since the component is in the `components/` folder, Nuxt 3 will auto-import it.
+
+```vue
+<template>
+  <SocialShareButton
+    url="https://your-website.com"
+    title="Check this out!"
+    theme="dark"
+    buttonText="Share"
+  />
+</template>
+
+<script setup>
+// Component is auto-imported from components/ in Nuxt 3
+</script>
+```
+
+</details>
+
+<details>
+<summary><b>📄 Hugo / Jekyll</b></summary>
+
+### Step 1: Add CDN to your base layout
+
+Hugo: `layouts/_default/baseof.html`  
+Jekyll: `_layouts/default.html`
+
+```html
+<head>
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css"
+  />
+</head>
+<body>
+  <!-- Your content -->
+  <script
+    src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js"
+    defer
+  ></script>
+</body>
+```
+
+### Step 2: Add the container and initialize
+
+Place this script where you want the button to appear (e.g. at the bottom of a post template).
+
+**Hugo (Post Template):**
+
+```html
+<div id="share-button"></div>
+<script>
+  window.addEventListener("DOMContentLoaded", () => {
+    new SocialShareButton({
+      container: "#share-button",
+      url: window.location.href,
+      title: document.title,
+      description: {{ .Description | jsonify }},
+      theme: "dark",
+    });
+  });
+</script>
+```
+
+**Jekyll (Post Template):**
+
+```html
+<div id="share-button"></div>
+<script>
+  window.addEventListener("DOMContentLoaded", () => {
+    new SocialShareButton({
+      container: "#share-button",
+      url: window.location.href,
+      title: document.title,
+      description: {{ page.description | jsonify }},
+      theme: "dark",
+    });
+  });
+</script>
 ```
 
 </details>

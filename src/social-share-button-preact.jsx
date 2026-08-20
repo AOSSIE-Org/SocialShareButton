@@ -135,8 +135,8 @@ export default function SocialShareButton({
    * Synchronizes prop changes from Preact down to the vanilla JS instance
    * without re-mounting the entire component.
    */
-
-  // Stringify array dependencies to prevent unnecessary re-runs when
+  
+  // Stringify array dependencies to prevent unnecessary re-runs when 
   // parent components pass fresh array literals on every render.
   const hashtagsDep = JSON.stringify(hashtags);
   const platformsDep = JSON.stringify(platforms);
