@@ -9,6 +9,7 @@
     />
     <title>SocialShareButton Demo - Modern Social Sharing Component</title>
     <link rel="stylesheet" href="src/social-share-button.css" />
+    <link rel="stylesheet" href="src/scroll-to-top.css" />
     <link rel="icon" href="src/favicon.svg" />
     <style>
       * {
@@ -798,6 +799,20 @@
                 }, 2000);
               });
           });
+        });
+      });
+    </script>
+
+    <!-- Scroll to Top Feature -->
+
+    <script src="src/scroll-to-top.js" defer></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        new ScrollToTop({
+          position: "bottom-right",
+          showAfter: 300,
+          buttonColor: "#667eea",
+          buttonHoverColor: "#764ba2",
         });
       });
     </script>
