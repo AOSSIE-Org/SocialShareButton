@@ -75,7 +75,10 @@ export function EverywhereFeatures() {
               style={{
                 transformStyle: 'preserve-3d',
                 perspective: '1000px',
-                animation: hoveredCard === i ? 'none' : 'float 3s ease-in-out infinite',
+                animationName: hoveredCard === i ? 'none' : 'float',
+                animationDuration: '3s',
+                animationTimingFunction: 'ease-in-out',
+                animationIterationCount: 'infinite',
                 animationDelay: `${i * 0.2}s`,
               }}
             >
