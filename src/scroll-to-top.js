@@ -44,10 +44,12 @@ class ScrollToTop {
    * Initialize the scroll to top feature
    */
   init() {
+    // Skip initialization when running outside a browser environment
     if (typeof window === "undefined" || typeof document === "undefined") {
       return;
     }
 
+    // Avoid creating a duplicate scroll-to-top button
     if (document.querySelector(".scroll-to-top")) {
       return;
     }
@@ -138,11 +140,13 @@ class ScrollToTop {
    * Handle scroll events - show/hide button
    */
   handleScroll() {
+    // Stop handling scroll events after the instance has been destroyed
     if (this.isDestroyed) return;
 
     const scrollY = window.scrollY || window.pageYOffset;
     const shouldShow = scrollY > this.options.showAfter;
 
+    // Keep the internal state in sync with the button's visible class
     if (shouldShow && !this.isVisible) {
       this.button.classList.add("visible");
       this.isVisible = true;
