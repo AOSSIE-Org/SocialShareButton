@@ -9,7 +9,7 @@ description: >
 
 ## Goal
 
-Integrate `@aossie-org/social-share-button` into a client web project with minimal code and full context.
+Integrate `@aossie-org/social-share-button` into a client web project with minimal code, full context, and strict isolation between CDN and Package Manager methods.
 
 ---
 
@@ -17,47 +17,89 @@ Integrate `@aossie-org/social-share-button` into a client web project with minim
 
 ### 1. Locate Frontend Directory
 
-- Locate frontend app directory (`./`, `apps/*`, `packages/*`). Ignore backend services or unrelated subdirectories.
+- Locate the frontend app directory (`./`, `apps/*`, `packages/*`). Ignore backend services or unrelated subdirectories.
 
-### 2. Identify Framework & Dependencies
+### 2. Identify Framework, Package Manager & Dependencies
 
-- Inspect `package.json` for framework precedence: Next.js → React, Preact → React, Vue 3, Angular, Vanilla HTML/JS.
+- **Check `package.json` to Identify Framework**:
+  - Check dependencies for framework precedence: Next.js → React, Preact → React, Vue 3, Angular.
+  - If no `package.json` or no framework dependencies exist, classify the project as **Vanilla HTML / JS**.
+- **Detect Package Manager**:
+  - `pnpm-lock.yaml` → `pnpm`
+  - `yarn.lock` → `yarn`
+  - `bun.lockb` / `bun.lock` → `bun`
+  - `package-lock.json` (or default) → `npm`
 
-### 3. Install Package or Include CDN
+### 3. Scan Repository, Recommend Placement & Method
 
-- **CDN Method (Recommended)**: Add CSS stylesheet and JS script tags to base HTML / root layout (`index.html`, `layout.tsx`, `app.tsx`):
-  ```html
-  <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.css"
-  />
-  <script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.js"></script>
-  ```
-- **NPM Method**: Install dependency (`npm i @aossie-org/social-share-button`, `pnpm add`, `yarn add`, or `bun add`).
+- **Scan for Placement Components**:
+  - Scan the repository for existing components and layout files (e.g., `Header`, `Navbar`, `Nav`, `Footer`, `Hero`, `Sidebar`, `Layout`, `page.tsx`, `App.tsx`, `index.html`).
+- **Ask Client Placement, Method & Style (Before Integrating)**:
+  - Proactively recommend the best target file and section (e.g., *"I scanned your repository and found `src/components/Navbar.tsx`. I recommend placing the Social Share Button inside the Navbar next to your actions or in the Hero section. Where would you like it placed?"*).
+  - Recommend the **CDN Method** by default (fastest, zero bundle overhead, zero build setup).
+  - Prompt for preferred button style (`default` | `round` | `square`).
+  - Confirm whether the user wants **CDN Method** or **Package Manager Method** (`npm`, `pnpm`, `yarn`, `bun`).
 
-### 4. Ask User Placement & Style
+---
 
-- **Method Preference**: Always recommend **CDN** over NPM.
-- **Placement Prompting**: Ask the user explicitly:
-  - Which file they want to import/place the Social Share button in.
-  - The exact placement location inside that file (e.g., to the left of, right of, above, or below a specific existing component or DOM element, such as next to a logo, navigation items, or primary action buttons).
-- **React / Next.js Guidance**: Always recommend placing in the **Navbar / Header** every time when integrating React or Next.js using CDN.
-- **Vanilla HTML Guidance**: For HTML projects, ask for their main HTML file (e.g., `index.html`) and exact placement relative to existing HTML elements.
-- **Style Options**: Prompt for preferred button style (`default` | `round` | `square`).
+### 4. Strict Code Injection Rules (STRICT ISOLATION)
 
-### 5. Inject Integration Code into Existing Files
+⚠️ **CRITICAL GUARDRAIL**: Follow EXACTLY ONE path below based on the chosen method. NEVER mix CDN and Package Manager code in the same project!
 
-- 🛑 **No New Files**: Inject directly into target existing file (e.g., `Header`, `Footer`, `page.tsx`).
-- **ESM Import**: `import SocialShareButton from "@aossie-org/social-share-button";`
-- **CSS Import**: `@aossie-org/social-share-button/css`
-- **Next.js**: Add `"use client";` at top of interactive client components.
+#### 🌐 PATH A: If CDN Method is Selected (Recommended)
+
+1. **Root Layout / Base HTML**: Add CSS `<link>` and JS `<script>` CDN tags to the base HTML / root layout file (`index.html`, `layout.tsx`, `_document.tsx`, `app.html`):
+   ```html
+   <link
+     rel="stylesheet"
+     href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.css"
+   />
+   <script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.js"></script>
+   ```
+2. **Target Component**: Insert ONLY the declarative HTML container in the confirmed target component:
+   ```html
+   <div data-social-share data-button-style="default"></div>
+   ```
+   *(Replace `"default"` with the user's chosen style: `"default"`, `"round"`, or `"square"`).*
+3. 🛑 **STRICT PROHIBITIONS FOR CDN**:
+   - ❌ **DO NOT** run `npm i`, `pnpm add`, `yarn add`, or `bun add`.
+   - ❌ **DO NOT** add `import SocialShareButton from ...` or `import ".../css"` in any JavaScript/TypeScript/Vue/JSX/TSX files.
+   - ❌ **DO NOT** add `useEffect`, `useRef`, `onMounted`, or manual constructor calls. The CDN script automatically initializes `<div data-social-share>` elements via `MutationObserver`.
+
+---
+
+#### 📦 PATH B: If Package Manager Method is Selected (NPM / PNPM / Yarn / Bun)
+
+1. **Install Package**: Run the detected package manager install command:
+   - **npm**: `npm i @aossie-org/social-share-button`
+   - **pnpm**: `pnpm add @aossie-org/social-share-button`
+   - **yarn**: `yarn add @aossie-org/social-share-button`
+   - **bun**: `bun add @aossie-org/social-share-button`
+2. **Target Component**: Inject the ESM import, CSS import, and framework lifecycle hooks directly into the existing target component (e.g., `Header`, `Navbar`, `Footer`, `Hero`).
+3. 🛑 **STRICT PROHIBITIONS FOR PACKAGE MANAGER**:
+   - ❌ **DO NOT** add CDN `<link>` or `<script>` tags to `index.html` or root layouts.
+   - ❌ **DO NOT** create new files like `ShareButton.tsx` (inject into existing components).
+   - ❌ **Next.js**: Ensure `"use client";` is at the top of client components.
 
 ---
 
 ## Framework Integration Guides
 
-### ⚛️ React / Next.js (NPM Method)
+### ⚛️ React / Next.js
 
+#### CDN Method (Recommended)
+Add CDN `<link>` and `<script>` to `layout.tsx` / `index.html`. In the target component:
+```jsx
+export default function Header({ style = "default" }) {
+  return (
+    <header>
+      <div data-social-share data-button-style={style}></div>
+    </header>
+  );
+}
+```
+
+#### Package Manager Method (NPM / PNPM / Yarn / Bun)
 ```jsx
 "use client";
 import { useEffect, useRef } from "react";
@@ -71,7 +113,7 @@ export default function Header({ style = "default" }) {
     if (!shareContainerRef.current) return;
     const shareInstance = new SocialShareButton({
       container: shareContainerRef.current,
-      buttonStyle: style, // selected style from Step 4 ("default" | "round" | "square")
+      buttonStyle: style, // "default" | "round" | "square"
     });
     return () => shareInstance.destroy?.();
   }, [style]);
@@ -84,12 +126,22 @@ export default function Header({ style = "default" }) {
 }
 ```
 
-> **Note for CDN in React/Next.js**: Add CDN `<link>` and `<Script>` in `layout.tsx`/`index.html`. If explicit component hook instantiation is needed with CDN, use `window.SocialShareButton` inside `useEffect`.
-
 ---
 
-### 🟣 Preact (NPM Method)
+### 🟣 Preact
 
+#### CDN Method (Recommended)
+```jsx
+export default function Footer({ style = "default" }) {
+  return (
+    <footer>
+      <div data-social-share data-button-style={style}></div>
+    </footer>
+  );
+}
+```
+
+#### Package Manager Method
 ```jsx
 import { useEffect, useRef } from "preact/hooks";
 import SocialShareButton from "@aossie-org/social-share-button";
@@ -114,8 +166,24 @@ export default function Footer({ style = "default" }) {
 
 ---
 
-### 🟢 Vue 3 (NPM Method)
+### 🟢 Vue 3
 
+#### CDN Method (Recommended)
+```vue
+<template>
+  <header>
+    <div data-social-share :data-button-style="style"></div>
+  </header>
+</template>
+
+<script setup>
+defineProps({
+  style: { type: String, default: "default" },
+});
+</script>
+```
+
+#### Package Manager Method
 ```vue
 <template>
   <header>
@@ -144,8 +212,22 @@ onUnmounted(() => instance?.destroy?.());
 
 ---
 
-### 🅰️ Angular (NPM Method)
+### 🅰️ Angular
 
+#### CDN Method (Recommended)
+```typescript
+import { Component, Input } from "@angular/core";
+
+@Component({
+  selector: "app-header",
+  template: `<header><div data-social-share [attr.data-button-style]="style"></div></header>`,
+})
+export class HeaderComponent {
+  @Input() style: string = "default";
+}
+```
+
+#### Package Manager Method
 ```typescript
 import { Component, ElementRef, AfterViewInit, OnDestroy, ViewChild, Input } from "@angular/core";
 // @ts-ignore
@@ -179,8 +261,17 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
 
 ### 🌐 Vanilla HTML & JS
 
-#### NPM Method
+#### CDN Method (Recommended)
+```html
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.css"
+/>
+<div data-social-share data-button-style="default"></div>
+<script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.js"></script>
+```
 
+#### Package Manager Method
 ```html
 <div id="share-button"></div>
 ```
@@ -189,21 +280,5 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
 import SocialShareButton from "@aossie-org/social-share-button";
 import "@aossie-org/social-share-button/css";
 
-new SocialShareButton({ container: "#share-button", buttonStyle: style });
-```
-
-#### CDN Method
-
-```html
-<link
-  rel="stylesheet"
-  href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.css"
-/>
-<div id="share-button"></div>
-<script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.js"></script>
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    new window.SocialShareButton({ container: "#share-button", buttonStyle: style });
-  });
-</script>
+new SocialShareButton({ container: "#share-button", buttonStyle: "default" });
 ```
