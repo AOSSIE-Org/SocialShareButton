@@ -72,7 +72,7 @@ Lightweight social sharing component for web applications. Zero dependencies, fr
 
 - 🌐 Multiple platforms: WhatsApp, Facebook, X, LinkedIn, Telegram, Reddit, Email, Pinterest, Discord
 - 🎯 Zero dependencies - pure vanilla JavaScript
-- ⚛️ Framework support: React, Preact, Next.js, Qwik, Vue, Angular, or plain HTML
+- ⚛️ Framework support: React, Preact, SvelteKit, Qwik, Next.js, Vue, Angular, or plain HTML
 - 🔄 Auto-detects current URL and page title
 - 📱 Fully responsive and mobile-ready
 - 🎨 Customizable themes (dark/light)
@@ -483,6 +483,50 @@ export default function Header() {
   );
 }
 ```
+
+</details>
+
+<details>
+<summary><b>🟠 SvelteKit</b></summary>
+
+### Step 1: Install the npm package
+
+```bash
+npm install social-share-button-aossie
+```
+
+### Step 2: Add the core library CDN to `src/app.html`
+
+```html
+<head>
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css"
+  />
+</head>
+<body>
+  <div id="svelte">%sveltekit.body%</div>
+  <script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js"></script>
+</body>
+```
+
+### Step 3: Use the Svelte wrapper in any `+page.svelte`
+
+```svelte
+<script>
+  import SocialShareButton from 'social-share-button-aossie/src/social-share-button-svelte.svelte';
+</script>
+
+<SocialShareButton
+  url="https://your-website.com"
+  title="Check this out!"
+  description="An amazing website"
+  theme="dark"
+  buttonText="Share"
+/>
+```
+
+The wrapper handles SSR guards, cleanup on destroy, and reactive prop updates on SvelteKit route transitions automatically.
 
 </details>
 
