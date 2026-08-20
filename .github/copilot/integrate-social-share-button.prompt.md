@@ -25,10 +25,14 @@ Integrate `@aossie-org/social-share-button` into a client web project with minim
   - Check dependencies for framework precedence: Next.js → React, Preact → React, Vue 3, Angular.
   - If no `package.json` or no framework dependencies exist, classify the project as **Vanilla HTML / JS**.
 - **Detect Package Manager**:
-  - `pnpm-lock.yaml` → `pnpm`
-  - `yarn.lock` → `yarn`
-  - `bun.lockb` / `bun.lock` → `bun`
-  - `package-lock.json` (or default) → `npm`
+  - Check the selected frontend workspace's `package.json` `packageManager` field first (e.g., `pnpm`, `yarn`, `bun`, `npm`).
+  - If not set in `package.json`, inspect lockfiles strictly within the selected workspace directory:
+    - `pnpm-lock.yaml` → `pnpm`
+    - `yarn.lock` → `yarn`
+    - `bun.lockb` / `bun.lock` → `bun`
+    - `package-lock.json` (or default) → `npm`
+  - Stop detection and prompt the user to resolve if manifest (`packageManager`) and lockfile signals conflict.
+  - Do not inspect repository-level or unrelated workspace lockfiles when determining the install command.
 
 ### 3. Scan Repository, Recommend Placement & Method
 
@@ -64,7 +68,8 @@ Integrate `@aossie-org/social-share-button` into a client web project with minim
 3. 🛑 **STRICT PROHIBITIONS FOR CDN**:
    - ❌ **DO NOT** run `npm i`, `pnpm add`, `yarn add`, or `bun add`.
    - ❌ **DO NOT** add `import SocialShareButton from ...` or `import ".../css"` in any JavaScript/TypeScript/Vue/JSX/TSX files.
-   - ❌ **DO NOT** add `useEffect`, `useRef`, `onMounted`, or manual constructor calls. The CDN script automatically initializes `<div data-social-share>` elements via `MutationObserver`.
+   - ❌ **DO NOT** add `useEffect`, `useRef`, or manual constructor calls for other frameworks. The CDN script automatically initializes `<div data-social-share>` elements via `MutationObserver`.
+   - ⚠️ **Vue Exception**: Explicitly allowed only for Vue to use `onMounted`/`onUnmounted` lifecycle hooks to guard `window.SocialShareButton`, retain the created instance, and destroy it during unmount (`instance?.destroy?.()`). Manual initialization outside this documented Vue exception remains strictly prohibited.
 
 ---
 
@@ -75,7 +80,10 @@ Integrate `@aossie-org/social-share-button` into a client web project with minim
    - **pnpm**: `pnpm add @aossie-org/social-share-button`
    - **yarn**: `yarn add @aossie-org/social-share-button`
    - **bun**: `bun add @aossie-org/social-share-button`
-2. **Target Component**: Inject the ESM import, CSS import, and framework lifecycle hooks directly into the existing target component (e.g., `Header`, `Navbar`, `Footer`, `Hero`).
+2. **Target Component**:
+   - Import implementation from `@aossie-org/social-share-button/src/social-share-button.js` and resolve the constructor without assuming a default export (e.g., `const SocialShareButton = SocialShareButtonModule?.default || SocialShareButtonModule;`).
+   - Import styles from `@aossie-org/social-share-button/src/social-share-button.css` instead of unverified CSS subpaths.
+   - Inject the framework lifecycle hooks directly into the existing target component (e.g., `Header`, `Navbar`, `Footer`, `Hero`).
 3. 🛑 **STRICT PROHIBITIONS FOR PACKAGE MANAGER**:
    - ❌ **DO NOT** add CDN `<link>` or `<script>` tags to `index.html` or root layouts.
    - ❌ **DO NOT** create new files like `ShareButton.tsx` (inject into existing components).
@@ -88,7 +96,58 @@ Integrate `@aossie-org/social-share-button` into a client web project with minim
 ### ⚛️ React / Next.js
 
 #### CDN Method (Recommended)
-Add CDN `<link>` and `<script>` to `layout.tsx` / `index.html`. In the target component:
+
+##### Next.js App Router (`app/layout.tsx`)
+```tsx
+import Script from "next/script";
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <head>
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.css"
+        />
+      </head>
+      <body>
+        {children}
+        <Script
+          src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.js"
+          strategy="afterInteractive"
+        />
+      </body>
+    </html>
+  );
+}
+```
+
+##### Next.js Pages Router (`pages/_app.tsx`)
+```tsx
+import type { AppProps } from "next/app";
+import Head from "next/head";
+import Script from "next/script";
+
+export default function MyApp({ Component, pageProps }: AppProps) {
+  return (
+    <>
+      <Head>
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.css"
+        />
+      </Head>
+      <Component {...pageProps} />
+      <Script
+        src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.js"
+        strategy="afterInteractive"
+      />
+    </>
+  );
+}
+```
+
+##### Target Component (Next.js / React)
 ```jsx
 export default function Header({ style = "default" }) {
   return (
@@ -98,13 +157,16 @@ export default function Header({ style = "default" }) {
   );
 }
 ```
+*(For plain React / Vite SPA, add the CDN `<link>` and `<script>` directly to `index.html`).*
 
 #### Package Manager Method (NPM / PNPM / Yarn / Bun)
 ```jsx
 "use client";
 import { useEffect, useRef } from "react";
-import SocialShareButton from "@aossie-org/social-share-button";
-import "@aossie-org/social-share-button/css";
+import SocialShareButtonModule from "@aossie-org/social-share-button/src/social-share-button.js";
+import "@aossie-org/social-share-button/src/social-share-button.css";
+
+const SocialShareButton = SocialShareButtonModule?.default || SocialShareButtonModule;
 
 export default function Header({ style = "default" }) {
   const shareContainerRef = useRef(null);
@@ -144,8 +206,10 @@ export default function Footer({ style = "default" }) {
 #### Package Manager Method
 ```jsx
 import { useEffect, useRef } from "preact/hooks";
-import SocialShareButton from "@aossie-org/social-share-button";
-import "@aossie-org/social-share-button/css";
+import SocialShareButtonModule from "@aossie-org/social-share-button/src/social-share-button.js";
+import "@aossie-org/social-share-button/src/social-share-button.css";
+
+const SocialShareButton = SocialShareButtonModule?.default || SocialShareButtonModule;
 
 export default function Footer({ style = "default" }) {
   const containerRef = useRef(null);
@@ -169,16 +233,39 @@ export default function Footer({ style = "default" }) {
 ### 🟢 Vue 3
 
 #### CDN Method (Recommended)
+Add CDN `<link>` and `<script>` to `index.html`. In the target component:
 ```vue
 <template>
   <header>
-    <div data-social-share :data-button-style="style"></div>
+    <div ref="containerRef" class="social-share-wrapper"></div>
   </header>
 </template>
 
 <script setup>
-defineProps({
+import { ref, onMounted, onUnmounted, watch } from "vue";
+
+const props = defineProps({
   style: { type: String, default: "default" },
+});
+const containerRef = ref(null);
+let instance = null;
+
+function initButton() {
+  instance?.destroy?.();
+  if (containerRef.value && typeof window !== "undefined" && window.SocialShareButton) {
+    instance = new window.SocialShareButton({
+      container: containerRef.value,
+      buttonStyle: props.style,
+    });
+  }
+}
+
+onMounted(initButton);
+
+watch(() => props.style, initButton);
+
+onUnmounted(() => {
+  instance?.destroy?.();
 });
 </script>
 ```
@@ -192,9 +279,11 @@ defineProps({
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from "vue";
-import SocialShareButton from "@aossie-org/social-share-button";
-import "@aossie-org/social-share-button/css";
+import { ref, onMounted, onUnmounted, watch } from "vue";
+import SocialShareButtonModule from "@aossie-org/social-share-button/src/social-share-button.js";
+import "@aossie-org/social-share-button/src/social-share-button.css";
+
+const SocialShareButton = SocialShareButtonModule?.default || SocialShareButtonModule;
 
 const props = defineProps({
   style: { type: String, default: "default" },
@@ -202,11 +291,23 @@ const props = defineProps({
 const containerRef = ref(null);
 let instance = null;
 
-onMounted(() => {
-  if (containerRef.value)
-    instance = new SocialShareButton({ container: containerRef.value, buttonStyle: props.style });
+function initButton() {
+  instance?.destroy?.();
+  if (containerRef.value) {
+    instance = new SocialShareButton({
+      container: containerRef.value,
+      buttonStyle: props.style,
+    });
+  }
+}
+
+onMounted(initButton);
+
+watch(() => props.style, initButton);
+
+onUnmounted(() => {
+  instance?.destroy?.();
 });
-onUnmounted(() => instance?.destroy?.());
 </script>
 ```
 
@@ -229,21 +330,43 @@ export class HeaderComponent {
 
 #### Package Manager Method
 ```typescript
-import { Component, ElementRef, AfterViewInit, OnDestroy, ViewChild, Input } from "@angular/core";
+import {
+  Component,
+  ElementRef,
+  AfterViewInit,
+  OnChanges,
+  OnDestroy,
+  SimpleChanges,
+  ViewChild,
+  Input,
+} from "@angular/core";
 // @ts-ignore
-import SocialShareButton from "@aossie-org/social-share-button";
+import SocialShareButtonModule from "@aossie-org/social-share-button/src/social-share-button.js";
+
+const SocialShareButton = (SocialShareButtonModule as any)?.default || SocialShareButtonModule;
 
 @Component({
   selector: "app-header",
   template: `<header><div #container class="social-share-wrapper"></div></header>`,
-  styleUrls: ["../../node_modules/@aossie-org/social-share-button/css"],
+  styleUrls: ["../../node_modules/@aossie-org/social-share-button/src/social-share-button.css"],
 })
-export class HeaderComponent implements AfterViewInit, OnDestroy {
+export class HeaderComponent implements AfterViewInit, OnChanges, OnDestroy {
   @ViewChild("container") container!: ElementRef;
   @Input() style: string = "default";
   private instance: any;
 
   ngAfterViewInit(): void {
+    this.initButton();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes["style"] && !changes["style"].isFirstChange()) {
+      this.initButton();
+    }
+  }
+
+  private initButton(): void {
+    this.instance?.destroy?.();
     if (this.container?.nativeElement) {
       this.instance = new SocialShareButton({
         container: this.container.nativeElement,
@@ -251,6 +374,7 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
       });
     }
   }
+
   ngOnDestroy(): void {
     this.instance?.destroy?.();
   }
@@ -271,14 +395,23 @@ export class HeaderComponent implements AfterViewInit, OnDestroy {
 <script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.js"></script>
 ```
 
-#### Package Manager Method
+#### Package Manager Method (Vite / Webpack / Bundler)
+
+##### 1. HTML (`index.html`)
 ```html
 <div id="share-button"></div>
+<script type="module" src="/src/main.js"></script>
 ```
 
+##### 2. Bundler Entry Module (`src/main.js`)
 ```javascript
-import SocialShareButton from "@aossie-org/social-share-button";
-import "@aossie-org/social-share-button/css";
+import SocialShareButtonModule from "@aossie-org/social-share-button/src/social-share-button.js";
+import "@aossie-org/social-share-button/src/social-share-button.css";
 
-new SocialShareButton({ container: "#share-button", buttonStyle: "default" });
+const SocialShareButton = SocialShareButtonModule?.default || SocialShareButtonModule;
+
+new SocialShareButton({
+  container: "#share-button",
+  buttonStyle: "default", // replace with chosen style: "default" | "round" | "square"
+});
 ```
