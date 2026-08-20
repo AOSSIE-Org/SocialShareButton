@@ -4,3 +4,5 @@ build/
 *.min.js
 *.min.css
 package-lock.json
+landing-page/.next/
+landing-page/out/
