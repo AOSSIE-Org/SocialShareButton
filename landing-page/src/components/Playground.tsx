@@ -87,8 +87,8 @@ export function Playground() {
 
             <div className="flex items-center justify-center gap-6 mb-12">
               <button className="text-[#FFCC00] font-bold text-xl font-serif">Preview</button>
-              <span className="text-white font-bold text-xl">|</span>
-              <button className="text-white font-bold text-xl font-serif hover:text-neutral-300 transition-colors">Code</button>
+              <span className="text-neutral-900 dark:text-white font-bold text-xl">|</span>
+              <button className="text-neutral-900 dark:text-white font-bold text-xl font-serif hover:text-neutral-500 dark:hover:text-neutral-300 transition-colors">Code</button>
             </div>
 
             {/* The Output Mockup */}
