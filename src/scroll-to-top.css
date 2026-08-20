@@ -19,7 +19,6 @@
   transition:
     transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
     box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
   z-index: 999;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
@@ -59,7 +58,7 @@
 
 .scroll-to-top.visible {
   display: flex;
-   animation: scroll-to-top-fade-in 0.4s ease;
+  animation: scroll-to-top-fade-in 0.4s ease;
 }
 
 @media (prefers-color-scheme: dark) {

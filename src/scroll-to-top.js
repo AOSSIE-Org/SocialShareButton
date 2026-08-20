@@ -85,7 +85,16 @@ class ScrollToTop {
 
     // Store reference
     this.button = btn;
-    document.body.appendChild(btn);
+
+    if (document.body) {
+      document.body.appendChild(btn);
+    } else {
+      document.addEventListener("DOMContentLoaded", () => {
+        if (document.body) {
+          document.body.appendChild(btn);
+        }
+      });
+    }
   }
 
   /**
