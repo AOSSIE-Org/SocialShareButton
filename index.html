@@ -292,7 +292,7 @@
           <div class="feature-card">
             <div class="feature-icon">⚙️</div>
             <h3>Framework Agnostic</h3>
-            <p>Works with React, Vue, Angular, or vanilla JS</p>
+            <p>Works with React, Vue, Angular, Alpine.js, or vanilla JS</p>
           </div>
           <div class="feature-card">
             <div class="feature-icon">📐</div>
@@ -573,16 +573,138 @@
           View on GitHub →
         </a>
 
-        <a
-          href="https://discord.gg/prMM922G"
-          class="cta-button discord-btn"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Join Discord
-        </a>
-      </div>
-    </div>
+  <!--Qwik/QwikCity Integration-->
+  <div class="demo-section">
+  <h2>⚡ Qwik / QwikCity Integration</h2>
+  <p>Resumability-optimized wrapper for the fastest performance.</p>
+  
+  <div class="code-block">
+    <button class="copy-btn" type="button" aria-label="Copy code">Copy</button>
+    <span class="copy-status" aria-live="polite" style="position:absolute; left:-9999px;"></span>
+    <code>
+    &lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.css"&gt;
+    &lt;script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.js"&gt;&lt;/script&gt;
+    </code>
+    <code>
+    import { component$ } from '@builder.io/qwik';
+    import { SocialShareButton } from './social-share-button-qwik';
+
+    export default component$(() => (
+    &lt;SocialShareButton
+    url="https://your-website.com"
+    theme="light"
+    buttonText="Share Now"
+    buttonStyle="primary"
+    /&gt;
+  ));</code>
+  </div>
+</div>
+
+
+
+    <div class="demo-section">
+  <h2>▲ Next.js Integration</h2>
+  <p>Use the component inside a Next.js page</p>
+
+  <div class="code-block">
+<code>import SocialShareButton from 'social-share-button';
+
+export default function Home() {
+  return (
+    &lt;SocialShareButton
+      url="https://your-website.com"
+      title="Check this out!"
+    /&gt;
+  );
+}</code>
+  </div>
+</div>
+
+<div class="demo-section">
+  <h2>🟢 Vue / Vite Integration</h2>
+  <p>Use inside a Vue component</p>
+
+  <div class="code-block">
+<code>&lt;template&gt;
+  &lt;SocialShareButton
+    url="https://your-website.com"
+    title="Check this out!"
+  /&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import SocialShareButton from 'social-share-button'
+&lt;/script&gt;</code>
+  </div>
+</div>
+
+<div class="demo-section">
+  <h2>🅰️ Angular Integration</h2>
+  <p>Use inside an Angular component template</p>
+
+  <div class="code-block">
+<code>&lt;social-share-button
+  [url]="'https://your-website.com'"
+  [title]="'Check this out!'"
+&gt;
+&lt;/social-share-button&gt;</code>
+  </div>
+</div>
+
+<div class="demo-section">
+  <h2>🏔️ Alpine.js Integration</h2>
+  <p><strong>Step 1:</strong> Include SocialShareButton CSS and JS via CDN<br>
+  <strong>Step 2:</strong> Include Alpine.js via CDN<br>
+  <strong>Step 3:</strong> Initialize via x-data and x-init directives</p>
+
+  <div class="code-block">
+    <button class="copy-btn" type="button" aria-label="Copy code">Copy</button>
+    <span class="copy-status" aria-live="polite" style="position:absolute; left:-9999px;"></span>
+    <code>&lt;!-- Include dependencies --&gt;
+&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css"&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js"&gt;&lt;/script&gt;
+&lt;script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"&gt;&lt;/script&gt;
+
+&lt;!-- Usage --&gt;
+&lt;div
+  x-data="{ 
+    shareBtn: null,
+    init() {
+      this.shareBtn = new SocialShareButton({
+        container: $el,
+        url: 'https://your-website.com',
+        title: 'Check this out!',
+        description: 'An amazing website',
+        theme: 'dark',
+        buttonText: 'Share'
+      });
+    },
+    destroy() {
+      this.shareBtn && this.shareBtn.destroy();
+    }
+  }"
+&gt;&lt;/div&gt;</code>
+  </div>
+</div>
+
+
+
+    <!-- CTA Section -->
+    <div class="cta-section">
+      <h2 style="color: #fff; margin-bottom: 20px;">Ready to Get Started?</h2>
+      <a href="https://github.com/AOSSIE-Org/SocialShareButton" class="cta-button" target="_blank" rel="noopener">
+        View on GitHub →
+      </a>
+
+    <a href="https://discord.gg/prMM922G"
+   class="cta-button discord-btn"
+   target="_blank"
+   rel="noopener noreferrer">
+   Join Discord
+</a>
+  </div>
+
+</div>
 
     <footer>
       <p>Made with ❤️ by the AOSSIE community</p>
