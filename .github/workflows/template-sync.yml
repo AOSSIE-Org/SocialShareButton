@@ -17,7 +17,7 @@ jobs:
     steps:
       # Check out the repository
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         # https://github.com/actions/checkout#usage
         # uncomment if you use submodules within the repository
         # with:
