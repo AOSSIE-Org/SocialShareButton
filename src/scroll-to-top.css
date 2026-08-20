@@ -9,7 +9,7 @@
   height: 50px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--scroll-btn-bg-start) 0%, var(--scroll-btn-bg-end) 100%);
-  color: white;
+ color: #fff;
   border: none;
   cursor: pointer;
   display: none;
