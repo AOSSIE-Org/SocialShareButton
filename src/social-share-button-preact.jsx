@@ -15,7 +15,7 @@ export default function SocialShareButton({
   description = "",
   hashtags = [],
   via = "",
-  platforms = ["whatsapp", "facebook", "twitter", "linkedin", "telegram", "reddit", "discord"],
+  platforms = ["whatsapp", "facebook", "twitter", "linkedin", "telegram", "reddit", "pinterest", "instagram", "discord"],
   theme = "dark",
   buttonText = "Share",
   customClass = "",
