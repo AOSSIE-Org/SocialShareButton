@@ -1,30 +1,51 @@
+:root {
+  --scroll-btn-bg-start: #667eea;
+  --scroll-btn-bg-end: #764ba2;
+}
+
 .scroll-to-top {
   position: fixed;
-  bottom: 30px;
-  right: 30px;
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--scroll-btn-bg-start) 0%, var(--scroll-btn-bg-end) 100%);
   color: white;
   border: none;
   cursor: pointer;
   display: none;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
   z-index: 999;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
+.scroll-to-top-bottom-right {
+  bottom: 30px;
+  right: 30px;
+}
+
+.scroll-to-top-bottom-left {
+  bottom: 30px;
+  left: 30px;
+}
+
+.scroll-to-top-bottom-center {
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
 .scroll-to-top:hover {
   transform: translateY(-3px) scale(1.05);
   box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
-  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  background: linear-gradient(135deg, var(--scroll-btn-bg-end) 0%, var(--scroll-btn-bg-start) 100%);
 }
 
 .scroll-to-top:active {
@@ -38,9 +59,8 @@
 
 .scroll-to-top.visible {
   display: flex;
-  animation: scrollToTopFadeIn 0.4s ease;
+   animation: scroll-to-top-fade-in 0.4s ease;
 }
-
 
 @media (prefers-color-scheme: dark) {
   .scroll-to-top {
@@ -52,7 +72,7 @@
   .scroll-to-top {
     width: 45px;
     height: 45px;
-    font-size: 20px;
+    /* font-size: 20px; */
     bottom: 20px;
     right: 20px;
   }
@@ -60,15 +80,15 @@
 
 @media (max-width: 480px) {
   .scroll-to-top {
-    width: 40px;
-    height: 40px;
-    font-size: 18px;
+    width: 44px;
+    height: 44px;
+    /* font-size: 18px; */
     bottom: 15px;
     right: 15px;
   }
 }
 
-@keyframes scrollToTopFadeIn {
+@keyframes scroll-to-top-fade-in {
   from {
     opacity: 0;
     transform: translateY(20px) scale(0.9);
@@ -76,17 +96,6 @@
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes scrollToTopFadeOut {
-  from {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-  to {
-    opacity: 0;
-    transform: translateY(20px) scale(0.9);
   }
 }
 

@@ -2,7 +2,7 @@
  * Scroll to Top Feature
  * @version 1.0.0
  * @license GPL-3.0
- * 
+ *
  * A floating action button that appears when scrolling down,
  * allowing users to smoothly scroll back to the top of the page.
  */
@@ -22,10 +22,10 @@ class ScrollToTop {
   constructor(options = {}) {
     // Default options
     this.options = {
-      position: options.position || 'bottom-right',
+      position: options.position || "bottom-right",
       showAfter: options.showAfter || 300,
-      buttonColor: options.buttonColor || '#667eea',
-      buttonHoverColor: options.buttonHoverColor || '#764ba2',
+      buttonColor: options.buttonColor || "#667eea",
+      buttonHoverColor: options.buttonHoverColor || "#764ba2",
       iconSize: options.iconSize || 24,
       zIndex: options.zIndex || 999,
       animationDuration: options.animationDuration || 400,
@@ -36,7 +36,7 @@ class ScrollToTop {
     this.isDestroyed = false;
     this.scrollHandler = null;
     this.clickHandler = null;
-    
+
     this.init();
   }
 
@@ -44,13 +44,11 @@ class ScrollToTop {
    * Initialize the scroll to top feature
    */
   init() {
-    // Don't create if already exists
-    if (document.querySelector('.scroll-to-top')) {
+    if (typeof window === "undefined" || typeof document === "undefined") {
       return;
     }
 
-    // Don't initialize on server
-    if (typeof window === 'undefined') {
+    if (document.querySelector(".scroll-to-top")) {
       return;
     }
 
@@ -62,32 +60,25 @@ class ScrollToTop {
    * Create the button element
    */
   createButton() {
-    const btn = document.createElement('button');
+    const btn = document.createElement("button");
     btn.className = `scroll-to-top scroll-to-top-${this.options.position}`;
-    btn.setAttribute('aria-label', 'Scroll to top');
-    btn.setAttribute('title', 'Scroll to top');
-    btn.setAttribute('role', 'button');
-    btn.setAttribute('tabindex', '0');
-
-    // Apply custom colors
-    if (this.options.buttonColor) {
-      btn.style.background = this.options.buttonColor;
-    }
+    btn.setAttribute("aria-label", "Scroll to top");
+    btn.setAttribute("title", "Scroll to top");
 
     // Create SVG arrow icon
-    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svg.setAttribute('width', this.options.iconSize);
-    svg.setAttribute('height', this.options.iconSize);
-    svg.setAttribute('viewBox', '0 0 24 24');
-    svg.setAttribute('fill', 'none');
-    svg.setAttribute('stroke', 'currentColor');
-    svg.setAttribute('stroke-width', '2.5');
-    svg.setAttribute('stroke-linecap', 'round');
-    svg.setAttribute('stroke-linejoin', 'round');
-    svg.style.display = 'block';
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("width", this.options.iconSize);
+    svg.setAttribute("height", this.options.iconSize);
+    svg.setAttribute("viewBox", "0 0 24 24");
+    svg.setAttribute("fill", "none");
+    svg.setAttribute("stroke", "currentColor");
+    svg.setAttribute("stroke-width", "2.5");
+    svg.setAttribute("stroke-linecap", "round");
+    svg.setAttribute("stroke-linejoin", "round");
+    svg.style.display = "block";
 
-    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    path.setAttribute('d', 'M12 19V5M5 12l7-7 7 7');
+    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    path.setAttribute("d", "M12 19V5M5 12l7-7 7 7");
     svg.appendChild(path);
 
     btn.appendChild(svg);
@@ -95,23 +86,6 @@ class ScrollToTop {
     // Store reference
     this.button = btn;
     document.body.appendChild(btn);
-
-    // Apply hover effects
-    this.button.addEventListener('mouseenter', () => {
-      if (this.options.buttonHoverColor) {
-        this.button.style.background = this.options.buttonHoverColor;
-      }
-      this.button.style.transform = 'translateY(-3px) scale(1.05)';
-      this.button.style.boxShadow = '0 6px 25px rgba(0, 0, 0, 0.4)';
-    });
-
-    this.button.addEventListener('mouseleave', () => {
-      if (this.options.buttonColor) {
-        this.button.style.background = this.options.buttonColor;
-      }
-      this.button.style.transform = 'translateY(0) scale(1)';
-      this.button.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.3)';
-    });
   }
 
   /**
@@ -136,12 +110,12 @@ class ScrollToTop {
       this.scrollToTop();
     };
 
-    window.addEventListener('scroll', this.scrollHandler, { passive: true });
-    this.button.addEventListener('click', this.clickHandler);
+    window.addEventListener("scroll", this.scrollHandler, { passive: true });
+    this.button.addEventListener("click", this.clickHandler);
 
     // Keyboard support
-    this.button.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
+    this.button.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
         this.scrollToTop();
       }
@@ -161,10 +135,10 @@ class ScrollToTop {
     const shouldShow = scrollY > this.options.showAfter;
 
     if (shouldShow && !this.isVisible) {
-      this.button.classList.add('visible');
+      this.button.classList.add("visible");
       this.isVisible = true;
     } else if (!shouldShow && this.isVisible) {
-      this.button.classList.remove('visible');
+      this.button.classList.remove("visible");
       this.isVisible = false;
     }
   }
@@ -176,7 +150,7 @@ class ScrollToTop {
     try {
       window.scrollTo({
         top: 0,
-        behavior: 'smooth'
+        behavior: "smooth",
       });
     } catch (e) {
       // Fallback for older browsers
@@ -189,7 +163,7 @@ class ScrollToTop {
    */
   updateOptions(options) {
     this.options = { ...this.options, ...options };
-    
+
     // Reapply colors if changed
     if (options.buttonColor && this.button) {
       this.button.style.background = options.buttonColor;
@@ -203,12 +177,12 @@ class ScrollToTop {
     this.isDestroyed = true;
 
     if (this.scrollHandler) {
-      window.removeEventListener('scroll', this.scrollHandler);
+      window.removeEventListener("scroll", this.scrollHandler);
       this.scrollHandler = null;
     }
 
     if (this.button) {
-      this.button.removeEventListener('click', this.clickHandler);
+      this.button.removeEventListener("click", this.clickHandler);
       if (this.button.parentNode) {
         this.button.parentNode.removeChild(this.button);
       }
@@ -221,10 +195,10 @@ class ScrollToTop {
 }
 
 // Export for different module systems
-if (typeof module !== 'undefined' && module.exports) {
+if (typeof module !== "undefined" && module.exports) {
   module.exports = ScrollToTop;
 }
 
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   window.ScrollToTop = ScrollToTop;
 }
