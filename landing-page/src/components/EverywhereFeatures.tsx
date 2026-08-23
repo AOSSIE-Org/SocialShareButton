@@ -1,116 +1,177 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import { BookOpen, ShoppingBag, BarChart3, Newspaper, CheckCircle2 } from "lucide-react";
+
+const CONTEXTS = [
+  {
+    id: "docs",
+    title: "Engineering Docs & Blogs",
+    icon: BookOpen,
+    badge: "Developer Portals",
+    description:
+      "Allow readers to share code snippets, release notes, and documentation pages with clean canonical URLs and anchor tag persistence.",
+    previewSnippet: `<SocialShareButton 
+  url="https://docs.acme.dev/v2/migration"
+  title="Migrating to v2 in 5 minutes"
+  networks={["x", "linkedin", "reddit"]}
+/>`,
+  },
+  {
+    id: "saas",
+    title: "SaaS & User Dashboards",
+    icon: BarChart3,
+    badge: "Product Growth",
+    description:
+      "Empower your users to share milestone celebrations, weekly metrics, referral links, and project achievements with one tap.",
+    previewSnippet: `<SocialShareButton 
+  url="https://app.saas.io/badges/100-streak"
+  title="I just completed a 100-day build streak!"
+  theme="dark"
+  style="compact"
+/>`,
+  },
+  {
+    id: "ecommerce",
+    title: "E-Commerce & Retail",
+    icon: ShoppingBag,
+    badge: "Conversion",
+    description:
+      "Let shoppers broadcast wishlist items, limited-time flash sales, and product drops to WhatsApp group chats and social feeds.",
+    previewSnippet: `<SocialShareButton 
+  url="https://store.brand.com/products/ceramic-mug"
+  title="Check out this handmade ceramic mug"
+  networks={["whatsapp", "facebook", "pinterest"]}
+/>`,
+  },
+  {
+    id: "media",
+    title: "News & Digital Media",
+    icon: Newspaper,
+    badge: "High Throughput",
+    description:
+      "Handle millions of readers during breaking news surges without relying on third-party tracking CDNs that could crash or lag your page.",
+    previewSnippet: `<SocialShareButton 
+  url="https://times.daily.org/2026/breaking-update"
+  title="Major scientific breakthrough announced"
+  style="inline"
+/>`,
+  },
+];
 
 export function EverywhereFeatures() {
-  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
-
-  const cards = [
-    {
-      num: "01",
-      title: "Content creators",
-      desc: "Amplify your blog posts, articles, and newsletters by letting your audience share them easily.",
-      color: "bg-[#00C853]",
-      textColor: "text-black",
-    },
-    {
-      num: "02",
-      title: "E-commerce sites",
-      desc: "Drive more traffic and sales by making your products shareable to social media platforms.",
-      color: "bg-[#FFCC00]",
-      textColor: "text-black",
-    },
-    {
-      num: "03",
-      title: "Portfolio platforms",
-      desc: "Let clients and recruiters easily share your work and projects with their networks.",
-      color: "bg-white dark:bg-neutral-900",
-      textColor: "text-black dark:text-white",
-    },
-    {
-      num: "04",
-      title: "News portals",
-      desc: "Enable rapid distribution of breaking news and important stories across any network.",
-      color: "bg-[#FFCC00]",
-      textColor: "text-black",
-    },
-    {
-      num: "05",
-      title: "Web apps",
-      desc: "Add shareable achievements, results, or dashboards to your SaaS or web application.",
-      color: "bg-[#00C853]",
-      textColor: "text-black",
-    },
-  ];
-
-  // const [paused, setPaused] = useState(false);
-  // Duplicate the deck so the track can loop seamlessly.
-  const track = [...cards, ...cards];
+  const [activeContext, setActiveContext] = useState(0);
+  const current = CONTEXTS[activeContext];
+  const Icon = current.icon;
 
   return (
-    <div className="py-24 bg-background border-t-2 border-black dark:border-white overflow-hidden">
+    <section className="py-24 bg-card/40 border-b border-border relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-16">
-          <span className="text-xs font-bold tracking-widest text-[#FFCC00] uppercase mb-4 block">
-            HOW IT WORKS
-          </span>
-          <h2 className="text-4xl md:text-5xl font-serif font-bold tracking-tight text-balance">
-            Wherever content<br />gets <span className="underline decoration-[#FFCC00] decoration-4 underline-offset-8">shared.</span>
+        
+        {/* Header */}
+        <div className="max-w-3xl mb-16">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/10 border border-secondary/20 text-xs font-mono font-semibold text-secondary mb-4">
+            <span>REAL-WORLD SURFACES</span>
+          </div>
+          <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl font-extrabold text-foreground tracking-tight leading-[1.15] mb-4 text-balance">
+            Wherever content needs to spread.
           </h2>
+          <p className="text-base text-muted-foreground leading-relaxed">
+            From technical documentation to high-traffic newsrooms, SocialShareButton fits into any publishing surface seamlessly.
+          </p>
         </div>
-      </div>
 
-        <div className="flex gap-4 sm:gap-6 md:gap-8 overflow-x-auto pb-12 pt-4 snap-x hide-scrollbar">
-          {track.map((card, i) => (
-            <div 
-              key={i} 
-              onMouseEnter={() => setHoveredCard(i)}
-              onMouseLeave={() => setHoveredCard(null)}
-              className={`snap-center shrink-0 w-[280px] sm:w-[300px] md:w-[350px] lg:w-[400px] rounded-[32px] p-6 sm:p-8 md:p-10 relative flex flex-col transition-all duration-700 ease-in-out border-[3px] border-black dark:border-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] dark:shadow-[8px_8px_0px_0px_rgba(255,255,255,1)] ${card.color} ${card.textColor} aspect-square
-                hover:-translate-y-4 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[12px_12px_0px_0px_rgba(255,255,255,1)]
-                hover:rotate-[360deg] hover:scale-110
-                ${hoveredCard === i ? 'z-10' : 'z-0'}
-                animate-float`}
-              style={{
-                transformStyle: 'preserve-3d',
-                perspective: '1000px',
-                animation: hoveredCard === i ? 'none' : 'float 3s ease-in-out infinite',
-                animationDelay: `${i * 0.2}s`,
-              }}
-            >
-              {/* Glow effect */}
-              <div className={`absolute inset-0 rounded-[32px] opacity-0 transition-opacity duration-500 ${hoveredCard === i ? 'opacity-100' : ''}`}
-                style={{
-                  background: 'radial-gradient(circle at center, rgba(255,255,255,0.3) 0%, transparent 70%)',
-                  filter: 'blur(20px)',
-                }}
-              />
-              
-              {/* Shine effect */}
-              <div className={`absolute inset-0 rounded-[32px] overflow-hidden opacity-0 transition-opacity duration-500 ${hoveredCard === i ? 'opacity-100' : ''}`}>
-                <div className={`absolute top-0 left-0 w-full h-full bg-linear-to-r from-transparent via-white/20 to-transparent ${hoveredCard === i ? 'animate-shine' : ''}`} />
-              </div>
-              
-              <span className={`text-5xl sm:text-6xl md:text-7xl font-serif opacity-30 absolute top-4 sm:top-6 right-6 sm:right-8 font-bold ${card.textColor} transition-transform duration-300 ${hoveredCard === i ? 'scale-110 rotate-12' : ''}`}>
-                {card.num}
-              </span>
-              
-              <div className="mt-auto pt-8 sm:pt-12">
-                <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-3 sm:mb-4 pr-4 transition-transform duration-300">{card.title}</h3>
-                <p className={`text-[12px] sm:text-[14px] md:text-[15px] opacity-90 leading-relaxed font-semibold mb-6 sm:mb-8 transition-transform duration-300`}>
-                  {card.desc}
-                </p>
+        {/* Interactive Surface Switcher */}
+        <div className="grid lg:grid-cols-12 gap-8 items-start">
+          
+          {/* Surface Selectors */}
+          <div className="lg:col-span-5 space-y-3">
+            {CONTEXTS.map((context, i) => {
+              const CtxIcon = context.icon;
+              const isSelected = activeContext === i;
+              return (
+                <button
+                  key={context.id}
+                  onClick={() => setActiveContext(i)}
+                  className={`w-full text-left p-5 rounded-xl border transition-all flex items-start gap-4 cursor-pointer ${
+                    isSelected
+                      ? "bg-card border-primary/50 shadow-md shadow-primary/5"
+                      : "bg-background/60 border-border hover:border-border/80 hover:bg-card/50"
+                  }`}
+                >
+                  <div
+                    className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 transition-colors ${
+                      isSelected
+                        ? "bg-primary text-primary-foreground font-bold"
+                        : "bg-muted text-muted-foreground"
+                    }`}
+                  >
+                    <CtxIcon className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="font-heading font-bold text-base text-foreground">
+                        {context.title}
+                      </span>
+                    </div>
+                    <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
+                      {context.description}
+                    </p>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
 
-                <div>
-                  <Link href="/docs" className="inline-block text-xs sm:text-sm font-bold px-4 sm:px-6 py-2 sm:py-3 bg-black text-white dark:bg-white dark:text-black rounded-full shadow-xs hover:opacity-80 transition cursor-pointer hover:scale-105 hover:shadow-lg transform focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-black dark:focus:ring-white">
-                    Learn more
-                  </Link>
+          {/* Surface Preview Console */}
+          <div className="lg:col-span-7">
+            <div className="rounded-2xl border border-border bg-card p-6 sm:p-8 shadow-xl">
+              <div className="flex items-center justify-between pb-4 mb-6 border-b border-border">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                    <Icon className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h3 className="font-heading font-bold text-foreground text-sm">
+                      {current.title}
+                    </h3>
+                    <span className="text-[11px] font-mono text-muted-foreground">
+                      {current.badge}
+                    </span>
+                  </div>
                 </div>
+                <span className="text-xs font-mono px-2.5 py-1 rounded bg-muted text-primary font-medium">
+                  Config Spec
+                </span>
+              </div>
+
+              <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
+                {current.description}
+              </p>
+
+              {/* Code Snippet Box */}
+              <div className="rounded-xl border border-border bg-background p-4 font-mono text-xs text-muted-foreground overflow-x-auto leading-relaxed">
+                <pre className="text-foreground">
+                  <code>{current.previewSnippet}</code>
+                </pre>
+              </div>
+
+              <div className="mt-6 flex items-center gap-4 text-xs font-mono text-muted-foreground">
+                <span className="flex items-center gap-1.5 text-primary">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  <span>Custom OpenGraph title</span>
+                </span>
+                <span className="flex items-center gap-1.5 text-primary">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  <span>Dynamic UTM generator</span>
+                </span>
               </div>
             </div>
-          ))}
+          </div>
+
         </div>
+
       </div>
+    </section>
   );
 }

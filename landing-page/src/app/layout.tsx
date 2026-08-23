@@ -1,19 +1,34 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Inter, Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair" });
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const plusJakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  variable: "--font-heading",
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://social-share-button.aossie.org"),
   title: {
-    default: "SocialShareButton — Lightweight Social Share Button Library",
+    default: "SocialShareButton — Zero-Dependency Social Sharing Component",
     template: "%s | SocialShareButton",
   },
   description:
-    "Add native-feeling share buttons (WhatsApp, Facebook, X, LinkedIn, Telegram) to any site with one script. Zero dependencies, fast, secure, open source.",
+    "A zero-dependency, <10KB social sharing component for modern websites. Zero external trackers, zero cookie banners, instant framework-agnostic drop-in.",
   keywords: [
     "social share button",
     "share button library",
@@ -22,6 +37,7 @@ export const metadata: Metadata = {
     "open source social share",
     "react share button",
     "preact share button",
+    "vue share button",
     "cross platform share widget",
   ],
   authors: [{ name: "AOSSIE" }],
@@ -31,9 +47,9 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "SocialShareButton — Lightweight Social Share Button Library",
+    title: "SocialShareButton — Zero-Dependency Social Sharing Component",
     description:
-      "Zero-dependency, cross-platform social share button widget. Add it to your site with one script.",
+      "Zero-dependency, cross-platform social share widget. Under 10KB, zero tracking, instant drop-in.",
     url: "https://social-share-button.aossie.org",
     siteName: "SocialShareButton",
     images: [
@@ -41,7 +57,7 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "SocialShareButton — Lightweight Social Share Button Library",
+        alt: "SocialShareButton — Zero-Dependency Social Sharing Component",
       },
     ],
     type: "website",
@@ -49,8 +65,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "SocialShareButton — Lightweight Social Share Button Library",
-    description: "Zero-dependency social share button widget for any website.",
+    title: "SocialShareButton — Zero-Dependency Social Sharing Component",
+    description: "Zero-dependency social share component widget for any website.",
     images: ["/og-image.png"],
   },
   robots: {
@@ -79,7 +95,7 @@ const jsonLd = {
   applicationCategory: "DeveloperApplication",
   operatingSystem: "Any",
   description:
-    "Lightweight, zero-dependency social share button library for modern websites. Supports WhatsApp, Facebook, X, LinkedIn, and Telegram.",
+    "Lightweight, zero-dependency social share button library for modern websites. Supports WhatsApp, Facebook, X, LinkedIn, Telegram, Reddit, and Email.",
   offers: {
     "@type": "Offer",
     price: "0",
@@ -105,27 +121,12 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className={`${inter.variable} ${playfair.variable} font-sans`}>
+      <body
+        className={`${inter.variable} ${plusJakarta.variable} ${jetbrainsMono.variable} font-sans antialiased selection:bg-[#00E599]/20 selection:text-[#00E599]`}
+      >
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
-          
-          {/* Three-column layout */}
-          <div className="flex min-h-screen">
-            
-            {/* Left fixed panel */}
-            <div className="hidden lg:block w-[120px] shrink-0">
-              <div className="fixed top-0 left-0 w-[120px] h-full bg-[#e8e8e8] dark:bg-[#111111] border-r border-neutral-200 dark:border-neutral-900 z-40" />
-            </div>
-
-            {/* Main content */}
-            <div className="flex-1 min-w-0">
-              {children}
-            </div>
-
-            {/* Right fixed panel */}
-            <div className="hidden lg:block w-[120px] shrink-0">
-              <div className="fixed top-0 right-0 w-[120px] h-full bg-[#e8e8e8] dark:bg-[#111111] border-l border-neutral-200 dark:border-neutral-900 z-40" />
-            </div>
-
+          <div className="min-h-screen bg-background text-foreground flex flex-col">
+            {children}
           </div>
 
         </ThemeProvider>

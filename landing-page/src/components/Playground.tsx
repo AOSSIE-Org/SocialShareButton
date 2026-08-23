@@ -1,326 +1,392 @@
 "use client";
+
 import { useState } from "react";
+import { Check, Copy, Sliders, Eye, Code2, Sparkles, RefreshCw } from "lucide-react";
 
-type ButtonStyleKey = "default" | "primary" | "compact" | "icon-only";
+type ButtonStyleKey = "default" | "compact" | "icon-only" | "inline";
 
-const BUTTON_STYLES: { key: ButtonStyleKey; label: string }[] = [
-  { key: "default", label: "default" },
-  { key: "primary", label: "primary" },
-  { key: "compact", label: "compact" },
-  { key: "icon-only", label: "icon-only" },
+const BUTTON_STYLES: { key: ButtonStyleKey; label: string; description: string }[] = [
+  { key: "default", label: "Modal Sheet", description: "Floating share dialog with copy bar" },
+  { key: "compact", label: "Compact Pill", description: "Space-conscious for dense headers" },
+  { key: "icon-only", label: "Icon Grid", description: "Clean, textless social icons" },
+  { key: "inline", label: "Inline Bar", description: "Horizontal strip for article footers" },
 ];
 
-const COLORS = [
-  "#FFCC00",
-  "#00C853",
-  "#229ED9",
-  "#FF4500",
-  "#a855f7",
-  "#ffffff",
+const ACCENT_COLORS = [
+  { name: "Electric Mint", hex: "#00E599" },
+  { name: "Telemetry Amber", hex: "#FFB800" },
+  { name: "Sky Blue", hex: "#229ED9" },
+  { name: "Flame Orange", hex: "#FF4500" },
+  { name: "Neon Purple", hex: "#A855F7" },
+  { name: "Slate Monochrome", hex: "#475569" },
 ];
 
-const INITIAL_PLATFORMS = [
-  { name: "WhatsApp", icon: "W", active: true, color: "#25D366" },
-  { name: "Facebook", icon: "f", active: true, color: "#1877F2" },
-  { name: "Twitter/X", icon: "X", active: true, color: "#111111" },
-  { name: "LinkedIn", icon: "in", active: true, color: "#0A66C2" },
-  { name: "Telegram", icon: "T", active: false, color: "#229ED9" },
-  { name: "Reddit", icon: "R", active: false, color: "#FF4500" },
-  { name: "Email", icon: "@", active: false, color: "#737373" },
+const PLATFORMS_CONFIG = [
+  { id: "whatsapp", name: "WhatsApp", icon: "W", color: "#25D366", active: true },
+  { id: "x", name: "X / Twitter", icon: "𝕏", color: "#111111", active: true },
+  { id: "linkedin", name: "LinkedIn", icon: "in", color: "#0A66C2", active: true },
+  { id: "telegram", name: "Telegram", icon: "TG", color: "#229ED9", active: true },
+  { id: "reddit", name: "Reddit", icon: "r/", color: "#FF4500", active: false },
+  { id: "facebook", name: "Facebook", icon: "f", color: "#1877F2", active: false },
+  { id: "email", name: "Email", icon: "@", color: "#64748B", active: false },
 ];
-
-// Pick readable text color (black/white) for a given hex background
-function textColorFor(hex: string) {
-  const c = hex.replace("#", "");
-  const r = parseInt(c.substring(0, 2), 16);
-  const g = parseInt(c.substring(2, 4), 16);
-  const b = parseInt(c.substring(4, 6), 16);
-  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-  return luminance > 0.6 ? "#000000" : "#ffffff";
-}
 
 export function Playground() {
-  const [theme, setTheme] = useState<"light" | "dark">("dark");
-  const [style, setStyle] = useState<ButtonStyleKey>("default");
-  const [color, setColor] = useState<string>(COLORS[0]);
-  const [platforms, setPlatforms] = useState(INITIAL_PLATFORMS);
+  const [themeMode, setThemeMode] = useState<"dark" | "light">("dark");
+  const [styleVariant, setStyleVariant] = useState<ButtonStyleKey>("default");
+  const [accentColor, setAccentColor] = useState(ACCENT_COLORS[0].hex);
+  const [platforms, setPlatforms] = useState(PLATFORMS_CONFIG);
+  const [activeTab, setActiveTab] = useState<"preview" | "code">("preview");
+  const [copiedCode, setCopiedCode] = useState(false);
+  const [copiedLink, setCopiedLink] = useState(false);
 
-  const textColor = textColorFor(color);
-  const activePlatforms = platforms.filter((p) => p.active);
-
-  const togglePlatform = (name: string) => {
+  const togglePlatform = (id: string) => {
     setPlatforms((prev) =>
-      prev.map((p) => (p.name === name ? { ...p, active: !p.active } : p))
+      prev.map((p) => (p.id === id ? { ...p, active: !p.active } : p))
     );
   };
 
-  const isDark = theme === "dark";
-  const isCompact = style === "compact";
-  const isIconOnly = style === "icon-only";
-  const isPrimary = style === "primary";
+  const activePlatforms = platforms.filter((p) => p.active);
+  const activeIds = activePlatforms.map((p) => `"${p.id}"`).join(", ");
 
-  // In light mode, pure white blends into the card background — anything that
-  // relies on `color` for an outline or unfilled text needs to fall back to black.
-  const whiteOnLight = !isDark && color === "#ffffff";
-  const outlineColor = whiteOnLight ? "#000000" : color;
+  const generatedSnippet = `<SocialShareButton
+  url="https://yourdomain.com/post-slug"
+  title="Share this page"
+  networks={[${activeIds}]}
+  theme="${themeMode}"
+  style="${styleVariant}"
+  accentColor="${accentColor}"
+/>`;
+
+  const handleCopyCode = () => {
+    navigator.clipboard.writeText(generatedSnippet);
+    setCopiedCode(true);
+    setTimeout(() => setCopiedCode(false), 2000);
+  };
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText("https://social-share-button.aossie.org");
+    setCopiedLink(true);
+    setTimeout(() => setCopiedLink(false), 2000);
+  };
+
+  const isDark = themeMode === "dark";
 
   return (
-    <div id="playground" className="py-24 bg-background">
+    <section id="playground" className="py-24 bg-background border-b border-border relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-        <div className="mb-12">
-          <span className="text-xs font-bold tracking-widest text-[#FFCC00] uppercase mb-4 block flex items-center gap-2">
-            <div className="w-4 h-[2px] bg-[#FFCC00]"></div> INTERACTIVE DEMO
-          </span>
-          <h2 className="text-4xl md:text-6xl font-serif font-bold tracking-tight text-balance mb-6">
-            Configure it live.<br />See it <span className="underline decoration-[#FFCC00] decoration-4 underline-offset-8">instantly.</span>
+        
+        {/* Header */}
+        <div className="max-w-3xl mb-16">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-xs font-mono font-semibold text-primary mb-4">
+            <Sliders className="w-3.5 h-3.5" />
+            <span>INTERACTIVE STUDIO CONFIGURATOR</span>
+          </div>
+          <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl font-extrabold text-foreground tracking-tight leading-[1.15] mb-4 text-balance">
+            Configure visually. <br />
+            Ship in seconds.
           </h2>
-          <p className="text-neutral-600 dark:text-neutral-400 font-medium max-w-md text-sm leading-relaxed">
-            Tweak theme, style, platforms and color — the preview updates in real time.
+          <p className="text-base text-muted-foreground leading-relaxed">
+            Test theme modes, layout styles, and target social destinations with real-time synchronized code generation.
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-[1fr_400px] gap-12 lg:gap-24 items-start mt-16">
-
-          {/* Left Column: Preview / Code */}
-          <div className="flex flex-col items-center">
-
-            <div className="flex items-center justify-center gap-6 mb-12">
-              <button className="text-[#FFCC00] font-bold text-xl font-serif">Preview</button>
-              <span className="text-white font-bold text-xl">|</span>
-              <button className="text-white font-bold text-xl font-serif hover:text-neutral-300 transition-colors">Code</button>
-            </div>
-
-            {/* The Output Mockup */}
-            <div
-              className={`relative rounded-2xl border-2 shadow-[0_0_40px_rgba(255,204,0,0.15)] w-full max-w-[450px] transition-colors ${
-                isDark ? "bg-neutral-900 dark:bg-[#111] text-white" : "bg-white text-black"
-              } ${isCompact ? "p-6" : "p-8"}`}
-              style={{ borderColor: outlineColor }}
-            >
-              <div className="flex items-center justify-between mb-6">
-                <h3
-                  className={`font-serif font-bold text-center w-full ${isCompact ? "text-2xl" : "text-3xl"}`}
-                  style={{ color: outlineColor }}
-                >
-                  Share this Page
-                </h3>
-                <button
-                  className="absolute right-6 top-6 border rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold opacity-80 hover:opacity-100 transition-opacity"
-                  style={{ color: outlineColor, borderColor: outlineColor }}
-                >
-                  ✕
-                </button>
-              </div>
-
-              {!isIconOnly && (
-                <p className={`text-center text-sm mb-8 font-medium ${isDark ? "text-neutral-400" : "text-neutral-500"}`}>
-                  Share this page to your social networks:
-                </p>
-              )}
-
-              <div className={`gap-4 mb-10 justify-center ${isCompact || isIconOnly ? "flex flex-wrap" : "grid grid-cols-5"}`}>
-                {activePlatforms.length === 0 && (
-                  <p className="text-xs text-neutral-500">No platforms selected — turn one on in the panel →</p>
-                )}
-                {activePlatforms.map((network, i) => (
-                  <div key={i} className="flex flex-col items-center gap-3">
-                    <div
-                      className={`rounded-full flex items-center justify-center text-white font-bold shadow-md ${isCompact || isIconOnly ? "w-9 h-9 text-sm" : "w-12 h-12 text-xl"}`}
-                      style={{ backgroundColor: network.color }}
-                    >
-                      {network.icon}
-                    </div>
-                    {!isIconOnly && (
-                      <span className={`text-[11px] font-medium ${isDark ? "text-neutral-400" : "text-neutral-500"}`}>
-                        {network.name}
-                      </span>
-                    )}
-                  </div>
-                ))}
-              </div>
-
-              {!isIconOnly && (
-                <div
-                  className={`flex items-center gap-2 bg-transparent rounded-full p-1 pl-4 border mb-8 ${
-                    isDark ? "border-neutral-600" : "border-neutral-300"
-                  }`}
-                >
-                  <span className={`text-sm truncate flex-1 ${isDark ? "text-neutral-400" : "text-neutral-500"}`}>
-                    https://socialsharebutton.com
-                  </span>
+        {/* Studio Workspace Layout */}
+        <div className="grid lg:grid-cols-12 gap-8 items-start">
+          
+          {/* Left Panel: Configuration Controls */}
+          <div className="lg:col-span-5 space-y-6">
+            <div className="rounded-2xl border border-border bg-card p-6 shadow-md space-y-6">
+              
+              {/* 1. Theme Selection */}
+              <div>
+                <label className="block text-xs font-mono font-semibold uppercase text-muted-foreground mb-2.5">
+                  1. Color Mode
+                </label>
+                <div className="grid grid-cols-2 gap-2">
                   <button
-                    className={`px-6 py-2 rounded-full text-sm font-bold transition-colors ${isPrimary ? "border-2" : ""}`}
-                    style={
-                      isPrimary
-                        ? { color: outlineColor, borderColor: outlineColor, backgroundColor: "transparent" }
-                        : {
-                            backgroundColor: color,
-                            color: textColor,
-                            border: whiteOnLight ? "2px solid #000000" : "none",
-                          }
-                    }
+                    onClick={() => setThemeMode("dark")}
+                    className={`py-2 px-3 rounded-lg text-xs font-mono font-semibold border transition-all cursor-pointer ${
+                      themeMode === "dark"
+                        ? "bg-foreground text-background border-foreground shadow-xs"
+                        : "bg-muted/50 border-border text-muted-foreground hover:text-foreground"
+                    }`}
                   >
-                    Copy Link
+                    Dark Theme
+                  </button>
+                  <button
+                    onClick={() => setThemeMode("light")}
+                    className={`py-2 px-3 rounded-lg text-xs font-mono font-semibold border transition-all cursor-pointer ${
+                      themeMode === "light"
+                        ? "bg-foreground text-background border-foreground shadow-xs"
+                        : "bg-muted/50 border-border text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    Light Theme
                   </button>
                 </div>
-              )}
-
-              <div className="flex justify-center">
-                <button
-                  className={`font-bold shadow-lg transition-colors ${
-                    isIconOnly
-                      ? "w-14 h-14 rounded-full text-xl"
-                      : isCompact
-                      ? "px-8 py-2 rounded-full text-base w-40"
-                      : "px-12 py-3 rounded-full text-lg w-48"
-                  } ${isPrimary ? "border-2" : ""}`}
-                  style={
-                    isPrimary
-                      ? { color: outlineColor, borderColor: outlineColor, backgroundColor: "transparent" }
-                      : {
-                          backgroundColor: color,
-                          color: textColor,
-                          border: whiteOnLight ? "2px solid #000000" : "none",
-                        }
-                  }
-                >
-                  {isIconOnly ? "↗" : "Share"}
-                </button>
               </div>
+
+              {/* 2. Style Variant */}
+              <div>
+                <label className="block text-xs font-mono font-semibold uppercase text-muted-foreground mb-2.5">
+                  2. Layout Variant
+                </label>
+                <div className="grid grid-cols-2 gap-2">
+                  {BUTTON_STYLES.map((style) => (
+                    <button
+                      key={style.key}
+                      onClick={() => setStyleVariant(style.key)}
+                      className={`p-2.5 text-left rounded-lg border text-xs font-mono transition-all cursor-pointer ${
+                        styleVariant === style.key
+                          ? "bg-primary/10 border-primary text-foreground font-semibold"
+                          : "bg-muted/30 border-border text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      <div className="font-heading font-bold text-foreground capitalize">
+                        {style.label}
+                      </div>
+                      <div className="text-[10px] text-muted-foreground truncate">
+                        {style.description}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* 3. Accent Color */}
+              <div>
+                <label className="block text-xs font-mono font-semibold uppercase text-muted-foreground mb-2.5">
+                  3. Brand Accent Token
+                </label>
+                <div className="flex items-center gap-2.5 flex-wrap">
+                  {ACCENT_COLORS.map((c) => (
+                    <button
+                      key={c.hex}
+                      onClick={() => setAccentColor(c.hex)}
+                      className={`w-7 h-7 rounded-full border-2 transition-transform cursor-pointer ${
+                        accentColor === c.hex
+                          ? "scale-125 border-foreground shadow-md"
+                          : "border-transparent hover:scale-110"
+                      }`}
+                      style={{ backgroundColor: c.hex }}
+                      title={c.name}
+                      aria-label={c.name}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* 4. Active Social Platforms */}
+              <div>
+                <label className="block text-xs font-mono font-semibold uppercase text-muted-foreground mb-2.5">
+                  4. Active Platforms ({activePlatforms.length} selected)
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {platforms.map((p) => (
+                    <button
+                      key={p.id}
+                      onClick={() => togglePlatform(p.id)}
+                      className={`px-2.5 py-1.5 rounded-lg border text-xs font-mono font-medium transition-all flex items-center gap-1.5 cursor-pointer ${
+                        p.active
+                          ? "bg-foreground text-background border-foreground font-semibold shadow-xs"
+                          : "bg-muted/40 border-border text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      <span>{p.icon}</span>
+                      <span>{p.name}</span>
+                      {p.active && <Check className="w-3 h-3 text-primary shrink-0" />}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
             </div>
           </div>
 
-          {/* Right Column: Configuration Panel */}
-          <div className="w-full">
-            <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#111] overflow-hidden">
-
-              {/* Panel Header */}
-              <div className="bg-[#FFCC00] px-4 py-3 flex items-center gap-2">
-                <div className="w-4 h-4 rounded-full border border-black/20 flex items-center justify-center">
-                   <div className="w-1.5 h-1.5 bg-background rounded-full"></div>
-                </div>
-                <span className="text-black text-xs font-mono font-bold tracking-wide">Configuration panel</span>
-              </div>
-
-              <div className="p-6 space-y-8">
-
-                {/* Theme Config */}
-                <div>
-                   <h4 className="text-[10px] font-mono tracking-widest text-neutral-500 mb-3 uppercase">Theme</h4>
-                   <div className="flex rounded-md border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-[#0a0a0a] p-1">
-                     <button
-                       onClick={() => setTheme("light")}
-                       className={`flex-1 py-2 text-sm rounded transition-colors ${
-                         theme === "light"
-                           ? "font-bold text-black bg-[#FFCC00] shadow-xs"
-                           : "font-medium text-neutral-500 dark:text-neutral-400"
-                       }`}
-                     >
-                       Light
-                     </button>
-                     <button
-                       onClick={() => setTheme("dark")}
-                       className={`flex-1 py-2 text-sm rounded transition-colors ${
-                         theme === "dark"
-                           ? "font-bold text-black bg-[#FFCC00] shadow-xs"
-                           : "font-medium text-neutral-500 dark:text-neutral-400"
-                       }`}
-                     >
-                       Dark
-                     </button>
-                   </div>
+          {/* Right Panel: Live Rendered Output & Code Preview */}
+          <div className="lg:col-span-7">
+            <div className="rounded-2xl border border-border bg-card shadow-2xl overflow-hidden">
+              
+              {/* Studio Canvas Header */}
+              <div className="flex items-center justify-between px-5 py-3.5 border-b border-border bg-muted/50">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                  <span className="font-mono text-xs text-muted-foreground font-semibold">
+                    studio_canvas.live
+                  </span>
                 </div>
 
-                {/* Button Style Config */}
-                <div>
-                   <h4 className="text-[10px] font-mono tracking-widest text-neutral-500 mb-3 uppercase">Button Style</h4>
-                   <div className="grid grid-cols-2 gap-2">
-                     {BUTTON_STYLES.map((s) => (
-                       <button
-                         key={s.key}
-                         onClick={() => setStyle(s.key)}
-                         className={`py-2 text-sm rounded-md transition-colors ${
-                           style === s.key
-                             ? "font-bold text-black bg-[#FFCC00] shadow-xs"
-                             : "font-medium text-neutral-500 dark:text-neutral-400 border border-neutral-200 dark:border-neutral-800"
-                         }`}
-                       >
-                         {s.label}
-                       </button>
-                     ))}
-                   </div>
-                </div>
-
-                {/* Platforms Config */}
-                <div>
-                  <h4 className="text-[10px] font-mono tracking-widest text-neutral-500 mb-3 uppercase">Platforms</h4>
-                  <div className="space-y-2">
-                    {platforms.map((platform, i) => (
-                      <button
-                        key={i}
-                        onClick={() => togglePlatform(platform.name)}
-                        className={`w-full flex items-center justify-between p-2 rounded-md border transition-colors ${
-                          platform.active
-                            ? "border-[#00C853]/50 bg-[#00C853]/5"
-                            : "border-transparent hover:bg-neutral-50 dark:hover:bg-neutral-900"
-                        }`}
-                      >
-                        <div className="flex items-center gap-3">
-                          <div
-                            className="w-6 h-6 rounded flex items-center justify-center text-[10px] text-white font-bold"
-                            style={{ backgroundColor: platform.active ? platform.color : "#a3a3a3" }}
-                          >
-                            {platform.icon}
-                          </div>
-                          <span className={`text-xs font-medium ${platform.active ? "text-foreground" : "text-neutral-500"}`}>
-                            {platform.name}
-                          </span>
-                        </div>
-
-                        {/* Toggle */}
-                        <div
-                          className={`w-8 h-4 rounded-full relative transition-colors ${
-                            platform.active
-                              ? "bg-[#00C853]"
-                              : "bg-neutral-200 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700"
-                          }`}
-                        >
-                          <div
-                            className={`absolute top-0.5 w-3 h-3 rounded-full transition-all ${
-                              platform.active ? "bg-white right-0.5" : "bg-neutral-400 dark:bg-neutral-500 left-0.5"
-                            }`}
-                          ></div>
-                        </div>
-                      </button>
-                    ))}
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center rounded-lg bg-background p-0.5 border border-border">
+                    <button
+                      onClick={() => setActiveTab("preview")}
+                      className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-mono font-medium transition-colors ${
+                        activeTab === "preview"
+                          ? "bg-primary text-primary-foreground"
+                          : "text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      <Eye className="w-3.5 h-3.5" />
+                      <span>Live Preview</span>
+                    </button>
+                    <button
+                      onClick={() => setActiveTab("code")}
+                      className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-mono font-medium transition-colors ${
+                        activeTab === "code"
+                          ? "bg-primary text-primary-foreground"
+                          : "text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      <Code2 className="w-3.5 h-3.5" />
+                      <span>React JSX</span>
+                    </button>
                   </div>
                 </div>
+              </div>
 
-                {/* Button Color Config */}
-                <div>
-                   <h4 className="text-[10px] font-mono tracking-widest text-neutral-500 mb-3 uppercase">Button Color</h4>
-                   <div className="flex gap-2">
-                     {COLORS.map((c) => (
-                       <button
-                         key={c}
-                         onClick={() => setColor(c)}
-                         aria-label={`Set button color to ${c}`}
-                         className={`w-6 h-6 rounded transition-all ${
-                           c === "#ffffff" ? "border border-neutral-200 dark:border-neutral-800" : ""
-                         } ${color === c ? "scale-110 ring-2 ring-offset-2 ring-offset-background ring-foreground" : "hover:scale-105"}`}
-                         style={{ backgroundColor: c }}
-                       />
-                     ))}
-                   </div>
-                </div>
+              {/* Canvas Preview Area */}
+              <div className="p-8 min-h-[380px] flex items-center justify-center bg-background/50 relative overflow-hidden">
+                {activeTab === "preview" ? (
+                  <div
+                    className={`w-full max-w-md rounded-2xl border p-6 transition-all shadow-xl ${
+                      isDark ? "bg-[#10141D] text-white border-[#1E2638]" : "bg-white text-black border-slate-200"
+                    }`}
+                    style={{ borderColor: accentColor }}
+                  >
+                    {styleVariant === "default" && (
+                      <div>
+                        <div className="flex items-center justify-between mb-4">
+                          <h3 className="font-heading text-lg font-bold" style={{ color: accentColor }}>
+                            Share this page
+                          </h3>
+                          <span className="text-xs opacity-50 cursor-pointer">✕</span>
+                        </div>
+                        <p className="text-xs opacity-75 mb-5 font-sans">
+                          Select a network to share instantly:
+                        </p>
+                        
+                        <div className="grid grid-cols-4 sm:grid-cols-5 gap-2.5 my-4">
+                          {activePlatforms.map((p) => (
+                            <div key={p.id} className="flex flex-col items-center gap-1">
+                              <div
+                                className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-mono text-xs font-bold shadow-xs hover:scale-105 transition-transform cursor-pointer"
+                                style={{ backgroundColor: p.color }}
+                              >
+                                {p.icon}
+                              </div>
+                              <span className="text-[10px] opacity-75 truncate max-w-[50px] text-center">
+                                {p.name.split(" ")[0]}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
 
+                        <div className="mt-5 pt-4 border-t border-white/10 flex items-center gap-2">
+                          <input
+                            type="text"
+                            readOnly
+                            value="https://social-share-button.aossie.org"
+                            className="text-xs font-mono bg-black/20 rounded-lg px-3 py-2 flex-1 border border-white/10 opacity-80"
+                          />
+                          <button
+                            onClick={handleCopyLink}
+                            className="px-3 py-2 rounded-lg font-heading font-semibold text-xs transition-all text-black shrink-0"
+                            style={{ backgroundColor: accentColor }}
+                          >
+                            {copiedLink ? "Copied!" : "Copy"}
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {styleVariant === "compact" && (
+                      <div className="flex items-center gap-2 flex-wrap justify-center py-2">
+                        <span className="text-xs font-medium opacity-80 mr-2">Share:</span>
+                        {activePlatforms.map((p) => (
+                          <button
+                            key={p.id}
+                            className="px-2.5 py-1 rounded-full text-xs font-mono font-medium text-white flex items-center gap-1.5 shadow-xs"
+                            style={{ backgroundColor: p.color }}
+                          >
+                            <span>{p.icon}</span>
+                            <span>{p.name.split(" ")[0]}</span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+
+                    {styleVariant === "icon-only" && (
+                      <div className="flex items-center justify-center gap-3 py-4 flex-wrap">
+                        {activePlatforms.map((p) => (
+                          <div
+                            key={p.id}
+                            className="w-11 h-11 rounded-full flex items-center justify-center text-white font-mono font-bold text-sm shadow-md hover:scale-110 transition-transform cursor-pointer"
+                            style={{ backgroundColor: p.color }}
+                          >
+                            {p.icon}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {styleVariant === "inline" && (
+                      <div className="space-y-3">
+                        <div className="text-xs font-heading font-semibold uppercase tracking-wider opacity-60">
+                          Spread the word
+                        </div>
+                        <div className="flex items-center gap-2 flex-wrap">
+                          {activePlatforms.map((p) => (
+                            <button
+                              key={p.id}
+                              className="px-3 py-1.5 rounded-lg text-xs font-mono font-semibold border flex items-center gap-2 hover:brightness-110 transition-all text-white"
+                              style={{ backgroundColor: p.color, borderColor: "transparent" }}
+                            >
+                              <span>{p.icon}</span>
+                              <span>{p.name}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="w-full font-mono text-xs leading-relaxed overflow-x-auto p-4 rounded-xl bg-[#0B0E14] border border-[#1E2638] text-[#E2E8F0]">
+                    <pre>
+                      <code>{generatedSnippet}</code>
+                    </pre>
+                  </div>
+                )}
+              </div>
+
+              {/* Studio Canvas Action Bar */}
+              <div className="px-6 py-3.5 border-t border-border bg-muted/40 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
+                <span className="text-muted-foreground">
+                  OUTPUT: <strong className="text-foreground">Zero-dependency bundle component</strong>
+                </span>
+                <button
+                  onClick={handleCopyCode}
+                  className="inline-flex items-center gap-1.5 bg-primary text-primary-foreground px-4 py-1.5 rounded-lg font-heading font-semibold text-xs hover:brightness-110 active:scale-95 transition-all shadow-xs"
+                >
+                  {copiedCode ? (
+                    <>
+                      <Check className="w-3.5 h-3.5" />
+                      <span>Copied Snippet!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-3.5 h-3.5" />
+                      <span>Copy Component Code</span>
+                    </>
+                  )}
+                </button>
               </div>
             </div>
           </div>
 
         </div>
+
       </div>
-    </div>
+    </section>
   );
 }
