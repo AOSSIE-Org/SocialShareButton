@@ -36,7 +36,7 @@ function FeatureCard({ card, index, rotatedCard, handleCardClick }: FeatureCardP
 
         <div>
           <Link href="/docs" className="inline-block text-xs sm:text-sm font-bold px-4 sm:px-6 py-2 sm:py-3 bg-black text-white dark:bg-white dark:text-black rounded-full shadow-xs hover:opacity-80 transition cursor-pointer focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-black dark:focus:ring-white">
-            Learn more
+            Learn more<span className="sr-only"> about {card.title}</span>
           </Link>
         </div>
       </div>
