@@ -92,7 +92,7 @@ export function EverywhereFeatures() {
                 <div className={`absolute top-0 left-0 w-full h-full bg-linear-to-r from-transparent via-white/20 to-transparent ${hoveredCard === i ? 'animate-shine' : ''}`} />
               </div>
               
-              <span className={`text-5xl sm:text-6xl md:text-7xl font-serif opacity-30 absolute top-4 sm:top-6 right-6 sm:right-8 font-bold ${card.textColor} transition-transform duration-300 ${hoveredCard === i ? 'scale-110 rotate-12' : ''}`}>
+              <span aria-hidden="true" className={`text-5xl sm:text-6xl md:text-7xl font-serif opacity-60 absolute top-4 sm:top-6 right-6 sm:right-8 font-bold ${card.textColor} transition-transform duration-300 ${hoveredCard === i ? 'scale-110 rotate-12' : ''}`}>
                 {card.num}
               </span>
               

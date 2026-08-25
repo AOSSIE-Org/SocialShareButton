@@ -25,7 +25,7 @@ function FeatureCard({ card, index, rotatedCard, handleCardClick, tabIndex }: Fe
         perspective: '1000px',
       }}
     >
-      <span className={`text-5xl sm:text-6xl md:text-7xl font-serif opacity-30 absolute top-4 sm:top-6 right-6 sm:right-8 font-bold ${card.textColor}`}>
+      <span aria-hidden="true" className={`text-5xl sm:text-6xl md:text-7xl font-serif opacity-60 absolute top-4 sm:top-6 right-6 sm:right-8 font-bold ${card.textColor}`}>
         {card.num}
       </span>
 
