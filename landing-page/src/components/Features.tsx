@@ -9,9 +9,10 @@ interface FeatureCardProps {
   index: number;
   rotatedCard: number | null;
   handleCardClick: (index: number) => void;
+  tabIndex?: number;
 }
 
-function FeatureCard({ card, index, rotatedCard, handleCardClick }: FeatureCardProps) {
+function FeatureCard({ card, index, rotatedCard, handleCardClick, tabIndex }: FeatureCardProps) {
   return (
     <div
       onClick={() => handleCardClick(index)}
@@ -35,7 +36,7 @@ function FeatureCard({ card, index, rotatedCard, handleCardClick }: FeatureCardP
         </p>
 
         <div>
-          <Link href="/docs" className="inline-block text-xs sm:text-sm font-bold px-4 sm:px-6 py-2 sm:py-3 bg-black text-white dark:bg-white dark:text-black rounded-full shadow-xs hover:opacity-80 transition cursor-pointer focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-black dark:focus:ring-white">
+          <Link href="/docs" tabIndex={tabIndex} className="inline-block text-xs sm:text-sm font-bold px-4 sm:px-6 py-2 sm:py-3 bg-black text-white dark:bg-white dark:text-black rounded-full shadow-xs hover:opacity-80 transition cursor-pointer focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-black dark:focus:ring-white">
             Learn more<span className="sr-only"> about {card.title}</span>
           </Link>
         </div>
@@ -119,7 +120,7 @@ export function Features() {
           </div>
           <div className="flex gap-4 sm:gap-6 md:gap-8 w-max animate-scroll-left group-hover:[animation-play-state:paused] pr-4 sm:pr-6 md:pr-8" aria-hidden="true">
             {cards.map((card, i) => (
-              <FeatureCard key={`dup-${i}`} card={card} index={i} rotatedCard={rotatedCard} handleCardClick={handleCardClick} />
+              <FeatureCard key={`dup-${i}`} card={card} index={i} rotatedCard={rotatedCard} handleCardClick={handleCardClick} tabIndex={-1} />
             ))}
           </div>
         </div>
