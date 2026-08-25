@@ -60,7 +60,7 @@ export function CodeShowcase() {
                   {"\n  "}
                   <code className="text-[#00C853]">return</code> <code className="text-white">(</code>
                   {"\n    "}
-                  <code className="text-neutral-700 font-medium">{"// Just drop it wherever you need it"}</code>
+                  <code className="text-neutral-300 font-medium">{"// Just drop it wherever you need it"}</code>
                   {"\n    "}
                   <code className="text-white">{"<"}</code>
                   <code className="text-[#FFCC00]">SocialShare</code>

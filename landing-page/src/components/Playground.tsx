@@ -121,7 +121,7 @@ export function Playground() {
 
               <div className={`gap-4 mb-10 justify-center ${isCompact || isIconOnly ? "flex flex-wrap" : "grid grid-cols-5"}`}>
                 {activePlatforms.length === 0 && (
-                  <p className="text-xs text-neutral-700">No platforms selected — turn one on in the panel →</p>
+                  <p className={`text-xs ${isDark ? 'text-neutral-300' : 'text-neutral-700'}`}>No platforms selected — turn one on in the panel →</p>
                 )}
                 {activePlatforms.map((network, i) => (
                   <div key={i} className="flex flex-col items-center gap-3">

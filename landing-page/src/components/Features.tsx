@@ -118,7 +118,7 @@ export function Features() {
               <FeatureCard key={i} card={card} index={i} rotatedCard={rotatedCard} handleCardClick={handleCardClick} />
             ))}
           </div>
-          <div className="flex gap-4 sm:gap-6 md:gap-8 w-max animate-scroll-left group-hover:[animation-play-state:paused] pr-4 sm:pr-6 md:pr-8" aria-hidden="true">
+          <div className="flex gap-4 sm:gap-6 md:gap-8 w-max animate-scroll-left group-hover:[animation-play-state:paused] pr-4 sm:pr-6 md:pr-8" aria-hidden="true" inert>
             {cards.map((card, i) => (
               <FeatureCard key={`dup-${i}`} card={card} index={i} rotatedCard={rotatedCard} handleCardClick={handleCardClick} tabIndex={-1} />
             ))}

@@ -132,14 +132,14 @@ export function Footer() {
               <div className="flex flex-wrap gap-6">
                 <a
                   aria-label="Contact by Mail"
-                  className="text-neutral-600 hover:text-[#FFCC00] transition"
+                  className="text-neutral-500 hover:text-[#FFCC00] transition"
                   href="mailto:contact@aossie.org"
                 >
                   <Mail className="w-6 h-6" />
                 </a>
                 <a
                   aria-label="Join on Discord"
-                  className="text-neutral-600 hover:text-[#FFCC00] transition"
+                  className="text-neutral-500 hover:text-[#FFCC00] transition"
                   href="https://discord.gg/hjUhu33uAn"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -148,7 +148,7 @@ export function Footer() {
                 </a>
                 <a
                   aria-label="Follow on LinkedIn"
-                  className="text-neutral-600 hover:text-[#FFCC00] transition"
+                  className="text-neutral-500 hover:text-[#FFCC00] transition"
                   href="https://www.linkedin.com/company/aossie/"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -157,7 +157,7 @@ export function Footer() {
                 </a>
                 <a
                   aria-label="Subscribe on YouTube"
-                  className="text-neutral-600 hover:text-[#FFCC00] transition"
+                  className="text-neutral-500 hover:text-[#FFCC00] transition"
                   href="https://www.youtube.com/@AOSSIE-Org"
                   target="_blank"
                   rel="noopener noreferrer"
