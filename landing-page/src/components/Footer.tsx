@@ -33,7 +33,7 @@ export function Footer() {
               <br />
               Right <span className="text-[#00C853]">now.</span>
             </h2>
-            <p className="text-neutral-500 max-w-sm text-sm font-medium leading-relaxed mt-6">
+            <p className="text-neutral-400 max-w-sm text-sm font-medium leading-relaxed mt-6">
               Two CDN tags, one function call. No account, no API key, no
               <br className="hidden sm:block" />
               build step. Your users will be sharing in under 30
@@ -174,7 +174,7 @@ export function Footer() {
       {/* Bottom bar */}
       <div className="border-t border-neutral-900 py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center">
-          <div className="text-sm text-neutral-500 text-center">
+          <div className="text-sm text-neutral-400 text-center">
             Open Source under MIT License &middot; &copy; 2016-
             {new Date().getFullYear()} AOSSIE. All rights reserved.
           </div>

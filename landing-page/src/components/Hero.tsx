@@ -54,7 +54,7 @@ export function Hero() {
                 whileTap={{ scale: 0.9 }}
                 href="/docs/manual"
                 onClick={(e) => handleNavigate(e, '/docs/manual')}
-                className="bg-[#00C853] text-white px-6 py-3 rounded-full font-bold hover:brightness-110 transition-all border-2 border-transparent dark:border-none flex items-center gap-2 cursor-pointer group"
+                className="bg-[#00C853] text-black px-6 py-3 rounded-full font-bold hover:brightness-110 transition-all border-2 border-transparent dark:border-none flex items-center gap-2 cursor-pointer group"
               >
                 Add Manually <span className="group-hover:translate-x-1 transition-transform">→</span>
               </motion.a>
@@ -79,11 +79,11 @@ export function Hero() {
           <div className="relative mx-auto w-full max-w-md lg:max-w-none lg:ml-auto perspective-1000">
             <div className="rounded-xl border-2 border-[#FFCC00] bg-card p-6 shadow-[0_0_30px_rgba(255,204,0,0.15)] transform-gpu hover:-translate-y-2 transition-transform duration-500">
               <div className="flex items-center justify-between mb-8 cursor-move">
-                <h3 className="font-serif text-2xl font-bold text-center w-full text-[#00C853]">Share this Page</h3>
+                <h2 className="font-serif text-2xl font-bold text-center w-full text-[#00C853]">Share this Page</h2>
                 <button className="absolute right-4 top-4 text-neutral-400 hover:text-foreground">✕</button>
               </div>
 
-              <p className="text-center text-sm text-neutral-500 mb-6">Where do you want to share this link?</p>
+              <p className="text-center text-sm text-card-foreground/70 mb-6">Where do you want to share this link?</p>
 
               <div className="grid grid-cols-5 gap-4 mb-8">
                 {/* Mock Icons */}
@@ -98,13 +98,13 @@ export function Hero() {
                     <div className={`w-10 h-10 md:w-12 md:h-12 rounded-full ${network.bg} flex items-center justify-center text-white shadow-lg transition-transform group-hover:-translate-y-1`}>
                       {network.name[0]}
                     </div>
-                    <span className="text-[10px] md:text-xs text-neutral-500">{network.name}</span>
+                    <span className="text-[10px] md:text-xs text-card-foreground/70">{network.name}</span>
                   </div>
                 ))}
               </div>
 
               <div className="flex items-center gap-2 bg-background rounded-full p-1 pl-4 border-2 border-[#FFCC00]">
-                <span className="text-xs md:text-sm text-neutral-500 truncate flex-1 hidden sm:block">social-share-button.aossie.org</span>
+                <span className="text-xs md:text-sm text-foreground/70 truncate flex-1 hidden sm:block">social-share-button.aossie.org</span>
                 <button className="bg-[#FFCC00] text-black px-4 py-2 rounded-full text-sm font-bold">
                   Copy Link
                 </button>

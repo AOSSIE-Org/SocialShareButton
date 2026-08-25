@@ -114,14 +114,14 @@ export function Playground() {
               </div>
 
               {!isIconOnly && (
-                <p className={`text-center text-sm mb-8 font-medium ${isDark ? "text-neutral-400" : "text-neutral-500"}`}>
+                <p className={`text-center text-sm mb-8 font-medium ${isDark ? "text-neutral-300" : "text-neutral-700"}`}>
                   Share this page to your social networks:
                 </p>
               )}
 
               <div className={`gap-4 mb-10 justify-center ${isCompact || isIconOnly ? "flex flex-wrap" : "grid grid-cols-5"}`}>
                 {activePlatforms.length === 0 && (
-                  <p className="text-xs text-neutral-500">No platforms selected — turn one on in the panel →</p>
+                  <p className={`text-xs ${isDark ? 'text-neutral-300' : 'text-neutral-700'}`}>No platforms selected — turn one on in the panel →</p>
                 )}
                 {activePlatforms.map((network, i) => (
                   <div key={i} className="flex flex-col items-center gap-3">
@@ -132,7 +132,7 @@ export function Playground() {
                       {network.icon}
                     </div>
                     {!isIconOnly && (
-                      <span className={`text-[11px] font-medium ${isDark ? "text-neutral-400" : "text-neutral-500"}`}>
+                      <span className={`text-[11px] font-medium ${isDark ? "text-neutral-300" : "text-neutral-700"}`}>
                         {network.name}
                       </span>
                     )}
@@ -146,7 +146,7 @@ export function Playground() {
                     isDark ? "border-neutral-600" : "border-neutral-300"
                   }`}
                 >
-                  <span className={`text-sm truncate flex-1 ${isDark ? "text-neutral-400" : "text-neutral-500"}`}>
+                  <span className={`text-sm truncate flex-1 ${isDark ? "text-neutral-300" : "text-neutral-700"}`}>
                     https://socialsharebutton.com
                   </span>
                   <button
@@ -207,7 +207,7 @@ export function Playground() {
 
                 {/* Theme Config */}
                 <div>
-                   <h4 className="text-[10px] font-mono tracking-widest text-neutral-500 mb-3 uppercase">Theme</h4>
+                   <h4 className="text-[10px] font-mono tracking-widest text-neutral-700 dark:text-neutral-300 mb-3 uppercase">Theme</h4>
                    <div className="flex rounded-md border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-[#0a0a0a] p-1">
                      <button
                        onClick={() => setTheme("light")}
@@ -234,7 +234,7 @@ export function Playground() {
 
                 {/* Button Style Config */}
                 <div>
-                   <h4 className="text-[10px] font-mono tracking-widest text-neutral-500 mb-3 uppercase">Button Style</h4>
+                   <h4 className="text-[10px] font-mono tracking-widest text-neutral-700 dark:text-neutral-300 mb-3 uppercase">Button Style</h4>
                    <div className="grid grid-cols-2 gap-2">
                      {BUTTON_STYLES.map((s) => (
                        <button
@@ -243,7 +243,7 @@ export function Playground() {
                          className={`py-2 text-sm rounded-md transition-colors ${
                            style === s.key
                              ? "font-bold text-black bg-[#FFCC00] shadow-xs"
-                             : "font-medium text-neutral-500 dark:text-neutral-400 border border-neutral-200 dark:border-neutral-800"
+                             : "font-medium text-neutral-700 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-800"
                          }`}
                        >
                          {s.label}
@@ -254,7 +254,7 @@ export function Playground() {
 
                 {/* Platforms Config */}
                 <div>
-                  <h4 className="text-[10px] font-mono tracking-widest text-neutral-500 mb-3 uppercase">Platforms</h4>
+                  <h4 className="text-[10px] font-mono tracking-widest text-neutral-700 dark:text-neutral-300 mb-3 uppercase">Platforms</h4>
                   <div className="space-y-2">
                     {platforms.map((platform, i) => (
                       <button
@@ -273,7 +273,7 @@ export function Playground() {
                           >
                             {platform.icon}
                           </div>
-                          <span className={`text-xs font-medium ${platform.active ? "text-foreground" : "text-neutral-500"}`}>
+                          <span className={`text-xs font-medium ${platform.active ? "text-foreground" : "text-neutral-700 dark:text-neutral-300"}`}>
                             {platform.name}
                           </span>
                         </div>
@@ -299,7 +299,7 @@ export function Playground() {
 
                 {/* Button Color Config */}
                 <div>
-                   <h4 className="text-[10px] font-mono tracking-widest text-neutral-500 mb-3 uppercase">Button Color</h4>
+                   <h4 className="text-[10px] font-mono tracking-widest text-neutral-700 dark:text-neutral-300 mb-3 uppercase">Button Color</h4>
                    <div className="flex gap-2">
                      {COLORS.map((c) => (
                        <button

@@ -22,7 +22,7 @@ export default function NotFound() {
       <SiteNavbar />
       <main className="flex-1 flex flex-col items-center justify-center text-center px-4 pt-16">
         <h1 className="text-5xl sm:text-6xl font-serif font-bold mb-4">404</h1>
-        <p className="text-lg text-neutral-500 mb-8">
+        <p className="text-lg text-neutral-600 dark:text-neutral-400 mb-8">
           {notFoundCopy.message}
         </p>
         <div className="flex flex-wrap gap-4 justify-center">

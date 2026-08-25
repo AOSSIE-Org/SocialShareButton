@@ -14,7 +14,7 @@ export function CodeShowcase() {
             <h2 className="text-4xl md:text-5xl font-serif font-bold tracking-tight text-balance mb-6">
               30-second<br />setup.<br />Any framework.
             </h2>
-            <p className="text-neutral-600 dark:text-neutral-400 mb-8 max-w-lg font-medium">
+            <p className="text-neutral-700 dark:text-neutral-300 mb-8 max-w-lg font-medium">
               Fully typed, tree-shakable, and designed to match your application's design system out of the box.
             </p>
             
@@ -60,7 +60,7 @@ export function CodeShowcase() {
                   {"\n  "}
                   <code className="text-[#00C853]">return</code> <code className="text-white">(</code>
                   {"\n    "}
-                  <code className="text-neutral-500 font-medium">{"// Just drop it wherever you need it"}</code>
+                  <code className="text-neutral-300 font-medium">{"// Just drop it wherever you need it"}</code>
                   {"\n    "}
                   <code className="text-white">{"<"}</code>
                   <code className="text-[#FFCC00]">SocialShare</code>

@@ -92,7 +92,7 @@ export function EverywhereFeatures() {
                 <div className={`absolute top-0 left-0 w-full h-full bg-linear-to-r from-transparent via-white/20 to-transparent ${hoveredCard === i ? 'animate-shine' : ''}`} />
               </div>
               
-              <span className={`text-5xl sm:text-6xl md:text-7xl font-serif opacity-30 absolute top-4 sm:top-6 right-6 sm:right-8 font-bold ${card.textColor} transition-transform duration-300 ${hoveredCard === i ? 'scale-110 rotate-12' : ''}`}>
+              <span aria-hidden="true" className={`text-5xl sm:text-6xl md:text-7xl font-serif opacity-60 absolute top-4 sm:top-6 right-6 sm:right-8 font-bold ${card.textColor} transition-transform duration-300 ${hoveredCard === i ? 'scale-110 rotate-12' : ''}`}>
                 {card.num}
               </span>
               
@@ -104,7 +104,7 @@ export function EverywhereFeatures() {
 
                 <div>
                   <Link href="/docs" className="inline-block text-xs sm:text-sm font-bold px-4 sm:px-6 py-2 sm:py-3 bg-black text-white dark:bg-white dark:text-black rounded-full shadow-xs hover:opacity-80 transition cursor-pointer hover:scale-105 hover:shadow-lg transform focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-black dark:focus:ring-white">
-                    Learn more
+                    Learn more<span className="sr-only"> about {card.title}</span>
                   </Link>
                 </div>
               </div>
