@@ -10,14 +10,7 @@ const BUTTON_STYLES: { key: ButtonStyleKey; label: string }[] = [
   { key: "icon-only", label: "icon-only" },
 ];
 
-const COLORS = [
-  "#FFCC00",
-  "#00C853",
-  "#229ED9",
-  "#FF4500",
-  "#a855f7",
-  "#ffffff",
-];
+const COLORS = ["#FFCC00", "#00C853", "#229ED9", "#FF4500", "#a855f7", "#ffffff"];
 
 const INITIAL_PLATFORMS = [
   { name: "WhatsApp", icon: "W", active: true, color: "#25D366" },
@@ -49,9 +42,7 @@ export function Playground() {
   const activePlatforms = platforms.filter((p) => p.active);
 
   const togglePlatform = (name: string) => {
-    setPlatforms((prev) =>
-      prev.map((p) => (p.name === name ? { ...p, active: !p.active } : p))
-    );
+    setPlatforms((prev) => prev.map((p) => (p.name === name ? { ...p, active: !p.active } : p)));
   };
 
   const isDark = theme === "dark";
@@ -67,28 +58,32 @@ export function Playground() {
   return (
     <div id="playground" className="py-24 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-        <div className="mb-12">
-          <span className="text-xs font-bold tracking-widest text-[#FFCC00] uppercase mb-4 block flex items-center gap-2">
+        <div className="mb-12 text-center flex flex-col items-center">
+          <span className="text-xs font-bold tracking-widest text-[#FFCC00] uppercase mb-4 flex items-center justify-center gap-2">
             <div className="w-4 h-[2px] bg-[#FFCC00]"></div> INTERACTIVE DEMO
           </span>
-          <h2 className="text-4xl md:text-6xl font-serif font-bold tracking-tight text-balance mb-6">
-            Configure it live.<br />See it <span className="underline decoration-[#FFCC00] decoration-4 underline-offset-8">instantly.</span>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold tracking-tight text-balance mb-6">
+            Configure it live.
+            <br />
+            See it{" "}
+            <span className="underline decoration-[#FFCC00] decoration-4 underline-offset-8">
+              instantly.
+            </span>
           </h2>
-          <p className="text-neutral-600 dark:text-neutral-400 font-medium max-w-md text-sm leading-relaxed">
+          <p className="text-neutral-600 dark:text-neutral-400 font-medium max-w-md text-sm leading-relaxed mx-auto text-balance">
             Tweak theme, style, platforms and color — the preview updates in real time.
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-[1fr_400px] gap-12 lg:gap-24 items-start mt-16">
-
+        <div className="grid lg:grid-cols-[450px_400px] justify-center gap-12 lg:gap-16 items-center mt-16">
           {/* Left Column: Preview / Code */}
           <div className="flex flex-col items-center">
-
             <div className="flex items-center justify-center gap-6 mb-12">
               <button className="text-[#FFCC00] font-bold text-xl font-serif">Preview</button>
               <span className="text-white font-bold text-xl">|</span>
-              <button className="text-white font-bold text-xl font-serif hover:text-neutral-300 transition-colors">Code</button>
+              <button className="text-white font-bold text-xl font-serif hover:text-neutral-300 transition-colors">
+                Code
+              </button>
             </div>
 
             {/* The Output Mockup */}
@@ -114,14 +109,20 @@ export function Playground() {
               </div>
 
               {!isIconOnly && (
-                <p className={`text-center text-sm mb-8 font-medium ${isDark ? "text-neutral-400" : "text-neutral-500"}`}>
+                <p
+                  className={`text-center text-sm mb-8 font-medium ${isDark ? "text-neutral-400" : "text-neutral-500"}`}
+                >
                   Share this page to your social networks:
                 </p>
               )}
 
-              <div className={`gap-4 mb-10 justify-center ${isCompact || isIconOnly ? "flex flex-wrap" : "grid grid-cols-5"}`}>
+              <div
+                className={`gap-4 mb-10 justify-center ${isCompact || isIconOnly ? "flex flex-wrap" : "grid grid-cols-5"}`}
+              >
                 {activePlatforms.length === 0 && (
-                  <p className="text-xs text-neutral-500">No platforms selected — turn one on in the panel →</p>
+                  <p className="text-xs text-neutral-500">
+                    No platforms selected — turn one on in the panel →
+                  </p>
                 )}
                 {activePlatforms.map((network, i) => (
                   <div key={i} className="flex flex-col items-center gap-3">
@@ -132,7 +133,9 @@ export function Playground() {
                       {network.icon}
                     </div>
                     {!isIconOnly && (
-                      <span className={`text-[11px] font-medium ${isDark ? "text-neutral-400" : "text-neutral-500"}`}>
+                      <span
+                        className={`text-[11px] font-medium ${isDark ? "text-neutral-400" : "text-neutral-500"}`}
+                      >
                         {network.name}
                       </span>
                     )}
@@ -146,14 +149,20 @@ export function Playground() {
                     isDark ? "border-neutral-600" : "border-neutral-300"
                   }`}
                 >
-                  <span className={`text-sm truncate flex-1 ${isDark ? "text-neutral-400" : "text-neutral-500"}`}>
+                  <span
+                    className={`text-sm truncate flex-1 ${isDark ? "text-neutral-400" : "text-neutral-500"}`}
+                  >
                     https://socialsharebutton.com
                   </span>
                   <button
                     className={`px-6 py-2 rounded-full text-sm font-bold transition-colors ${isPrimary ? "border-2" : ""}`}
                     style={
                       isPrimary
-                        ? { color: outlineColor, borderColor: outlineColor, backgroundColor: "transparent" }
+                        ? {
+                            color: outlineColor,
+                            borderColor: outlineColor,
+                            backgroundColor: "transparent",
+                          }
                         : {
                             backgroundColor: color,
                             color: textColor,
@@ -172,12 +181,16 @@ export function Playground() {
                     isIconOnly
                       ? "w-14 h-14 rounded-full text-xl"
                       : isCompact
-                      ? "px-8 py-2 rounded-full text-base w-40"
-                      : "px-12 py-3 rounded-full text-lg w-48"
+                        ? "px-8 py-2 rounded-full text-base w-40"
+                        : "px-12 py-3 rounded-full text-lg w-48"
                   } ${isPrimary ? "border-2" : ""}`}
                   style={
                     isPrimary
-                      ? { color: outlineColor, borderColor: outlineColor, backgroundColor: "transparent" }
+                      ? {
+                          color: outlineColor,
+                          borderColor: outlineColor,
+                          backgroundColor: "transparent",
+                        }
                       : {
                           backgroundColor: color,
                           color: textColor,
@@ -190,108 +203,93 @@ export function Playground() {
               </div>
             </div>
           </div>
-
-          {/* Right Column: Configuration Panel */}
           <div className="w-full">
             <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#111] overflow-hidden">
-
               {/* Panel Header */}
               <div className="bg-[#FFCC00] px-4 py-3 flex items-center gap-2">
                 <div className="w-4 h-4 rounded-full border border-black/20 flex items-center justify-center">
-                   <div className="w-1.5 h-1.5 bg-background rounded-full"></div>
+                  <div className="w-1.5 h-1.5 bg-background rounded-full"></div>
                 </div>
-                <span className="text-black text-xs font-mono font-bold tracking-wide">Configuration panel</span>
+                <span className="text-black text-xs font-mono font-bold tracking-wide">
+                  Configuration panel
+                </span>
               </div>
 
               <div className="p-6 space-y-8">
-
                 {/* Theme Config */}
                 <div>
-                   <h4 className="text-[10px] font-mono tracking-widest text-neutral-500 mb-3 uppercase">Theme</h4>
-                   <div className="flex rounded-md border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-[#0a0a0a] p-1">
-                     <button
-                       onClick={() => setTheme("light")}
-                       className={`flex-1 py-2 text-sm rounded transition-colors ${
-                         theme === "light"
-                           ? "font-bold text-black bg-[#FFCC00] shadow-xs"
-                           : "font-medium text-neutral-500 dark:text-neutral-400"
-                       }`}
-                     >
-                       Light
-                     </button>
-                     <button
-                       onClick={() => setTheme("dark")}
-                       className={`flex-1 py-2 text-sm rounded transition-colors ${
-                         theme === "dark"
-                           ? "font-bold text-black bg-[#FFCC00] shadow-xs"
-                           : "font-medium text-neutral-500 dark:text-neutral-400"
-                       }`}
-                     >
-                       Dark
-                     </button>
-                   </div>
+                  <h4 className="text-[10px] font-mono tracking-widest text-neutral-500 mb-3 uppercase">
+                    Theme
+                  </h4>
+                  <div className="flex rounded-md border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-[#0a0a0a] p-1">
+                    <button
+                      onClick={() => setTheme("light")}
+                      className={`flex-1 py-2 text-sm rounded transition-colors ${
+                        theme === "light"
+                          ? "font-bold text-black bg-[#FFCC00] shadow-xs"
+                          : "font-medium text-neutral-500 dark:text-neutral-400"
+                      }`}
+                    >
+                      Light
+                    </button>
+                    <button
+                      onClick={() => setTheme("dark")}
+                      className={`flex-1 py-2 text-sm rounded transition-colors ${
+                        theme === "dark"
+                          ? "font-bold text-black bg-[#FFCC00] shadow-xs"
+                          : "font-medium text-neutral-500 dark:text-neutral-400"
+                      }`}
+                    >
+                      Dark
+                    </button>
+                  </div>
                 </div>
 
                 {/* Button Style Config */}
                 <div>
-                   <h4 className="text-[10px] font-mono tracking-widest text-neutral-500 mb-3 uppercase">Button Style</h4>
-                   <div className="grid grid-cols-2 gap-2">
-                     {BUTTON_STYLES.map((s) => (
-                       <button
-                         key={s.key}
-                         onClick={() => setStyle(s.key)}
-                         className={`py-2 text-sm rounded-md transition-colors ${
-                           style === s.key
-                             ? "font-bold text-black bg-[#FFCC00] shadow-xs"
-                             : "font-medium text-neutral-500 dark:text-neutral-400 border border-neutral-200 dark:border-neutral-800"
-                         }`}
-                       >
-                         {s.label}
-                       </button>
-                     ))}
-                   </div>
+                  <h4 className="text-[10px] font-mono tracking-widest text-neutral-500 mb-3 uppercase">
+                    Button Style
+                  </h4>
+                  <div className="grid grid-cols-2 gap-2">
+                    {BUTTON_STYLES.map((s) => (
+                      <button
+                        key={s.key}
+                        onClick={() => setStyle(s.key)}
+                        className={`py-2 text-sm rounded-md transition-colors ${
+                          style === s.key
+                            ? "font-bold text-black bg-[#FFCC00] shadow-xs"
+                            : "font-medium text-neutral-500 dark:text-neutral-400 border border-neutral-200 dark:border-neutral-800"
+                        }`}
+                      >
+                        {s.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
 
                 {/* Platforms Config */}
                 <div>
-                  <h4 className="text-[10px] font-mono tracking-widest text-neutral-500 mb-3 uppercase">Platforms</h4>
-                  <div className="space-y-2">
+                  <h4 className="text-[10px] font-mono tracking-widest text-neutral-500 mb-4 uppercase">
+                    Platforms
+                  </h4>
+                  <div className="flex flex-wrap justify-center gap-3 max-w-[250px] mx-auto">
                     {platforms.map((platform, i) => (
                       <button
                         key={i}
                         onClick={() => togglePlatform(platform.name)}
-                        className={`w-full flex items-center justify-between p-2 rounded-md border transition-colors ${
+                        title={platform.name}
+                        className={`w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold transition-all relative group cursor-pointer ${
                           platform.active
-                            ? "border-[#00C853]/50 bg-[#00C853]/5"
-                            : "border-transparent hover:bg-neutral-50 dark:hover:bg-neutral-900"
+                            ? "text-white shadow-md scale-105"
+                            : "bg-neutral-100 dark:bg-neutral-850 text-neutral-400 dark:text-neutral-500 hover:bg-neutral-200 dark:hover:bg-neutral-800 border border-neutral-200 dark:border-neutral-800"
                         }`}
+                        style={platform.active ? { backgroundColor: platform.color } : {}}
                       >
-                        <div className="flex items-center gap-3">
-                          <div
-                            className="w-6 h-6 rounded flex items-center justify-center text-[10px] text-white font-bold"
-                            style={{ backgroundColor: platform.active ? platform.color : "#a3a3a3" }}
-                          >
-                            {platform.icon}
-                          </div>
-                          <span className={`text-xs font-medium ${platform.active ? "text-foreground" : "text-neutral-500"}`}>
-                            {platform.name}
-                          </span>
-                        </div>
-
-                        {/* Toggle */}
-                        <div
-                          className={`w-8 h-4 rounded-full relative transition-colors ${
-                            platform.active
-                              ? "bg-[#00C853]"
-                              : "bg-neutral-200 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700"
-                          }`}
-                        >
-                          <div
-                            className={`absolute top-0.5 w-3 h-3 rounded-full transition-all ${
-                              platform.active ? "bg-white right-0.5" : "bg-neutral-400 dark:bg-neutral-500 left-0.5"
-                            }`}
-                          ></div>
-                        </div>
+                        {platform.icon}
+                        {/* Tooltip */}
+                        <span className="absolute bottom-full mb-2 hidden group-hover:block bg-neutral-900 text-neutral-100 text-[10px] px-2 py-0.5 rounded shadow-md pointer-events-none whitespace-nowrap z-50 font-sans">
+                          {platform.name}
+                        </span>
                       </button>
                     ))}
                   </div>
@@ -299,26 +297,26 @@ export function Playground() {
 
                 {/* Button Color Config */}
                 <div>
-                   <h4 className="text-[10px] font-mono tracking-widest text-neutral-500 mb-3 uppercase">Button Color</h4>
-                   <div className="flex gap-2">
-                     {COLORS.map((c) => (
-                       <button
-                         key={c}
-                         onClick={() => setColor(c)}
-                         aria-label={`Set button color to ${c}`}
-                         className={`w-6 h-6 rounded transition-all ${
-                           c === "#ffffff" ? "border border-neutral-200 dark:border-neutral-800" : ""
-                         } ${color === c ? "scale-110 ring-2 ring-offset-2 ring-offset-background ring-foreground" : "hover:scale-105"}`}
-                         style={{ backgroundColor: c }}
-                       />
-                     ))}
-                   </div>
+                  <h4 className="text-[10px] font-mono tracking-widest text-neutral-500 mb-3 uppercase">
+                    Button Color
+                  </h4>
+                  <div className="flex gap-2">
+                    {COLORS.map((c) => (
+                      <button
+                        key={c}
+                        onClick={() => setColor(c)}
+                        aria-label={`Set button color to ${c}`}
+                        className={`w-6 h-6 rounded transition-all ${
+                          c === "#ffffff" ? "border border-neutral-200 dark:border-neutral-800" : ""
+                        } ${color === c ? "scale-110 ring-2 ring-offset-2 ring-offset-background ring-foreground" : "hover:scale-105"}`}
+                        style={{ backgroundColor: c }}
+                      />
+                    ))}
+                  </div>
                 </div>
-
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </div>

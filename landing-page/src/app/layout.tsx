@@ -104,21 +104,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className={`${inter.variable} ${playfair.variable} font-sans`}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
-          {/* Three-column layout */}
-          <div className="flex min-h-screen">
-            {/* Left fixed panel */}
-            <div className="hidden lg:block w-[120px] shrink-0">
-              <div className="fixed top-0 left-0 w-[120px] h-full bg-[#e8e8e8] dark:bg-[#111111] border-r border-neutral-200 dark:border-neutral-900 z-40" />
-            </div>
-
-            {/* Main content */}
-            <div className="flex-1 min-w-0">{children}</div>
-
-            {/* Right fixed panel */}
-            <div className="hidden lg:block w-[120px] shrink-0">
-              <div className="fixed top-0 right-0 w-[120px] h-full bg-[#e8e8e8] dark:bg-[#111111] border-l border-neutral-200 dark:border-neutral-900 z-40" />
-            </div>
-          </div>
+          <div className="min-h-screen">{children}</div>
         </ThemeProvider>
       </body>
     </html>
