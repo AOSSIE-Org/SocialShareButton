@@ -278,10 +278,12 @@ export function Playground() {
                         key={i}
                         onClick={() => togglePlatform(platform.name)}
                         title={platform.name}
+                        aria-label={platform.name}
+                        aria-pressed={platform.active}
                         className={`w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold transition-all relative group cursor-pointer ${
                           platform.active
                             ? "text-white shadow-md scale-105"
-                            : "bg-neutral-100 dark:bg-neutral-850 text-neutral-400 dark:text-neutral-500 hover:bg-neutral-200 dark:hover:bg-neutral-800 border border-neutral-200 dark:border-neutral-800"
+                            : "bg-neutral-100 dark:bg-neutral-800 text-neutral-400 dark:text-neutral-500 hover:bg-neutral-200 dark:hover:bg-neutral-700 border border-neutral-200 dark:border-neutral-800"
                         }`}
                         style={platform.active ? { backgroundColor: platform.color } : {}}
                       >
