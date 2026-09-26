@@ -1,0 +1,339 @@
+{
+  "Home": {
+    "heading": "<line>Lightweight social share</line> button library for modern websites",
+    "metaTitle": "Social Share Button | Lightweight, zero-dependency share buttons for any website",
+    "metaDescription": "Add a native-feeling share button for WhatsApp, Facebook, X, LinkedIn, Telegram, Reddit, Email, Pinterest and Discord to any site. Zero dependencies, framework-agnostic, open source by AOSSIE.",
+    "metaKeywords": "social share button, share button library, javascript share widget, react share button, next.js share button, vue share button, zero dependency, open source",
+    "ogImageAlt": "Social Share Button, a lightweight social share button library for modern websites",
+    "skipToContent": "Skip to content"
+  },
+  "Nav": {
+    "primary": "Primary",
+    "home": "Social Share Button home",
+    "brand": "Social Share Button",
+    "release": "Current release {version}",
+    "get": "Get",
+    "share": "Share",
+    "useCases": "Use-Cases",
+    "docs": "View Docs",
+    "faqs": "FAQs",
+    "github": "GitHub repository",
+    "openMenu": "Open navigation menu",
+    "closeMenu": "Close navigation menu",
+    "external": "(opens in a new tab)"
+  },
+  "Share": {
+    "title": "Social Share Button: lightweight share buttons for modern websites",
+    "description": "Zero dependencies. Framework-agnostic. Open source by AOSSIE."
+  },
+  "Hero": {
+    "eyebrow": "Open source library",
+    "broughtBy": "Brought to you by <link>AOSSIE</link>",
+    "subtitle": "Zero dependencies. Framework-agnostic. Designed for technical precision and extreme performance.",
+    "starOnGithub": "Star on GitHub",
+    "tryDemo": "Click to Try Demo",
+    "npmTitle": "Install with npm"
+  },
+  "TrustedBy": {
+    "title": "Trusted by builders at"
+  },
+  "Features": {
+    "eyebrow": "Features",
+    "title": "Everything a share button needs. Nothing it doesn't.",
+    "zeroDeps": {
+      "title": "Zero dependencies",
+      "description": "Pure vanilla JavaScript and one stylesheet, about {size} KB gzipped. No framework runtime, no icon font, no tracking SDK.",
+      "unit": "KB",
+      "dependencies": "dependencies: {count}"
+    },
+    "platforms": {
+      "title": "Nine platforms, one button",
+      "description": "A single share button opens a clean modal with every network your audience uses, plus copy-to-clipboard."
+    },
+    "themes": {
+      "title": "Themes and styles built in",
+      "description": "Light and dark themes, four button styles and your own brand colors. No CSS required.",
+      "styles": {
+        "primary": "Primary",
+        "default": "Default",
+        "compact": "Compact"
+      }
+    },
+    "analytics": {
+      "title": "Privacy-first analytics",
+      "description": "The library never sends data anywhere. It emits share events you can forward to Google Analytics, Mixpanel, Segment, Plausible or PostHog."
+    }
+  },
+  "Install": {
+    "eyebrow": "Installation steps",
+    "stepLabel": "Step {step}",
+    "frameworkLabel": "Your framework",
+    "frameworkPlaceholder": "Select your framework from the following options",
+    "frameworkInfo": "A framework is the toolkit your website is built with. Not sure? Look at your project's package.json, or pick “Plain HTML” if you only have .html files.",
+    "emptyState": "Pick your framework above and the exact code to copy will appear here.",
+    "cdnTitle": "Add CDN to {file}",
+    "cdnInfo": "A CDN (Content Delivery Network) hosts the library for you. You link to it instead of downloading anything, and it is cached close to your visitors.",
+    "cdnHead": "Add <code>{tag}</code> to your HTML within <code>{parent}</code>",
+    "cdnBody": "Add <code>{tag}</code> to your HTML within <code>{parent}</code>",
+    "containerTitle": "Add a container element",
+    "containerInfo": "A container is an empty box on your page. The share button is drawn inside it, so put it wherever you want the button to appear.",
+    "initTitle": "Initialize in your component",
+    "initInfo": "Initializing means telling the library to start. It runs once the page is ready and draws the button inside your container.",
+    "copy": "Copy code",
+    "copied": "Copied!",
+    "copyCommand": "Copy command",
+    "expand": "Show full code",
+    "collapse": "Collapse code",
+    "moreInfo": "What does this mean?",
+    "frameworks": {
+      "cra": {
+        "label": "Create React App",
+        "container": "Open an existing component that renders on every page (for example <code>{file}</code>) and add the container to its JSX.",
+        "init": "Initialize the button in a <code>useEffect</code> so it runs after React has rendered the container."
+      },
+      "next-app": {
+        "label": "Next.js (App Router)",
+        "container": "Open a component that is already in your layout (for example <code>{file}</code>) and add the container to its JSX.",
+        "init": "The library touches the DOM, so this must be a Client Component. Keep the <code>\"use client\"</code> directive at the top."
+      },
+      "next-pages": {
+        "label": "Next.js (Pages Router)",
+        "container": "Open a component that is rendered on every page (for example <code>{file}</code>) and add the container to its JSX.",
+        "init": "Initialize the button in a <code>useEffect</code>. The script is loaded globally by <code>_document.tsx</code>."
+      },
+      "vite": {
+        "label": "Vite / Vue / Angular",
+        "container": "Open your root or layout component (e.g. <code>App.vue</code>, <code>app.component.html</code> or <code>App.jsx</code>) and add a container where you want the button to appear.",
+        "init": "Initialize once the DOM is ready, in <code>mounted()</code>, <code>ngAfterViewInit()</code> or <code>useEffect()</code>."
+      },
+      "preact": {
+        "label": "Preact",
+        "container": "Open an existing component that renders on every page (for example <code>{file}</code>) and add the container to its JSX.",
+        "init": "Initialize the button in a <code>useEffect</code> from <code>preact/hooks</code>."
+      },
+      "html": {
+        "label": "Plain HTML",
+        "container": "Add the container to <code>{file}</code> wherever you want the button to appear.",
+        "init": "Add this script after the library script, just before <code>{tag}</code>."
+      }
+    }
+  },
+  "Metrics": {
+    "eyebrow": "By the numbers",
+    "title": "Small enough to forget it is there.",
+    "size": "KB gzipped, JS + CSS",
+    "deps": "runtime dependencies",
+    "platforms": "share targets",
+    "frameworks": "frameworks with copy-paste guides"
+  },
+  "Compare": {
+    "eyebrow": "Why switch?",
+    "title": "No bloat. No paywalls. Just code.",
+    "subtitle": "Hosted share widgets load third-party scripts that can track your visitors and slow your pages down. Social Share Button is one small script and one stylesheet that you control.",
+    "caption": "How Social Share Button compares with typical hosted share widgets",
+    "feature": "Feature",
+    "us": "Social Share Button",
+    "them": "Hosted share widgets",
+    "rows": {
+      "size": {
+        "label": "Bundle size",
+        "us": "{size} KB gzipped",
+        "them": "Remote script, size varies"
+      },
+      "requests": {
+        "label": "Network calls by the widget",
+        "us": "None",
+        "them": "Several per page view"
+      },
+      "tracking": {
+        "label": "Visitor tracking",
+        "us": "None",
+        "them": "Common"
+      },
+      "cookies": {
+        "label": "Cookie banner needed",
+        "us": "No",
+        "them": "Often"
+      },
+      "styling": {
+        "label": "Custom styling",
+        "us": "Full CSS control",
+        "them": "Limited"
+      },
+      "source": {
+        "label": "Open source",
+        "us": "Yes, GPL-3.0",
+        "them": "Rarely"
+      }
+    }
+  },
+  "UseCases": {
+    "eyebrow": "Use cases",
+    "title": "Wherever people want to pass it on.",
+    "subtitle": "Anything with a URL deserves a share button. These are the places it earns its keep.",
+    "items": {
+      "blogs": {
+        "title": "Blogs and publications",
+        "description": "Let readers send an article to WhatsApp or X the moment they finish it, with the title and description included."
+      },
+      "docs": {
+        "title": "Documentation sites",
+        "description": "Help developers share the exact page that solved their problem, even in single-page doc sites."
+      },
+      "commerce": {
+        "title": "Product pages",
+        "description": "Turn a product link into a conversation on Pinterest, WhatsApp or Email without a heavy plugin."
+      },
+      "opensource": {
+        "title": "Open-source projects",
+        "description": "Make it one click to tell a community about your release, with your hashtags and handle baked in."
+      },
+      "portfolios": {
+        "title": "Portfolios",
+        "description": "Give recruiters and clients an easy way to forward your work to LinkedIn or their team."
+      },
+      "events": {
+        "title": "Events and campaigns",
+        "description": "Spread a launch, meetup or fundraiser across every network and track shares with your own analytics."
+      }
+    }
+  },
+  "Architecture": {
+    "eyebrow": "Modular architecture",
+    "title": "A tiny core. Everything else is optional.",
+    "subtitle": "Load the core from a CDN and stop there, or add the pieces you need. Nothing is bundled that you did not ask for.",
+    "core": {
+      "title": "Core",
+      "description": "The share button, modal and copy-to-clipboard. Works on its own in any page."
+    },
+    "wrappers": {
+      "title": "Framework wrappers",
+      "description": "Optional thin components for React, Preact and Qwik. Copy one into your project if you prefer JSX."
+    },
+    "analytics": {
+      "title": "Analytics adapters",
+      "description": "Opt-in adapters that forward share events to the tool you already use."
+    },
+    "delivery": {
+      "title": "Delivery",
+      "description": "Use the jsDelivr CDN with a pinned version, or install from npm."
+    },
+    "eventsTitle": "Three ways to listen for events",
+    "events": {
+      "dom": "DOM CustomEvent: listen for social-share on document",
+      "callback": "onAnalytics callback: one function, one place",
+      "plugins": "analyticsPlugins: send to several providers at once"
+    }
+  },
+  "Faq": {
+    "eyebrow": "FAQs",
+    "title": "Questions, answered.",
+    "items": {
+      "free": {
+        "question": "Is Social Share Button free to use?",
+        "answer": "Yes. It is open source under the GNU General Public License v3.0 and maintained by the AOSSIE community."
+      },
+      "privacy": {
+        "question": "Does it track my visitors?",
+        "answer": "No. The library never collects, stores or sends data. It only emits events inside the browser, and you decide whether to forward them to an analytics tool."
+      },
+      "frameworks": {
+        "question": "Which frameworks does it work with?",
+        "answer": "Any. It is plain JavaScript, so it runs in plain HTML, React, Next.js, Preact, Vue, Angular, Qwik and more. The installation steps above have copy-paste code for the most common setups."
+      },
+      "platforms": {
+        "question": "Can I choose which platforms appear?",
+        "answer": "Yes. Pass the platforms option, for example platforms: [\"linkedin\", \"twitter\", \"email\"]. Available platforms are WhatsApp, Facebook, X, LinkedIn, Telegram, Reddit, Email, Pinterest and Discord."
+      },
+      "styling": {
+        "question": "Can I match it to my brand?",
+        "answer": "Yes. Choose a light or dark theme, one of four button styles (default, primary, compact, icon-only), set buttonColor and buttonHoverColor, or add your own CSS class with customClass."
+      },
+      "spa": {
+        "question": "Will the shared link update when my single-page app changes route?",
+        "answer": "Yes. When you do not pass a fixed url, the library listens for client-side navigation and updates the link automatically. You can also call updateOptions() yourself."
+      },
+      "missing": {
+        "question": "The button does not appear. What should I check?",
+        "answer": "Make sure the stylesheet link is inside the page head, the script has loaded before you initialize, and the container selector matches your element. For example, container: \"#share-button\" needs an element with id=\"share-button\"."
+      },
+      "npm": {
+        "question": "Can I install it from npm instead of a CDN?",
+        "answer": "Yes. Run npm install @aossie-org/social-share-button, then import the module and its stylesheet in your code."
+      }
+    }
+  },
+  "Testimonials": {
+    "eyebrow": "Testimonials",
+    "title": "Built in the open, shaped by its users.",
+    "emptyTitle": "Your story could be the first one here.",
+    "emptyBody": "Shipping Social Share Button in production? Tell us what you built and we will feature it on this page.",
+    "cta": "Share your story on Discord"
+  },
+  "Footer": {
+    "tagline": "Lightweight, zero-dependency social share buttons for modern websites.",
+    "project": "Project",
+    "community": "Community",
+    "github": "GitHub",
+    "npm": "npm package",
+    "docs": "Documentation",
+    "releases": "Releases",
+    "contributing": "Contributing",
+    "issues": "Report an issue",
+    "discord": "Discord",
+    "telegram": "Telegram",
+    "x": "X (Twitter)",
+    "linkedin": "LinkedIn",
+    "youtube": "YouTube",
+    "license": "Released under the GNU GPL v3.0.",
+    "copyright": "© {year} AOSSIE. All rights reserved.",
+    "aossieLogo": "AOSSIE logo",
+    "stabilityNexusLogo": "Stability Nexus logo"
+  },
+  "Demo": {
+    "title": "Live preview",
+    "description": "This is the real library. Configure it, then click the button to open the share modal.",
+    "close": "Close live preview",
+    "preview": "Preview",
+    "code": "Code",
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "style": "Button style",
+    "platforms": "Platforms",
+    "color": "Button color",
+    "defaultColor": "Default",
+    "colorLabel": "Use {color} as the button color",
+    "buttonText": "Button text",
+    "loading": "Loading the library…",
+    "hint": "Click the button to see the share dialog.",
+    "noPlatforms": "Select at least one platform.",
+    "shareTitle": "I just tried Social Share Button",
+    "shareDescription": "A zero-dependency share button for any website.",
+    "styles": {
+      "default": "Default",
+      "primary": "Primary",
+      "compact": "Compact",
+      "icon-only": "Icon only"
+    }
+  },
+  "Error": {
+    "title": "Something went wrong",
+    "description": "An unexpected server or client error occurred while rendering the page.",
+    "retry": "Try again"
+  },
+  "NotFound": {
+    "title": "Page not found",
+    "description": "The page you are looking for does not exist or has been moved.",
+    "home": "Go to Home"
+  },
+  "LanguageSwitcher": {
+    "label": "Language"
+  },
+  "ThemeToggle": {
+    "toggleTheme": "Toggle theme",
+    "current": "Current theme: {theme}",
+    "light": "light",
+    "dark": "dark"
+  }
+}

@@ -1,6 +1,5 @@
-# <!-- Don't delete it -->
-
-<div name="readme-top"></div>
+<!-- Don't delete it -->
+<div id="readme-top"></div>
 
 > ⚠️ **IMPORTANT**
 >
@@ -12,83 +11,174 @@
 > **Maintainer:** @kpj2006
 
 <!-- Organization Logo -->
-<div align="center" style="display: flex; align-items: flex-end; justify-content: center; gap: 16px;">
-  <img alt="Social Share Button" src="public/socialshare.png" height="150">
-  <img alt="AOSSIE" src="public/aossie_logo.svg" height="130">
-</div>
-
-&nbsp;
+<p align="center">
+  <img src="public/aossie_logo.svg" height="130" alt="AOSSIE logo" />
+  &nbsp;&nbsp;
+  <img src="public/socialshare.png" height="150" alt="Social Share Button logo" />
+</p>
 
 <!-- Organization Name -->
-<div align="center">
+<p align="center">
+  <a href="https://github.com/AOSSIE-Org/SocialShareButton">
+    <img src="https://img.shields.io/badge/AOSSIE-Social_Share_Button-228B22?style=for-the-badge&labelColor=FFC517" alt="AOSSIE Social Share Button Badge" />
+  </a>
+</p>
 
-[![Static Badge](https://img.shields.io/badge/AOSSIE-Social_Share_Button-228B22?style=for-the-badge&labelColor=FFC517)](https://github.com/AOSSIE-Org/SocialShareButton)
-
-<br/>
-
-![Lighthouse Performance](./badges/lighthouse-performance.svg)
-![Lighthouse Accessibility](./badges/lighthouse-accessibility.svg)
-![Lighthouse Best Practices](./badges/lighthouse-best-practices.svg)
-![Lighthouse SEO](./badges/lighthouse-seo.svg)
-![Lighthouse PWA](./badges/lighthouse-pwa.svg)
-
-<!-- Correct deployed url to be added -->
-
-</div>
+<p align="center">
+  <img src="./badges/lighthouse-performance.svg" alt="Lighthouse Performance" />
+  <img src="./badges/lighthouse-accessibility.svg" alt="Lighthouse Accessibility" />
+  <img src="./badges/lighthouse-best-practices.svg" alt="Lighthouse Best Practices" />
+  <img src="./badges/lighthouse-seo.svg" alt="Lighthouse SEO" />
+  <img src="./badges/lighthouse-pwa.svg" alt="Lighthouse PWA" />
+</p>
 
 <!-- Organization/Project Social Handles -->
 <p align="center">
-<!-- Telegram -->
-<a href="https://t.me/StabilityNexus">
-<img src="https://img.shields.io/badge/Telegram-black?style=flat&logo=telegram&logoColor=white&logoSize=auto&color=24A1DE" alt="Telegram Badge"/></a>
-&nbsp;&nbsp;
-<!-- X (formerly Twitter) -->
-<a href="https://x.com/aossie_org">
-<img src="https://img.shields.io/twitter/follow/aossie_org" alt="X (formerly Twitter) Badge"/></a>
-&nbsp;&nbsp;
-<!-- Discord -->
-<a href="https://discord.gg/hjUhu33uAn">
-<img src="https://img.shields.io/discord/1022871757289422898?style=flat&logo=discord&logoColor=white&logoSize=auto&label=Discord&labelColor=5865F2&color=57F287" alt="Discord Badge"/></a>
-&nbsp;&nbsp;
-<!-- Medium -->
-<a href="https://news.stability.nexus/">
-  <img src="https://img.shields.io/badge/Medium-black?style=flat&logo=medium&logoColor=black&logoSize=auto&color=white" alt="Medium Badge"></a>
-&nbsp;&nbsp;
-<!-- LinkedIn -->
-<a href="https://www.linkedin.com/company/aossie/">
-  <img src="https://img.shields.io/badge/LinkedIn-black?style=flat&logo=LinkedIn&logoColor=white&logoSize=auto&color=0A66C2" alt="LinkedIn Badge"></a>
-&nbsp;&nbsp;
-<!-- Youtube -->
-<a href="https://www.youtube.com/@StabilityNexus">
-  <img src="https://img.shields.io/youtube/channel/subscribers/UCZOG4YhFQdlGaLugr_e5BKw?style=flat&logo=youtube&logoColor=white&logoSize=auto&labelColor=FF0000&color=FF0000" alt="Youtube Badge"></a>
+  <a href="https://t.me/StabilityNexus">
+    <img src="https://img.shields.io/badge/Telegram-black?style=flat&logo=telegram&logoColor=white&logoSize=auto&color=24A1DE" alt="Telegram Badge"/>
+  </a>
+  &nbsp;
+  <a href="https://x.com/aossie_org">
+    <img src="https://img.shields.io/twitter/follow/aossie_org" alt="X (formerly Twitter) Badge"/>
+  </a>
+  &nbsp;
+  <a href="https://discord.gg/hjUhu33uAn">
+    <img src="https://img.shields.io/discord/1022871757289422898?style=flat&logo=discord&logoColor=white&logoSize=auto&label=Discord&labelColor=5865F2&color=57F287" alt="Discord Badge"/>
+  </a>
+  &nbsp;
+  <a href="https://news.stability.nexus/">
+    <img src="https://img.shields.io/badge/Medium-black?style=flat&logo=medium&logoColor=black&logoSize=auto&color=white" alt="Medium Badge"/>
+  </a>
+  &nbsp;
+  <a href="https://www.linkedin.com/company/aossie/">
+    <img src="https://img.shields.io/badge/LinkedIn-black?style=flat&logo=LinkedIn&logoColor=white&logoSize=auto&color=0A66C2" alt="LinkedIn Badge"/>
+  </a>
+  &nbsp;
+  <a href="https://www.youtube.com/@StabilityNexus">
+    <img src="https://img.shields.io/youtube/channel/subscribers/UCZOG4YhFQdlGaLugr_e5BKw?style=flat&logo=youtube&logoColor=white&logoSize=auto&labelColor=FF0000&color=FF0000" alt="Youtube Badge"/>
+  </a>
 </p>
 
 ---
 
 <div align="center">
-<h1>SocialShareButton</h1>
+<h1>Social Share Button</h1>
 </div>
 
-Lightweight social sharing component for web applications. Zero dependencies, framework-agnostic.
+Lightweight social sharing component for web applications. **Zero dependencies, framework-agnostic.** One script and one stylesheet add a share button and a clean share modal to any website.
+
+🌐 **Website & live demo:** [social-share-button.aossie.org](https://social-share-button.aossie.org)
 
 [![npm version](https://img.shields.io/npm/v/@aossie-org/social-share-button.svg)](https://www.npmjs.com/package/@aossie-org/social-share-button)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 
 ---
 
-## Features
+## 🚀 Project's Features
 
-- 🌐 Multiple platforms: WhatsApp, Facebook, X, LinkedIn, Telegram, Reddit, Email, Pinterest, Discord
-- 🎯 Zero dependencies - pure vanilla JavaScript
-- ⚛️ Framework support: React, Preact, Next.js, Qwik, Vue, Angular, or plain HTML
-- 🔄 Auto-detects current URL and page title
-- 📱 Fully responsive and mobile-ready
-- 🎨 Customizable themes (dark/light)
-- ⚡ Lightweight (< 10KB gzipped)
+- 🌐 **Multiple platforms:** WhatsApp, Facebook, X, LinkedIn, Telegram, Reddit, Email, Pinterest, Discord
+- 🎯 **Zero dependencies:** pure vanilla JavaScript
+- ⚛️ **Framework support:** React, Preact, Next.js, Qwik, Vue, Angular, or plain HTML
+- 🔄 **SPA-aware:** auto-detects the current URL and page title, and follows client-side route changes
+- 📱 **Responsive:** fully responsive and mobile-ready
+- 🎨 **Customizable:** dark/light themes, four button styles, custom colors and classes
+- 📊 **Privacy-first analytics:** emits events only — adapters for Google Analytics 4, Mixpanel, Segment, Plausible and PostHog
+- ⚡ **Lightweight:** ≈15 KB gzipped for the JS + CSS (unminified; the website computes the exact figure at build time)
 
 ---
 
-## Installation
+## 💻 Tech Stack
+
+| Part                      | Stack                                                                                                                                                                                                          |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Library (`src/`)          | Vanilla JavaScript, plain CSS, no runtime dependencies. Delivered via [jsDelivr](https://www.jsdelivr.com/) and [npm](https://www.npmjs.com/package/@aossie-org/social-share-button). Formatted with Prettier. |
+| Framework wrappers        | React (`social-share-button-react.jsx`), Preact (`social-share-button-preact.jsx`), Qwik (`social-share-button-qwik.tsx`)                                                                                      |
+| Website (`landing-page/`) | Next.js 16 (App Router, static export), React 19, Tailwind CSS v4, TypeScript, `next-intl` (i18n/l10n), `next-themes`, Lenis, `sugar-high`                                                                     |
+| CI/CD                     | GitHub Actions — lint & build, GitHub Pages deployment, Lighthouse/SEO audit, dependency review, CodeRabbit AI review                                                                                          |
+
+---
+
+## 📋 Project Maturity & TODO Checklist
+
+In the checklist below, mark the items that have been completed for the project:
+
+- [x] The project has a logo (`public/socialshare.png`, `landing-page/public/brand/icons/social-share-button-mark.svg`).
+- [x] The project has a favicon (`landing-page/public/brand/icons/favicon.ico`).
+- [x] The web frontend:
+  - [x] Has proper title and metadata.
+  - [x] Has proper open graph metadata, to ensure that it is shown well when shared in social media.
+  - [x] Has a footer and header with AOSSIE logos and social handles.
+  - [x] Uses React Server Components by default, introducing Client Components (`"use client"`) only when interactivity or client hooks are required.
+  - [x] Is deployed to GitHub Pages via a GitHub Workflow (`.github/workflows/nextjs.yml`).
+  - [x] Has automated CI build and lint validation (`.github/workflows/ci.yml`).
+  - [x] Has CodeRabbit automated AI code review (`.coderabbit.yaml`).
+  - [x] Has open-source legal compliance (`DCO.md`, `COPYRIGHT.md`, `LICENSE`).
+  - [x] Is available in more than one language (English and Hindi).
+  - [ ] Features real testimonials from adopters.
+
+See also the [OpenSSF-based best practices checklist](BestPracticesChecklist.md).
+
+---
+
+## 🚀 Website's Features
+
+The website in [`landing-page/`](landing-page/) is built from the [AOSSIE Next.js webpage template](https://github.com/AOSSIE-Org/Template-Repo-NextJS):
+
+- **Dogfooded:** the “Share” button in the navigation and the “Click to Try Demo” live preview run the real library from `src/`, copied in at build time.
+- **Copy-paste installation guide:** pick a framework and get the exact snippets, with a copy button on every code block and beginner-friendly tooltips.
+- **Next.js 16 & React 19:** Server Components, static export, async routing.
+- **Tailwind CSS v4:** semantic design tokens with a design language inspired by [tailwindcss.com](https://tailwindcss.com).
+- **Dual Theme System:** flash-free light and dark themes with `next-themes`; first-time visitors start on their OS preference.
+- **Robust i18n & l10n:** English at `/` and Hindi at `/hi` with `next-intl`, localized metadata, `hreflang` alternates and a localized sitemap.
+- **SEO & AI discoverability:** Open Graph, JSON-LD (`SoftwareApplication`, `FAQPage`), `robots.txt`, `sitemap.xml`, `llms.txt`, `.well-known/ai-plugin.json`.
+- **Accessibility:** keyboard-navigable listbox and dialog, focus management, skip link, WCAG AA color contrast.
+- **AI Agent Pairing Ready:** includes [`AGENTS.md`](AGENTS.md) and [`CLAUDE.md`](CLAUDE.md).
+
+---
+
+## 📂 Project Structure
+
+```text
+├── .github/
+│   ├── ISSUE_TEMPLATE/          # Bug, feature and good-first-issue templates
+│   ├── copilot/                 # AI-agent prompts for integrating the library
+│   └── workflows/               # CI, GitHub Pages deploy, SEO audit, labels, template sync
+├── src/                         # 📦 The library (published to npm / jsDelivr)
+│   ├── social-share-button.js           # Core
+│   ├── social-share-button.css          # Styles
+│   ├── social-share-analytics.js        # Optional analytics adapters
+│   └── social-share-button-{react,preact,qwik}.*  # Optional framework wrappers
+├── index.html                   # Local demo page for the library
+├── docs/                        # Roadmap and guides
+├── landing-page/                # 🌐 The website (Next.js 16)
+│   ├── next.config.ts           # Static export + next-intl; injects library version & size
+│   ├── scripts/sync-library.mjs # Copies ../src into public/vendor before dev/build
+│   ├── public/
+│   │   ├── .well-known/         # ai-plugin.json, assetlinks.json
+│   │   ├── brand/               # Brand.md, logos, favicon, Open Graph image
+│   │   └── llms.txt, robots.txt, openapi.yaml, site.webmanifest
+│   └── src/
+│       ├── app/
+│       │   ├── (default)/       # "/" — default locale (English), canonical
+│       │   ├── [locale]/        # "/en", "/hi" + localized error & not-found pages
+│       │   ├── globals.css      # Tailwind v4 theme tokens (light/dark)
+│       │   └── sitemap.ts       # Localized sitemap
+│       ├── components/          # site/, sections/, demo/, ui/, providers/
+│       ├── config/              # languages.ts, site.ts
+│       ├── content/install.ts   # Per-framework installation snippets
+│       ├── i18n/                # routing, request, navigation, metadata, messages
+│       ├── lib/                 # Library constants and React bindings
+│       └── messages/            # en.json, hi.json
+├── AGENTS.md / CLAUDE.md        # Guidance for AI coding agents
+├── BestPracticesChecklist.md    # OpenSSF-based checklist
+├── CONTRIBUTING.md, MAINTAINERS.md, SECURITY.md
+├── COPYRIGHT.md, DCO.md, LICENSE
+└── .coderabbit.yaml             # CodeRabbit AI review configuration
+```
+
+---
+
+## 📦 Installation
 
 ### Via CDN (Recommended)
 
@@ -102,7 +192,7 @@ Lightweight social sharing component for web applications. Zero dependencies, fr
 
 ---
 
-## Quick Start Guide
+## ⚡ Quick Start Guide
 
 > 🚫 **IMPORTANT:** Do NOT create new files like `ShareButton.jsx` or `ShareButton.tsx`!  
 > ✅ Add code directly to your **existing** component (Header, Navbar, etc.)
@@ -496,7 +586,7 @@ export default function Header() {
 
 ---
 
-## Configuration
+## ⚙️ Configuration
 
 ### Basic Options
 
@@ -563,7 +653,6 @@ new SocialShareButton({
 - **Email:** Subject = `title`, Body = `description` + link
 - **Pinterest:** `title` + `description` + `hashtags` + link
 - **Discord:** `title` + `description` + `hashtags` + link
--
 
 ### Customize Button Color & Appearance
 
@@ -665,7 +754,7 @@ new SocialShareButton({
 
 ---
 
-## Advanced Usage
+## 🧠 Advanced Usage
 
 ### Using npm Package
 
@@ -721,7 +810,7 @@ useEffect(() => {
 
 ---
 
-## Troubleshooting
+## 🩺 Troubleshooting
 
 <details>
 <summary><b>Multiple buttons appearing</b></summary>
@@ -779,7 +868,7 @@ if (window.SocialShareButton) {
 
 ---
 
-## Examples
+## 🧪 Examples
 
 ### Mobile Menu
 
@@ -817,43 +906,50 @@ new SocialShareButton({
 
 ---
 
-## Demo
+## 🎬 Demo
 
-Open `index.html` in your browser to see all features.
+Try the live, configurable demo at **[social-share-button.aossie.org](https://social-share-button.aossie.org)** (“Click to Try Demo”), or open `index.html` in your browser to see all features locally.
 Tutorial: https://youtu.be/cLJaT-8rEvQ?si=CLipA0Db4WL0EqKM
 
 ---
 
-## Contributing
+## 🌐 Website Development and Deployment
+
+```bash
+cd landing-page
+npm install
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000). `npm run dev` and `npm run build` first copy the library from `../src`, so the site always showcases your local changes. `npm run build` produces a static export in `landing-page/out`, deployed to GitHub Pages by [`.github/workflows/nextjs.yml`](.github/workflows/nextjs.yml). See [`landing-page/README.md`](landing-page/README.md) for adding languages, translating text and theming.
+
+---
+
+## 🤝 Contributing
 
 We welcome contributions of all kinds! To contribute:
 
 1. Fork the repository and create your feature branch (`git checkout -b feature/AmazingFeature`).
 2. Commit your changes (`git commit -m 'Add some AmazingFeature'`).
 3. Run code quality checks:
-   - `npm run lint` - Check for code issues
-   - `npm run format:check` - Check code formatting
-   - `npm run format` - Auto-format code
-4. Test your changes by opening `index.html` in your browser to verify functionality.
+   - `npm run format:check` / `npm run format` — library formatting (repository root)
+   - `npm run lint` and `npm run build` — website (inside `landing-page/`)
+4. Test your changes by opening `index.html` in your browser, or run the website locally.
 5. Push your branch (`git push origin feature/AmazingFeature`).
 6. Open a Pull Request for review.
 
-If you encounter bugs, need help, or have feature requests:
+Please read [`CONTRIBUTING.md`](CONTRIBUTING.md) and [`DCO.md`](DCO.md) first. If you encounter bugs, need help, or have feature requests, please open an issue with detailed information, logs or screenshots.
 
-- Please open an issue in this repository providing detailed information.
-- Describe the problem clearly and include any relevant logs or screenshots.
-
-We appreciate your feedback and contributions!
-
-This project is licensed under the GNU General Public License v3.0.
-See the [LICENSE](LICENSE) file for details.
+This project is licensed under the GNU General Public License v3.0. See the [LICENSE](LICENSE) file and [COPYRIGHT.md](COPYRIGHT.md) for details.
 
 ---
 
 ## 💪 Thanks To All Contributors
 
-Thanks a lot for spending your time helping SocialShareButton grow. Keep rocking 🥂
+Thanks a lot for spending your time helping Social Share Button grow. Keep rocking 🥂
 
 [![Contributors](https://contrib.rocks/image?repo=AOSSIE-Org/SocialShareButton)](https://github.com/AOSSIE-Org/SocialShareButton/graphs/contributors)
 
-© 2025 AOSSIE
+© 2025-2026 AOSSIE
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
