@@ -1,7 +1,7 @@
 name: Bug Report
 description: Report a bug or issue
-title: '[BUG]: '
-labels: ['bug', 'triage-needed']
+title: "[BUG]: "
+labels: ["bug", "triage-needed"]
 body:
   - type: markdown
     attributes:
@@ -75,8 +75,6 @@ body:
       label: Code of Conduct
       description: By submitting this issue, you agree to follow our Code of Conduct and join our Discord
       options:
-        - label: I agree to follow the Code of Conduct
-          required: true
         - label: I have joined the [Discord server](https://discord.gg/hjUhu33uAn) and will post updates there
           required: true
         - label: I have searched existing issues to avoid duplicates
