@@ -3,17 +3,23 @@
   "version": "1.0.4",
   "description": "Lightweight social sharing component for web applications",
   "main": "src/social-share-button.js",
+  "types": "src/index.d.ts",
   "files": [
     "src/social-share-button.js",
     "src/social-share-button.css",
     "src/social-share-button-react.jsx",
     "src/social-share-analytics.js",
+    "src/social-share-button.d.ts",
+    "src/social-share-button-react.d.ts",
+    "src/social-share-analytics.d.ts",
+    "src/index.d.ts",
     "README.md",
     "LICENSE"
   ],
   "scripts": {
-    "format": "prettier --write \"**/*.{js,jsx,json,css,md,html}\"",
-    "format:check": "prettier --check \"**/*.{js,jsx,json,css,md,html}\""
+    "format": "prettier --write \"**/*.{js,jsx,json,css,md,html,ts}\"",
+    "format:check": "prettier --check \"**/*.{js,jsx,json,css,md,html,ts}\"",
+    "test:types": "tsc --noEmit"
   },
   "repository": {
     "type": "git",
@@ -39,7 +45,10 @@
   },
   "homepage": "https://github.com/AOSSIE-Org/SocialShareButton#readme",
   "devDependencies": {
-    "prettier": "^3.2.4"
+    "@types/node": "^26.6.3",
+    "@types/react": "^19.3.0",
+    "prettier": "^3.2.4",
+    "typescript": "^7.0.2"
   },
   "type": "module",
   "packageManager": "pnpm@10.26.1+sha512.664074abc367d2c9324fdc18037097ce0a8f126034160f709928e9e9f95d98714347044e5c3164d65bd5da6c59c6be362b107546292a8eecb7999196e5ce58fa"
