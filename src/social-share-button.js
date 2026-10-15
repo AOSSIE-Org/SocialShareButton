@@ -441,23 +441,26 @@ class SocialShareButton {
       // fallback is to copy the share URL to the clipboard and then navigate the user
       // towards Discord's direct messaging area.
       if (platform === "discord") {
+        let popup = null;
+        try {
+          popup = window.open("about:blank", "_blank");
+          if (popup) {
+            popup.opener = null;
+          }
+        } catch (_err) {
+          popup = null;
+        }
+
         return Promise.resolve(this.copyLink()).then((copied) => {
           if (!copied) {
+            if (popup && typeof popup.close === "function" && !popup.closed) {
+              popup.close();
+            }
             this._emit("social_share_error", "error", {
               platform,
               errorMessage: "Failed to copy share link to clipboard for Discord fallback",
             });
             return false;
-          }
-
-          let popup = null;
-          try {
-            popup = window.open(shareUrl, "_blank");
-            if (popup) {
-              popup.opener = null;
-            }
-          } catch (_err) {
-            popup = null;
           }
 
           if (!popup || popup.closed || typeof popup.closed === "undefined") {
@@ -466,6 +469,12 @@ class SocialShareButton {
               errorMessage: "Popup blocked when opening Discord share window",
             });
             return false;
+          }
+
+          try {
+            popup.location.href = shareUrl;
+          } catch (_err) {
+            popup.location = shareUrl;
           }
 
           this._emit("social_share_success", "share", { platform });

@@ -3,10 +3,16 @@ import assert from "node:assert/strict";
 
 // Setup mock browser environment for Node.js
 function setupMockEnvironment(overrides = {}) {
-  const emittedEvents = [];
   let clipboardWriteTextResult = Promise.resolve();
   let execCommandResult = true;
-  let windowOpenResult = { closed: false, opener: "initial" };
+  let windowOpenResult = {
+    closed: false,
+    opener: "initial",
+    location: { href: "about:blank" },
+    close() {
+      this.closed = true;
+    },
+  };
   let windowOpenCalls = [];
 
   const mockWindow = {
@@ -149,13 +155,21 @@ test("Discord fallback share: success when clipboard and window.open succeed", a
     },
   });
 
-  const popupHandle = { closed: false, opener: "exists" };
+  const popupHandle = {
+    closed: false,
+    opener: "exists",
+    location: { href: "about:blank" },
+    close() {
+      this.closed = true;
+    },
+  };
   env.setWindowOpenResult(popupHandle);
 
   const result = await instance.share("discord");
 
   assert.equal(result, true, "share('discord') should resolve to true");
   assert.equal(popupHandle.opener, null, "popup.opener should be severed to null for security");
+  assert.equal(popupHandle.location.href, "https://discord.com/channels/@me");
   assert.equal(sharedPlatform, "discord");
   assert.equal(sharedUrl, "https://aossie.org");
 
@@ -192,11 +206,21 @@ test("Discord fallback share: error emitted when clipboard copy fails", async ()
     },
   });
 
+  const popupHandle = {
+    closed: false,
+    opener: "exists",
+    location: { href: "about:blank" },
+    close() {
+      this.closed = true;
+    },
+  };
+  env.setWindowOpenResult(popupHandle);
+
   const result = await instance.share("discord");
 
   assert.equal(result, false, "share('discord') must resolve to false when copy fails");
   assert.equal(onShareCalled, false, "onShare must NOT be called when copy fails");
-  assert.equal(env.windowOpenCalls.length, 0, "window.open must NOT be called when copy fails");
+  assert.equal(popupHandle.closed, true, "popup must be closed when copy fails");
 
   const successEvent = events.find((e) => e.eventName === "social_share_success");
   assert.equal(successEvent, undefined, "social_share_success must NOT be emitted");
