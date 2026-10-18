@@ -446,7 +446,9 @@ test("Discord fallback share: calls copyLink before window.open to preserve tran
   };
   env.setWindowOpenResult(popupHandle);
 
-  const result = await instance.share("discord");
+  const shareResult = instance.share("discord");
+  assert.equal(env.windowOpenCalls.length, 1, "popup must open synchronously");
+  const result = await shareResult;
 
   assert.equal(result, true);
   assert.deepEqual(env.callOrder, ["clipboard.writeText", "window.open"]);
