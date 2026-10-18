@@ -14,10 +14,12 @@ function setupMockEnvironment(overrides = {}) {
     },
   };
   let windowOpenCalls = [];
+  let callOrder = [];
 
   const mockWindow = {
     location: { href: "https://example.com/test-page" },
     open: (url, target, features) => {
+      callOrder.push("window.open");
       windowOpenCalls.push({ url, target, features });
       if (typeof overrides.windowOpenFactory === "function") {
         return overrides.windowOpenFactory(url, target, features);
@@ -70,6 +72,7 @@ function setupMockEnvironment(overrides = {}) {
   const mockNavigator = {
     clipboard: {
       writeText: async (text) => {
+        callOrder.push("clipboard.writeText");
         if (overrides.clipboardRejects) {
           throw new Error("Clipboard write permission denied");
         }
@@ -113,6 +116,7 @@ function setupMockEnvironment(overrides = {}) {
     mockDocument,
     mockNavigator,
     windowOpenCalls,
+    callOrder,
     setWindowOpenResult: (val) => {
       windowOpenResult = val;
     },
@@ -422,4 +426,32 @@ test("copyLink: resolves to false when clipboard writeText rejects and fallback 
 
   assert.equal(result, false);
   assert.equal(onCopyCalled, false);
+});
+
+test("Discord fallback share: calls copyLink before window.open to preserve transient activation", async () => {
+  const env = setupMockEnvironment();
+  const SocialShareButton = await getSocialShareButton(env);
+
+  const instance = new SocialShareButton({
+    url: "https://aossie.org",
+  });
+
+  const popupHandle = {
+    closed: false,
+    opener: "exists",
+    location: { href: "about:blank" },
+    close() {
+      this.closed = true;
+    },
+  };
+  env.setWindowOpenResult(popupHandle);
+
+  const result = await instance.share("discord");
+
+  assert.equal(result, true);
+  assert.deepEqual(env.callOrder, ["clipboard.writeText", "window.open"]);
+  assert.ok(
+    env.callOrder.indexOf("clipboard.writeText") < env.callOrder.indexOf("window.open"),
+    "clipboard.writeText must be invoked before window.open to retain transient user activation"
+  );
 });

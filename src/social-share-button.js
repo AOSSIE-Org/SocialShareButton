@@ -441,6 +441,10 @@ class SocialShareButton {
       // fallback is to copy the share URL to the clipboard and then navigate the user
       // towards Discord's direct messaging area.
       if (platform === "discord") {
+        // Start copying before opening the window so clipboard access occurs while
+        // transient user activation from the click event is still available.
+        const copyPromise = Promise.resolve(this.copyLink());
+
         let popup = null;
         try {
           popup = window.open("about:blank", "_blank");
@@ -451,7 +455,7 @@ class SocialShareButton {
           popup = null;
         }
 
-        return Promise.resolve(this.copyLink()).then((copied) => {
+        return copyPromise.then((copied) => {
           if (!copied) {
             if (popup && typeof popup.close === "function" && !popup.closed) {
               popup.close();
