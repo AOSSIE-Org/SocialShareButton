@@ -12,6 +12,7 @@
     "LICENSE"
   ],
   "scripts": {
+    "test": "node --test tests/**/*.test.js",
     "format": "prettier --write \"**/*.{js,jsx,json,css,md,html}\"",
     "format:check": "prettier --check \"**/*.{js,jsx,json,css,md,html}\""
   },
