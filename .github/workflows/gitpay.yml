@@ -1,0 +1,105 @@
+name: GitPay
+
+# Pays contributors from this project's own Safe on Ethereum Sepolia.
+# https://github.com/StabilityNexus/GitPay
+#
+# A maintainer comments on a pull request:
+#
+#   /send 0xRecipientAddress 2.50
+#
+# GitPay checks the policy below, then either reports what it would pay
+# (dry-run) or pays it from the Safe and posts a receipt on the PR.
+#
+# This workflow stays in dry-run until the GITPAY_DELEGATE_KEY secret exists.
+# Going live needs, in Settings → Secrets and variables → Actions:
+#   secrets:   GITPAY_DELEGATE_KEY, GITPAY_RPC_URL
+#   variables: GITPAY_SAFE, GITPAY_TOKEN
+# and, in Safe{Wallet}, a spending limit for the delegate address
+# (Settings → Setup → Spending limits). Size that limit at what you can afford
+# to lose in one period: it is the real ceiling if the delegate key ever leaks.
+#
+# issue_comment workflows always run from the default branch, so a pull
+# request cannot change this file's policy before it is merged.
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: read
+  # The receipt comment on the PR is the payment ledger: the run reads it to
+  # avoid paying twice, and writes it after paying.
+  issues: write
+  pull-requests: write
+
+# One payout at a time, across the whole repository. The receipt check is
+# check-then-act, and every payout is signed by the same delegate account.
+# Never cancel a run in progress: that can lose a payout's receipt.
+concurrency:
+  group: gitpay-payout-${{ github.repository }}
+  cancel-in-progress: false
+
+jobs:
+  pay:
+    # Pull request comments that start with /send. GitPay does the real
+    # permission check; this only avoids starting a runner for every comment.
+    if: github.event.issue.pull_request && startsWith(github.event.comment.body, '/send')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pay from the /send comment
+        id: gitpay
+        uses: StabilityNexus/GitPay@99d8a73697ee2465aa04322210663e92f250c7c1 # v1.0.1
+        with:
+          comment: ${{ github.event.comment.body }}
+          actor_association: ${{ github.event.comment.author_association }}
+          actor: ${{ github.event.comment.user.login }}
+          # Ties the payout to this PR, so a re-run can never pay it twice.
+          # To pay the same person again on the same PR, bump `round`.
+          ref: refs/pull/${{ github.event.issue.number }}
+          network: sepolia
+          asset: USDC
+          decimals: "6"
+
+          # Real settlement is never implicit: no delegate key, no payout.
+          mode: ${{ secrets.GITPAY_DELEGATE_KEY != '' && 'self' || 'dry-run' }}
+
+          # ── Policy ────────────────────────────────────────────────────────
+          # Checked offline before anything is signed. Every run logs one
+          # line per rule, and a refusal names the rule that refused.
+          #
+          # Kill switch. Set the repository variable GITPAY_ENABLED to false
+          # and every /send is refused, with no commit needed.
+          enabled: ${{ vars.GITPAY_ENABLED || 'true' }}
+          # Who may issue /send. Org members and the owner only. Outside
+          # collaborators and contributors cannot spend.
+          allowed_associations: OWNER,MEMBER
+          # The largest single payout, in the units /send is typed in
+          # (10 means 10 USDC). A larger /send is refused before signing.
+          # Kept in this file on purpose, so raising it takes a reviewed PR.
+          max_per_payout: "10"
+
+          # ── This repository's settlement accounts ─────────────────────────
+          rpc_url: ${{ secrets.GITPAY_RPC_URL }}
+          safe: ${{ vars.GITPAY_SAFE }}
+          token: ${{ vars.GITPAY_TOKEN }}
+          delegate_key: ${{ secrets.GITPAY_DELEGATE_KEY }}
+          pr: ${{ github.event.issue.number }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Report
+        # A refusal fails the step above, so this runs only on success.
+        env:
+          STATUS: ${{ steps.gitpay.outputs.STATUS }}
+          TX_HASH: ${{ steps.gitpay.outputs.TX_HASH }}
+          EXPLORER_URL: ${{ steps.gitpay.outputs.EXPLORER_URL }}
+          IDEMPOTENCY_KEY: ${{ steps.gitpay.outputs.IDEMPOTENCY_KEY }}
+        run: |
+          echo "STATUS          = $STATUS"
+          echo "IDEMPOTENCY_KEY = $IDEMPOTENCY_KEY"
+          case "$STATUS" in
+            dry-run)      echo "Policy passed. Dry run: nothing was paid." ;;
+            settled)      echo "Paid: $EXPLORER_URL" ;;
+            already-paid) echo "A receipt already exists for this payout. Nothing was paid again." ;;
+            skipped)      echo "No /send command found. Nothing to do." ;;
+            *)            echo "::error::unexpected STATUS '$STATUS'"; exit 1 ;;
+          esac
