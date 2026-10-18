@@ -27,17 +27,6 @@ on:
 
 permissions:
   contents: read
-  # The receipt comment on the PR is the payment ledger: the run reads it to
-  # avoid paying twice, and writes it after paying.
-  issues: write
-  pull-requests: write
-
-# One payout at a time, across the whole repository. The receipt check is
-# check-then-act, and every payout is signed by the same delegate account.
-# Never cancel a run in progress: that can lose a payout's receipt.
-concurrency:
-  group: gitpay-payout-${{ github.repository }}
-  cancel-in-progress: false
 
 jobs:
   pay:
@@ -45,6 +34,22 @@ jobs:
     # permission check; this only avoids starting a runner for every comment.
     if: github.event.issue.pull_request && startsWith(github.event.comment.body, '/send')
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # The receipt comment on the PR is the payment ledger: the run reads it
+      # to avoid paying twice, and writes it after paying.
+      issues: write
+      pull-requests: write
+    # One payout at a time, across the whole repository. The receipt check is
+    # check-then-act, and every payout is signed by the same delegate account.
+    # Set on the job, not the workflow, so a comment that is not a /send never
+    # enters the group. queue: max keeps every waiting /send; the default
+    # keeps only the newest pending run and cancels the rest.
+    # Never cancel a run in progress: that can lose a payout's receipt.
+    concurrency:
+      group: gitpay-payout-${{ github.repository }}
+      cancel-in-progress: false
+      queue: max
     steps:
       - name: Pay from the /send comment
         id: gitpay
