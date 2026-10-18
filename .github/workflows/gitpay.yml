@@ -7,11 +7,11 @@ name: GitPay
 #
 #   /send 0xRecipientAddress 2.50
 #
-# GitPay checks the policy below, then either reports what it would pay
-# (dry-run) or pays it from the Safe and posts a receipt on the PR.
+# GitPay checks the policy below, then pays it on Ethereum Sepolia from the
+# Safe and posts a receipt on the PR. Every /send that passes policy is a real
+# testnet transfer; there is no dry-run fallback.
 #
-# This workflow stays in dry-run until the GITPAY_DELEGATE_KEY secret exists.
-# Going live needs, in Settings → Secrets and variables → Actions:
+# Settings → Secrets and variables → Actions needs:
 #   secrets:   GITPAY_DELEGATE_KEY, GITPAY_RPC_URL
 #   variables: GITPAY_SAFE, GITPAY_TOKEN
 # and, in Safe{Wallet}, a spending limit for the delegate address
@@ -60,8 +60,9 @@ jobs:
           asset: USDC
           decimals: "6"
 
-          # Real settlement is never implicit: no delegate key, no payout.
-          mode: ${{ secrets.GITPAY_DELEGATE_KEY != '' && 'self' || 'dry-run' }}
+          # Real testnet settlement. Without the secrets and variables above,
+          # a /send fails with a configuration error and pays nothing.
+          mode: self
 
           # ── Policy ────────────────────────────────────────────────────────
           # Checked offline before anything is signed. Every run logs one
@@ -97,7 +98,6 @@ jobs:
           echo "STATUS          = $STATUS"
           echo "IDEMPOTENCY_KEY = $IDEMPOTENCY_KEY"
           case "$STATUS" in
-            dry-run)      echo "Policy passed. Dry run: nothing was paid." ;;
             settled)      echo "Paid: $EXPLORER_URL" ;;
             already-paid) echo "A receipt already exists for this payout. Nothing was paid again." ;;
             skipped)      echo "No /send command found. Nothing to do." ;;
