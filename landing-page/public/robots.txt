@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
 
+# The production domain is set in src/config/site.ts (NEXT_PUBLIC_SITE_URL overrides it at build time).
 Sitemap: https://social-share-button.aossie.org/sitemap.xml

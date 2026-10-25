@@ -291,3 +291,39 @@ reviews:
         - Not every function needs comments - only add where it aids understanding
         
         Flag any newly added or modified function or property that lacks descriptive inline comments for non-obvious logic or edge cases.
+
+    # Website (Next.js 16 static export) — adapted from AOSSIE Template-Repo-NextJS
+    - path: "landing-page/src/**/*.{ts,tsx}"
+      instructions: |
+        NextJS:
+        - Ensure that "use client" is used only where interactivity or client hooks are required
+        - Ensure that only features compatible with static export (`output: "export"`) are used
+        - Layout and Page `params` must be awaited, and `setRequestLocale(locale)` must be called for static rendering
+        - Locale-aware navigation must use `@/i18n/navigation`, not `next/link` or `next/navigation`
+
+        Theming:
+        - Use semantic token classes (e.g. `bg-background-primary`, `text-foreground-secondary`, `border-line`) instead of `dark:` utilities or hard-coded theme colors
+        - New colors must be defined for both `:root` and `.dark` in `landing-page/src/app/globals.css` and keep WCAG AA contrast
+
+        TypeScript:
+        - Avoid 'any', use explicit types
+        - Prefer 'import type' for type imports
+
+        Internationalization:
+        - User-visible strings must be externalized to `landing-page/src/messages/*.json`, with identical keys in every locale
+
+        Library:
+        - The version and bundle size must come from `@/config/site` (injected from ../package.json), never be hard-coded
+
+    - path: "landing-page/src/messages/*.json"
+      instructions: |
+        - Every locale file must contain exactly the same keys as `en.json`
+        - Literal HTML tags such as `<head>` must not appear in messages (ICU parses them as rich-text tags); pass them as values instead
+
+    # Brand assets
+    - path: "landing-page/public/brand/**/*"
+      instructions: |
+        Review asset files for:
+        - Image optimization (appropriate size and format)
+        - SVG assets are optimized
+        - Changes to colors, fonts or logos are reflected in `landing-page/public/brand/Brand.md`

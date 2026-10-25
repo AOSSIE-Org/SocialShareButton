@@ -1,15 +1,13 @@
 {
   "name": "Social Share Button",
   "short_name": "Social Share",
+  "description": "Lightweight, zero-dependency social share buttons for modern websites.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#212121",
-  "theme_color": "#212121",
+  "background_color": "#030712",
+  "theme_color": "#16A34A",
   "icons": [
-    {
-      "src": "/SocialShare_logo.webp",
-      "sizes": "any",
-      "type": "image/webp"
-    }
+    { "src": "/brand/icons/social-share-button-mark.svg", "sizes": "any", "type": "image/svg+xml" },
+    { "src": "/brand/icons/apple-icon.png", "sizes": "180x180", "type": "image/png" }
   ]
 }
