@@ -1,0 +1,67 @@
+# Social Share Button
+
+> Lightweight, zero-dependency social share button library for modern websites, by AOSSIE. One script and one stylesheet add a share button and modal for WhatsApp, Facebook, X, LinkedIn, Telegram, Reddit, Email, Pinterest and Discord. Framework-agnostic; licensed GPL-3.0.
+
+- Repository: https://github.com/AOSSIE-Org/SocialShareButton
+- Documentation: https://github.com/AOSSIE-Org/SocialShareButton#readme
+- npm: https://www.npmjs.com/package/@aossie-org/social-share-button
+- Website: https://social-share-button.aossie.org (English at /, Hindi at /hi)
+
+---
+
+## Install (CDN)
+
+Add to the page `<head>`:
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.css" />
+```
+
+Add before `</body>`:
+
+```html
+<script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.js"></script>
+```
+
+Add a container and initialize once the DOM is ready:
+
+```html
+<div id="share-button"></div>
+<script>
+  new SocialShareButton({ container: "#share-button" });
+</script>
+```
+
+In React, Next.js, Preact, Vue or Angular: add the container to an existing layout/header component and call `new window.SocialShareButton({ container: "#share-button" })` inside `useEffect`, `mounted()` or `ngAfterViewInit()`. Do not create a new wrapper file. In the Next.js App Router the component must be a Client Component (`"use client"`).
+
+## Options
+
+| Option | Type | Default | Notes |
+| --- | --- | --- | --- |
+| `container` | string \| Element | none | Required. CSS selector or element. |
+| `url` | string | `window.location.href` | Auto-updates on SPA navigation when omitted. |
+| `title` | string | `document.title` | |
+| `description` | string | `""` | |
+| `hashtags` | string[] | `[]` | |
+| `via` | string | `""` | X/Twitter handle without `@`. |
+| `platforms` | string[] | all | `whatsapp`, `facebook`, `twitter`, `linkedin`, `telegram`, `reddit`, `email`, `pinterest`, `discord` |
+| `buttonText` | string | `"Share"` | |
+| `buttonStyle` | string | `"default"` | `default`, `primary`, `compact`, `icon-only` |
+| `buttonColor` / `buttonHoverColor` | string | `""` | Any CSS color. |
+| `customClass` | string | `""` | Extra class on the button. |
+| `theme` | string | `"dark"` | `dark` or `light` |
+| `showButton` | boolean | `true` | `false` renders no button; call `openModal()` yourself. |
+| `onShare` / `onCopy` | function | `null` | `(platform, url)` / `(url)` |
+| `analytics`, `onAnalytics`, `analyticsPlugins` | | | Privacy-first events; the library never sends data itself. |
+
+Instance methods: `openModal()`, `closeModal()`, `updateOptions(options)`, `destroy()`.
+
+## Analytics
+
+Events are emitted three ways: a bubbling `social-share` DOM `CustomEvent`, the `onAnalytics(payload)` callback, and `analyticsPlugins` adapters (Google Analytics 4, Mixpanel, Segment, Plausible, PostHog, custom) from `src/social-share-analytics.js`.
+
+---
+
+## Website source (this site)
+
+The website lives in `landing-page/` of the repository: Next.js 16 (App Router, static export), React 19, Tailwind CSS v4, `next-intl` (i18n/l10n), `next-themes` (light/dark; first visit follows the OS preference) and Lenis smooth scrolling. See `landing-page/README.md` and `AGENTS.md`.

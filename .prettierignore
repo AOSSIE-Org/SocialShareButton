@@ -4,3 +4,9 @@ build/
 *.min.js
 *.min.css
 package-lock.json
+landing-page/.next/
+landing-page/out/
+landing-page/public/vendor/
+landing-page/node_modules/
+# Verbatim legal text; must not be reformatted
+DCO.md

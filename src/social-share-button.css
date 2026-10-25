@@ -238,7 +238,6 @@
   background: rgba(255, 255, 255, 0.4);
 }
 
-
 /* Individual Platform Button */
 .social-share-platform-btn {
   display: flex;
@@ -255,8 +254,8 @@
 }
 
 .social-share-platform-btn:hover {
-   transform: scale(1.05); 
-  }
+  transform: scale(1.05);
+}
 
 .social-share-platform-btn:active {
   transform: scale(0.95);
@@ -278,10 +277,10 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
-.social-share-platform-icon svg { 
+.social-share-platform-icon svg {
   width: 28px;
-  height: 28px; 
-  }
+  height: 28px;
+}
 
 .social-share-platform-btn span {
   font-size: 12px;
@@ -375,7 +374,6 @@
   background: #00b857;
 }
 
-
 /* -----------------------------------------------------------------------------
    RESPONSIVE OVERRIDES
    ----------------------------------------------------------------------------- */
@@ -389,11 +387,10 @@
   }
 
   /* Snap modal to bottom on mobile */
-  .social-share-modal-content.bottom { 
-    margin-top: auto; 
+  .social-share-modal-content.bottom {
+    margin-top: auto;
   }
 
-  
   .social-share-modal-header {
     padding: 12px 16px;
   }
@@ -449,7 +446,6 @@
 .social-share-modal-overlay.dark .social-share-platform-btn span {
   color: #fff;
 }
-
 
 /* -----------------------------------------------------------------------------
    ACCESSIBILITY & PRINT

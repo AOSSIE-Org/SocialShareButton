@@ -1,6 +1,6 @@
 /**
  * SocialShareButton - A lightweight, customizable social sharing component
- * @version 1.0.3
+ * @version 1.0.4
  * @license GPL-3.0
  */
 
@@ -9,6 +9,13 @@ const ANALYTICS_SCHEMA_VERSION = "1.0";
 
 class SocialShareButton {
   constructor(options = {}) {
+    // Resolve container element early to prevent duplicate instances
+    const containerEl = SocialShareButton._resolveContainer(options.container);
+
+    if (containerEl && containerEl._socialShareButtonInstance) {
+      return containerEl._socialShareButtonInstance;
+    }
+
     this.options = {
       url: options.url || (typeof window !== "undefined" ? window.location.href : ""),
       title: options.title || (typeof document !== "undefined" ? document.title : ""),
@@ -23,6 +30,7 @@ class SocialShareButton {
         "telegram",
         "reddit",
         "pinterest",
+        "discord",
       ],
       theme: options.theme || "dark",
       buttonText: options.buttonText || "Share",
@@ -59,6 +67,25 @@ class SocialShareButton {
     this.eventsAttached = false; // Guard against multiple attachEvents() calls
     this.isDestroyed = false; // Track if instance has been destroyed (prevents async callbacks)
 
+    this._dynamicUrl = !options.url; // true when url was not provided; updateCurrentPage() will overwrite on SPA route changes
+    this._dynamicTitle = !options.title; // true when title was not provided; updateCurrentPage() will overwrite on SPA route changes
+
+    this._containerEl = containerEl; // Cache resolved element so cleanup still finds it after removal
+
+    // If a container was specified but could not be resolved (e.g. SSR or missing DOM node),
+    // abort registration and initialization to prevent orphan instances and DOM errors.
+    if (this.options.container && !this._containerEl) {
+      return;
+    }
+
+    if (containerEl) {
+      containerEl._socialShareButtonInstance = this;
+    }
+
+    if (typeof window !== "undefined" && SocialShareButton.instances) {
+      SocialShareButton.instances.add(this);
+    }
+
     if (this.options.container) {
       this.init();
     }
@@ -85,18 +112,10 @@ class SocialShareButton {
     `;
 
     this.button = button;
-    if (this.options.container) {
-      const container =
-        typeof this.options.container === "string"
-          ? document.querySelector(this.options.container)
-          : this.options.container;
-
-      if (container) {
-        container.appendChild(button);
-      }
+    if (this._containerEl) {
+      this._containerEl.appendChild(button);
     }
   }
-
   createModal() {
     const modal = document.createElement("div");
     modal.className = `social-share-modal-overlay ${this.options.theme}`;
@@ -172,6 +191,11 @@ class SocialShareButton {
         color: "#E60023",
         icon: '<path d="M12 0C5.372 0 0 5.373 0 12c0 4.99 3.052 9.267 7.386 11.059-.102-.94-.194-2.385.04-3.413.211-.904 1.356-5.752 1.356-5.752s-.346-.693-.346-1.717c0-1.608.932-2.808 2.093-2.808.987 0 1.463.741 1.463 1.63 0 .993-.632 2.476-.958 3.853-.273 1.155.58 2.098 1.718 2.098 2.062 0 3.646-2.174 3.646-5.31 0-2.778-1.997-4.722-4.847-4.722-3.304 0-5.242 2.478-5.242 5.039 0 .997.384 2.066.865 2.647.095.115.109.215.08.331-.088.365-.282 1.155-.321 1.316-.05.212-.165.257-.381.155-1.418-.66-2.305-2.733-2.305-4.397 0-3.579 2.601-6.867 7.497-6.867 3.936 0 6.998 2.805 6.998 6.557 0 3.91-2.466 7.058-5.892 7.058-1.15 0-2.232-.597-2.6-1.302l-.707 2.692c-.255.983-.946 2.215-1.408 2.966A12.002 12.002 0 0024 12C24 5.373 18.627 0 12 0z"/>',
       },
+      discord: {
+        name: "Discord",
+        color: "#5865F2",
+        icon: '<path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 11.756 11.756 0 0 0-.617-1.25.077.077 0 0 0-.079-.037 19.736 19.736 0 0 0-4.885 1.515.069.069 0 0 0-.032.027C.533 9.048-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.419-2.157 2.419zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.419-2.157 2.419z"/>',
+      },
     };
 
     return this.options.platforms
@@ -244,6 +268,7 @@ class SocialShareButton {
       reddit: `https://reddit.com/submit?url=${encodedUrl}&title=${encodedReddit}`,
       email: `mailto:?subject=${encodedTitle}&body=${encodedEmail}%20${encodedUrl}`,
       pinterest: `https://pinterest.com/pin/create/button/?url=${encodedUrl}&description=${encodedPinterest}`,
+      discord: "https://discord.com/channels/@me",
     };
 
     return urls[platform] || "";
@@ -409,9 +434,17 @@ class SocialShareButton {
     if (shareUrl) {
       this._emit("social_share_click", "share", { platform });
 
-      if (platform === "email") {
+      // Platform-specific sharing trigger logic:
+      // Discord does not provide a native web-share intent; therefore, the most reliable
+      // fallback is to copy the share URL to the clipboard and then navigate the user
+      // towards Discord's direct messaging area.
+      if (platform === "discord") {
+        this.copyLink();
+        window.open(shareUrl, "_blank", "noopener,noreferrer");
+      } else if (platform === "email") {
         window.location.href = shareUrl;
       } else {
+        // Default behavior: open platform's share intent in a specialized popup window
         window.open(shareUrl, "_blank", "noopener,noreferrer,width=600,height=600");
       }
 
@@ -577,6 +610,16 @@ class SocialShareButton {
       }
     }
 
+    // Remove from active instances registry
+    if (typeof window !== "undefined" && SocialShareButton.instances) {
+      SocialShareButton.instances.delete(this);
+    }
+
+    const containerEl = this._getContainer();
+    if (containerEl && containerEl._socialShareButtonInstance === this) {
+      delete containerEl._socialShareButtonInstance;
+    }
+
     // Clear references (makes destroy idempotent)
     this.button = null;
     this.modal = null;
@@ -584,7 +627,18 @@ class SocialShareButton {
     this.eventsAttached = false; // Reset re-entrancy guard
   }
 
-  updateOptions(options) {
+  updateOptions(options, isInternalRefresh = false) {
+    // External updates recompute dynamic flags, while internal SPA refreshes
+    // preserve caller-supplied values to maintain the auto-update contract.
+    if (!isInternalRefresh) {
+      if (options.url !== undefined) {
+        this._dynamicUrl = !options.url;
+      }
+      if (options.title !== undefined) {
+        this._dynamicTitle = !options.title;
+      }
+    }
+
     this.options = { ...this.options, ...options };
 
     // Update URL in modal if it exists
@@ -677,16 +731,16 @@ class SocialShareButton {
   //                         systems to all receive the same event simultaneously.
   // ---------------------------------------------------------------------------
 
-  /**
-   * Returns the host container element, or null when no container is configured.
-   * @returns {Element|null}
-   */
-  _getContainer() {
-    if (!this.options.container) return null;
+  // Resolves a raw container value (string or Element) to a DOM Element, or null if absent/SSR.
+  static _resolveContainer(raw) {
+    if (!raw) return null;
     if (typeof document === "undefined") return null;
-    return typeof this.options.container === "string"
-      ? document.querySelector(this.options.container)
-      : this.options.container;
+    return typeof raw === "string" ? document.querySelector(raw) : raw;
+  }
+
+  // Returns the cached host container element, or null.
+  _getContainer() {
+    return this._containerEl || null;
   }
 
   /**
@@ -786,11 +840,201 @@ class SocialShareButton {
       }
     }
   }
+
+  static updateCurrentPage() {
+    if (typeof window === "undefined" || !SocialShareButton.instances) return;
+    SocialShareButton.instances.forEach((instance) => {
+      // Only refresh fields that were auto-defaulted from the page;
+      // caller-supplied url/title values must remain unchanged.
+      const updates = {};
+      if (instance._dynamicUrl) {
+        updates.url = window.location.href;
+      }
+      if (instance._dynamicTitle) {
+        updates.title = document.title;
+      }
+      if (Object.keys(updates).length > 0) {
+        instance.updateOptions(updates, true);
+      }
+    });
+  }
 }
 
 // Static properties for shared body overflow management across all instances
 SocialShareButton.openModalCount = 0;
 SocialShareButton.originalBodyOverflow = null;
+SocialShareButton.instances = new Set();
+
+(function () {
+  // Helper for dynamic route changes in SPAs
+  function handleRouteChange() {
+    setTimeout(() => {
+      SocialShareButton.updateCurrentPage();
+    }, 50);
+  }
+
+  // Patch pushState and replaceState to track SPA routing dynamically
+  let isHistoryPatched = false;
+  function patchHistory() {
+    if (typeof window === "undefined" || !window.history || isHistoryPatched) return;
+    isHistoryPatched = true;
+
+    const wrap = (type) => {
+      const orig = window.history[type];
+      return function (...args) {
+        const result = orig.apply(this, args);
+        try {
+          const event = new CustomEvent("pushstate-or-replacestate", { detail: { type } });
+          window.dispatchEvent(event);
+        } catch (_e) {
+          // Ignore error
+        }
+        return result;
+      };
+    };
+
+    window.history.pushState = wrap("pushState");
+    window.history.replaceState = wrap("replaceState");
+  }
+
+  // Auto-initialize elements with `data-social-share` attribute
+  function autoInitElement(element) {
+    if (element._socialShareButtonInstance) return;
+
+    const options = { container: element };
+    const attrs = {
+      url: "data-url",
+      title: "data-title",
+      description: "data-description",
+      via: "data-via",
+      theme: "data-theme",
+      buttonText: "data-button-text",
+      customClass: "data-custom-class",
+      buttonColor: "data-button-color",
+      buttonHoverColor: "data-button-hover-color",
+      buttonStyle: "data-button-style",
+      modalPosition: "data-modal-position",
+    };
+
+    for (const [key, attr] of Object.entries(attrs)) {
+      const val = element.getAttribute(attr);
+      if (val !== null) {
+        options[key] = val;
+      }
+    }
+
+    if (element.hasAttribute("data-hashtags")) {
+      options.hashtags = element
+        .getAttribute("data-hashtags")
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
+    }
+
+    if (element.hasAttribute("data-platforms")) {
+      options.platforms = element
+        .getAttribute("data-platforms")
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
+    }
+
+    if (element.hasAttribute("data-show-button")) {
+      options.showButton = element.getAttribute("data-show-button") !== "false";
+    }
+
+    new SocialShareButton(options);
+  }
+
+  function autoInit(root = document) {
+    if (typeof document === "undefined") return;
+
+    // Fast short-circuit: skip nodes appended by the library itself to avoid redundant scans
+    if (
+      root !== document &&
+      root.classList &&
+      (root.classList.contains("social-share-btn") ||
+        root.classList.contains("social-share-modal-overlay"))
+    ) {
+      return;
+    }
+
+    if (root !== document && root.hasAttribute && root.hasAttribute("data-social-share")) {
+      autoInitElement(root);
+    }
+    const elements = root.querySelectorAll ? root.querySelectorAll("[data-social-share]") : [];
+    elements.forEach((element) => autoInitElement(element));
+  }
+
+  // Setup MutationObserver to watch for added/removed sharing components
+  let globalObserver = null;
+  let initTimeout = null;
+  function setupMutationObserver() {
+    if (typeof document === "undefined" || globalObserver) return;
+    globalObserver = new MutationObserver((mutations) => {
+      let needsInit = false;
+
+      mutations.forEach((mutation) => {
+        // Auto-cleanup on removal
+        // Fast-path: Skip costly removal traversal if we have no active tracked instances
+        if (
+          mutation.removedNodes.length > 0 &&
+          SocialShareButton.instances &&
+          SocialShareButton.instances.size > 0
+        ) {
+          mutation.removedNodes.forEach((node) => {
+            if (node.nodeType !== 1) return;
+            SocialShareButton.instances.forEach((instance) => {
+              const containerEl = instance._getContainer();
+              if (containerEl && (node === containerEl || node.contains(containerEl))) {
+                instance.destroy();
+              }
+            });
+          });
+        }
+
+        // Track if there are any element additions to trigger a batched scan
+        if (!needsInit && mutation.addedNodes.length > 0) {
+          for (let i = 0; i < mutation.addedNodes.length; i++) {
+            if (mutation.addedNodes[i].nodeType === 1) {
+              needsInit = true;
+              break;
+            }
+          }
+        }
+      });
+
+      // Batch auto-init to avoid costly scans on every single added node.
+      // If a timeout is already pending, we let it run (throttle vs debounce)
+      // so continuous DOM mutations don't indefinitely delay initialization.
+      if (needsInit && !initTimeout) {
+        initTimeout = setTimeout(() => {
+          initTimeout = null;
+          autoInit(document); // Single global scan is highly optimized natively
+        }, 10);
+      }
+    });
+    globalObserver.observe(document.body, { childList: true, subtree: true });
+  }
+
+  // Initialize on browser load
+  if (typeof window !== "undefined" && typeof document !== "undefined") {
+    patchHistory();
+    window.addEventListener("popstate", handleRouteChange);
+    window.addEventListener("hashchange", handleRouteChange);
+    window.addEventListener("pushstate-or-replacestate", handleRouteChange);
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", () => {
+        autoInit();
+        setupMutationObserver();
+      });
+    } else {
+      autoInit();
+      setupMutationObserver();
+    }
+  }
+})();
 
 // Export for different module systems
 if (typeof module !== "undefined" && module.exports) {
