@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: Get PR details
         id: pr-details
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -33,7 +33,7 @@ jobs:
       # STEP 1: Issue-based labels
       - name: Extract linked issue number
         id: extract-issue
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -60,7 +60,7 @@ jobs:
 
       - name: Apply issue-based labels
         if: steps.extract-issue.outputs.issue_number != ''
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         env:
           ISSUE_NUMBER: ${{ steps.extract-issue.outputs.issue_number }}
         with:
@@ -114,7 +114,7 @@ jobs:
 
       - name: Mark no issue linked
         if: steps.extract-issue.outputs.issue_number == ''
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -137,7 +137,7 @@ jobs:
       # STEP 2: File-based labels
       - name: Get changed files
         id: changed-files
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -156,7 +156,7 @@ jobs:
             return changedFiles;
 
       - name: Apply file-based labels
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         env:
           CHANGED_FILES: ${{ steps.changed-files.outputs.files }}
         with:
@@ -250,7 +250,7 @@ jobs:
 
       # STEP 3: PR size labels
       - name: Apply PR size label
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -334,7 +334,7 @@ jobs:
 
       # STEP 4: Contributor-based labels(in this later we can add logic of team p as discussed on discord)
       - name: Apply contributor-based labels
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         env:
           LABELLER_TOKEN: ${{ secrets.EXTERNAL_LABELLER_TOKEN || secrets.GITHUB_TOKEN }}
         with:
@@ -413,7 +413,7 @@ jobs:
       # STEP 5: Review status
       - name: Add needs review label
         if: github.event.action != 'edited'
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -434,7 +434,7 @@ jobs:
 
       # Summary step
       - name: Label sync summary
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
