@@ -429,6 +429,8 @@ class SocialShareButton {
   }
 
   share(platform) {
+    if (typeof window === "undefined") return Promise.resolve(false);
+
     const shareUrl = this.getShareURL(platform);
 
     if (shareUrl) {
@@ -439,13 +441,82 @@ class SocialShareButton {
       // fallback is to copy the share URL to the clipboard and then navigate the user
       // towards Discord's direct messaging area.
       if (platform === "discord") {
-        this.copyLink();
-        window.open(shareUrl, "_blank", "noopener,noreferrer");
-      } else if (platform === "email") {
+        // Start copying before opening the window so clipboard access occurs while
+        // transient user activation from the click event is still available.
+        const copyPromise = Promise.resolve(this.copyLink());
+
+        let popup = null;
+        try {
+          popup = window.open("about:blank", "_blank");
+          if (popup) {
+            popup.opener = null;
+          }
+        } catch (_err) {
+          popup = null;
+        }
+
+        return copyPromise.then((copied) => {
+          if (!copied) {
+            if (popup && typeof popup.close === "function" && !popup.closed) {
+              popup.close();
+            }
+            this._emit("social_share_error", "error", {
+              platform,
+              errorMessage: "Failed to copy share link to clipboard for Discord fallback",
+            });
+            return false;
+          }
+
+          if (!popup || popup.closed || typeof popup.closed === "undefined") {
+            this._emit("social_share_error", "error", {
+              platform,
+              errorMessage: "Popup blocked when opening Discord share window",
+            });
+            return false;
+          }
+
+          try {
+            popup.location.href = shareUrl;
+          } catch (_err) {
+            popup.location = shareUrl;
+          }
+
+          this._emit("social_share_success", "share", { platform });
+
+          if (this.options.onShare) {
+            this.options.onShare(platform, this.options.url);
+          }
+          return true;
+        });
+      }
+
+      if (platform === "email") {
         window.location.href = shareUrl;
-      } else {
-        // Default behavior: open platform's share intent in a specialized popup window
-        window.open(shareUrl, "_blank", "noopener,noreferrer,width=600,height=600");
+        this._emit("social_share_success", "share", { platform });
+
+        if (this.options.onShare) {
+          this.options.onShare(platform, this.options.url);
+        }
+        return Promise.resolve(true);
+      }
+
+      // Default behavior: open platform's share intent in a specialized popup window
+      let popup = null;
+      try {
+        popup = window.open(shareUrl, "_blank", "width=600,height=600");
+        if (popup) {
+          popup.opener = null;
+        }
+      } catch (_err) {
+        popup = null;
+      }
+
+      if (!popup || popup.closed || typeof popup.closed === "undefined") {
+        this._emit("social_share_error", "error", {
+          platform,
+          errorMessage: `Popup blocked when opening share window for ${platform}`,
+        });
+        return Promise.resolve(false);
       }
 
       this._emit("social_share_success", "share", { platform });
@@ -453,28 +524,36 @@ class SocialShareButton {
       if (this.options.onShare) {
         this.options.onShare(platform, this.options.url);
       }
-    } else {
-      this._emit("social_share_error", "error", {
-        platform,
-        errorMessage: `No share URL configured for platform: ${platform}`,
-      });
+      return Promise.resolve(true);
     }
+
+    this._emit("social_share_error", "error", {
+      platform,
+      errorMessage: `No share URL configured for platform: ${platform}`,
+    });
+    return Promise.resolve(false);
   }
 
   copyLink() {
-    const input = this.modal.querySelector(".social-share-link-input input");
-    const copyBtn = this.modal.querySelector(".social-share-copy-btn");
+    const input = this.modal ? this.modal.querySelector(".social-share-link-input input") : null;
+    const copyBtn = this.modal ? this.modal.querySelector(".social-share-copy-btn") : null;
 
     // Check if clipboard API is available
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard
+    if (
+      typeof navigator !== "undefined" &&
+      navigator.clipboard &&
+      typeof navigator.clipboard.writeText === "function"
+    ) {
+      return navigator.clipboard
         .writeText(this.options.url)
         .then(() => {
           // Guard against async callback after destroy
-          if (this.isDestroyed) return;
+          if (this.isDestroyed) return false;
 
-          copyBtn.textContent = "Copied!";
-          copyBtn.classList.add("copied");
+          if (copyBtn) {
+            copyBtn.textContent = "Copied!";
+            copyBtn.classList.add("copied");
+          }
           this._emit("social_share_copy", "copy");
 
           if (this.options.onCopy) {
@@ -493,28 +572,57 @@ class SocialShareButton {
             copyBtn.classList.remove("copied");
             this.feedbackTimeout = null;
           }, 2000);
+
+          return true;
         })
         .catch(() => {
           // Fallback to manual selection
-          this.fallbackCopy(input, copyBtn);
+          return this.fallbackCopy(input, copyBtn);
         });
-    } else {
-      // Fallback for browsers without clipboard API
-      this.fallbackCopy(input, copyBtn);
     }
+
+    // Fallback for browsers without clipboard API
+    return Promise.resolve(this.fallbackCopy(input, copyBtn));
   }
 
   fallbackCopy(input, copyBtn) {
     // Guard against execution after destroy
-    if (this.isDestroyed) return;
+    if (this.isDestroyed) return false;
 
+    let tempInput = null;
     try {
-      input.select();
-      input.setSelectionRange(0, 99999); // For mobile devices
-      document.execCommand("copy");
+      let targetInput = input;
+      if (!targetInput) {
+        if (typeof document !== "undefined" && document.body) {
+          tempInput = document.createElement("textarea");
+          tempInput.value = this.options.url;
+          tempInput.style.position = "fixed";
+          tempInput.style.left = "-9999px";
+          tempInput.style.top = "0";
+          tempInput.setAttribute("readonly", "");
+          document.body.appendChild(tempInput);
+          targetInput = tempInput;
+        } else {
+          return false;
+        }
+      }
 
-      copyBtn.textContent = "Copied!";
-      copyBtn.classList.add("copied");
+      targetInput.select();
+      if (typeof targetInput.setSelectionRange === "function") {
+        targetInput.setSelectionRange(0, 99999); // For mobile devices
+      }
+      const successful =
+        typeof document !== "undefined" && document.execCommand
+          ? document.execCommand("copy")
+          : false;
+      if (!successful) {
+        throw new Error("execCommand copy failed");
+      }
+
+      if (copyBtn) {
+        copyBtn.textContent = "Copied!";
+        copyBtn.classList.add("copied");
+      }
       this._emit("social_share_copy", "copy");
 
       if (this.options.onCopy) {
@@ -533,8 +641,12 @@ class SocialShareButton {
         copyBtn.classList.remove("copied");
         this.feedbackTimeout = null;
       }, 2000);
+
+      return true;
     } catch (_err) {
-      copyBtn.textContent = "Failed";
+      if (copyBtn) {
+        copyBtn.textContent = "Failed";
+      }
 
       // Clear any existing feedback timeout
       if (this.feedbackTimeout) {
@@ -547,6 +659,12 @@ class SocialShareButton {
         copyBtn.textContent = "Copy";
         this.feedbackTimeout = null;
       }, 2000);
+
+      return false;
+    } finally {
+      if (tempInput && tempInput.parentNode) {
+        tempInput.parentNode.removeChild(tempInput);
+      }
     }
   }
 
