@@ -150,11 +150,11 @@ We use Prettier for the library and ESLint for the website. Please run these bef
 - `npm run format` — Automatically format your code to project standards (repository root).
 - `npm run format:check` — Verify that files are correctly formatted (repository root).
 - `npm test` / `npm run test:coverage` — Run the library's Vitest unit and property tests in `tests/` (repository root). CI fails below 90% coverage of `src/social-share-button.js` and `src/social-share-analytics.js`.
+- `npm run lint` and `npm run build` — Lint and build the website (inside `landing-page/`).
 
 ### Testing Policy
 
 New library behaviour (options, platforms, events, lifecycle) must come with tests in [`tests/`](tests/). Use [fast-check](https://fast-check.dev) property tests where the input space is large (URLs, titles, option combinations). Releases run the same suite before publishing to npm.
-- `npm run lint` and `npm run build` — Lint and build the website (inside `landing-page/`).
 
 ### Working on the Website
 

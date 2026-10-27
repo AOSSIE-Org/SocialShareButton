@@ -25,6 +25,10 @@ const PLATFORMS = [
 ];
 
 let container;
+// Globals some tests mutate, captured per test so cleanup restores the real values
+let originalExecCommand;
+let originalUrl;
+let originalTitle;
 
 function create(options = {}) {
   return new SocialShareButton({
@@ -36,6 +40,9 @@ function create(options = {}) {
 }
 
 beforeEach(() => {
+  originalExecCommand = Object.getOwnPropertyDescriptor(document, "execCommand");
+  originalUrl = window.location.href;
+  originalTitle = document.title;
   vi.useFakeTimers();
   container = document.createElement("div");
   document.body.appendChild(container);
@@ -45,6 +52,11 @@ afterEach(() => {
   // Let the library's batched auto-init timer finish so its internal throttle resets between tests
   vi.runOnlyPendingTimers();
   for (const instance of [...SocialShareButton.instances]) instance.destroy();
+  // jsdom defines execCommand on Document.prototype, so usually there is no own property to restore
+  if (originalExecCommand) Object.defineProperty(document, "execCommand", originalExecCommand);
+  else delete document.execCommand;
+  window.history.replaceState(window.history.state, "", originalUrl);
+  document.title = originalTitle;
   document.body.innerHTML = "";
   document.body.style.overflow = "";
   SocialShareButton.openModalCount = 0;
@@ -487,13 +499,22 @@ describe("edge cases", () => {
 
   it("navigates the current tab for email instead of opening a popup", () => {
     const open = vi.spyOn(window, "open").mockImplementation(() => null);
-    const btn = create();
+    const onAnalytics = vi.fn();
+    const btn = create({ onAnalytics });
     try {
       btn.share("email");
     } catch {
-      // jsdom does not implement navigation; only the popup behaviour matters here
+      // jsdom does not implement navigation and may throw before onShare runs
     }
     expect(open).not.toHaveBeenCalled();
+    // The click is reported before navigating, so it is observable even if navigation throws
+    expect(onAnalytics).toHaveBeenCalledWith(
+      expect.objectContaining({
+        eventName: "social_share_click",
+        interactionType: "share",
+        platform: "email",
+      })
+    );
   });
 
   it("restarts the copy feedback timer when copying twice", async () => {

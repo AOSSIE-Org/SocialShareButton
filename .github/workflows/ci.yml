@@ -34,7 +34,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@008330803749db0355799c700092d9a85fd074e9 # v6.0.9
         with:
-          version: 10
+          # Version comes from "packageManager" in package.json
           run_install: false
 
       - name: Setup Node.js

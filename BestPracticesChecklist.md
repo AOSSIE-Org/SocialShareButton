@@ -18,12 +18,12 @@
 | Category           | Met | N/A | Total (Applicable) | Status |
 |--------------------|-----|-----|--------------------|--------|
 | Basics             | 8   | 0   | 8                  | 🟢     |
-| Change Control     | 5   | 1   | 5 (6)              | 🟢     |
+| Change Control     | 4   | 1   | 5 (6)              | 🟡     |
 | Reporting          | 7   | 1   | 7 (8)              | 🟢     |
-| Quality            | 11  | 0   | 11                 | 🟢     |
+| Quality            | 10  | 0   | 11                 | 🟡     |
 | Security           | 3   | 6   | 3 (9)              | 🟢     |
 | Analysis           | 5   | 2   | 5 (7)              | 🟢     |
-| **Total**          | **39** | **10** | **39 (49)**    | **100.0%** |
+| **Total**          | **37** | **10** | **39 (49)**    | **94.9%** |
 
 *N/A items are excluded from the denominator.*
 
@@ -43,7 +43,7 @@
   - *Evidence URL:* https://github.com/AOSSIE-Org/SocialShareButton/blob/main/CONTRIBUTING.md
 
 - [x] 🟡 **contribution_requirements** — `CONTRIBUTING.md` references acceptable contribution standards (coding style, tests required, etc.).
-  - *Evidence URL:* https://github.com/AOSSIE-Org/SocialShareButton/blob/main/CONTRIBUTING.md#-code-style--architecture
+  - *Evidence URL:* https://github.com/AOSSIE-Org/SocialShareButton/blob/main/CONTRIBUTING.md#3️⃣-follow-project-standards
 
 - [x] 🔴 **documentation_basics** — Basic documentation exists for the software (README, Wiki, or docs folder).
   - *Evidence URL:* https://github.com/AOSSIE-Org/SocialShareButton#readme
@@ -81,8 +81,8 @@
 
 ### Release Notes
 
-- [x] 🔴 **release_notes** — Each release includes human-readable release notes summarizing major changes.
-  - *Evidence URL:* https://github.com/AOSSIE-Org/SocialShareButton/releases (draft notes published by `.github/workflows/version-release.yml`)
+- [ ] 🔴 **release_notes** — Each release includes human-readable release notes summarizing major changes.
+  - *Not met yet:* releases created from a prepared draft carry its notes, but when no draft exists `version-release.yml` creates a release with only a generic line and no change summary. See https://github.com/AOSSIE-Org/SocialShareButton/releases
 
 - [-] 🔴 **release_notes_vulns** — Release notes identify every publicly known vulnerability (with CVE) fixed in that release.
   - *Note:* `[~]` N/A: no publicly known vulnerabilities have been reported or fixed.
@@ -144,14 +144,15 @@
 
 ### New Functionality Testing Policy
 
-- [x] 🔴 **test_policy** — The project has a general policy that new functionality must include tests in the automated test suite.
-  - *Evidence URL:* https://github.com/AOSSIE-Org/SocialShareButton/blob/main/CONTRIBUTING.md#-pull-request-guidelines
+- [ ] 🔴 **test_policy** — The project has a general policy that new functionality must include tests in the automated test suite.
+  - *Evidence URL:* https://github.com/AOSSIE-Org/SocialShareButton/blob/main/CONTRIBUTING.md#testing-policy
+  - *Not met yet:* the policy covers new library behaviour only; the website (`landing-page/`) has no automated tests and no testing requirement.
 
 - [x] 🔴 **tests_are_added** — Evidence exists that the test policy has been followed in recent major changes.
   - *Evidence URL:* https://github.com/AOSSIE-Org/SocialShareButton/tree/main/tests
 
 - [x] 🔵 **tests_documented_added** — The test policy is documented in contribution instructions. *(SUGGESTED)*
-  - *Evidence URL:* https://github.com/AOSSIE-Org/SocialShareButton/blob/main/CONTRIBUTING.md#-pull-request-guidelines
+  - *Evidence URL:* https://github.com/AOSSIE-Org/SocialShareButton/blob/main/CONTRIBUTING.md#testing-policy (library)
 
 ### Linting / Warning Flags
 
@@ -171,7 +172,7 @@
 ### Secure Development Knowledge
 
 - [x] 🔴 **know_secure_design** — Primary developer knows how to design secure software.
-  - *Self-certification note:* The library opens share intents with `noopener,noreferrer`, never collects or sends data, and has zero runtime dependencies; the website is a static export with no server or cookies.
+  - *Self-certification note:* The library opens share intents with `noopener,noreferrer` and has zero runtime dependencies. Analytics events are emitted locally by default (a DOM event); only callbacks or adapters the host page configures forward the payload, including the shared URL and title, to provider SDKs. The website is a static export with no server or cookies.
 
 - [x] 🔴 **know_common_errors** — Primary developer knows common vulnerability types (XSS, CSRF, SSRF) and mitigations.
   - *Self-certification note:* No `dangerouslySetInnerHTML` with user data; React escapes output; dependencies pinned via lockfile.
@@ -217,7 +218,7 @@
 ### Dynamic Code Analysis
 
 - [x] 🔵 **dynamic_analysis** — Dynamic analysis applied before major releases. *(SUGGESTED)*
-  - *Evidence:* the published library is exercised in jsdom before every npm release (`version-release.yml` runs `pnpm run test:coverage`): fast-check property tests vary the inputs, and branch coverage of `src/` is above 90%, enforced by https://github.com/AOSSIE-Org/SocialShareButton/blob/main/vitest.config.js.
+  - *Evidence:* the published library is exercised in jsdom before every npm release (`version-release.yml` runs `pnpm run test:coverage`): fast-check property tests vary the inputs, and branch coverage of `src/social-share-button.js` and `src/social-share-analytics.js` is above 90%, enforced by https://github.com/AOSSIE-Org/SocialShareButton/blob/main/vitest.config.js.
 
 - [x] 🔵 **dynamic_analysis_enable_assertions** — Dynamic analysis runs with assertions enabled. *(SUGGESTED)*
   - *Note:* Vitest drives the real library in jsdom (DOM events, timers, clipboard, MutationObserver) with assertions on every interaction.
