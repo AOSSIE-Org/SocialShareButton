@@ -57,6 +57,8 @@ export default function LanguageSwitcher({
     if (newLocale === locale) return;
     // The default-locale home page is canonical at "/" (see src/app/(default)), not "/en".
     if (newLocale === defaultLanguage && pathname === "/") {
+      // Full load on purpose: "/" uses a different root layout outside the locale router
+      // eslint-disable-next-line @next/next/no-location-assign-relative-destination
       window.location.assign("/");
       return;
     }

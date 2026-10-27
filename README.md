@@ -98,12 +98,16 @@ Lightweight social sharing component for web applications. **Zero dependencies, 
 
 ---
 
-## 📋 Project Maturity & TODO Checklist
+## 📋 Project Maturity Checklist
 
-In the checklist below, mark the items that have been completed for the project:
+[![CI](https://github.com/AOSSIE-Org/SocialShareButton/actions/workflows/ci.yml/badge.svg)](https://github.com/AOSSIE-Org/SocialShareButton/actions/workflows/ci.yml) [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/AOSSIE-Org/SocialShareButton/badge)](https://scorecard.dev/viewer/?uri=github.com/AOSSIE-Org/SocialShareButton)
+
+Status of the GSoC / AOSSIE project checklist:
 
 - [x] The project has a logo (`public/socialshare.png`, `landing-page/public/brand/icons/social-share-button-mark.svg`).
 - [x] The project has a favicon (`landing-page/public/brand/icons/favicon.ico`).
+- [x] The library has unit and property tests (Vitest + fast-check) with a 90% coverage gate in CI and before every npm release (`npm run test:coverage`).
+- [x] OpenSSF Scorecard analysis (`.github/workflows/scorecard.yml`) and a security policy (`SECURITY.md`).
 - [x] The web frontend:
   - [x] Has proper title and metadata.
   - [x] Has proper open graph metadata, to ensure that it is shown well when shared in social media.
@@ -111,6 +115,7 @@ In the checklist below, mark the items that have been completed for the project:
   - [x] Uses React Server Components by default, introducing Client Components (`"use client"`) only when interactivity or client hooks are required.
   - [x] Is deployed to GitHub Pages via a GitHub Workflow (`.github/workflows/nextjs.yml`).
   - [x] Has automated CI build and lint validation (`.github/workflows/ci.yml`).
+  - [x] Has a `sitemap.xml` and a `robots.txt` that blocks `/pr-preview/`.
   - [x] Has CodeRabbit automated AI code review (`.coderabbit.yaml`).
   - [x] Has open-source legal compliance (`DCO.md`, `COPYRIGHT.md`, `LICENSE`).
   - [x] Is available in more than one language (English and Hindi).
@@ -930,11 +935,12 @@ Open [http://localhost:3000](http://localhost:3000). `npm run dev` and `npm run 
 We welcome contributions of all kinds! To contribute:
 
 1. Fork the repository and create your feature branch (`git checkout -b feature/AmazingFeature`).
-2. Commit your changes (`git commit -m 'Add some AmazingFeature'`).
-3. Run code quality checks:
+2. Run code quality checks:
+   - `npm run test:coverage` — library unit and property tests, 90% coverage gate (repository root)
    - `npm run format:check` / `npm run format` — library formatting (repository root)
    - `npm run lint` and `npm run build` — website (inside `landing-page/`)
-4. Test your changes by opening `index.html` in your browser, or run the website locally.
+3. Try your changes by opening `index.html` in your browser, or run the website locally.
+4. Commit your changes with a sign-off (`git commit -s -m 'Add some AmazingFeature'`).
 5. Push your branch (`git push origin feature/AmazingFeature`).
 6. Open a Pull Request for review.
 

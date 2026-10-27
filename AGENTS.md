@@ -16,8 +16,8 @@ A lightweight, zero-dependency social share button library (vanilla JS + CSS) an
 
 ## 🛠️ Stack & Commands
 
-- **Library:** no build step. `npm run format` / `npm run format:check` at the repo root. Test by opening `index.html` in a browser.
-- **Website stack:** Next.js 16.2 App Router (Turbopack, `output: "export"`), React 19, Tailwind CSS v4, `next-intl` (i18n), `next-themes` (light/dark; first visit follows the OS preference), `lenis` (smooth scroll), `sugar-high` (syntax highlighting).
+- **Library:** no build step. `npm run format` / `npm run format:check` at the repo root. Tests: `npm test` / `npm run test:coverage` (Vitest + jsdom + fast-check in `tests/`, 90% coverage gate in CI and before npm publish). Try it manually by opening `index.html` in a browser.
+- **Website stack:** Next.js 16.4 App Router (Turbopack, `output: "export"`), React 19, Tailwind CSS v4, `next-intl` (i18n), `next-themes` (light/dark; first visit follows the OS preference), `lenis` (smooth scroll), `sugar-high` (syntax highlighting).
 - **Website commands** (run inside `landing-page/`): `npm run dev`, `npm run build`, `npm run lint`.
 - `predev`/`prebuild` run `scripts/sync-library.mjs`, which copies `../src/social-share-button.{js,css}` into `public/vendor/` (git-ignored) and re-pins the CDN version in `public/llms.txt`. The site always demos the library code of the current commit.
 
@@ -25,7 +25,8 @@ A lightweight, zero-dependency social share button library (vanilla JS + CSS) an
 
 ## 🧩 Library Rules (`src/`)
 
-- Zero runtime dependencies. Never add one.
+- Zero runtime dependencies. Never add one (dev dependencies for tests are fine).
+- New options, platforms or events need tests in `tests/social-share-button.test.js`. The library is a classic script: tests import it for its side effect and use `window.SocialShareButton`.
 - The library must work from a plain `<script>` tag and expose `window.SocialShareButton`.
 - **Privacy by design:** the library never collects or sends data. It only emits events (DOM `social-share` CustomEvent, `onAnalytics`, `analyticsPlugins`).
 - When you change options or behavior, update the README "Configuration" table, `landing-page/src/content/install.ts` (copy-paste snippets) and `landing-page/public/llms.txt`.
