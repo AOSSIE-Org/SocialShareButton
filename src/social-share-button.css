@@ -61,16 +61,20 @@
   background: linear-gradient(135deg, #7c8ff0 0%, #8a5bb5 100%);
 }
 
-/* Light: Clean white style for dark backgrounds */
-.social-share-btn.light {
-  background: #fff;
-  color: #333;
-  border-color: #ddd;
+/* Light: Clean high-contrast style for light backgrounds */
+.social-share-btn.light,
+.social-share-btn.theme-light {
+  background: #ffffff;
+  color: #1a1a1a;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
-.social-share-btn.light:hover {
-  background: #f5f5f5;
-  border-color: #ccc;
+.social-share-btn.light:hover,
+.social-share-btn.theme-light:hover {
+  background: #f3f4f6;
+  border-color: rgba(0, 0, 0, 0.35);
+  color: #111827;
 }
 
 /* Compact: Smaller padding and font for tight spaces */
@@ -145,12 +149,61 @@
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
-
 /* Light Theme */
+.social-share-modal-overlay.light {
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
 .social-share-modal-overlay.light .social-share-modal-content {
   background: #ffffff;
-  color: #333;
+  color: #1a1a1a;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
 }
+
+.social-share-modal-overlay.light .social-share-modal-header {
+  border-bottom-color: #e5e7eb;
+}
+
+.social-share-modal-overlay.light .social-share-modal-header h3 {
+  color: #111827;
+}
+
+.social-share-modal-overlay.light .social-share-modal-close {
+  color: #4b5563;
+}
+
+.social-share-modal-overlay.light .social-share-modal-close:hover {
+  background-color: #f3f4f6;
+  color: #111827;
+}
+
+.social-share-modal-overlay.light .social-share-platform-btn span {
+  color: #374151;
+}
+
+.social-share-modal-overlay.light .social-share-link-container {
+  background: #f9fafb;
+  border-top: 1px solid #e5e7eb;
+}
+
+.social-share-modal-overlay.light .social-share-link-input {
+  background: #ffffff;
+  border-color: #d1d5db;
+}
+
+.social-share-modal-overlay.light .social-share-link-input input {
+  color: #2563eb;
+}
+
+.social-share-modal-overlay.light .social-share-copy-btn {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.social-share-modal-overlay.light .social-share-copy-btn:hover {
+  background: #1d4ed8;
+}
+
 
 /* -----------------------------------------------------------------------------
    MODAL HEADER
