@@ -9,7 +9,7 @@ This document provides guidelines to help you contribute effectively and keep th
 
 ## 🚨 Important: Discord Communication
 
-- Join our [Discord server](https://discord.gg/hjUhu33uAn) before starting any work
+- Join our [Discord server](https://discord.gg/hjUhu33uAn) before starting any work, then use the [#social-share-button](https://discord.com/channels/1022871757289422898/1479012884209078365) channel (the channel link only opens for members)
 - All project communication must happen on Discord.
 - Please post PR/issue updates in the relevant Discord channel.
 - PRs without Discord updates may face delays.
@@ -149,7 +149,12 @@ We use Prettier for the library and ESLint for the website. Please run these bef
 
 - `npm run format` — Automatically format your code to project standards (repository root).
 - `npm run format:check` — Verify that files are correctly formatted (repository root).
+- `npm test` / `npm run test:coverage` — Run the library's Vitest unit and property tests in `tests/` (repository root). CI fails below 90% coverage of `src/social-share-button.js` and `src/social-share-analytics.js`.
 - `npm run lint` and `npm run build` — Lint and build the website (inside `landing-page/`).
+
+### Testing Policy
+
+New library behaviour (options, platforms, events, lifecycle) must come with tests in [`tests/`](tests/). Use [fast-check](https://fast-check.dev) property tests where the input space is large (URLs, titles, option combinations). Releases run the same suite before publishing to npm.
 
 ### Working on the Website
 
@@ -180,7 +185,7 @@ Contributions are made under the [Developer Certificate of Origin](DCO.md). You 
 
 ### ✅ Before Submitting
 
-- [ ] Code tested
+- [ ] Code tested (`npm run test:coverage` at the repo root passes)
 - [ ] Documentation updated
 - [ ] Linked related issue
 - [ ] Branch rebased with upstream
