@@ -59,6 +59,25 @@ jobs:
           echo "✓ Version format is valid: $VERSION"
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
+      # Tests gate the release: nothing is tagged, released or published if they fail
+      - name: Setup pnpm
+        uses: pnpm/action-setup@008330803749db0355799c700092d9a85fd074e9 # v6.0.9
+        with:
+          # Version comes from "packageManager" in package.json
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run tests before releasing
+        run: pnpm run test:coverage
+
       - name: Create and push tag
         run: |
           VERSION="${{ steps.get_version.outputs.version }}"
@@ -159,7 +178,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@008330803749db0355799c700092d9a85fd074e9 # v6.0.9
         with:
-          version: 10
+          # Version comes from "packageManager" in package.json
           run_install: false
 
       - name: Setup Node.js
@@ -172,8 +191,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Run linting
-        run: pnpm run lint
 
       - name: Sync version from VERSION file
         run: |

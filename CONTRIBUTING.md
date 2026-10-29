@@ -9,7 +9,7 @@ This document provides guidelines to help you contribute effectively and keep th
 
 ## 🚨 Important: Discord Communication
 
-- Join our [Discord server](https://discord.gg/hjUhu33uAn) before starting any work
+- Join our [Discord server](https://discord.gg/hjUhu33uAn) before starting any work, then use the [#social-share-button](https://discord.com/channels/1022871757289422898/1479012884209078365) channel (the channel link only opens for members)
 - All project communication must happen on Discord.
 - Please post PR/issue updates in the relevant Discord channel.
 - PRs without Discord updates may face delays.
@@ -145,11 +145,31 @@ Push your branch:
 
 ### Code Quality Tools
 
-We use ESLint for linting and Prettier for formatting. Please run these before submitting a PR:
+We use Prettier for the library and ESLint for the website. Please run these before submitting a PR:
 
-- `npm run lint` — Check for code quality and style issues.
-- `npm run format` — Automatically format your code to project standards.
-- `npm run format:check` — Verify that files are correctly formatted.
+- `npm run format` — Automatically format your code to project standards (repository root).
+- `npm run format:check` — Verify that files are correctly formatted (repository root).
+- `npm test` / `npm run test:coverage` — Run the library's Vitest unit and property tests in `tests/` (repository root). CI fails below 90% coverage of `src/social-share-button.js` and `src/social-share-analytics.js`.
+- `npm run lint` and `npm run build` — Lint and build the website (inside `landing-page/`).
+
+### Testing Policy
+
+New library behaviour (options, platforms, events, lifecycle) must come with tests in [`tests/`](tests/). Use [fast-check](https://fast-check.dev) property tests where the input space is large (URLs, titles, option combinations). Releases run the same suite before publishing to npm.
+
+### Working on the Website
+
+The website in [`landing-page/`](landing-page/) is a Next.js 16 static site with Tailwind CSS v4, `next-intl` (English and Hindi) and `next-themes`:
+
+1. `cd landing-page && npm install`
+2. `npm run dev` and open http://localhost:3000 — the library in `../src` is copied in once when the dev server starts. If you edit the library while `npm run dev` is running, run `npm run sync-library` to update the site's copy.
+3. Put every user-visible string in **both** `src/messages/en.json` and `src/messages/hi.json`.
+4. Use the semantic theme tokens (`bg-background-primary`, `text-foreground-secondary`, …) instead of `dark:` utilities. See [`landing-page/public/brand/Brand.md`](landing-page/public/brand/Brand.md).
+
+AI coding agents should read [`AGENTS.md`](AGENTS.md) first.
+
+### Developer Certificate of Origin
+
+Contributions are made under the [Developer Certificate of Origin](DCO.md). You can certify it explicitly by signing off your commits with `git commit -s`.
 
 - Then open a Pull Request including:
 
@@ -165,7 +185,7 @@ We use ESLint for linting and Prettier for formatting. Please run these before s
 
 ### ✅ Before Submitting
 
-- [ ] Code tested
+- [ ] Code tested (`npm run test:coverage` at the repo root passes)
 - [ ] Documentation updated
 - [ ] Linked related issue
 - [ ] Branch rebased with upstream

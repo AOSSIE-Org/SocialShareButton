@@ -1,141 +1,328 @@
 @import "tailwindcss";
 
-/* --- CSS-first theme configuration (replaces tailwind.config.ts) --- */
-@theme {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-border: var(--border);
-
-  --font-sans: var(--font-inter), sans-serif;
-  --font-serif: var(--font-playfair), serif;
-}
-
-/* Override dark mode to use class strategy (for next-themes) */
+/* Configure class-based dark mode selector in Tailwind CSS v4 */
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* --- CSS variable definitions for light/dark themes --- */
-:root {
-  --background: #ffffff;
-  --foreground: #000000;
-  --primary: #ffcc00;
-  --primary-foreground: #000000;
-  --secondary: #2e8b00;
-  --secondary-foreground: #ffffff;
-  --card: #ffffff;
-  --card-foreground: #000000;
-  --border: #000000;
-}
+@theme {
+  /* Bind Tailwind v4 variables directly to semantic CSS variables (see public/brand/Brand.md) */
+  --color-background-primary: var(--background);
+  --color-background-secondary: var(--background-secondary);
+  --color-background-tertiary: var(--background-tertiary);
+  --color-foreground-primary: var(--foreground);
+  --color-foreground-secondary: var(--foreground-secondary);
+  --color-foreground-muted: var(--foreground-muted);
+  --color-border-default: var(--border);
+  --color-line: var(--line);
+  --color-pattern: var(--pattern-fg);
 
-.dark,
-.dark:root {
-  --background: #212121;
-  --foreground: #fafafa;
-  --primary: #ffcc00;
-  --primary-foreground: #000000;
-  --secondary: #2e8b00;
-  --secondary-foreground: #ffffff;
-  --card: #292929;
-  --card-foreground: #fafafa;
-  --border: #333333;
-}
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-highlight: var(--highlight);
 
-/* --- Base styles --- */
-@layer base {
-  * {
-    border-color: var(--color-border);
-  }
-  html {
-    scroll-behavior: smooth;
-  }
-  @media (prefers-reduced-motion: reduce) {
-    html {
-      scroll-behavior: auto;
+  --color-button-primary-bg: var(--button-primary-bg);
+  --color-button-primary-text: var(--button-primary-text);
+  --color-button-primary-border: var(--button-primary-border);
+  --color-button-primary-hover-bg: var(--button-primary-hover-bg);
+  --color-button-primary-hover-border: var(--button-primary-hover-border);
+  --color-button-secondary-bg: var(--button-secondary-bg);
+  --color-button-secondary-hover-bg: var(--button-secondary-hover-bg);
+  --color-button-secondary-text: var(--button-secondary-text);
+
+  --color-card-bg: var(--card-bg);
+  --color-card-border: var(--card-border);
+  --shadow-card: var(--card-shadow);
+  --shadow-popover: var(--popover-shadow);
+
+  --color-code-bg: var(--code-bg);
+  --color-code-border: var(--code-border);
+  --color-code-fg: var(--code-fg);
+  --color-code-muted: var(--code-muted);
+  --color-code-divider: var(--code-divider);
+  --color-code-hover-bg: var(--code-hover-bg);
+  --color-code-success: var(--code-success);
+
+  --color-status-error-bg: var(--status-error-bg);
+  --color-status-error-text: var(--status-error-text);
+  --color-status-neutral-bg: var(--status-neutral-bg);
+  --color-status-neutral-text: var(--status-neutral-text);
+  --color-status-success-text: var(--status-success-text);
+
+  --color-icon-sun: var(--icon-sun);
+  --color-icon-moon: var(--icon-moon);
+  --color-icon-system: var(--icon-system);
+
+  --color-discord-bg: var(--discord-bg);
+  --color-discord-hover-bg: var(--discord-hover-bg);
+  --color-discord-text: var(--discord-text);
+
+  --font-sans: var(--font-inter), var(--font-devanagari), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --animate-marquee: marquee 32s linear infinite;
+  --animate-theme-icon: theme-icon 300ms ease-out;
+  @keyframes theme-icon {
+    from {
+      opacity: 0;
+      transform: rotate(-60deg) scale(0.6);
     }
   }
-  body {
-    background-color: var(--color-background);
-    color: var(--color-foreground);
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
   }
 }
 
-/* --- Custom utilities --- */
-@utility hide-scrollbar {
+/* --- LIGHT MODE (Default) --- */
+:root {
+  --background: #ffffff;
+  --background-secondary: #f9fafb;
+  --background-tertiary: #f3f4f6;
+
+  /* primary = headings & strong text, secondary = body copy, muted = captions */
+  --foreground: #030712;
+  --foreground-secondary: #4b5563;
+  --foreground-muted: #636a77;
+
+  --border: rgb(3 7 18 / 0.1);
+  --line: rgb(3 7 18 / 0.06);
+  --pattern-fg: rgb(3 7 18 / 0.05);
+
+  /* Share Green & Signal Amber, sampled from the Social Share Button logo */
+  --accent: #15803d;
+  --accent-soft: rgb(22 163 74 / 0.1);
+  --highlight: #b45309;
+
+  --button-primary-bg: #030712;
+  --button-primary-text: #ffffff;
+  --button-primary-border: #030712;
+  --button-primary-hover-bg: #1f2937;
+  --button-primary-hover-border: #1f2937;
+  --button-secondary-bg: rgb(3 7 18 / 0.05);
+  --button-secondary-hover-bg: rgb(3 7 18 / 0.08);
+  --button-secondary-text: #030712;
+
+  --card-bg: rgb(3 7 18 / 0.025);
+  --card-border: rgb(3 7 18 / 0.08);
+  --card-shadow: 0 1px 2px rgb(3 7 18 / 0.04);
+  --popover-shadow: 0 10px 30px -10px rgb(3 7 18 / 0.25), 0 0 0 1px rgb(3 7 18 / 0.06);
+
+  /* Code panels: light in light mode, all text/syntax colors ≥ 4.5:1 on --code-bg */
+  --code-bg: #f6f8fa;
+  --code-border: rgb(3 7 18 / 0.1);
+  --code-fg: #1f2328;
+  --code-muted: #59636e;
+  --code-divider: rgb(3 7 18 / 0.08);
+  --code-hover-bg: rgb(3 7 18 / 0.06);
+  --code-success: #116329;
+
+  --status-error-bg: #fee2e2;
+  --status-error-text: #dc2626;
+  --status-neutral-bg: #f4f4f5;
+  --status-neutral-text: #52525b;
+  --status-success-text: #15803d;
+
+  /* #d97706 keeps the sun at ≥ 3:1 (non-text contrast) on white */
+  --icon-sun: #d97706;
+  --icon-moon: #818cf8;
+  --icon-system: #71717a;
+
+  /* Discord blurple; white text on it is 4.61:1, hover 6.42:1 */
+  --discord-bg: #5865f2;
+  --discord-hover-bg: #4752c4;
+  --discord-text: #ffffff;
+
+  /* sugar-high syntax tokens (light code panel) */
+  --sh-class: #8250df;
+  --sh-identifier: #1f2328;
+  --sh-sign: #59636e;
+  --sh-property: #116329;
+  --sh-entity: #0550ae;
+  --sh-jsxliterals: #1f2328;
+  --sh-string: #0a3069;
+  --sh-keyword: #cf222e;
+  --sh-comment: #59636e;
+}
+
+/* --- DARK MODE --- */
+.dark {
+  --background: #030712;
+  --background-secondary: #0a0f1c;
+  --background-tertiary: #111827;
+
+  --foreground: #ffffff;
+  --foreground-secondary: #9ca3af;
+  --foreground-muted: #8b93a0;
+
+  --border: rgb(255 255 255 / 0.1);
+  --line: rgb(255 255 255 / 0.08);
+  --pattern-fg: rgb(255 255 255 / 0.08);
+
+  --accent: #4ade80;
+  --accent-soft: rgb(74 222 128 / 0.1);
+  --highlight: #fbbf24;
+
+  --button-primary-bg: #374151;
+  --button-primary-text: #ffffff;
+  --button-primary-border: transparent;
+  --button-primary-hover-bg: #4b5563;
+  --button-primary-hover-border: transparent;
+  --button-secondary-bg: rgb(255 255 255 / 0.08);
+  --button-secondary-hover-bg: rgb(255 255 255 / 0.12);
+  --button-secondary-text: #ffffff;
+
+  --card-bg: rgb(255 255 255 / 0.025);
+  --card-border: rgb(255 255 255 / 0.08);
+  --card-shadow: 0 1px 2px rgb(0 0 0 / 0.3);
+  --popover-shadow: 0 10px 30px -10px rgb(0 0 0 / 0.8), 0 0 0 1px rgb(255 255 255 / 0.1);
+
+  --code-bg: #0c1019;
+  --code-border: rgb(255 255 255 / 0.1);
+  --code-fg: #e5e7eb;
+  --code-muted: #9ca3af;
+  --code-divider: rgb(255 255 255 / 0.1);
+  --code-hover-bg: rgb(255 255 255 / 0.1);
+  --code-success: #4ade80;
+
+  /* sugar-high syntax tokens (dark code panel) */
+  --sh-class: #7dd3fc;
+  --sh-identifier: #e5e7eb;
+  --sh-sign: #9ca3af;
+  --sh-property: #86efac;
+  --sh-entity: #7dd3fc;
+  --sh-jsxliterals: #e5e7eb;
+  --sh-string: #fcd34d;
+  --sh-keyword: #f9a8d4;
+  --sh-comment: #8b949e;
+
+  --status-error-bg: rgba(69, 10, 10, 0.5);
+  --status-error-text: #f87171;
+  --status-neutral-bg: #27272a;
+  --status-neutral-text: #a1a1aa;
+  --status-success-text: #4ade80;
+
+  --icon-sun: #fbbf24;
+  --icon-moon: #818cf8;
+  --icon-system: #a1a1aa;
+
+  --discord-bg: #5865f2;
+  --discord-hover-bg: #4752c4;
+  --discord-text: #ffffff;
+}
+
+/* --- GLOBAL STYLES --- */
+html,
+body {
+  max-width: 100%;
+  /* `clip`, not `hidden`: hidden turns <body> into a scroll container, which breaks the sticky header */
+  overflow-x: clip;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  transition:
+    background-color 200ms ease-in-out,
+    color 200ms ease-in-out;
+}
+
+/* Negative letter-spacing breaks Devanagari conjunct shaping; keep Hindi at normal tracking. */
+html:lang(hi) {
+  --tracking-tighter: 0em;
+  --tracking-tight: 0em;
+}
+
+::selection {
+  background-color: var(--accent-soft);
+}
+
+/* Diagonal hatching used for page gutters and dividers (after tailwindcss.com) */
+@utility hatch {
+  background-image: repeating-linear-gradient(
+    315deg,
+    var(--pattern-fg) 0,
+    var(--pattern-fg) 1px,
+    transparent 0,
+    transparent 50%
+  );
+  background-size: 10px 10px;
+}
+
+/*
+ * Pointer-following border light (see GlowGroup). A masked radial gradient draws a 1px
+ * border over each [data-glow] card and the group, plus a soft spotlight behind the cards.
+ * It only paints while the group is hovered.
+ */
+@layer components {
+  .glow-group {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .glow-group [data-glow] {
+    position: relative;
+  }
+
+  .glow-group::before,
+  .glow-group [data-glow]::before,
+  .glow-group::after {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 300ms ease;
+  }
+
+  .glow-group::before,
+  .glow-group [data-glow]::before {
+    padding: 1px;
+    background: radial-gradient(
+      16rem circle at var(--glow-x, 50%) var(--glow-y, 50%),
+      var(--accent),
+      transparent 70%
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#000 0 0) content-box exclude,
+      linear-gradient(#000 0 0);
+  }
+
+  .glow-group::after {
+    z-index: -1;
+    background: radial-gradient(
+      28rem circle at var(--glow-x, 50%) var(--glow-y, 50%),
+      var(--accent-soft),
+      transparent 70%
+    );
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .glow-group:hover::before,
+    .glow-group:hover::after,
+    .glow-group:hover [data-glow]::before {
+      opacity: 1;
+    }
+  }
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
   &::-webkit-scrollbar {
     display: none;
   }
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-@utility text-balance {
-  text-wrap: balance;
-}
-
-/* --- Animations --- */
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-@keyframes shine {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(100%);
-  }
-}
-
-@keyframes scroll-left {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-100%);
-  }
-}
-
-@keyframes marquee-right {
-  0% {
-    transform: translateX(-50%);
-  }
-  100% {
-    transform: translateX(0%);
-  }
-}
-
-@utility animate-float {
-  animation: float 3s ease-in-out infinite;
-}
-
-@utility animate-shine {
-  animation: shine 1.5s ease-in-out infinite;
-}
-
-@utility animate-scroll-left {
-  animation: scroll-left 40s linear infinite;
-}
-
-@utility animate-marquee-right {
-  animation: marquee-right 32s linear infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .animate-scroll-left,
-  .animate-float,
-  .animate-shine,
-  .animate-marquee-right {
-    animation: none !important;
+  .animate-marquee {
+    animation: none;
   }
 }

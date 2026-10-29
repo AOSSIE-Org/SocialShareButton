@@ -34,3 +34,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# library files copied from ../src by scripts/sync-library.mjs
+/public/vendor/

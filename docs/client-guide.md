@@ -38,7 +38,6 @@ You have exactly **three steps** between you and a live share button.
 
 That's it. No accounts. No API keys. No configuration files.
 
-
 ---
 
 ## Want to Track Every Share?
