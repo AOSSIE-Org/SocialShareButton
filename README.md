@@ -77,6 +77,7 @@ Lightweight social sharing component for web applications. **Zero dependencies, 
 ## 🚀 Project's Features
 
 - 🌐 **Multiple platforms:** WhatsApp, Facebook, X, LinkedIn, Telegram, Reddit, Email, Pinterest, Discord
+- 📷 QR Code sharing (optional — requires the `social-share-button-qr.js` extension, which loads `qrcode-generator` at runtime)
 - 🎯 **Zero dependencies:** pure vanilla JavaScript
 - ⚛️ **Framework support:** React, Preact, Next.js, Qwik, Vue, Angular, or plain HTML
 - 🔄 **SPA-aware:** auto-detects the current URL and page title, and follows client-side route changes
@@ -632,6 +633,8 @@ new SocialShareButton({
 **Available Platforms:**  
 `whatsapp`, `facebook`, `twitter`, `linkedin`, `telegram`, `reddit`, `email`, `pinterest`, `discord`
 
+> **QR Code** (`qrcode`) is available as an optional platform. It requires the separate `social-share-button-qr.js` extension — see [Using the QR Code Extension](#using-the-qr-code-extension).
+
 ### Customize Share Message/Post Text
 
 Control the text that appears when users share to social platforms:
@@ -760,6 +763,42 @@ new SocialShareButton({
 ---
 
 ## 🧠 Advanced Usage
+
+### Using the QR Code Extension
+
+The QR code feature is an **optional extension**. The core library has zero runtime dependencies; this extension loads `qrcode-generator` from jsDelivr at runtime.
+
+#### Via CDN (HTML)
+
+```html
+<!-- Main CSS and JS -->
+<link rel="stylesheet" href="path/to/social-share-button.css" />
+<script src="path/to/social-share-button.js"></script>
+
+<!-- QR Code Extension (loads qrcode-generator from jsDelivr automatically) -->
+<script src="path/to/social-share-button-qr.js"></script>
+```
+
+#### Via npm / bundler
+
+```javascript
+import "@aossie-org/social-share-button/src/social-share-button-qr.js";
+```
+
+The extension will dynamically inject `qrcode-generator` from jsDelivr the first time a user clicks the QR platform.
+
+#### Self-hosting under a strict CSP
+
+If your Content Security Policy (CSP) blocks `cdn.jsdelivr.net`, download `qrcode-generator` locally and load it **before** the extension:
+
+```html
+<!-- Self-hosted qrcode-generator -->
+<script src="/path/to/qrcode.min.js"></script>
+<!-- QR extension will detect window.qrcode and skip the CDN fetch -->
+<script src="path/to/social-share-button-qr.js"></script>
+```
+
+When you pass `qrcode` in the `platforms` array, a QR code panel will be rendered inline inside the share modal with a canvas preview and a **Download QR** button.
 
 ### Using npm Package
 
