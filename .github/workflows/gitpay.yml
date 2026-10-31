@@ -62,15 +62,17 @@ jobs:
     steps:
       - name: Pay from the /send comment
         id: gitpay
-        # main after StabilityNexus/GitPay#67, the first commit with
-        # `scheme: approve`. Re-pin to the v1.1.0 tag once it is published.
-        uses: StabilityNexus/GitPay@83942f8088bfdf5e34500b99a3f6a8f395dd8a92
+        # main after StabilityNexus/GitPay#68: `scheme: approve`, `round:N`
+        # in /send, and STATUS=unconfirmed. Re-pin to the v1.1.0 tag once it
+        # is published.
+        uses: StabilityNexus/GitPay@6cd8d64b075d3651a99e361268e70378023ddb03
         with:
           comment: ${{ github.event.comment.body }}
           actor_association: ${{ github.event.comment.author_association }}
           actor: ${{ github.event.comment.user.login }}
           # Ties the payout to this PR, so a re-run can never pay it twice.
-          # To pay the same person again on the same PR, bump `round`.
+          # To pay the same person again on the same PR, add round:1 (then
+          # round:2, …) to the command: /send 0xRecipient 2.50 round:1
           ref: refs/pull/${{ github.event.issue.number }}
           network: sepolia
           asset: USDC
@@ -106,12 +108,15 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Report
-        # A refusal fails the step above, so this runs only on success.
+        # Runs after a failure too, so an unconfirmed payout says what to do.
+        # Skipped only when the run is cancelled or GitPay wrote no STATUS.
+        if: ${{ !cancelled() && steps.gitpay.outputs.STATUS != '' }}
         env:
           STATUS: ${{ steps.gitpay.outputs.STATUS }}
           TX_HASH: ${{ steps.gitpay.outputs.TX_HASH }}
           EXPLORER_URL: ${{ steps.gitpay.outputs.EXPLORER_URL }}
           IDEMPOTENCY_KEY: ${{ steps.gitpay.outputs.IDEMPOTENCY_KEY }}
+          ERROR_CODE: ${{ steps.gitpay.outputs.ERROR_CODE }}
         run: |
           echo "STATUS          = $STATUS"
           echo "IDEMPOTENCY_KEY = $IDEMPOTENCY_KEY"
@@ -119,5 +124,9 @@ jobs:
             settled)      echo "Paid: $EXPLORER_URL" ;;
             already-paid) echo "A receipt already exists for this payout. Nothing was paid again." ;;
             skipped)      echo "No /send command found. Nothing to do." ;;
+            unconfirmed)
+              echo "::error::An earlier attempt for this payout recorded $TX_HASH that GitPay could not confirm, so its outcome is unknown. Nothing was paid by this run. Check $EXPLORER_URL: if it landed, the contributor is paid. Only if it never landed, re-send the command with round:1 (or the next round)."
+              exit 1 ;;
+            error)        echo "::error::GitPay refused or failed this payout (${ERROR_CODE:-no code}). See the log of the step above."; exit 1 ;;
             *)            echo "::error::unexpected STATUS '$STATUS'"; exit 1 ;;
           esac
