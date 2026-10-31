@@ -62,10 +62,8 @@ jobs:
     steps:
       - name: Pay from the /send comment
         id: gitpay
-        # main after StabilityNexus/GitPay#68: `scheme: approve`, `round:N`
-        # in /send, and STATUS=unconfirmed. Re-pin to the v1.1.0 tag once it
-        # is published.
-        uses: StabilityNexus/GitPay@6cd8d64b075d3651a99e361268e70378023ddb03
+        # v1.1.0: `scheme: approve`, `round:N` in /send, STATUS=unconfirmed.
+        uses: StabilityNexus/GitPay@0c470cef7b83003815339596ef7c688745467ba7 # v1.1.0
         with:
           comment: ${{ github.event.comment.body }}
           actor_association: ${{ github.event.comment.author_association }}
