@@ -1,22 +1,31 @@
 name: GitPay
 
-# Pays contributors from this project's own Safe on Ethereum Sepolia.
+# Pays contributors from this project's own wallet (MetaMask or any EVM
+# wallet) on Ethereum Sepolia. No Safe needed.
 # https://github.com/StabilityNexus/GitPay
 #
 # A maintainer comments on a pull request:
 #
 #   /send 0xRecipientAddress 2.50
 #
-# GitPay checks the policy below, then pays it on Ethereum Sepolia from the
-# Safe and posts a receipt on the PR. Every /send that passes policy is a real
-# testnet transfer; there is no dry-run fallback.
+# GitPay checks the policy below, then pays it on Ethereum Sepolia with
+# USDC.transferFrom(payer wallet → recipient) and posts a receipt on the PR.
+# Every /send that passes policy is a real testnet transfer; there is no
+# dry-run fallback.
+#
+# One-time setup:
+#   1. Payer wallet (MetaMask): holds the USDC that gets paid out.
+#   2. Delegate wallet: a NEW, separate account. CI signs payouts with its key,
+#      so send it a little Sepolia ETH for gas. Never use the payer's own key.
+#   3. From the payer wallet, call approve(delegate, amount) on the USDC
+#      contract (Etherscan → Contract → Write as Proxy). That approved amount is
+#      the most the delegate can ever spend, and also the most a leaked key can
+#      take. It does not refill: approve again when it runs out. Revoke with
+#      approve(delegate, 0).
 #
 # Settings → Secrets and variables → Actions needs:
 #   secrets:   GITPAY_DELEGATE_KEY, GITPAY_RPC_URL
-#   variables: GITPAY_SAFE, GITPAY_TOKEN
-# and, in Safe{Wallet}, a spending limit for the delegate address
-# (Settings → Setup → Spending limits). Size that limit at what you can afford
-# to lose in one period: it is the real ceiling if the delegate key ever leaks.
+#   variables: GITPAY_PAYER, GITPAY_TOKEN
 #
 # issue_comment workflows always run from the default branch, so a pull
 # request cannot change this file's policy before it is merged.
@@ -53,7 +62,9 @@ jobs:
     steps:
       - name: Pay from the /send comment
         id: gitpay
-        uses: StabilityNexus/GitPay@99d8a73697ee2465aa04322210663e92f250c7c1 # v1.0.1
+        # main after StabilityNexus/GitPay#67, the first commit with
+        # `scheme: approve`. Re-pin to the v1.1.0 tag once it is published.
+        uses: StabilityNexus/GitPay@83942f8088bfdf5e34500b99a3f6a8f395dd8a92
         with:
           comment: ${{ github.event.comment.body }}
           actor_association: ${{ github.event.comment.author_association }}
@@ -68,6 +79,8 @@ jobs:
           # Real testnet settlement. Without the secrets and variables above,
           # a /send fails with a configuration error and pays nothing.
           mode: self
+          # Pay from an ordinary wallet that approved the delegate, not a Safe.
+          scheme: approve
 
           # ── Policy ────────────────────────────────────────────────────────
           # Checked offline before anything is signed. Every run logs one
@@ -86,7 +99,7 @@ jobs:
 
           # ── This repository's settlement accounts ─────────────────────────
           rpc_url: ${{ secrets.GITPAY_RPC_URL }}
-          safe: ${{ vars.GITPAY_SAFE }}
+          payer: ${{ vars.GITPAY_PAYER }}
           token: ${{ vars.GITPAY_TOKEN }}
           delegate_key: ${{ secrets.GITPAY_DELEGATE_KEY }}
           pr: ${{ github.event.issue.number }}
