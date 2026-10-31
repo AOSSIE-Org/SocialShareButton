@@ -124,9 +124,19 @@ jobs:
             settled)      echo "Paid: $EXPLORER_URL" ;;
             already-paid) echo "A receipt already exists for this payout. Nothing was paid again." ;;
             skipped)      echo "No /send command found. Nothing to do." ;;
+            # A transaction was sent but did not confirm as a successful
+            # payout: it reverted, timed out, or lost its nonce. Only the
+            # explorer can say which. "Landed" is not enough: a reverted
+            # transaction is in a block and moved nothing.
             unconfirmed)
-              echo "::error::An earlier attempt for this payout recorded $TX_HASH that GitPay could not confirm, so its outcome is unknown. Nothing was paid by this run. Check $EXPLORER_URL: if it landed, the contributor is paid. Only if it never landed, re-send the command with round:1 (or the next round)."
+              echo "::error::An earlier attempt for this payout recorded $TX_HASH, which GitPay could not confirm. Nothing was paid by this run. Check $EXPLORER_URL. If the transaction succeeded, the contributor is paid. If it failed (reverted) or never landed, nothing was paid: re-send the command with round:1 (or the next round)."
               exit 1 ;;
-            error)        echo "::error::GitPay refused or failed this payout (${ERROR_CODE:-no code}). See the log of the step above."; exit 1 ;;
+            error)
+              if [[ -n "$TX_HASH" ]]; then
+                echo "::error::GitPay sent $TX_HASH but could not confirm it as a successful payout (${ERROR_CODE:-no code}). Check $EXPLORER_URL. If the transaction succeeded, the contributor is paid. If it failed (reverted) or never landed, nothing was paid: re-send the command with round:1 (or the next round)."
+              else
+                echo "::error::GitPay refused or failed this payout (${ERROR_CODE:-no code}). See the log of the step above, and any receipt on this PR."
+              fi
+              exit 1 ;;
             *)            echo "::error::unexpected STATUS '$STATUS'"; exit 1 ;;
           esac
