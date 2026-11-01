@@ -4,24 +4,22 @@ This document lists the individuals fulfilling the key roles of [Maintainer](htt
 
 ---
 
+> **Note:** If multiple contributors are fulfilling a role in a single repository, please include and fill out the extra columns to clarify responsibilities (e.g., `Project / Feature Idea`, `Area / Focus`, and `Proposal / Discussion Link` for Ideators; `Area / Focus` for Mentors and Maintainers). If there is only one person for a role, do not add these columns.
+
+## Ideators
+
+| Name | GitHub Username | Discord Username | Project / Feature Idea          | Area / Focus         | Proposal / Discussion Link                  |
+| ---- | --------------- | ---------------- | ------------------------------- | -------------------- | ------------------------------------------- |
+| TODO | @username       | @discord_user    | Context-First AI Infrastructure | AI Workflow & Skills | [Discussion](https://github.com/AOSSIE-Org) |
+
 ## Mentors
 
-| Name   | GitHub Username                                    | Discord Username | Area / Focus                            |
-| ------ | -------------------------------------------------- | ---------------- | --------------------------------------- |
-| Bruno  | [@Zahnentferner](https://github.com/Zahnentferner) | @b.wp            | Project Oversight & Coordination        |
-| Madhav | [@M4dhav](https://github.com/M4dhav)               | @m4dhav          | Architecture, Code Quality & PR Reviews |
+| Name | GitHub Username | Discord Username | Area / Focus                        |
+| ---- | --------------- | ---------------- | ----------------------------------- |
+| TODO | @username       | @discord_user    | whole Project Guidance & PR Reviews |
 
-## Contributors & Maintainers
+## Maintainers
 
-| Name         | GitHub Username                                    | Discord Username | Area / Focus          |
-| ------------ | -------------------------------------------------- | ---------------- | --------------------- |
-| Bruno        | [@Zahnentferner](https://github.com/Zahnentferner) | @b.wp            | Project Oversight     |
-| Madhav       | [@M4dhav](https://github.com/M4dhav)               | @m4dhav          | Code Quality & Reviews |
-| Karun Pacholi | [@kpj2006](https://github.com/kpj2006) | @karunpacholi0408   | Maintainer (GSoC 2026) |
-| Saksham Jain | [@reach2saksham](https://github.com/reach2saksham) | @theonlypro47    | Website & Library Maintenance (GSoC 2026) |
-
----
-
-## 📜 Contribution Guidelines
-
-Please read our [`CONTRIBUTING.md`](CONTRIBUTING.md) and [`DCO.md`](DCO.md) before submitting pull requests. All contributions are welcome!
+| Name | GitHub Username | Discord Username | Area / Focus                     |
+| ---- | --------------- | ---------------- | -------------------------------- |
+| TODO | @username       | @discord_user    | Repository Maintenance & Merging |

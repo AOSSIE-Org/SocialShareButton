@@ -2,62 +2,67 @@
 
 > Criteria adapted from the [OpenSSF Best Practices Badge](https://github.com/coreinfrastructure/best-practices-badge)
 > (MIT / CC BY 3.0) by OpenSSF contributors. Modified for AOSSIE multi-repo template use.
->
-> **Project:** Social Share Button (library + website) · **[Discord Channel](https://discord.com/channels/1022871757289422898/1479012884209078365)**
->
+
 > **Purpose:** Covers OpenSSF Best Practices criteria that are NOT auto-detected by OpenSSF Scorecard.
 > Scorecard already handles: License, SAST tools, CI tests, Security Policy file, Branch Protection,
 > Pinned Dependencies, Signed Releases, Maintained status, and Known Vulnerabilities.
 >
-> **Legend:** `[x]` met · `[-]` not applicable · `[ ]` not met · 🔴 MUST · 🟡 SHOULD · 🔵 SUGGESTED
+> **How to use:**
+> 1. Fill in checkboxes below — tick `[x]` for Met, leave `[ ]` for Unmet, use `[~]` for N/A
+> 2. Add a brief note or URL after each item as evidence
+> 3. Run the checklist-score workflow to update the badge automatically
+>
+> **Legend:**
+> - 🔴 MUST — Required for passing
+> - 🟡 SHOULD — Required unless documented rationale given
+> - 🔵 SUGGESTED — Optional but recommended
+> - ⚪ N/A — Mark `[~]` if not applicable, add justification
 
 ---
 
 ## Score Summary
 
-| Category           | Met | N/A | Total (Applicable) | Status |
-|--------------------|-----|-----|--------------------|--------|
-| Basics             | 8   | 0   | 8                  | 🟢     |
-| Change Control     | 4   | 1   | 5 (6)              | 🟡     |
-| Reporting          | 7   | 1   | 7 (8)              | 🟢     |
-| Quality            | 10  | 0   | 11                 | 🟡     |
-| Security           | 3   | 6   | 3 (9)              | 🟢     |
-| Analysis           | 5   | 2   | 5 (7)              | 🟢     |
-| **Total**          | **37** | **10** | **39 (49)**    | **94.9%** |
-
-*N/A items are excluded from the denominator.*
-
+<!-- Auto-updated by checklist-score.yml workflow — do not edit manually -->
+| Category           | Met | Total | Status |
+|--------------------|-----|-------|--------|
+| Basics             | 0   | 8     | 🔴     |
+| Change Control     | 0   | 6     | 🔴     |
+| Reporting          | 0   | 8     | 🔴     |
+| Quality            | 0   | 11     | 🔴     |
+| Security           | 0   | 9     | 🔴     |
+| Analysis           | 0   | 7     | 🔴     |
+| **Total**          | **0** | **49** | **0%** |
 ---
 
 ## 🏗️ Basics
 
 ### Project Website & Documentation
 
-- [x] 🔴 **description_good** — The project README/website clearly describes what the software does and what problem it solves.
-  - *Evidence URL:* https://github.com/AOSSIE-Org/SocialShareButton#readme
+- [ ] 🔴 **description_good** — The project README/website clearly describes what the software does and what problem it solves.
+  - *Evidence URL:*
 
-- [x] 🔴 **interact** — The project provides information on how to obtain the software, submit bug reports, and contribute.
-  - *Evidence URL:* https://github.com/AOSSIE-Org/SocialShareButton/blob/main/CONTRIBUTING.md
+- [ ] 🔴 **interact** — The project provides information on how to obtain the software, submit bug reports, and contribute.
+  - *Evidence URL:*
 
-- [x] 🔴 **contribution** — `CONTRIBUTING.md` explains the contribution process (e.g., PRs are used, how to open one).
-  - *Evidence URL:* https://github.com/AOSSIE-Org/SocialShareButton/blob/main/CONTRIBUTING.md
+- [ ] 🔴 **contribution** — `CONTRIBUTING.md` explains the contribution process (e.g., PRs are used, how to open one).
+  - *Evidence URL:*
 
-- [x] 🟡 **contribution_requirements** — `CONTRIBUTING.md` references acceptable contribution standards (coding style, tests required, etc.).
-  - *Evidence URL:* https://github.com/AOSSIE-Org/SocialShareButton/blob/main/CONTRIBUTING.md#3️⃣-follow-project-standards
+- [ ] 🟡 **contribution_requirements** — `CONTRIBUTING.md` references acceptable contribution standards (coding style, tests required, etc.).
+  - *Evidence URL:*
 
-- [x] 🔴 **documentation_basics** — Basic documentation exists for the software (README, Wiki, or docs folder).
-  - *Evidence URL:* https://github.com/AOSSIE-Org/SocialShareButton#readme
+- [ ] 🔴 **documentation_basics** — Basic documentation exists for the software (README, Wiki, or docs folder).
+  - *Evidence URL:* `[ ]` N/A — *Justification:*
 
-- [x] 🔴 **documentation_interface** — Reference documentation describes the external interface (API inputs/outputs, CLI flags, config schema, etc.).
-  - *Note:* Every library option, event and framework wrapper is documented in the README Configuration and Advanced Usage sections; the website configuration is documented in [README](https://github.com/AOSSIE-Org/SocialShareButton#readme) and [AGENTS.md](https://github.com/AOSSIE-Org/SocialShareButton/blob/main/AGENTS.md).
+- [ ] 🔴 **documentation_interface** — Reference documentation describes the external interface (API inputs/outputs, CLI flags, config schema, etc.).
+  - *Evidence URL:* `[ ]` N/A — *Justification:*
 
 ### Other Basics
 
-- [x] 🔴 **discussion** — Project has a searchable, URL-addressable discussion mechanism (GitHub Issues, Discord with archive, mailing list, etc.) that doesn't require proprietary client software.
-  - *Evidence URL:* https://github.com/AOSSIE-Org/SocialShareButton/issues and https://discord.com/channels/1022871757289422898/1479012884209078365
+- [ ] 🔴 **discussion** — Project has a searchable, URL-addressable discussion mechanism (GitHub Issues, Discord with archive, mailing list, etc.) that doesn't require proprietary client software.
+  - *Evidence URL:*
 
-- [x] 🟡 **english** — Documentation is provided in English and English bug reports/comments are accepted.
-  - *Note:* All documentation is in English; the site itself is localized with next-intl.
+- [ ] 🟡 **english** — Documentation is provided in English and English bug reports/comments are accepted.
+  - *Note:*
 
 ---
 
@@ -65,27 +70,27 @@
 
 ### Version Control
 
-- [x] 🔵 **repo_distributed** — Project uses a distributed VCS (e.g., git). *(SUGGESTED)*
-  - *Evidence URL:* https://github.com/AOSSIE-Org/SocialShareButton
+- [ ] 🔵 **repo_distributed** — Project uses a distributed VCS (e.g., git). *(SUGGESTED)*
+  - *Evidence URL:*
 
 ### Version Numbering
 
-- [x] 🔴 **version_unique** — Each release has a unique version identifier (e.g., v1.0.0).
-  - *Evidence URL:* https://github.com/AOSSIE-Org/SocialShareButton/blob/main/VERSION (the version-release workflow refuses to reuse an existing tag)
+- [ ] 🔴 **version_unique** — Each release has a unique version identifier (e.g., v1.0.0).
+  - *Evidence URL:*
 
-- [x] 🔵 **version_semver** — Project uses [SemVer](https://semver.org) or [CalVer](https://calver.org/) format. *(SUGGESTED)*
-  - *Note:* `VERSION` is validated as `MAJOR.MINOR.PATCH` by `.github/workflows/version-release.yml`.
+- [ ] 🔵 **version_semver** — Project uses [SemVer](https://semver.org) or [CalVer](https://calver.org/) format. *(SUGGESTED)*
+  - *Note:*
 
-- [x] 🔵 **version_tags** — Releases are tagged in the VCS (e.g., `git tag v1.0.0`). *(SUGGESTED)*
-  - *Evidence URL:* https://github.com/AOSSIE-Org/SocialShareButton/blob/main/.github/workflows/version-release.yml
+- [ ] 🔵 **version_tags** — Releases are tagged in the VCS (e.g., `git tag v1.0.0`). *(SUGGESTED)*
+  - *Evidence URL:*
 
 ### Release Notes
 
-- [ ] 🔴 **release_notes** — Each release includes human-readable release notes summarizing major changes.
-  - *Not met yet:* releases created from a prepared draft carry its notes, but when no draft exists `version-release.yml` creates a release with only a generic line and no change summary. See https://github.com/AOSSIE-Org/SocialShareButton/releases
+- [ ] 🔴 **release_notes** — Each release includes human-readable release notes summarizing major changes. Raw `git log` output is NOT acceptable.
+  - *Evidence URL:* `[ ]` N/A — *Justification (continuous delivery / no external reuse):*
 
-- [-] 🔴 **release_notes_vulns** — Release notes identify every publicly known vulnerability (with CVE) fixed in that release.
-  - *Note:* `[~]` N/A: no publicly known vulnerabilities have been reported or fixed.
+- [ ] 🔴 **release_notes_vulns** — Release notes identify every publicly known vulnerability (with CVE) fixed in that release.
+  - *Evidence URL:* `[ ]` N/A — *Justification (no publicly known vulns / users can't self-update):*
 
 ---
 
@@ -93,31 +98,31 @@
 
 ### Bug Reporting
 
-- [x] 🔴 **report_process** — A bug-reporting process exists (e.g., GitHub Issues link in README).
-  - *Evidence URL:* https://github.com/AOSSIE-Org/SocialShareButton/issues/new/choose
+- [ ] 🔴 **report_process** — A bug-reporting process exists (e.g., GitHub Issues link in README).
+  - *Evidence URL:*
 
-- [x] 🟡 **report_tracker** — An issue tracker (e.g., GitHub Issues) is used to track individual bugs.
-  - *Evidence URL:* https://github.com/AOSSIE-Org/SocialShareButton/issues
+- [ ] 🟡 **report_tracker** — An issue tracker (e.g., GitHub Issues) is used to track individual bugs.
+  - *Evidence URL:*
 
-- [x] 🔴 **report_responses** — A majority of bug reports submitted in the last 2–12 months have been acknowledged.
-  - *Self-certification note:* Maintainers triage issues on GitHub and in the project Discord channel.
+- [ ] 🔴 **report_responses** — A majority of bug reports submitted in the last 2–12 months have been acknowledged (response ≠ fix).
+  - *Self-certification note:*
 
-- [x] 🟡 **enhancement_responses** — More than 50% of enhancement requests in the last 2–12 months have received a response.
-  - *Self-certification note:* Feature requests are discussed and answered in the project Discord channel and on GitHub.
+- [ ] 🟡 **enhancement_responses** — More than 50% of enhancement requests in the last 2–12 months have received a response.
+  - *Self-certification note:*
 
-- [x] 🔴 **report_archive** — Reports and responses are publicly archived and searchable.
-  - *Evidence URL:* https://github.com/AOSSIE-Org/SocialShareButton/issues?q=is%3Aissue
+- [ ] 🔴 **report_archive** — Reports and responses are publicly archived and searchable (GitHub Issues satisfies this).
+  - *Evidence URL:*
 
 ### Vulnerability Reporting
 
-- [x] 🔴 **vulnerability_report_process** — A vulnerability reporting process is documented.
-  - *Evidence URL:* https://github.com/AOSSIE-Org/SocialShareButton/blob/main/SECURITY.md
+- [ ] 🔴 **vulnerability_report_process** — A vulnerability reporting process is documented (e.g., `SECURITY.md`).
+  - *Evidence URL:*
 
-- [x] 🟡 **vulnerability_report_private** — If private vulnerability reporting is supported, the method for private submission is documented.
-  - *Evidence URL:* https://github.com/AOSSIE-Org/SocialShareButton/blob/main/SECURITY.md#reporting-a-vulnerability (GitHub private advisories or email)
+- [ ] 🟡 **vulnerability_report_private** — If private vulnerability reporting is supported, the method for private submission is documented.
+  - *Evidence URL:* `[ ]` N/A — *Justification:*
 
-- [-] 🔴 **vulnerability_report_response** — Initial response to any vulnerability report received in the last 6 months was within 14 days.
-  - *Note:* `[~]` N/A: no vulnerability reports received in the last 6 months. SECURITY.md commits to acknowledging within 7 days.
+- [ ] 🔴 **vulnerability_report_response** — Initial response to any vulnerability report received in the last 6 months was within 14 days.
+  - *Self-certification note:* `[ ]` N/A — *Justification (no reports received):*
 
 ---
 
@@ -125,45 +130,44 @@
 
 ### Build System
 
-- [x] 🔴 **build** — If the project requires building, a working build system exists that can auto-rebuild from source.
-  - *Evidence URL:* https://github.com/AOSSIE-Org/SocialShareButton/blob/main/.github/workflows/ci.yml
+- [ ] 🔴 **build** — If the project requires building, a working build system exists that can auto-rebuild from source.
+  - *Evidence URL:* `[ ]` N/A — *Justification (interpreted language / no build step):*
 
-- [x] 🔵 **build_common_tools** — Common build tools are used (npm, Next.js). *(SUGGESTED)*
-  - *Evidence URL:* https://github.com/AOSSIE-Org/SocialShareButton/blob/main/package.json
+- [ ] 🔵 **build_common_tools** — Common build tools are used (npm, pip, cargo, make, gradle, etc.). *(SUGGESTED)*
+  - *Evidence URL:* `[ ]` N/A
 
-- [x] 🟡 **build_floss_tools** — The project can be built using only FLOSS tools.
-  - *Note:* Node.js, pnpm/npm, Vitest, Next.js, Tailwind CSS: all FLOSS.
+- [ ] 🟡 **build_floss_tools** — The project can be built using only FLOSS tools.
+  - *Note:* `[ ]` N/A
 
 ### Automated Testing
 
-- [x] 🔵 **test_invocation** — The test suite can be invoked in a standard way. *(SUGGESTED)*
-  - *Evidence URL:* `npm test` / `npm run test:coverage` at the repo root (https://github.com/AOSSIE-Org/SocialShareButton/blob/main/package.json)
+- [ ] 🔵 **test_invocation** — The test suite can be invoked in a standard way for the language (e.g., `npm test`, `pytest`, `cargo test`). *(SUGGESTED)*
+  - *Evidence URL:*
 
-- [x] 🔵 **test_most** — The test suite covers most code branches and functionality. *(SUGGESTED)*
-  - *Evidence URL:* https://github.com/AOSSIE-Org/SocialShareButton/blob/main/vitest.config.js (90% thresholds on the published library files, enforced in CI and before every npm release)
+- [ ] 🔵 **test_most** — The test suite covers most code branches, input fields, and functionality. *(SUGGESTED)*
+  - *Estimated coverage %:*
 
 ### New Functionality Testing Policy
 
 - [ ] 🔴 **test_policy** — The project has a general policy that new functionality must include tests in the automated test suite.
-  - *Evidence URL:* https://github.com/AOSSIE-Org/SocialShareButton/blob/main/CONTRIBUTING.md#testing-policy
-  - *Not met yet:* the policy covers new library behaviour only; the website (`landing-page/`) has no automated tests and no testing requirement.
+  - *Evidence (CONTRIBUTING reference or informal policy):*
 
-- [x] 🔴 **tests_are_added** — Evidence exists that the test policy has been followed in recent major changes.
-  - *Evidence URL:* https://github.com/AOSSIE-Org/SocialShareButton/tree/main/tests
+- [ ] 🔴 **tests_are_added** — Evidence exists that the test policy has been followed in recent major changes (e.g., PRs include tests).
+  - *Evidence URL (recent PR with tests):*
 
-- [x] 🔵 **tests_documented_added** — The test policy is documented in contribution instructions. *(SUGGESTED)*
-  - *Evidence URL:* https://github.com/AOSSIE-Org/SocialShareButton/blob/main/CONTRIBUTING.md#testing-policy (library)
+- [ ] 🔵 **tests_documented_added** — The test policy is documented in contribution instructions. *(SUGGESTED)*
+  - *Evidence URL:*
 
 ### Linting / Warning Flags
 
-- [x] 🔴 **warnings** — At least one linter or compiler warning flag is enabled.
-  - *Tool used:* ESLint 9 with `eslint-config-next` (core-web-vitals + TypeScript), TypeScript `strict` mode.
+- [ ] 🔴 **warnings** — At least one linter or compiler warning flag is enabled (ESLint, Pylint, clippy, golangci-lint, Slither for Solidity, etc.).
+  - *Tool used:*
 
-- [x] 🔴 **warnings_fixed** — Warnings from the linter are addressed.
-  - *Note:* Library tests and the website `npm run lint` + `npm run build` run in CI on every PR and complete without warnings.
+- [ ] 🔴 **warnings_fixed** — Warnings from the linter are addressed (not suppressed without reason).
+  - *Note:*
 
-- [x] 🔵 **warnings_strict** — Project uses maximum strictness in linter config where practical. *(SUGGESTED)*
-  - *Note:* TypeScript `strict: true`; Next.js recommended + core-web-vitals rule sets.
+- [ ] 🔵 **warnings_strict** — Project uses maximum strictness in linter config where practical. *(SUGGESTED)*
+  - *Note:*
 
 ---
 
@@ -171,34 +175,34 @@
 
 ### Secure Development Knowledge
 
-- [x] 🔴 **know_secure_design** — Primary developer knows how to design secure software.
-  - *Self-certification note:* The library opens share intents with `noopener,noreferrer` and has zero runtime dependencies. Analytics events are emitted locally by default (a DOM event); only callbacks or adapters the host page configures forward the payload, including the shared URL and title, to provider SDKs. The website is a static export with no server or cookies.
+- [ ] 🔴 **know_secure_design** — At least one primary developer knows how to design secure software (familiar with OWASP, threat modeling, secure-by-default principles).
+  - *Self-certification note:*
 
-- [x] 🔴 **know_common_errors** — Primary developer knows common vulnerability types (XSS, CSRF, SSRF) and mitigations.
-  - *Self-certification note:* No `dangerouslySetInnerHTML` with user data; React escapes output; dependencies pinned via lockfile.
+- [ ] 🔴 **know_common_errors** — At least one primary developer knows common vulnerability types for this software's category and how to mitigate them (e.g., injection, XSS, reentrancy for Solidity, prompt injection for AI).
+  - *Self-certification note:*
 
-### Cryptography
+### Cryptography (mark N/A if project does not handle cryptography)
 
-- [-] 🔴 **crypto_published** — Only publicly reviewed cryptographic protocols/algorithms are used by default.
-  - *Note:* `[~]` N/A: client-side share widget and static website; no cryptography, accounts or secrets in the code. Transport security (HTTPS/TLS) is provided by GitHub Pages and the npm/jsDelivr CDNs.
+- [ ] 🔴 **crypto_published** — Only publicly reviewed cryptographic protocols/algorithms are used by default.
+  - *Note:* `[ ]` N/A
 
-- [-] 🟡 **crypto_call** — Project calls an established crypto library rather than reimplementing crypto functions.
-  - *Note:* `[~]` N/A: client-side share widget and static website; no cryptography, accounts or secrets in the code. Transport security (HTTPS/TLS) is provided by GitHub Pages and the npm/jsDelivr CDNs.
+- [ ] 🟡 **crypto_call** — Project calls an established crypto library rather than reimplementing crypto functions.
+  - *Library used:* `[ ]` N/A
 
-- [-] 🔴 **crypto_working** — No broken algorithms used.
-  - *Note:* `[~]` N/A: client-side share widget and static website; no cryptography, accounts or secrets in the code. Transport security (HTTPS/TLS) is provided by GitHub Pages and the npm/jsDelivr CDNs.
+- [ ] 🔴 **crypto_working** — No broken algorithms (MD4, MD5, single DES, RC4, Dual_EC_DRBG) used unless required for interoperability (must be documented).
+  - *Note:* `[ ]` N/A
 
-- [-] 🔴 **crypto_keylength** — Key lengths meet NIST 2030 minimums by default.
-  - *Note:* `[~]` N/A: client-side share widget and static website; no cryptography, accounts or secrets in the code. Transport security (HTTPS/TLS) is provided by GitHub Pages and the npm/jsDelivr CDNs.
+- [ ] 🔴 **crypto_keylength** — Key lengths meet [NIST 2030 minimums](https://www.keylength.com/en/4/) by default.
+  - *Note:* `[ ]` N/A
 
-- [-] 🔴 **crypto_password_storage** — Passwords for external users are stored as iterated salted hashes.
-  - *Note:* `[~]` N/A: client-side share widget and static website; no cryptography, accounts or secrets in the code. Transport security (HTTPS/TLS) is provided by GitHub Pages and the npm/jsDelivr CDNs.
+- [ ] 🔴 **crypto_password_storage** — Passwords for external users are stored as iterated salted hashes (Argon2id, bcrypt, scrypt, PBKDF2).
+  - *Note:* `[ ]` N/A — *Justification (project doesn't store passwords):*
 
-- [-] 🔴 **crypto_random** — Cryptographic keys and nonces are generated using a CSPRNG.
-  - *Note:* `[~]` N/A: client-side share widget and static website; no cryptography, accounts or secrets in the code. Transport security (HTTPS/TLS) is provided by GitHub Pages and the npm/jsDelivr CDNs.
+- [ ] 🔴 **crypto_random** — Cryptographic keys and nonces are generated using a CSPRNG; insecure generators (Math.random, rand()) are NOT used for security purposes.
+  - *Note:* `[ ]` N/A
 
-- [x] 🟡 **delivery_unsigned** — Cryptographic hashes are NOT retrieved over plain HTTP without a signature check.
-  - *Note:* Site served only over HTTPS; npm packages are verified against `package-lock.json` integrity hashes.
+- [ ] 🟡 **delivery_unsigned** — Cryptographic hashes are NOT retrieved over plain HTTP without a signature check.
+  - *Note:*
 
 ---
 
@@ -206,25 +210,49 @@
 
 ### Static Code Analysis
 
-- [x] 🔴 **static_analysis_fixed** — All medium+ severity vulnerabilities found by static analysis are fixed in a timely manner.
-  - *Note:* CodeRabbit reviews every PR (security findings are resolved before merge); OpenSSF Scorecard runs weekly.
+- [ ] 🔴 **static_analysis_fixed** — All medium+ severity vulnerabilities found by static analysis are fixed in a timely manner after confirmation.
+  - *Note:* `[ ]` N/A
 
-- [x] 🔵 **static_analysis_common_vulnerabilities** — The static analysis tool includes checks for common vulnerabilities. *(SUGGESTED)*
-  - *Tool + ruleset:* CodeRabbit security review (https://github.com/AOSSIE-Org/SocialShareButton/blob/main/.coderabbit.yaml) and OpenSSF Scorecard (https://github.com/AOSSIE-Org/SocialShareButton/blob/main/.github/workflows/scorecard.yml).
+- [ ] 🔵 **static_analysis_common_vulnerabilities** — The static analysis tool includes checks for common vulnerabilities in the language/environment (e.g., eslint-plugin-security, bandit, Slither). *(SUGGESTED)*
+  - *Tool + ruleset:* `[ ]` N/A
 
-- [x] 🔵 **static_analysis_often** — Static analysis runs on every commit or at least daily. *(SUGGESTED)*
-  - *Evidence URL:* https://github.com/AOSSIE-Org/SocialShareButton/blob/main/.github/workflows/ci.yml (ESLint on every PR and push to main)
+- [ ] 🔵 **static_analysis_often** — Static analysis runs on every commit or at least daily (CI integration). *(SUGGESTED)*
+  - *Evidence URL:* `[ ]` N/A
 
 ### Dynamic Code Analysis
 
-- [x] 🔵 **dynamic_analysis** — Dynamic analysis applied before major releases. *(SUGGESTED)*
-  - *Evidence:* the published library is exercised in jsdom before every npm release (`version-release.yml` runs `pnpm run test:coverage`): fast-check property tests vary the inputs, and branch coverage of `src/social-share-button.js` and `src/social-share-analytics.js` is above 90%, enforced by https://github.com/AOSSIE-Org/SocialShareButton/blob/main/vitest.config.js.
+- [ ] 🔵 **dynamic_analysis** — At least one dynamic analysis tool is applied before major releases (fuzzer, web app scanner like OWASP ZAP, etc.). *(SUGGESTED)*
+  - *Tool used:* `[ ]` N/A — *Justification:*
 
-- [x] 🔵 **dynamic_analysis_enable_assertions** — Dynamic analysis runs with assertions enabled. *(SUGGESTED)*
-  - *Note:* Vitest drives the real library in jsdom (DOM events, timers, clipboard, MutationObserver) with assertions on every interaction.
+- [ ] 🔵 **dynamic_analysis_enable_assertions** — Dynamic analysis / testing runs with assertions enabled (not just production mode). *(SUGGESTED)*
+  - *Note:*
 
-- [-] 🔴 **dynamic_analysis_fixed** — Medium+ severity vulnerabilities fixed in a timely manner.
-  - *Note:* `[~]` N/A: dynamic analysis has not found medium or higher severity vulnerabilities.
+- [ ] 🔴 **dynamic_analysis_fixed** — Medium+ severity vulnerabilities found by dynamic analysis are fixed in a timely manner.
+  - *Note:* `[ ]` N/A
 
-- [-] 🔵 **dynamic_analysis_unsafe** — Memory safety tools used. *(SUGGESTED)*
-  - *Note:* `[~]` N/A: memory-safe TypeScript/JavaScript; no native code.
+- [ ] 🔵 **dynamic_analysis_unsafe** — If the project uses memory-unsafe languages (C/C++), memory safety tools (Valgrind, AddressSanitizer) are used. *(SUGGESTED)*
+  - *Note:* `[ ]` N/A — *Justification (project uses memory-safe languages):*
+
+---
+
+## 📎 Project-Specific Notes
+
+> Add domain-specific notes here for Web3, Full-Stack, or AI projects.
+
+### Web3 / Solidity Notes
+- Scorecard does not audit Solidity-specific security. Use [Slither](https://github.com/crytic/slither) for `static_analysis` and `warnings` criteria.
+- For `crypto_*` criteria, document which cryptographic primitives your contracts rely on (e.g., ECDSA in EVM is standard).
+- Smart contract audit reports count as evidence for `know_secure_design`.
+
+### Full-Stack / Next.js Notes
+- For `crypto_password_storage`: document which auth library handles hashing (e.g., NextAuth + bcrypt).
+- For `dynamic_analysis`: [OWASP ZAP](https://www.zaproxy.org/) can be run as a GitHub Action.
+
+### AI / LLM Notes
+- For `know_common_errors`: include awareness of prompt injection, data leakage, and model output validation.
+- For `dynamic_analysis`: consider adversarial input testing as a form of dynamic analysis.
+
+---
+
+*This checklist complements [OpenSSF Scorecard](https://scorecard.dev/) (auto-detected checks) and is
+inspired by the [OpenSSF Best Practices Badge](https://www.bestpractices.dev/en/criteria/0) passing criteria.*
