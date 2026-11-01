@@ -18,7 +18,7 @@ A lightweight, zero-dependency social share button library (vanilla JS + CSS) an
 
 - **Library:** no build step. `npm run format` / `npm run format:check` at the repo root. Tests: `npm test` / `npm run test:coverage` (Vitest + jsdom + fast-check in `tests/`, 90% coverage gate in CI and before npm publish). Try it manually by opening `index.html` in a browser.
 - **Website stack:** Next.js 16.4 App Router (Turbopack, `output: "export"`), React 19, Tailwind CSS v4, `next-intl` (i18n), `next-themes` (light/dark; first visit follows the OS preference), `lenis` (smooth scroll), `sugar-high` (syntax highlighting).
-- **Website commands** (run inside `landing-page/`): `npm run dev`, `npm run build`, `npm run lint`.
+- **Website commands** (run inside `landing-page/`): `npm run dev`, `npm run build`, `npm run lint`, `npm test` / `npm run test:coverage` (Vitest + React Testing Library + jsdom + fast-check in `landing-page/tests/`, 90% coverage gate on the whole website source `src/**/*.{ts,tsx}`, run in CI; shared mocks in `tests/setup.tsx`). New website logic needs tests there (see CONTRIBUTING.md "Testing Policy").
 - `predev`/`prebuild` run `scripts/sync-library.mjs`, which copies `../src/social-share-button.{js,css}` into `public/vendor/` (git-ignored) and re-pins the CDN version in `public/llms.txt`. The site always demos the library code of the current commit.
 
 ---
@@ -60,7 +60,7 @@ A lightweight, zero-dependency social share button library (vanilla JS + CSS) an
 ## 📦 Project Boundaries
 
 - **Config:** `next.config.ts` wraps the config with `createNextIntlPlugin("./src/i18n/request.ts")` and injects `NEXT_PUBLIC_LIBRARY_VERSION` and `NEXT_PUBLIC_LIBRARY_GZIP_KB` computed from `../package.json` and `../src`. Never hard-code the version or bundle size.
-- **Site constants:** URLs, social links and the CDN base live in [`src/config/site.ts`](landing-page/src/config/site.ts). The production domain can be overridden with `NEXT_PUBLIC_SITE_URL`.
+- **Site constants:** all landing-page links (site origin, repo, npm, CDN base, social links, AOSSIE / Stability Nexus, license) live in [`landing-page/src/config/site.ts`](landing-page/src/config/site.ts); never hard-code URLs in components. The production domain can be overridden with `NEXT_PUBLIC_SITE_URL`.
 - **Server vs client:** constants shared with Server Components go in `src/lib/platforms.ts` (no hooks). React bindings for the library live in `src/lib/social-share-button.ts` and are imported only by Client Components.
 - **Branding Assets:** logos, favicon, Open Graph image and `Brand.md` live in [`landing-page/public/brand/`](landing-page/public/brand/).
 - **Machine-readable files:** `public/llms.txt`, `public/robots.txt`, `public/openapi.yaml`, `public/.well-known/`. Deployment uses `actions/upload-pages-artifact@v3`, which keeps dotfiles; v4 drops them by default — keep `.well-known/` in mind before upgrading.
