@@ -23,7 +23,8 @@ export interface LegalLinks {
 const HEADING = /^(#{1,3})\s+(.+)$/;
 const LIST_ITEM = /^[*-]\s+(.+)$/;
 const INLINE = /\*\*(.+?)\*\*|\[([^\]]+)\]\(([^)\s]+)\)|`([^`]+)`/g;
-const SAFE_HREF = /^(https?:|mailto:|\/|#)/i;
+// Same-site paths and fragments, or http(s)/mailto. "//host" and "/\host" are protocol-relative, so they are not paths
+const SAFE_HREF = /^(https?:|mailto:|#|\/(?![/\\]))/i;
 
 export function parseLegalMarkdown(source: string): LegalBlock[] {
   const blocks: LegalBlock[] = [];

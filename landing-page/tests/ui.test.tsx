@@ -289,6 +289,10 @@ describe("GlowGroup", () => {
       </GlowGroup>,
     );
 
+  // jsdom has no PointerEvent, so fireEvent.pointerMove would drop clientX/clientY; a MouseEvent keeps them
+  const pointerMove = (target: Element, clientX: number, clientY: number) =>
+    fireEvent(target, new MouseEvent("pointermove", { bubbles: true, clientX, clientY }));
+
   it("positions the glow relative to the group and each card on fine pointers", () => {
     media.set(FINE_POINTER, true);
     const { container } = renderGroup();
@@ -298,8 +302,8 @@ describe("GlowGroup", () => {
     vi.spyOn(group, "getBoundingClientRect").mockReturnValue({ left: 10, top: 20 } as DOMRect);
     vi.spyOn(card, "getBoundingClientRect").mockReturnValue({ left: 50, top: 70 } as DOMRect);
 
-    fireEvent.pointerMove(group, { clientX: 100, clientY: 200 });
-    fireEvent.pointerMove(group, { clientX: 110, clientY: 210 });
+    pointerMove(group, 100, 200);
+    pointerMove(group, 110, 210);
     expect(frames).toHaveLength(1); // batched per frame
     frames[0](0);
     expect(group.style.getPropertyValue("--glow-x")).toBe("100px");
@@ -313,14 +317,14 @@ describe("GlowGroup", () => {
     const { container, unmount } = renderGroup();
     const group = container.firstElementChild as HTMLElement;
     unmount();
-    fireEvent.pointerMove(group, { clientX: 1, clientY: 1 });
+    pointerMove(group, 1, 1);
     expect(frames).toHaveLength(0);
     expect(cancelAnimationFrame).toHaveBeenCalled();
   });
 
   it("does nothing on touch devices", () => {
     const { container } = renderGroup();
-    fireEvent.pointerMove(container.firstElementChild!, { clientX: 1, clientY: 1 });
+    pointerMove(container.firstElementChild!, 1, 1);
     expect(frames).toHaveLength(0);
   });
 });

@@ -25,7 +25,7 @@
 - The label is now a `<span>` created with `document.createElement` and filled with `textContent`, so it is never parsed as HTML. Only the static share icon stays in the template.
 - The same pass found a second option inserted into markup, `modalPosition`. It is now restricted to the known values `center` and `bottom` (anything else falls back to `center`).
 
-**Regression tests.** `tests/social-share-button.test.js`: `renders buttonText as text, never as HTML` uses an `<img onerror>` payload; a fast-check property test checks that no generated `buttonText` string ends up in the markup.
+**Regression tests.** `tests/social-share-button.test.js`: `renders buttonText as text, never as HTML` uses an `<img onerror>` payload; a fast-check property test checks that no generated `buttonText` string ends up in the markup; `does not inject markup from data-button-text or data-modal-position` covers the same payloads through auto-init from `data-*` attributes.
 
 **Note.** This issue was also found by the AI security review run on this repository, so the fix is in the same branch as that remediation (see the AI security-review report in this repository).
 

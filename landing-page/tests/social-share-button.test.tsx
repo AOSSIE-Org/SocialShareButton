@@ -67,11 +67,18 @@ describe("useSocialShareButton", () => {
     expect(FakeShareButton.live()).toHaveLength(0);
   });
 
-  it("creates nothing without options or before the library loads", async () => {
-    const { rerender } = render(<Mount options={{ title: "x" }} />);
-    rerender(<Mount options={null} />);
+  it("creates nothing while the library has not loaded", () => {
+    vi.useFakeTimers();
+    render(<Mount options={{ title: "x" }} />);
+    act(() => vi.advanceTimersByTime(200));
+    expect(FakeShareButton.instances).toHaveLength(0);
+  });
+
+  it("creates nothing for null options once the library has loaded", () => {
+    vi.useFakeTimers();
+    render(<Mount options={null} />);
     loadShareLibrary();
-    await new Promise((resolve) => setTimeout(resolve, 80));
+    act(() => vi.advanceTimersByTime(50));
     expect(FakeShareButton.instances).toHaveLength(0);
   });
 

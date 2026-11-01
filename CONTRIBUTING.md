@@ -150,7 +150,7 @@ We use Prettier for the library and ESLint for the website. Please run these bef
 - `npm run format` — Automatically format your code to project standards (repository root).
 - `npm run format:check` — Verify that files are correctly formatted (repository root).
 - `npm test` / `npm run test:coverage` — Run the library's Vitest unit and property tests in `tests/` (repository root). CI fails below 90% coverage of `src/social-share-button.js` and `src/social-share-analytics.js`.
-- `npm test` / `npm run test:coverage` — Run the website's Vitest unit and property tests in `landing-page/tests/` (inside `landing-page/`). CI fails below 90% coverage of the site's logic modules listed in [`landing-page/vitest.config.mts`](landing-page/vitest.config.mts).
+- `npm test` / `npm run test:coverage` — Run the website's Vitest unit and property tests in `landing-page/tests/` (inside `landing-page/`). CI fails below 90% coverage of all website source (`landing-page/src/**/*.{ts,tsx}`; only declaration files are excluded, see [`landing-page/vitest.config.mts`](landing-page/vitest.config.mts)).
 - `npm run lint` and `npm run build` — Lint and build the website (inside `landing-page/`).
 
 ### Testing Policy

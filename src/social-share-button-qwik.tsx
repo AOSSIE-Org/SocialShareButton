@@ -22,7 +22,9 @@ export const SocialShareButton = component$<Props>((props) => {
   const containerRef = useSignal<HTMLDivElement>();
 
 
-  useVisibleTask$(({ cleanup }) => {
+  useVisibleTask$(({ track, cleanup }) => {
+    // Rerun on label changes: cleanup destroys the old instance and a new one is created with the new labels
+    track(() => props.labels);
     if (typeof window !== 'undefined' && (window as any).SocialShareButton && containerRef.value) {
       const shareButton = new (window as any).SocialShareButton({
         container: containerRef.value,

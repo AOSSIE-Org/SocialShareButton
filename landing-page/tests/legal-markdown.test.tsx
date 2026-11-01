@@ -95,6 +95,11 @@ describe("resolveLegalHref", () => {
     expect(resolveLegalHref("other.md", links)).toBeNull();
   });
 
+  it("drops protocol-relative links to other hosts", () => {
+    expect(resolveLegalHref("//example.org", links)).toBeNull();
+    expect(resolveLegalHref("/\\example.org", links)).toBeNull();
+  });
+
   it("keeps site-relative paths and in-page anchors", () => {
     expect(resolveLegalHref("/support", links)).toBe("/support");
     expect(resolveLegalHref("#contact", links)).toBe("#contact");
