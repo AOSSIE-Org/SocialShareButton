@@ -288,7 +288,10 @@
     "license": "GNU GPL v3.0 के तहत जारी।",
     "copyright": "© {year} AOSSIE। सर्वाधिकार सुरक्षित।",
     "aossieLogo": "AOSSIE लोगो",
-    "stabilityNexusLogo": "Stability Nexus लोगो"
+    "stabilityNexusLogo": "Stability Nexus लोगो",
+    "privacy": "गोपनीयता नीति",
+    "terms": "सेवा की शर्तें",
+    "support": "समर्थन करें"
   },
   "Demo": {
     "title": "लाइव प्रीव्यू",
@@ -321,6 +324,24 @@
     "title": "कुछ गलत हो गया",
     "description": "पेज रेंडर करते समय एक अप्रत्याशित त्रुटि आई है।",
     "retry": "पुनः प्रयास करें"
+  },
+  "Legal": {
+    "englishOnly": "यह दस्तावेज़ केवल अंग्रेज़ी में उपलब्ध है।",
+    "privacy": {
+      "title": "गोपनीयता नीति",
+      "description": "Social Share Button website आपकी जानकारी को कैसे संभालता है।"
+    },
+    "terms": {
+      "title": "सेवा की शर्तें",
+      "description": "Social Share Button website के उपयोग की शर्तें।"
+    }
+  },
+  "Support": {
+    "title": "सोशल शेयर बटन का समर्थन करें",
+    "description": "सोशल शेयर बटन को निःशुल्क और ओपन सोर्स बनाए रखने में मदद करें।",
+    "madeBy": "द्वारा बनाया गया प्रोजेक्ट",
+    "supportedBy": "समर्थक",
+    "aossieDescription": "AOSSIE एक ऑस्ट्रेलियाई गैर-लाभकारी संगठन है जो ओपन-सोर्स प्रोजेक्ट्स का समर्थन करता है और उन्हें एक साथ लाता है।"
   },
   "NotFound": {
     "title": "पेज नहीं मिला",

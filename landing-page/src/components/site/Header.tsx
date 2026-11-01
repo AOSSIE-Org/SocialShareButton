@@ -9,6 +9,7 @@ import { BrandMark, CloseIcon, GitHubIcon, MenuIcon, ShareIcon } from "@/compone
 import { useSocialShareButton } from "@/lib/social-share-button";
 import { platformIds } from "@/lib/platforms";
 import { docsUrl, libraryVersion, localeUrl, repoUrl } from "@/config/site";
+import { getPathname, usePathname } from "@/i18n/navigation";
 
 const sectionLinks = [
   { id: "get", key: "get" },
@@ -18,8 +19,8 @@ const sectionLinks = [
 
 type SectionId = (typeof sectionLinks)[number]["id"];
 
-/** Highlights the nav item for the section currently under the header. */
-function useActiveSection(): SectionId {
+/** Highlights the nav item for the section currently under the header; none away from the home page. */
+function useActiveSection(onHome: boolean): SectionId | null {
   const [active, setActive] = useState<SectionId>("get");
 
   useEffect(() => {
@@ -44,7 +45,17 @@ function useActiveSection(): SectionId {
     };
   }, []);
 
-  return active;
+  return onHome ? active : null;
+}
+
+/**
+ * Href for a home-page section: a bare `#id` on the home page (Lenis glides there), the
+ * localized home page plus the hash on other pages such as the privacy policy.
+ */
+function useSectionHref(onHome: boolean) {
+  const locale = useLocale();
+  const home = onHome ? "" : getPathname({ href: "/", locale });
+  return (id: SectionId) => `${home}#${id}`;
 }
 
 /** The "Share" nav item dogfoods the library: a buttonless instance whose modal we open on click. */
@@ -93,7 +104,9 @@ function NavShareButton({
 
 export function Header() {
   const t = useTranslations("Nav");
-  const active = useActiveSection();
+  const onHome = usePathname() === "/";
+  const active = useActiveSection(onHome);
+  const sectionHref = useSectionHref(onHome);
   const { containerRef: shareContainerRef, ready: shareReady, open: openShare } = useSiteShare();
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -122,7 +135,7 @@ export function Header() {
       <div className="flex h-14 items-center justify-between gap-4 px-4 sm:px-6 lg:px-10">
         <div className="flex items-center gap-2.5">
           <a
-            href="#get"
+            href={sectionHref("get")}
             aria-label={t("home")}
             className="flex items-center gap-2.5 rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
@@ -144,7 +157,7 @@ export function Header() {
         </div>
 
         <nav aria-label={t("primary")} className="hidden items-center gap-1 lg:flex">
-          <a href="#get" aria-current={active === "get" ? "true" : undefined} className={linkClass(active === "get")}>
+          <a href={sectionHref("get")} aria-current={active === "get" ? "true" : undefined} className={linkClass(active === "get")}>
             {t("get")}
           </a>
           <NavShareButton
@@ -154,7 +167,7 @@ export function Header() {
             className={`${linkClass(false)} cursor-pointer gap-1.5 disabled:cursor-wait disabled:opacity-60`}
           />
           <a
-            href="#use-cases"
+            href={sectionHref("use-cases")}
             aria-current={active === "use-cases" ? "true" : undefined}
             className={linkClass(active === "use-cases")}
           >
@@ -164,7 +177,7 @@ export function Header() {
             {t("docs")}
             <span className="sr-only"> {t("external")}</span>
           </a>
-          <a href="#faqs" aria-current={active === "faqs" ? "true" : undefined} className={linkClass(active === "faqs")}>
+          <a href={sectionHref("faqs")} aria-current={active === "faqs" ? "true" : undefined} className={linkClass(active === "faqs")}>
             {t("faqs")}
           </a>
         </nav>
@@ -233,7 +246,7 @@ export function Header() {
               return (
                 <li key={item}>
                   <a
-                    href={`#${item}`}
+                    href={sectionHref(item)}
                     onClick={() => setMenuOpen(false)}
                     aria-current={active === item ? "true" : undefined}
                     className={itemClass}

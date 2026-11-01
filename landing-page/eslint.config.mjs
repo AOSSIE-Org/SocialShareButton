@@ -14,6 +14,8 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Library files copied from ../src by scripts/sync-library.mjs
     "public/vendor/**",
+    // HTML report written by `npm run test:coverage`
+    "coverage/**",
   ]),
 ]);
 

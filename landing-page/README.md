@@ -17,14 +17,20 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000). English is served at `/` and Hindi at `/hi`.
 
-| Command                | What it does                                                                                                        |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `npm run dev`          | Syncs the library, then starts the dev server                                                                       |
-| `npm run build`        | Syncs the library, then writes a static export to `out/`                                                            |
-| `npm run lint`         | ESLint (Next.js core-web-vitals + TypeScript rules)                                                                 |
-| `npm run sync-library` | Copies `../src/social-share-button.{js,css}` into `public/vendor/` and re-pins the CDN version in `public/llms.txt` |
+| Command                 | What it does                                                                                                        |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `npm run dev`           | Syncs the library, then starts the dev server                                                                       |
+| `npm run build`         | Syncs the library, then writes a static export to `out/`                                                            |
+| `npm run lint`          | ESLint (Next.js core-web-vitals + TypeScript rules)                                                                 |
+| `npm test`              | Unit, component and property tests (Vitest, React Testing Library, fast-check)                                      |
+| `npm run test:coverage` | The tests with the 90% coverage gate that CI enforces                                                               |
+| `npm run sync-library`  | Copies `../src/social-share-button.{js,css}` into `public/vendor/` and re-pins the CDN version in `public/llms.txt` |
 
 The site **dogfoods the library**: the header's “Share” item and the “Click to Try Demo” live preview use the real `SocialShareButton` from `../src`. `predev` copies the library once, before the dev server starts; if you edit `../src` while `npm run dev` is running, run `npm run sync-library` to pick up the change. The version badge, CDN snippets and the gzipped-size metric are all derived from `../package.json` and `../src` at build time (see `next.config.ts`) — never hard-code them.
+
+### Testing
+
+Tests live in [`tests/`](tests/). Coverage is measured on the **whole website source** (`src/**/*.{ts,tsx}`: pages, layouts, components, hooks, config, i18n and lib), and `npm run test:coverage` fails below 90% lines, statements, functions or branches; CI runs it on every pull request. The only exclusion, listed in [`vitest.config.mts`](vitest.config.mts), is type declaration files. Components and pages are rendered with React Testing Library in jsdom (`// @vitest-environment jsdom`) inside `NextIntlClientProvider` with the real `en`/`hi` catalogs, and async Server Components are resolved first (`resolveServer` in [`tests/helpers.tsx`](tests/helpers.tsx)). [`tests/setup.tsx`](tests/setup.tsx) mocks only what tests cannot run: server-only `next-intl` APIs, `next/font`, `next/script`, the App Router pathname/router, Lenis and `matchMedia`; the live demo and the header's Share item use a stand-in for `window.SocialShareButton`.
 
 ---
 
