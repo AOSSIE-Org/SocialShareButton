@@ -1,0 +1,141 @@
+name: GitPay
+
+# Pays contributors from this project's own wallet (MetaMask or any EVM
+# wallet) on Ethereum Sepolia. No Safe needed.
+# https://github.com/StabilityNexus/GitPay
+#
+# A maintainer comments on a pull request:
+#
+#   /send 0xRecipientAddress 2.50
+#
+# GitPay checks the policy below, then pays it on Ethereum Sepolia with
+# USDC.transferFrom(payer wallet → recipient) and posts a receipt on the PR.
+# Every /send that passes policy is a real testnet transfer; there is no
+# dry-run fallback.
+#
+# One-time setup:
+#   1. Payer wallet (MetaMask): holds the USDC that gets paid out.
+#   2. Delegate wallet: a NEW, separate account. CI signs payouts with its key,
+#      so send it a little Sepolia ETH for gas. Never use the payer's own key.
+#   3. From the payer wallet, call approve(delegate, amount) on the USDC
+#      contract (Etherscan → Contract → Write as Proxy). That approved amount is
+#      the most the delegate can ever spend, and also the most a leaked key can
+#      take. It does not refill: approve again when it runs out. Revoke with
+#      approve(delegate, 0).
+#
+# Settings → Secrets and variables → Actions needs:
+#   secrets:   GITPAY_DELEGATE_KEY, GITPAY_RPC_URL
+#   variables: GITPAY_PAYER, GITPAY_TOKEN
+#
+# issue_comment workflows always run from the default branch, so a pull
+# request cannot change this file's policy before it is merged.
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: read
+
+jobs:
+  pay:
+    # Pull request comments that start with /send. GitPay does the real
+    # permission check; this only avoids starting a runner for every comment.
+    if: github.event.issue.pull_request && startsWith(github.event.comment.body, '/send')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # The receipt comment on the PR is the payment ledger: the run reads it
+      # to avoid paying twice, and writes it after paying.
+      issues: write
+      pull-requests: write
+    # One payout at a time, across the whole repository. The receipt check is
+    # check-then-act, and every payout is signed by the same delegate account.
+    # Set on the job, not the workflow, so a comment that is not a /send never
+    # enters the group. queue: max keeps every waiting /send; the default
+    # keeps only the newest pending run and cancels the rest.
+    # Never cancel a run in progress: that can lose a payout's receipt.
+    concurrency:
+      group: gitpay-payout-${{ github.repository }}
+      cancel-in-progress: false
+      queue: max
+    steps:
+      - name: Pay from the /send comment
+        id: gitpay
+        # v1.1.0: `scheme: approve`, `round:N` in /send, STATUS=unconfirmed.
+        uses: StabilityNexus/GitPay@0c470cef7b83003815339596ef7c688745467ba7 # v1.1.0
+        with:
+          comment: ${{ github.event.comment.body }}
+          actor_association: ${{ github.event.comment.author_association }}
+          actor: ${{ github.event.comment.user.login }}
+          # Ties the payout to this PR, so a re-run can never pay it twice.
+          # To pay the same person again on the same PR, add round:1 (then
+          # round:2, …) to the command: /send 0xRecipient 2.50 round:1
+          ref: refs/pull/${{ github.event.issue.number }}
+          network: sepolia
+          asset: USDC
+          decimals: "6"
+
+          # Real testnet settlement. Without the secrets and variables above,
+          # a /send fails with a configuration error and pays nothing.
+          mode: self
+          # Pay from an ordinary wallet that approved the delegate, not a Safe.
+          scheme: approve
+
+          # ── Policy ────────────────────────────────────────────────────────
+          # Checked offline before anything is signed. Every run logs one
+          # line per rule, and a refusal names the rule that refused.
+          #
+          # Kill switch. Set the repository variable GITPAY_ENABLED to false
+          # and every /send is refused, with no commit needed.
+          enabled: ${{ vars.GITPAY_ENABLED || 'true' }}
+          # Who may issue /send. Org members and the owner only. Outside
+          # collaborators and contributors cannot spend.
+          allowed_associations: OWNER,MEMBER
+          # The largest single payout, in the units /send is typed in
+          # (10 means 10 USDC). A larger /send is refused before signing.
+          # Kept in this file on purpose, so raising it takes a reviewed PR.
+          max_per_payout: "10"
+
+          # ── This repository's settlement accounts ─────────────────────────
+          rpc_url: ${{ secrets.GITPAY_RPC_URL }}
+          payer: ${{ vars.GITPAY_PAYER }}
+          token: ${{ vars.GITPAY_TOKEN }}
+          delegate_key: ${{ secrets.GITPAY_DELEGATE_KEY }}
+          pr: ${{ github.event.issue.number }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Report
+        # Runs after a failure too, so an unconfirmed payout says what to do.
+        # Skipped only when the run is cancelled or GitPay wrote no STATUS.
+        if: ${{ !cancelled() && steps.gitpay.outputs.STATUS != '' }}
+        env:
+          STATUS: ${{ steps.gitpay.outputs.STATUS }}
+          TX_HASH: ${{ steps.gitpay.outputs.TX_HASH }}
+          EXPLORER_URL: ${{ steps.gitpay.outputs.EXPLORER_URL }}
+          IDEMPOTENCY_KEY: ${{ steps.gitpay.outputs.IDEMPOTENCY_KEY }}
+          ERROR_CODE: ${{ steps.gitpay.outputs.ERROR_CODE }}
+        run: |
+          echo "STATUS          = $STATUS"
+          echo "IDEMPOTENCY_KEY = $IDEMPOTENCY_KEY"
+          case "$STATUS" in
+            settled)      echo "Paid: $EXPLORER_URL" ;;
+            already-paid) echo "A receipt already exists for this payout. Nothing was paid again." ;;
+            skipped)      echo "No /send command found. Nothing to do." ;;
+            # A transaction was sent but did not confirm as a successful
+            # payout: it reverted, timed out, or lost its nonce. Only the
+            # explorer can say which. "Landed" is not enough: a reverted
+            # transaction is in a block and moved nothing. A pending one may
+            # still succeed, so the answer then is to wait.
+            unconfirmed)
+              echo "::error::An earlier attempt for this payout recorded $TX_HASH, which GitPay could not confirm. Nothing was paid by this run. Check $EXPLORER_URL. If the transaction succeeded, the contributor is paid. If it is still pending, wait. Only if it failed (reverted) or was dropped, nothing was paid: re-send the command with round:1 (or the next round)."
+              exit 1 ;;
+            error)
+              if [[ -n "$TX_HASH" ]]; then
+                echo "::error::GitPay sent $TX_HASH but could not confirm it as a successful payout (${ERROR_CODE:-no code}). Check $EXPLORER_URL. If the transaction succeeded, the contributor is paid. If it is still pending, wait. Only if it failed (reverted) or was dropped, nothing was paid: re-send the command with round:1 (or the next round)."
+              else
+                echo "::error::GitPay refused or failed this payout (${ERROR_CODE:-no code}). See the log of the step above, and any receipt on this PR."
+              fi
+              exit 1 ;;
+            *)            echo "::error::unexpected STATUS '$STATUS'"; exit 1 ;;
+          esac
