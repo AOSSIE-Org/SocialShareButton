@@ -173,6 +173,47 @@ describe("rendering", () => {
     btn.button.dispatchEvent(new Event("mouseleave"));
     expect(btn.button.style.backgroundColor).toBe("rgb(1, 2, 3)");
   });
+
+  it("renders buttonText as text, never as HTML", () => {
+    const payload = '<img src=x onerror="window.__xss = true">';
+    const btn = create({ buttonText: payload });
+    expect(btn.button.querySelector("img")).toBeNull();
+    expect(btn.button.querySelector("span").textContent).toBe(payload);
+  });
+
+  it("keeps any buttonText string out of the markup (property)", () => {
+    fc.assert(
+      fc.property(fc.string(), (text) => {
+        const el = document.createElement("div");
+        document.body.appendChild(el);
+        const btn = new SocialShareButton({
+          container: el,
+          url: "https://x.org",
+          buttonText: text || "x",
+        });
+        const label = btn.button.querySelector("span");
+        const ok = label.textContent === (text || "x") && label.children.length === 0;
+        btn.destroy();
+        el.remove();
+        return ok;
+      }),
+      { numRuns: 50 }
+    );
+  });
+
+  it("only accepts known modal positions", () => {
+    create({ modalPosition: 'center"><img src=x onerror="window.__xss = true">' });
+    const content = document.querySelector(".social-share-modal-content");
+    expect(content.className).toBe("social-share-modal-content center");
+    expect(document.querySelector(".social-share-modal-overlay img")).toBeNull();
+  });
+
+  it("keeps a supported modal position", () => {
+    create({ modalPosition: "bottom" });
+    expect(document.querySelector(".social-share-modal-content").classList.contains("bottom")).toBe(
+      true
+    );
+  });
 });
 
 describe("modal", () => {
@@ -470,6 +511,20 @@ describe("auto-init from data attributes", () => {
     el.remove();
     await vi.advanceTimersByTimeAsync(20);
     expect(SocialShareButton.instances.has(instance)).toBe(false);
+  });
+
+  it("does not inject markup from data-button-text or data-modal-position", async () => {
+    const el = document.createElement("div");
+    el.setAttribute("data-social-share", "");
+    el.setAttribute("data-button-text", "<img src=x>");
+    el.setAttribute("data-modal-position", '"><img src=x>');
+    document.body.appendChild(el);
+    await vi.advanceTimersByTimeAsync(20);
+
+    expect(el._socialShareButtonInstance).toBeDefined();
+    expect(document.querySelector(".social-share-btn img")).toBeNull();
+    expect(document.querySelector(".social-share-modal-overlay img")).toBeNull();
+    expect(document.querySelector(".social-share-btn span").textContent).toBe("<img src=x>");
   });
 });
 
