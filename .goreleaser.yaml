@@ -1,0 +1,198 @@
+# https://goreleaser.com/customization/
+#   1. Uncomment only the sections relevant to your project type
+#   2. Fill in placeholders marked with <REPLACE_ME>
+#   3. Run `goreleaser check` to validate before pushing
+
+version: 2
+
+project_name: template-repo   # replace with project name e.g. my-tool, my-project
+
+# before:
+#   hooks:
+    # Clean up build artifacts before release
+    # - go mod tidy            # [GO] uncomment if  Go project
+    # - npm ci               # [NODE] Uncomment for Node.js projects
+    # - bun install --frozen # [NODE/BUN] Uncomment for Bun projects
+
+env:
+  - GITHUB_TOKEN={{ .Env.GITHUB_TOKEN }}
+  # - NPM_TOKEN={{ .Env.NPM_TOKEN }}        # [NODE] Uncomment if publishing to npm
+  # - DOCKER_USERNAME={{ .Env.DOCKER_USERNAME }}  # [DOCKER] Uncomment if pushing to Docker Hub
+
+# builds:
+#   # [GO] — Go binary build (most common for CLI tools, GitHub Actions runners)
+#   - id: go-build
+#     builder: go
+#     main: ./main.go          # Entry point — change to ./cmd/<name>/main.go if needed
+#     binary: template-repo     # Output binary name e.g. my-project
+#     env:
+#       - CGO_ENABLED=0        # Disable CGO for static binaries (recommended for Actions)
+#     goos:
+#       - linux
+#       - darwin
+#       - windows
+#     goarch:
+#       - amd64
+#       - arm64
+#     ldflags:
+#       # Embed version info at build time
+#       - -s -w
+#       - -X main.version={{ .Version }}
+#       - -X main.commit={{ .Commit }}
+#       - -X main.date={{ .Date }}
+    # [GO] Uncomment if building multiple binaries from the same repo
+    # targets:
+    #   - linux_amd64
+    #   - linux_arm64
+    #   - darwin_amd64
+    #   - darwin_arm64
+    #   - windows_amd64
+
+  # [NODE] — Node.js project build, Uncomment this entire block if your project is Node.js/Bun based
+  # - id: node-build
+  #   builder: node
+  #   command: build           # Runs `npm run build` or equivalent
+  #   ids: []
+  #   # For Bun projects, replace builder with:
+  #   # builder: bun
+  #   # command: build
+
+  # [PYTHON] — Python project (uv/poetry),Uncomment this entire block if your project is Python based
+  # - id: python-build
+  #   builder: uv              # Options: uv, poetry, python
+  #   # For Poetry projects replace with:
+  #   # builder: poetry
+
+  # [PREBUILT] — Import pre-built binaries, Use if you build binaries in a prior CI step and just want GoReleaser to package
+  # - id: prebuilt-import
+  #   builder: prebuilt
+  #   goos:
+  #     - linux
+  #     - darwin
+  #     - windows
+  #   goarch:
+  #     - amd64
+  #     - arm64
+  #   prebuilt:
+  #     path: dist/{{ .Os }}_{{ .Arch }}/{{ .ProjectName }}
+
+archives:
+  - id: default-archive
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    wrap_in_directory: true     # Wrap binary in a directory inside the archive
+    files:
+      - LICENSE
+      - README.md
+      - CHANGELOG.md
+      # Uncomment if shipping ABI/contract artifacts with release ( for web3 projects)
+      # - artifacts/abi/**
+      # - artifacts/addresses.json
+    format_overrides:          # Windows gets .zip, everything else gets .tar.gz
+      - goos: windows  
+        format: zip
+
+  # [NODE] Uncomment if your project produces a dist/ folder to archive
+  # - id: node-archive
+  #   ids: [node-build]
+  #   name_template: "{{ .ProjectName }}_{{ .Version }}_js"
+  #   files:
+  #     - dist/**
+  #     - package.json
+  #     - README.md
+
+# include checksums for security/verification
+checksum:    
+  name_template: "{{ .ProjectName }}_{{ .Version }}_checksums.txt"
+  algorithm: sha256
+
+# source archive of the full repository at the release tag, useful for source-based distributions and OpenSSF compliance
+source:
+  enabled: true
+  name_template: "{{ .ProjectName }}_{{ .Version }}_source"
+
+# SBOM — Software Bill of Materials generation for supply chain transparency
+sboms:
+  - artifacts: archive
+    # Requires syft to be installed: https://github.com/anchore/syft
+
+# SIGNING — Sign release artifacts with cosign (keyless via GitHub OIDC) 
+# signs:
+#   - cmd: cosign
+#     args:
+#       - sign-blob
+#       - --output-signature=${signature}
+#       - ${artifact}
+#       - --yes
+#     artifacts: checksum
+
+
+# [DOCKER] Uncomment this entire section if your project has a Dockerfile
+# docker_builds:
+#   - id: docker-linux
+#     ids: [go-build]          # Reference your build id above; or remove for non-Go
+#     goos: linux
+#     goarchs:
+#       - amd64
+#       - arm64
+#     image_templates:
+#       - "ghcr.io/{{ .Env.GITHUB_REPOSITORY_OWNER }}/{{ .ProjectName }}:{{ .Version }}-{{ .Os }}-{{ .Arch }}"
+#       - "ghcr.io/{{ .Env.GITHUB_REPOSITORY_OWNER }}/{{ .ProjectName }}:latest"
+#     build_flag_templates:
+#       - --label=org.opencontainers.image.title={{ .ProjectName }}
+#       - --label=org.opencontainers.image.version={{ .Version }}
+#       - --label=org.opencontainers.image.created={{ .Date }}
+#       - --label=org.opencontainers.image.revision={{ .FullCommit }}
+#       - --label=org.opencontainers.image.source={{ .GitURL }}
+#     # Optional: push to Docker Hub as well
+#     # extra_files:
+#     #   - docker-compose.yml
+
+# [NODE] Uncomment if your project is an npm package, Requires NPM_TOKEN secret in GitHub Actions
+# nfpms: []   # Not applicable for npm — GoReleaser publishes npm directly:
+# publishers:
+#   - name: npm
+#     cmd: npm publish --access public
+#     env:
+#       - NODE_AUTH_TOKEN={{ .Env.NPM_TOKEN }}
+#     dir: "{{ dir .ArtifactPath }}"
+#     artifacts: archive
+#     ids: [node-archive]
+
+
+# [WEB3] Uncomment if your project compiles Solidity/Hardhat/Foundry contracts, This publishes ABI + bytecode artifacts alongside the release
+# before hooks for WEB3 — add to before.hooks above:
+#   - forge build --sizes     # Foundry projects
+#   - npx hardhat compile     # Hardhat projects
+#
+# extra_files:
+#   - glob: ./artifacts/contracts/**/*.json
+#   - glob: ./deployments/**/*.json          # deployment addresses per network
+#   - glob: ./broadcast/**/*-latest.json     # Foundry broadcast logs
+
+release:                      # Release metadata and GitHub release configuration
+  github:
+    owner: AOSSIE-Org  
+    name: template-repo       # Repo name e.g. pr-feedback-action
+  # Make release a draft first so maintainer can review before publishing
+  draft: false
+  # Set to true to mark as a pre-release if version has a pre-release tag (e.g. v1.0.0-beta.1)
+  prerelease: auto
+  # Override release name
+  name_template: "{{ .ProjectName }} {{ .Version }}"
+  # [OPTIONAL] Point to a hand-crafted release notes file instead of auto-changelog
+  # release_notes: RELEASE_NOTES.md
+
+# CHANGELOG generation disabled here because Release Drafter already produces changelog drafts via .github/release-drafter.yml 
+
+# [MONOREPO] Uncomment if this template repo spans multiple sub-projects. Each sub-project should have its own .goreleaser.yaml that includes this base
+# monorepo:
+#   tag_prefix: "{{ .ProjectName }}/"   
+#   dir: .                               # Root of the monorepo
+
+# SNAPSHOT — Local test builds (no git tag required)
+# Run: goreleaser release --snapshot --clean
+snapshot:
+  version_template: "{{ .Tag }}-SNAPSHOT-{{ .ShortCommit }}"
+
+# REPORT SIZES — Print artifact size table after build which is useful for tracking binary bloat over releases
+report_sizes: true

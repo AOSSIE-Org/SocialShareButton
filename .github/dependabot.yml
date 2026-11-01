@@ -1,25 +1,264 @@
+# Dependabot Configuration for Multi-Domain Projects
+# Documentation: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+# ============================================================================
+# CUSTOMIZATION GUIDE
+# ============================================================================
+# 1. Remove package ecosystems not used in your project (e.g., if no Java, remove maven & gradle)
+# 2. Update "directory" if dependencies are in subdirectories (e.g., "/backend", "/frontend")
+# 3. Adjust "schedule" timing based on your team's workflow
+# 4. Set "open-pull-requests-limit" based on your review capacity (default: 5)
+# 5. Add reviewers/assignees if needed:
+#    reviewers:
+#      - "username"           # Individual GitHub user
+#      - "org/team-name"      # Organization team
+#    assignees:
+#      - "username"
+# 6. Customize labels to match your project's labeling system
+# 7. Use "ignore" to exclude specific dependencies or update types
+# 8. For monorepos, duplicate sections with different "directory" values
+# ============================================================================
+
 version: 2
 updates:
-  # Maintain dependencies for GitHub Actions
+  # NPM - JavaScript/Node.js projects
+  # Remove this section if your project doesn't use npm
+  - package-ecosystem: "npm"
+    directory: "/"  # Change to "/frontend" or "/backend" for monorepos
+    schedule:
+      interval: "weekly"  # Options: daily, weekly, monthly
+      day: "monday"       # For weekly: monday-sunday
+      time: "09:00"       # UTC time
+    open-pull-requests-limit: 5  # Max PRs to keep open
+    labels:
+      - "dependencies"
+      - "npm"
+    commit-message:
+      prefix: "chore(deps)"  # Follows conventional commits
+      include: "scope"
+    pull-request-branch-name:
+      separator: "-"  # Creates branches like: dependabot/npm-package-name
+
+  # GitHub Actions - Keep workflows up to date (recommended for all projects)
   - package-ecosystem: "github-actions"
+    directory: "/"  # Scans .github/workflows/
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "github-actions"
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+    pull-request-branch-name:
+      separator: "-"
+
+  # Docker - Containerized applications
+  # Remove this section if your project doesn't use Docker
+  - package-ecosystem: "docker"
+    directory: "/"  # Directory containing Dockerfile
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "docker"
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+    pull-request-branch-name:
+      separator: "-"
+
+  # Bundler - Ruby projects
+  # Remove this section if your project doesn't use Ruby
+  - package-ecosystem: "bundler"
     directory: "/"
     schedule:
       interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "ruby"
     commit-message:
       prefix: "chore(deps)"
+      include: "scope"
+    pull-request-branch-name:
+      separator: "-"
 
-  # Maintain dependencies for npm/pnpm
-  - package-ecosystem: "npm"
+  # Cargo - Rust projects
+  # Remove this section if your project doesn't use Rust
+  - package-ecosystem: "cargo"
     directory: "/"
     schedule:
       interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "rust"
     commit-message:
       prefix: "chore(deps)"
+      include: "scope"
+    pull-request-branch-name:
+      separator: "-"
 
-  # Maintain dependencies for landing-page
-  - package-ecosystem: "npm"
-    directory: "/landing-page"
+  # Maven - Java projects
+  # Remove this section if your project uses Gradle instead or doesn't use Java
+  - package-ecosystem: "maven"
+    directory: "/"
     schedule:
       interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "java"
     commit-message:
       prefix: "chore(deps)"
+      include: "scope"
+    pull-request-branch-name:
+      separator: "-"
+
+  # Gradle - Java/Kotlin/Android projects
+  # Remove this section if your project uses Maven instead or doesn't use Java/Kotlin
+  - package-ecosystem: "gradle"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "java"
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+    pull-request-branch-name:
+      separator: "-"
+
+  # Composer - PHP projects
+  # Remove this section if your project doesn't use PHP
+  - package-ecosystem: "composer"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "php"
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+    pull-request-branch-name:
+      separator: "-"
+
+  # Go Modules - Go projects
+  # Remove this section if your project doesn't use Go
+  - package-ecosystem: "gomod"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "go"
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+    pull-request-branch-name:
+      separator: "-"
+
+  # Pip - Python projects (supports pip, pipenv, poetry)
+  # Remove this section if your project doesn't use Python
+  - package-ecosystem: "pip"
+    directory: "/"  # Directory containing requirements.txt, Pipfile, or pyproject.toml
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "python"
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+    pull-request-branch-name:
+      separator: "-"
+    # Uncomment and customize for AI/ML projects to prevent breaking changes:
+    # ignore:
+    #   - dependency-name: "tensorflow"
+    #     update-types: ["version-update:semver-major"]
+    #   - dependency-name: "torch"
+    #     update-types: ["version-update:semver-major"]
+    #   - dependency-name: "scikit-learn"
+    #     update-types: ["version-update:semver-major"]
+
+  # Terraform - Infrastructure as Code
+  # Remove this section if your project doesn't use Terraform
+  - package-ecosystem: "terraform"
+    directory: "/"  # Directory containing .tf files
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "infrastructure"
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+    pull-request-branch-name:
+      separator: "-"
+
+  # Pub - Dart/Flutter projects
+  # Remove this section if your project doesn't use Dart/Flutter
+  - package-ecosystem: "pub"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "flutter"
+      - "dart"
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+    pull-request-branch-name:
+      separator: "-"
+
+  # NuGet - .NET projects (C#, F#, VB.NET)
+  # Remove this section if your project doesn't use .NET
+  - package-ecosystem: "nuget"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "dotnet"
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+    pull-request-branch-name:
+      separator: "-"
