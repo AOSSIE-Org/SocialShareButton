@@ -142,6 +142,8 @@ jobs:
                 body: `## Release ${version}\n\nThis release was automatically created when the VERSION file was updated.`,
                 draft: false,
                 prerelease: false,
+                // GitHub appends a human-readable summary of the PRs merged since the previous release
+                generate_release_notes: true,
               });
 
               console.log(`✓ Created and published release ${version}`);

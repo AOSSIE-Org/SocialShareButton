@@ -9,7 +9,17 @@ import {
   XLogoIcon,
   YouTubeIcon,
 } from "@/components/ui/Icons";
-import { docsUrl, npmUrl, repoUrl, socialLinks } from "@/config/site";
+import {
+  aossieUrl,
+  docsUrl,
+  legalPages,
+  npmUrl,
+  repoUrl,
+  socialLinks,
+  stabilityNexusUrl,
+  supportPagePath,
+} from "@/config/site";
+import { Link } from "@/i18n/navigation";
 
 const socials: { key: keyof typeof socialLinks; icon: ComponentType<SVGProps<SVGSVGElement>> }[] = [
   { key: "discord", icon: DiscordIcon },
@@ -48,10 +58,10 @@ export function Footer() {
           </div>
           <p className="mt-4 max-w-sm text-sm/6 text-foreground-secondary">{t("tagline")}</p>
           <div className="mt-6 flex items-center gap-5">
-            <a href="https://aossie.org" target="_blank" rel="noopener noreferrer" className="rounded-md focus-visible:outline-2 focus-visible:outline-accent">
+            <a href={aossieUrl} target="_blank" rel="noopener noreferrer" className="rounded-md focus-visible:outline-2 focus-visible:outline-accent">
               <img src="/brand/icons/aossie_logo.svg" alt={t("aossieLogo")} width={37} height={40} className="h-10 w-auto" loading="lazy" />
             </a>
-            <a href="https://stability.nexus" target="_blank" rel="noopener noreferrer" className="rounded-md focus-visible:outline-2 focus-visible:outline-accent">
+            <a href={stabilityNexusUrl} target="_blank" rel="noopener noreferrer" className="rounded-md focus-visible:outline-2 focus-visible:outline-accent">
               <img src="/brand/icons/stability_nexus_logo.svg" alt={t("stabilityNexusLogo")} width={35} height={40} className="h-10 w-auto" loading="lazy" />
             </a>
           </div>
@@ -75,9 +85,13 @@ export function Footer() {
           </div>
         ))}
 
-        {/* Separated by a hairline: socials on the left, copyright and license on the right edge */}
-        <div className="flex flex-col-reverse gap-4 border-t border-line pt-8 md:col-span-3 md:flex-row md:items-center md:justify-between">
-          <ul className="-ml-2 flex items-center gap-1">
+        {/*
+          Separated by a hairline. From lg up: socials on the left, legal and support links centred on
+          the page (equal side columns), copyright and license on the right edge. Below lg the parts
+          stack, each centred: links, copyright, socials.
+        */}
+        <div className="flex flex-col items-center gap-4 border-t border-line pt-8 md:col-span-3 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:gap-x-8">
+          <ul className="order-last flex items-center gap-1 lg:order-none lg:-ml-2 lg:justify-self-start">
             {socials.map(({ key, icon: Icon }) => (
               <li key={key}>
                 <a
@@ -92,7 +106,21 @@ export function Footer() {
               </li>
             ))}
           </ul>
-          <p className="text-sm text-foreground-muted md:text-right">
+          <ul className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1">
+            {(["privacy", "terms"] as const).map((page) => (
+              <li key={page}>
+                <Link href={legalPages[page].path} className={linkClass}>
+                  {t(page)}
+                </Link>
+              </li>
+            ))}
+            <li>
+              <Link href={supportPagePath} className={linkClass}>
+                <span aria-hidden="true">♥</span> {t("support")}
+              </Link>
+            </li>
+          </ul>
+          <p className="text-center text-sm text-foreground-muted lg:justify-self-end lg:text-right">
             {t("copyright", { year: new Date().getFullYear() })} {t("license")}
           </p>
         </div>

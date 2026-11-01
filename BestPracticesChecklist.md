@@ -18,12 +18,12 @@
 | Category           | Met | N/A | Total (Applicable) | Status |
 |--------------------|-----|-----|--------------------|--------|
 | Basics             | 8   | 0   | 8                  | 🟢     |
-| Change Control     | 4   | 1   | 5 (6)              | 🟡     |
+| Change Control     | 5   | 1   | 5 (6)              | 🟢     |
 | Reporting          | 7   | 1   | 7 (8)              | 🟢     |
-| Quality            | 10  | 0   | 11                 | 🟡     |
+| Quality            | 11  | 0   | 11                 | 🟢     |
 | Security           | 3   | 6   | 3 (9)              | 🟢     |
 | Analysis           | 5   | 2   | 5 (7)              | 🟢     |
-| **Total**          | **37** | **10** | **39 (49)**    | **94.9%** |
+| **Total**          | **39** | **10** | **39 (49)**    | **100%** |
 
 *N/A items are excluded from the denominator.*
 
@@ -81,8 +81,8 @@
 
 ### Release Notes
 
-- [ ] 🔴 **release_notes** — Each release includes human-readable release notes summarizing major changes.
-  - *Not met yet:* releases created from a prepared draft carry its notes, but when no draft exists `version-release.yml` creates a release with only a generic line and no change summary. See https://github.com/AOSSIE-Org/SocialShareButton/releases
+- [x] 🔴 **release_notes** — Each release includes human-readable release notes summarizing major changes.
+  - *Evidence URL:* https://github.com/AOSSIE-Org/SocialShareButton/blob/main/.github/workflows/version-release.yml (a prepared draft's notes are published as-is; otherwise the release is created with `generate_release_notes: true`, so GitHub adds a "What's Changed" summary of the merged PRs). Releases: https://github.com/AOSSIE-Org/SocialShareButton/releases
 
 - [-] 🔴 **release_notes_vulns** — Release notes identify every publicly known vulnerability (with CVE) fixed in that release.
   - *Note:* `[~]` N/A: no publicly known vulnerabilities have been reported or fixed.
@@ -137,22 +137,21 @@
 ### Automated Testing
 
 - [x] 🔵 **test_invocation** — The test suite can be invoked in a standard way. *(SUGGESTED)*
-  - *Evidence URL:* `npm test` / `npm run test:coverage` at the repo root (https://github.com/AOSSIE-Org/SocialShareButton/blob/main/package.json)
+  - *Evidence URL:* `npm test` / `npm run test:coverage` at the repo root for the library (https://github.com/AOSSIE-Org/SocialShareButton/blob/main/package.json) and inside `landing-page/` for the website (https://github.com/AOSSIE-Org/SocialShareButton/blob/main/landing-page/package.json)
 
 - [x] 🔵 **test_most** — The test suite covers most code branches and functionality. *(SUGGESTED)*
-  - *Evidence URL:* https://github.com/AOSSIE-Org/SocialShareButton/blob/main/vitest.config.js (90% thresholds on the published library files, enforced in CI and before every npm release)
+  - *Evidence URL:* https://github.com/AOSSIE-Org/SocialShareButton/blob/main/vitest.config.js (90% thresholds on the published library files, enforced in CI and before every npm release) and https://github.com/AOSSIE-Org/SocialShareButton/blob/main/landing-page/vitest.config.mts (90% thresholds on the whole website source, `src/**/*.{ts,tsx}`: pages, layouts, components, hooks, config, i18n and lib, rendered with React Testing Library in jsdom; the only exclusion is type declaration files)
 
 ### New Functionality Testing Policy
 
-- [ ] 🔴 **test_policy** — The project has a general policy that new functionality must include tests in the automated test suite.
-  - *Evidence URL:* https://github.com/AOSSIE-Org/SocialShareButton/blob/main/CONTRIBUTING.md#testing-policy
-  - *Not met yet:* the policy covers new library behaviour only; the website (`landing-page/`) has no automated tests and no testing requirement.
+- [x] 🔴 **test_policy** — The project has a general policy that new functionality must include tests in the automated test suite.
+  - *Evidence URL:* https://github.com/AOSSIE-Org/SocialShareButton/blob/main/CONTRIBUTING.md#testing-policy (new functionality in both the library and the website must include tests; CI runs both suites on every PR)
 
 - [x] 🔴 **tests_are_added** — Evidence exists that the test policy has been followed in recent major changes.
-  - *Evidence URL:* https://github.com/AOSSIE-Org/SocialShareButton/tree/main/tests
+  - *Evidence URL:* https://github.com/AOSSIE-Org/SocialShareButton/tree/main/tests (library) and https://github.com/AOSSIE-Org/SocialShareButton/tree/main/landing-page/tests (website)
 
 - [x] 🔵 **tests_documented_added** — The test policy is documented in contribution instructions. *(SUGGESTED)*
-  - *Evidence URL:* https://github.com/AOSSIE-Org/SocialShareButton/blob/main/CONTRIBUTING.md#testing-policy (library)
+  - *Evidence URL:* https://github.com/AOSSIE-Org/SocialShareButton/blob/main/CONTRIBUTING.md#testing-policy (library and website)
 
 ### Linting / Warning Flags
 
@@ -160,7 +159,7 @@
   - *Tool used:* ESLint 9 with `eslint-config-next` (core-web-vitals + TypeScript), TypeScript `strict` mode.
 
 - [x] 🔴 **warnings_fixed** — Warnings from the linter are addressed.
-  - *Note:* Library tests and the website `npm run lint` + `npm run build` run in CI on every PR and complete without warnings.
+  - *Note:* Library tests and the website `npm run lint`, `npm run test:coverage` and `npm run build` run in CI on every PR and complete without warnings.
 
 - [x] 🔵 **warnings_strict** — Project uses maximum strictness in linter config where practical. *(SUGGESTED)*
   - *Note:* TypeScript `strict: true`; Next.js recommended + core-web-vitals rule sets.

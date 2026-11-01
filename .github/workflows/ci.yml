@@ -49,7 +49,7 @@ jobs:
       - name: Run tests with coverage (90% threshold)
         run: pnpm run test:coverage
 
-  # Website (landing-page/)
+  # Website (landing-page/): lint, unit + property tests with a 90% coverage gate, then build
   build:
     runs-on: ubuntu-latest
 
@@ -75,6 +75,9 @@ jobs:
 
       - name: Run Lint
         run: npm run lint
+
+      - name: Run tests with coverage (90% threshold)
+        run: npm run test:coverage
 
       # prebuild copies the library from ../src, so this also catches library/website drift
       - name: Build project

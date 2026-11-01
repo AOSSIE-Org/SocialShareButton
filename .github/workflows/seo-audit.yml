@@ -50,11 +50,14 @@ jobs:
 
       # On PRs, canonical/hreflang URLs point at production, which does not
       # have the PR's new pages yet, so skip the production domain there.
+      # The header's version badge links to this repo's release tag, which a
+      # VERSION bump only creates on merge, so skip those tag links too.
       - name: Audit Broken Links and Images
         run: |
           if [ "${{ github.event_name }}" == "pull_request" ]; then
             linkchecker "${{ env.AUDIT_URL }}" --check-extern --no-warnings \
-              --ignore-url '^https://social-share-button\.aossie\.org(/|$)'
+              --ignore-url '^https://social-share-button\.aossie\.org(/|$)' \
+              --ignore-url '^https://github\.com/AOSSIE-Org/SocialShareButton/releases/tag/'
           else
             linkchecker "${{ env.AUDIT_URL }}" --check-extern --no-warnings
           fi

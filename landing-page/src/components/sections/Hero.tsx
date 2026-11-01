@@ -3,7 +3,7 @@ import { DemoLauncher } from "@/components/demo/DemoLauncher";
 import { ArrowUpRightIcon, StarIcon } from "@/components/ui/Icons";
 import { InstallCommand } from "@/components/ui/InstallCommand";
 import { Eyebrow } from "@/components/ui/Section";
-import { npmPackage, repoUrl } from "@/config/site";
+import { aossieUrl, npmPackage, repoUrl } from "@/config/site";
 
 export function Hero() {
   const t = useTranslations("Hero");
@@ -22,7 +22,7 @@ export function Hero() {
           {t.rich("broughtBy", {
             link: (chunks) => (
               <a
-                href="https://aossie.org/"
+                href={`${aossieUrl}/`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-accent underline decoration-accent/40 underline-offset-4 transition-colors hover:decoration-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"

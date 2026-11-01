@@ -1,12 +1,14 @@
 {
   "name": "@aossie-org/social-share-button",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "description": "Lightweight social sharing component for web applications",
   "main": "src/social-share-button.js",
   "files": [
     "src/social-share-button.js",
     "src/social-share-button.css",
     "src/social-share-button-react.jsx",
+    "src/social-share-button-preact.jsx",
+    "src/social-share-button-qwik.tsx",
     "src/social-share-analytics.js",
     "README.md",
     "LICENSE"

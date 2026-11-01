@@ -10,3 +10,7 @@ landing-page/public/vendor/
 landing-page/node_modules/
 # Verbatim legal text; must not be reformatted
 DCO.md
+# Verbatim copies of the Template-Repo security skills; keep in sync with the template
+skills/
+# Security review and remediation reports are published verbatim
+security-reviews/

@@ -9,6 +9,8 @@ interface Props {
   platforms?: string[];
   theme?: 'dark' | 'light';
   buttonText?: string;
+  /** Translated UI text; missing keys keep the English defaults. */
+  labels?: Partial<Record<'share' | 'close' | 'copy' | 'copied' | 'copyFailed' | 'urlLabel', string>>;
   customClass?: string;
   buttonStyle?: 'default' | 'primary' | 'compact' | 'icon-only';
   modalPosition?: 'center' | 'top' | 'bottom';
@@ -20,7 +22,9 @@ export const SocialShareButton = component$<Props>((props) => {
   const containerRef = useSignal<HTMLDivElement>();
 
 
-  useVisibleTask$(({ cleanup }) => {
+  useVisibleTask$(({ track, cleanup }) => {
+    // Rerun on label changes: cleanup destroys the old instance and a new one is created with the new labels
+    track(() => props.labels);
     if (typeof window !== 'undefined' && (window as any).SocialShareButton && containerRef.value) {
       const shareButton = new (window as any).SocialShareButton({
         container: containerRef.value,
@@ -32,6 +36,7 @@ export const SocialShareButton = component$<Props>((props) => {
         platforms: props.platforms || ['whatsapp', 'facebook', 'twitter', 'linkedin', 'telegram', 'reddit', 'discord'],
         theme: props.theme || 'dark',
         buttonText: props.buttonText || 'Share',
+        labels: props.labels,
         customClass: props.customClass || '',
         buttonStyle: props.buttonStyle || 'default',
         modalPosition: props.modalPosition || 'center',

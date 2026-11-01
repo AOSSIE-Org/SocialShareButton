@@ -173,6 +173,47 @@ describe("rendering", () => {
     btn.button.dispatchEvent(new Event("mouseleave"));
     expect(btn.button.style.backgroundColor).toBe("rgb(1, 2, 3)");
   });
+
+  it("renders buttonText as text, never as HTML", () => {
+    const payload = '<img src=x onerror="window.__xss = true">';
+    const btn = create({ buttonText: payload });
+    expect(btn.button.querySelector("img")).toBeNull();
+    expect(btn.button.querySelector("span").textContent).toBe(payload);
+  });
+
+  it("keeps any buttonText string out of the markup (property)", () => {
+    fc.assert(
+      fc.property(fc.string(), (text) => {
+        const el = document.createElement("div");
+        document.body.appendChild(el);
+        const btn = new SocialShareButton({
+          container: el,
+          url: "https://x.org",
+          buttonText: text || "x",
+        });
+        const label = btn.button.querySelector("span");
+        const ok = label.textContent === (text || "x") && label.children.length === 0;
+        btn.destroy();
+        el.remove();
+        return ok;
+      }),
+      { numRuns: 50 }
+    );
+  });
+
+  it("only accepts known modal positions", () => {
+    create({ modalPosition: 'center"><img src=x onerror="window.__xss = true">' });
+    const content = document.querySelector(".social-share-modal-content");
+    expect(content.className).toBe("social-share-modal-content center");
+    expect(document.querySelector(".social-share-modal-overlay img")).toBeNull();
+  });
+
+  it("keeps a supported modal position", () => {
+    create({ modalPosition: "bottom" });
+    expect(document.querySelector(".social-share-modal-content").classList.contains("bottom")).toBe(
+      true
+    );
+  });
 });
 
 describe("modal", () => {
@@ -410,6 +451,85 @@ describe("updateOptions and SPA routing", () => {
   });
 });
 
+describe("labels", () => {
+  const hindi = {
+    share: "शेयर करें",
+    close: "बंद करें",
+    copy: "कॉपी करें",
+    copied: "कॉपी हो गया!",
+    copyFailed: "विफल",
+    urlLabel: "शेयर करने का URL",
+  };
+
+  function modalText(btn) {
+    const m = btn.modal;
+    return {
+      share: m.querySelector(".social-share-modal-header h3").textContent,
+      close: m.querySelector(".social-share-modal-close").getAttribute("aria-label"),
+      copy: m.querySelector(".social-share-copy-btn").textContent,
+      urlLabel: m.querySelector(".social-share-link-input input").getAttribute("aria-label"),
+      button: btn.button.getAttribute("aria-label"),
+    };
+  }
+
+  it("uses the English defaults when no labels are given", () => {
+    expect(modalText(create())).toEqual({
+      share: "Share",
+      close: "Close",
+      copy: "Copy",
+      urlLabel: "URL to share",
+      button: "Share",
+    });
+  });
+
+  it("applies translated labels to the button, modal and copy feedback", async () => {
+    vi.stubGlobal("navigator", { clipboard: { writeText: vi.fn(() => Promise.resolve()) } });
+    const btn = create({ labels: hindi });
+    expect(modalText(btn)).toEqual({
+      share: hindi.share,
+      close: hindi.close,
+      copy: hindi.copy,
+      urlLabel: hindi.urlLabel,
+      button: hindi.share,
+    });
+    const copyBtn = btn.modal.querySelector(".social-share-copy-btn");
+    copyBtn.click();
+    await vi.waitFor(() => expect(copyBtn.textContent).toBe(hindi.copied));
+    vi.advanceTimersByTime(2000);
+    expect(copyBtn.textContent).toBe(hindi.copy);
+  });
+
+  it("shows the translated failure text when copying fails", () => {
+    vi.stubGlobal("navigator", {});
+    document.execCommand = vi.fn(() => {
+      throw new Error("blocked");
+    });
+    const btn = create({ labels: hindi });
+    btn.copyLink();
+    expect(btn.modal.querySelector(".social-share-copy-btn").textContent).toBe(hindi.copyFailed);
+  });
+
+  it("keeps defaults for keys that are not translated", () => {
+    expect(modalText(create({ labels: { share: "Teilen" } }))).toMatchObject({
+      share: "Teilen",
+      copy: "Copy",
+    });
+  });
+
+  it("updates labels on an existing instance and keeps the others", () => {
+    const btn = create({ labels: { copy: "Kopieren" } });
+    btn.updateOptions({ labels: { share: "Teilen" } });
+    expect(modalText(btn)).toMatchObject({ share: "Teilen", copy: "Kopieren", close: "Close" });
+  });
+
+  it("renders labels as text, never as HTML", () => {
+    const payload = '<img src=x onerror="window.__xss = true">';
+    const btn = create({ labels: { share: payload, copy: payload } });
+    expect(btn.modal.querySelector("img")).toBeNull();
+    expect(modalText(btn).share).toBe(payload);
+  });
+});
+
 describe("destroy", () => {
   it("removes DOM, listeners and registry entry, and is idempotent", () => {
     const btn = create();
@@ -470,6 +590,20 @@ describe("auto-init from data attributes", () => {
     el.remove();
     await vi.advanceTimersByTimeAsync(20);
     expect(SocialShareButton.instances.has(instance)).toBe(false);
+  });
+
+  it("does not inject markup from data-button-text or data-modal-position", async () => {
+    const el = document.createElement("div");
+    el.setAttribute("data-social-share", "");
+    el.setAttribute("data-button-text", "<img src=x>");
+    el.setAttribute("data-modal-position", '"><img src=x>');
+    document.body.appendChild(el);
+    await vi.advanceTimersByTimeAsync(20);
+
+    expect(el._socialShareButtonInstance).toBeDefined();
+    expect(document.querySelector(".social-share-btn img")).toBeNull();
+    expect(document.querySelector(".social-share-modal-overlay img")).toBeNull();
+    expect(document.querySelector(".social-share-btn span").textContent).toBe("<img src=x>");
   });
 });
 

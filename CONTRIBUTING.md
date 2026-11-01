@@ -150,11 +150,18 @@ We use Prettier for the library and ESLint for the website. Please run these bef
 - `npm run format` — Automatically format your code to project standards (repository root).
 - `npm run format:check` — Verify that files are correctly formatted (repository root).
 - `npm test` / `npm run test:coverage` — Run the library's Vitest unit and property tests in `tests/` (repository root). CI fails below 90% coverage of `src/social-share-button.js` and `src/social-share-analytics.js`.
+- `npm test` / `npm run test:coverage` — Run the website's Vitest unit and property tests in `landing-page/tests/` (inside `landing-page/`). CI fails below 90% coverage of all website source (`landing-page/src/**/*.{ts,tsx}`; only declaration files are excluded, see [`landing-page/vitest.config.mts`](landing-page/vitest.config.mts)).
 - `npm run lint` and `npm run build` — Lint and build the website (inside `landing-page/`).
 
 ### Testing Policy
 
-New library behaviour (options, platforms, events, lifecycle) must come with tests in [`tests/`](tests/). Use [fast-check](https://fast-check.dev) property tests where the input space is large (URLs, titles, option combinations). Releases run the same suite before publishing to npm.
+All new functionality, in **both** the library and the website, must include tests in the automated test suite.
+
+- **Library:** new behaviour (options, platforms, events, lifecycle) needs tests in [`tests/`](tests/). Run them with `npm run test:coverage` at the repository root. Releases run the same suite before publishing to npm.
+- **Website:** new pages, components, hooks and logic need tests in [`landing-page/tests/`](landing-page/tests/). Run them with `npm run test:coverage` inside `landing-page/`. Coverage is measured on the whole website source (`landing-page/src/**/*.{ts,tsx}`); the only exclusion (type declaration files) is listed with its reason in [`landing-page/vitest.config.mts`](landing-page/vitest.config.mts), so don't add exclusions to reach the number. Render components with React Testing Library in jsdom inside `NextIntlClientProvider` with the real catalogs, and assert behaviour (text, links, ARIA state, interactions) in both locales rather than snapshots. The message-catalog tests check that `en.json` and `hi.json` keep the same keys, ICU arguments and tags.
+- Use [fast-check](https://fast-check.dev) property tests where the input space is large (URLs, titles, option combinations, Markdown).
+
+[CI](.github/workflows/ci.yml) runs both suites on every pull request and fails if a test fails or coverage drops below 90%. Visual layout and styling (CSS) are not unit-tested; they are checked by `npm run lint`, `npm run build` and review.
 
 ### Working on the Website
 
@@ -185,7 +192,7 @@ Contributions are made under the [Developer Certificate of Origin](DCO.md). You 
 
 ### ✅ Before Submitting
 
-- [ ] Code tested (`npm run test:coverage` at the repo root passes)
+- [ ] Code tested (`npm run test:coverage` passes at the repo root and, for website changes, inside `landing-page/`)
 - [ ] Documentation updated
 - [ ] Linked related issue
 - [ ] Branch rebased with upstream

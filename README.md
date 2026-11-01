@@ -190,9 +190,9 @@ The website in [`landing-page/`](landing-page/) is built from the [AOSSIE Next.j
 ```html
 <link
   rel="stylesheet"
-  href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.css"
+  href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.1.0/src/social-share-button.css"
 />
-<script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.1.0/src/social-share-button.js"></script>
 ```
 
 ---
@@ -223,12 +223,12 @@ No matter which framework you use, integration always follows the same 3 steps:
 <head>
   <link
     rel="stylesheet"
-    href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.css"
+    href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.1.0/src/social-share-button.css"
   />
 </head>
 <body>
   <div id="root"></div>
-  <script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.1.0/src/social-share-button.js"></script>
 </body>
 ```
 
@@ -297,13 +297,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link
           rel="stylesheet"
-          href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.css"
+          href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.1.0/src/social-share-button.css"
         />
       </head>
       <body>
         {children}
         <Script
-          src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.js"
+          src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.1.0/src/social-share-button.js"
           strategy="beforeInteractive"
         />
       </body>
@@ -407,13 +407,13 @@ export default function Document() {
       <Head>
         <link
           rel="stylesheet"
-          href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.css"
+          href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.1.0/src/social-share-button.css"
         />
       </Head>
       <body>
         <Main />
         <NextScript />
-        <script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.1.0/src/social-share-button.js"></script>
       </body>
     </Html>
   );
@@ -508,12 +508,12 @@ declare global {
 <head>
   <link
     rel="stylesheet"
-    href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.css"
+    href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.1.0/src/social-share-button.css"
   />
 </head>
 <body>
   <div id="app"></div>
-  <script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.1.0/src/social-share-button.js"></script>
 </body>
 ```
 
@@ -540,12 +540,12 @@ new window.SocialShareButton({
 <head>
   <link
     rel="stylesheet"
-    href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.css"
+    href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.1.0/src/social-share-button.css"
   />
 </head>
 <body>
   <div id="app"></div>
-  <script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.1.0/src/social-share-button.js"></script>
 </body>
 ```
 
@@ -619,6 +619,7 @@ new SocialShareButton({
 | `via`              | string         | `''`                   | Twitter handle (without @)                         |
 | `platforms`        | array          | All platforms          | Platforms to show (see below)                      |
 | `buttonText`       | string         | `'Share'`              | Button label text                                  |
+| `labels`           | object         | English                | Translated UI text (see below)                     |
 | `buttonStyle`      | string         | `'default'`            | `default`, `primary`, `compact`, `icon-only`       |
 | `buttonColor`      | string         | `''`                   | Custom button background color                     |
 | `buttonHoverColor` | string         | `''`                   | Custom button hover color                          |
@@ -631,6 +632,26 @@ new SocialShareButton({
 
 **Available Platforms:**  
 `whatsapp`, `facebook`, `twitter`, `linkedin`, `telegram`, `reddit`, `email`, `pinterest`, `discord`
+
+### Translate the Button and Modal
+
+Pass `labels` to translate the built-in text. Any key you leave out keeps its English default. Labels are always rendered as text, never as HTML.
+
+```js
+new SocialShareButton({
+  container: "#share-button",
+  labels: {
+    share: "शेयर करें", // modal title and button aria-label (default "Share")
+    close: "बंद करें", // close button aria-label (default "Close")
+    copy: "कॉपी करें", // copy button (default "Copy")
+    copied: "कॉपी हो गया!", // shown after copying (default "Copied!")
+    copyFailed: "विफल", // shown if copying fails (default "Failed")
+    urlLabel: "शेयर करने का URL", // aria-label of the link field (default "URL to share")
+  },
+});
+```
+
+The React, Preact and Qwik wrappers accept the same `labels` prop.
 
 ### Customize Share Message/Post Text
 
