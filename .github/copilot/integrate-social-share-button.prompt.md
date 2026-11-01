@@ -44,8 +44,8 @@ Target the frontend app directory (`./`, `apps/*`, `packages/*`). Ignore backend
 ### 🌐 PATH A: CDN Method (Recommended)
 
 - **CDN Assets**:
-  - CSS: `https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.css`
-  - JS: `https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.js`
+  - CSS: `https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.1.0/src/social-share-button.css`
+  - JS: `https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.1.0/src/social-share-button.js`
 - **Injection**: Add `<link>` and `<script>` to root layout / base HTML. Insert `<div data-social-share data-button-style="default"></div>` into target component (replace `"default"` with chosen style).
 - 🛑 **Prohibitions**:
   - ❌ DO NOT run install commands (`npm i`, `pnpm add`, `yarn add`, `bun add`).
@@ -84,13 +84,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link
           rel="stylesheet"
-          href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.css"
+          href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.1.0/src/social-share-button.css"
         />
       </head>
       <body>
         {children}
         <Script
-          src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.js"
+          src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.1.0/src/social-share-button.js"
           strategy="afterInteractive"
         />
       </body>
@@ -112,12 +112,12 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       <Head>
         <link
           rel="stylesheet"
-          href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.css"
+          href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.1.0/src/social-share-button.css"
         />
       </Head>
       <Component {...pageProps} />
       <Script
-        src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.js"
+        src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.1.0/src/social-share-button.js"
         strategy="afterInteractive"
       />
     </>
@@ -353,10 +353,10 @@ export class HeaderComponent implements AfterViewInit, OnChanges, OnDestroy {
 ```html
 <link
   rel="stylesheet"
-  href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.css"
+  href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.1.0/src/social-share-button.css"
 />
 <div data-social-share data-button-style="default"></div>
-<script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.4/src/social-share-button.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.1.0/src/social-share-button.js"></script>
 ```
 
 #### Package Manager Method (Vite / Webpack / Bundler)

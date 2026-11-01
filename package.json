@@ -1,6 +1,6 @@
 {
   "name": "@aossie-org/social-share-button",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "description": "Lightweight social sharing component for web applications",
   "main": "src/social-share-button.js",
   "files": [

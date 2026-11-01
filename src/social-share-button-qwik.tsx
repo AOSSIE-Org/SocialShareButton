@@ -9,6 +9,8 @@ interface Props {
   platforms?: string[];
   theme?: 'dark' | 'light';
   buttonText?: string;
+  /** Translated UI text; missing keys keep the English defaults. */
+  labels?: Partial<Record<'share' | 'close' | 'copy' | 'copied' | 'copyFailed' | 'urlLabel', string>>;
   customClass?: string;
   buttonStyle?: 'default' | 'primary' | 'compact' | 'icon-only';
   modalPosition?: 'center' | 'top' | 'bottom';
@@ -32,6 +34,7 @@ export const SocialShareButton = component$<Props>((props) => {
         platforms: props.platforms || ['whatsapp', 'facebook', 'twitter', 'linkedin', 'telegram', 'reddit', 'discord'],
         theme: props.theme || 'dark',
         buttonText: props.buttonText || 'Share',
+        labels: props.labels,
         customClass: props.customClass || '',
         buttonStyle: props.buttonStyle || 'default',
         modalPosition: props.modalPosition || 'center',

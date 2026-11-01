@@ -1,6 +1,6 @@
 /**
  * SocialShareButton - A lightweight, customizable social sharing component
- * @version 1.0.4
+ * @version 1.1.0
  * @license GPL-3.0
  */
 
@@ -9,6 +9,16 @@ const ANALYTICS_SCHEMA_VERSION = "1.0";
 
 /** Modal positions with matching CSS; anything else falls back to "center". */
 const SAFE_MODAL_POSITIONS = ["center", "bottom"];
+
+/** Built-in UI text. Pass `labels` to translate any of it; missing keys keep these defaults. */
+const DEFAULT_LABELS = {
+  share: "Share",
+  close: "Close",
+  copy: "Copy",
+  copied: "Copied!",
+  copyFailed: "Failed",
+  urlLabel: "URL to share",
+};
 
 class SocialShareButton {
   constructor(options = {}) {
@@ -37,6 +47,7 @@ class SocialShareButton {
       ],
       theme: options.theme || "dark",
       buttonText: options.buttonText || "Share",
+      labels: { ...DEFAULT_LABELS, ...options.labels },
       customClass: options.customClass || "",
       buttonColor: options.buttonColor || "",
       buttonHoverColor: options.buttonHoverColor || "",
@@ -106,7 +117,7 @@ class SocialShareButton {
   createButton() {
     const button = document.createElement("button");
     button.className = `social-share-btn ${this.options.buttonStyle} ${this.options.customClass}`;
-    button.setAttribute("aria-label", "Share");
+    button.setAttribute("aria-label", this.options.labels.share);
     button.innerHTML = `
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="share-icon">
         <path d="M18 16.08C17.24 16.08 16.56 16.38 16.04 16.85L8.91 12.7C8.96 12.47 9 12.24 9 12C9 11.76 8.96 11.53 8.91 11.3L15.96 7.19C16.5 7.69 17.21 8 18 8C19.66 8 21 6.66 21 5C21 3.34 19.66 2 18 2C16.34 2 15 3.34 15 5C15 5.24 15.04 5.47 15.09 5.7L8.04 9.81C7.5 9.31 6.79 9 6 9C4.34 9 3 10.34 3 12C3 13.66 4.34 15 6 15C6.79 15 7.5 14.69 8.04 14.19L15.16 18.35C15.11 18.56 15.08 18.78 15.08 19C15.08 20.61 16.39 21.92 18 21.92C19.61 21.92 20.92 20.61 20.92 19C20.92 17.39 19.61 16.08 18 16.08Z" fill="currentColor"/>
@@ -133,8 +144,8 @@ class SocialShareButton {
     modal.innerHTML = `
       <div class="social-share-modal-content ${modalPosition}">
         <div class="social-share-modal-header">
-          <h3>Share</h3>
-          <button class="social-share-modal-close" aria-label="Close">✕</button>
+          <h3></h3>
+          <button class="social-share-modal-close">✕</button>
         </div>
         <div class="social-share-platforms">
           ${this.getPlatformsHTML()}
@@ -142,7 +153,7 @@ class SocialShareButton {
         <div class="social-share-link-container">
           <div class="social-share-link-input">
           </div>
-          <button class="social-share-copy-btn">Copy</button>
+          <button class="social-share-copy-btn"></button>
         </div>
       </div>
     `;
@@ -152,10 +163,10 @@ class SocialShareButton {
     urlInput.type = "text";
     urlInput.value = this.options.url;
     urlInput.readOnly = true;
-    urlInput.setAttribute("aria-label", "URL to share");
     urlInputContainer.appendChild(urlInput);
 
     this.modal = modal;
+    this._applyLabels();
     document.body.appendChild(modal);
   }
 
@@ -483,7 +494,7 @@ class SocialShareButton {
           // Guard against async callback after destroy
           if (this.isDestroyed) return;
 
-          copyBtn.textContent = "Copied!";
+          copyBtn.textContent = this.options.labels.copied;
           copyBtn.classList.add("copied");
           this._emit("social_share_copy", "copy");
 
@@ -499,7 +510,7 @@ class SocialShareButton {
           // Track feedback timeout to prevent callback after destroy
           this.feedbackTimeout = setTimeout(() => {
             if (this.isDestroyed || !copyBtn) return; // Safety check
-            copyBtn.textContent = "Copy";
+            copyBtn.textContent = this.options.labels.copy;
             copyBtn.classList.remove("copied");
             this.feedbackTimeout = null;
           }, 2000);
@@ -523,7 +534,7 @@ class SocialShareButton {
       input.setSelectionRange(0, 99999); // For mobile devices
       document.execCommand("copy");
 
-      copyBtn.textContent = "Copied!";
+      copyBtn.textContent = this.options.labels.copied;
       copyBtn.classList.add("copied");
       this._emit("social_share_copy", "copy");
 
@@ -539,12 +550,12 @@ class SocialShareButton {
       // Track feedback timeout to prevent callback after destroy
       this.feedbackTimeout = setTimeout(() => {
         if (this.isDestroyed || !copyBtn) return; // Safety check
-        copyBtn.textContent = "Copy";
+        copyBtn.textContent = this.options.labels.copy;
         copyBtn.classList.remove("copied");
         this.feedbackTimeout = null;
       }, 2000);
     } catch (_err) {
-      copyBtn.textContent = "Failed";
+      copyBtn.textContent = this.options.labels.copyFailed;
 
       // Clear any existing feedback timeout
       if (this.feedbackTimeout) {
@@ -554,7 +565,7 @@ class SocialShareButton {
       // Track feedback timeout to prevent callback after destroy
       this.feedbackTimeout = setTimeout(() => {
         if (this.isDestroyed || !copyBtn) return; // Safety check
-        copyBtn.textContent = "Copy";
+        copyBtn.textContent = this.options.labels.copy;
         this.feedbackTimeout = null;
       }, 2000);
     }
@@ -649,7 +660,11 @@ class SocialShareButton {
       }
     }
 
-    this.options = { ...this.options, ...options };
+    const labels = options.labels
+      ? { ...this.options.labels, ...options.labels }
+      : this.options.labels;
+    this.options = { ...this.options, ...options, labels };
+    if (options.labels) this._applyLabels();
 
     // Update URL in modal if it exists
     if (this.modal) {
@@ -663,6 +678,19 @@ class SocialShareButton {
     if ("buttonColor" in options || "buttonHoverColor" in options) {
       this.applyCustomColors();
     }
+  }
+
+  /** Puts the (possibly translated) labels on the button and modal. Text is never parsed as HTML. */
+  _applyLabels() {
+    const { labels } = this.options;
+    if (this.button) this.button.setAttribute("aria-label", labels.share);
+    if (!this.modal) return;
+    this.modal.querySelector(".social-share-modal-header h3").textContent = labels.share;
+    this.modal.querySelector(".social-share-modal-close").setAttribute("aria-label", labels.close);
+    this.modal.querySelector(".social-share-copy-btn").textContent = labels.copy;
+    this.modal
+      .querySelector(".social-share-link-input input")
+      .setAttribute("aria-label", labels.urlLabel);
   }
 
   applyCustomColors() {
