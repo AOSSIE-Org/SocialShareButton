@@ -41,7 +41,7 @@ jobs:
               repo: context.repo.repo,
               username: context.actor,
             }).catch(() => ({ data: { permission: 'none' } }));
-            
+
             if (permission.permission !== 'admin' && permission.permission !== 'write') {
               core.setFailed(`Actor '${context.actor}' does not have write access to this repository. Aborting release.`);
             } else {
@@ -190,9 +190,17 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           cache: 'pnpm'
 
+      - name: Upgrade npm CLI
+        run: npm install --global npm@11.15.0
+
+      - name: Verify npm version
+        run: |
+          node --version
+          npm --version
+          npm stage --help
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-
 
       - name: Sync version from VERSION file
         run: |
@@ -205,9 +213,7 @@ jobs:
         run: npm pack --dry-run
 
       - name: Publish to npm
-        run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPMJS_TOKEN }}
+        run: npm stage publish --provenance --access public
 
       - name: Publish Summary
         run: |
