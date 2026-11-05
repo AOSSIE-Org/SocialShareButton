@@ -206,8 +206,9 @@ describe("SiteShell", () => {
     expect(html).toContain("<p>page</p>");
     expect(html).toContain('data-testid="lenis"');
     // The theme is applied from <head>, before <body> exists, so the first paint is never the wrong theme
-    const head = new DOMParser().parseFromString(html, "text/html").head;
-    expect(head.querySelector("script")?.textContent).toBe(themeInitScript);
+    const script = new DOMParser().parseFromString(html, "text/html").head.querySelector("script");
+    expect(script?.hasAttribute("type")).toBe(false);
+    expect(script?.textContent).toBe(themeInitScript);
   });
 
   it("falls back to the default catalog for an unknown locale", () => {
