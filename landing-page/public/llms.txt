@@ -14,13 +14,13 @@
 Add to the page `<head>`:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.1.0/src/social-share-button.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.1.1/src/social-share-button.css" />
 ```
 
 Add before `</body>`:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.1.0/src/social-share-button.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.1.1/src/social-share-button.js"></script>
 ```
 
 Add a container and initialize once the DOM is ready:
