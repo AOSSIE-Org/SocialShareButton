@@ -632,7 +632,7 @@ new SocialShareButton({
 | `onCopy`           | function       | `null`                 | Callback when user copies link: `(url) => {}`      |
 
 **Available Platforms:**  
-`whatsapp`, `facebook`, `twitter`, `linkedin`, `telegram`, `reddit`, `email`, `pinterest`, `discord`
+`whatsapp`, `facebook`, `twitter`, `linkedin`, `telegram`, `reddit`, `email`, `pinterest`, `discord`, `qrcode` (requires `social-share-button-qr.js` extension)
 
 ### Translate the Button and Modal
 
@@ -648,6 +648,9 @@ new SocialShareButton({
     copied: "कॉपी हो गया!", // shown after copying (default "Copied!")
     copyFailed: "विफल", // shown if copying fails (default "Failed")
     urlLabel: "शेयर करने का URL", // aria-label of the link field (default "URL to share")
+    qrcode: "क्यूआर कोड", // QR platform button label (default "QR Code")
+    qrScanTitle: "क्यूआर कोड स्कैन करें", // QR panel title (default "Scan QR Code")
+    qrDownload: "क्यूआर डाउनलोड करें", // QR download button (default "Download QR")
   },
 });
 ```
@@ -801,6 +804,11 @@ The QR code feature is an **optional extension**. The core library has zero runt
 #### Via npm / bundler
 
 ```javascript
+// Load the Social Share Button core first so window.SocialShareButton exists
+import "@aossie-org/social-share-button";
+import "@aossie-org/social-share-button/src/social-share-button.css";
+
+// Then load the QR extension
 import "@aossie-org/social-share-button/src/social-share-button-qr.js";
 ```
 
