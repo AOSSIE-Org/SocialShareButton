@@ -40,8 +40,10 @@ In React, Next.js, Preact, Vue or Angular: add the container to an existing layo
 | --- | --- | --- | --- |
 | `container` | string \| Element | none | Required. CSS selector or element. |
 | `url` | string | `window.location.href` | Auto-updates on SPA navigation when omitted. |
-| `title` | string | `document.title` | |
-| `description` | string | `""` | |
+| `title` | string | auto-detected | Falls back to `document.title` when detection is disabled or finds nothing. |
+| `description` | string | auto-detected / `""` | Detected from page metadata or body text when omitted. |
+| `autoDetect` | boolean | `true` | Detect omitted title/description from the page. |
+| `shareTemplates` | object | English | Locale-specific share message template functions. |
 | `hashtags` | string[] | `[]` | |
 | `via` | string | `""` | X/Twitter handle without `@`. |
 | `platforms` | string[] | all | `whatsapp`, `facebook`, `twitter`, `linkedin`, `telegram`, `reddit`, `email`, `pinterest`, `discord`, `qrcode` (requires `social-share-button-qr.js` extension) |

@@ -600,12 +600,26 @@ export default function Header() {
 new SocialShareButton({
   container: "#share-button", // Required: CSS selector or DOM element
   url: "https://example.com", // Optional: defaults to window.location.href
-  title: "Custom Title", // Optional: defaults to document.title
+  title: "Custom Title", // Optional: auto-detected from the page when omitted
   buttonText: "Share", // Optional: button label text
   buttonStyle: "primary", // default | primary | compact | icon-only
   theme: "dark", // dark | light
   platforms: ["twitter", "linkedin"], // Optional: defaults to all platforms
 });
+```
+
+### Automatic Content Detection
+
+When `title` or `description` is omitted, the component detects them from the page:
+
+1. Title: `og:title` → `twitter:title` → semantic `h1` → `document.title`
+2. Description: `og:description` → `twitter:description` → `meta[name=description]` → body excerpt
+
+Manual props always win. Set `autoDetect: false` to opt out. Detection is cached for 30 seconds per document URL; clear the cache after SPA navigation and call `updateOptions()` to re-detect.
+
+```js
+SocialShareButton.clearContentCache();
+button.updateOptions({ url: newUrl });
 ```
 
 ### All Available Options
@@ -614,8 +628,10 @@ new SocialShareButton({
 | ------------------ | -------------- | ---------------------- | -------------------------------------------------- |
 | `container`        | string/Element | -                      | **Required.** CSS selector or DOM element          |
 | `url`              | string         | `window.location.href` | URL to share                                       |
-| `title`            | string         | `document.title`       | Share title/headline                               |
-| `description`      | string         | `''`                   | Additional description text                        |
+| `title`            | string         | auto-detected          | Share title; falls back to `document.title`        |
+| `description`      | string         | auto-detected / `''`   | Additional description text                        |
+| `autoDetect`       | boolean        | `true`                 | Detect omitted title/description from the page     |
+| `shareTemplates`   | object         | English                | Locale-specific share message templates            |
 | `hashtags`         | array          | `[]`                   | Hashtags for posts (e.g., `['js', 'webdev']`)      |
 | `via`              | string         | `''`                   | Twitter handle (without @)                         |
 | `platforms`        | array          | All platforms          | Platforms to show (see below)                      |
@@ -659,7 +675,7 @@ The React, Preact and Qwik wrappers accept the same `labels` prop.
 
 ### Customize Share Message/Post Text
 
-Control the text that appears when users share to social platforms:
+Pass `shareTemplates` functions to localize or replace share text; each function receives `{ title, description, hashtagString, url }`. Missing keys keep the built-in template.
 
 ```jsx
 new SocialShareButton({

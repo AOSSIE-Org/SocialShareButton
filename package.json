@@ -11,6 +11,7 @@
     "src/social-share-button-qwik.tsx",
     "src/social-share-button-qr.js",
     "src/social-share-analytics.js",
+    "src/utils/extractContent.js",
     "README.md",
     "LICENSE"
   ],

@@ -311,6 +311,7 @@
             <h3>Default</h3>
             <p>Clean, minimal design</p>
             <div id="demo-default"></div>
+            <div id="demo-autodetect"></div>
           </div>
           <div class="demo-item">
             <h3>Primary</h3>
@@ -617,6 +618,13 @@
           title: demoTitle,
           description: demoDescription,
           buttonText: "Share",
+        });
+
+        // Auto-detects title and description from this page when omitted
+        new SocialShareButton({
+          container: "#demo-autodetect",
+          url: demoUrl,
+          buttonText: "Share (auto)",
         });
 
         // Primary

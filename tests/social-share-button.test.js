@@ -90,6 +90,19 @@ describe("getShareURL", () => {
     expect(btn.getShareURL("twitter")).not.toContain("&via=");
   });
 
+  it("uses locale-specific shareTemplates when provided", () => {
+    const btn = create({
+      shareTemplates: {
+        twitter: ({ title, url }) => `Mira ${title} en ${url}`,
+      },
+    });
+    const text = new URL(btn.getShareURL("twitter")).searchParams.get("text");
+    expect(text).toBe("Mira Hello & welcome en https://example.org/page?a=1&b=2");
+    expect(new URL(btn.getShareURL("whatsapp")).searchParams.get("text")).toContain(
+      "Hello & welcome"
+    );
+  });
+
   it("property: the shared page URL survives encoding round-trip on every http platform", () => {
     fc.assert(
       fc.property(
@@ -771,8 +784,10 @@ describe("edge cases", () => {
     expect(btn._dynamicTitle).toBe(true);
     btn.updateOptions({ title: "Pinned" });
     expect(btn._dynamicTitle).toBe(false);
-    btn.updateOptions({ title: "" });
+    btn.updateOptions({ title: null });
     expect(btn._dynamicTitle).toBe(true);
+    btn.updateOptions({ title: "" });
+    expect(btn._dynamicTitle).toBe(false);
   });
 
   it("does not register listeners twice", () => {

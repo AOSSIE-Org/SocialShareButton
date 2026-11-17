@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useRef } from "react";
 
 /**
@@ -10,7 +12,8 @@ import { useEffect, useRef } from "react";
 export const SocialShareButton = ({
   url,
   title,
-  description = "",
+  description,
+  autoDetect = true,
   hashtags = [],
   via = "",
   platforms = [
@@ -26,6 +29,7 @@ export const SocialShareButton = ({
   theme = "dark",
   buttonText = "Share",
   labels, // Translated UI text, e.g. { share, close, copy, copied, copyFailed, urlLabel }
+  shareTemplates, // Locale-specific share message templates
   customClass = "",
   buttonColor = "",
   buttonHoverColor = "",
@@ -49,7 +53,6 @@ export const SocialShareButton = ({
 
   // Resolve fallback values when props are not provided (client-side only)
   const currentUrl = url || (typeof window !== "undefined" ? window.location.href : "");
-  const currentTitle = title || (typeof document !== "undefined" ? document.title : "");
 
   /**
    * Initialization Effect
@@ -63,14 +66,16 @@ export const SocialShareButton = ({
         shareButtonRef.current = new window.SocialShareButton({
           container: containerRef.current,
           url: currentUrl,
-          title: currentTitle,
-          description,
+          ...(title === undefined ? {} : { title }),
+          ...(description === undefined ? {} : { description }),
+          autoDetect,
           hashtags,
           via,
           platforms,
           theme,
           buttonText,
           labels,
+          shareTemplates,
           customClass,
           buttonColor,
           buttonHoverColor,
@@ -105,16 +110,18 @@ export const SocialShareButton = ({
   useEffect(() => {
     if (shareButtonRef.current) {
       // Use the library's built-in update method
-      shareButtonRef.current.updateOptions({
+      const updateOpts = {
         url: currentUrl,
-        title: currentTitle,
-        description,
+        ...(title === undefined ? {} : { title }),
+        ...(description === undefined ? {} : { description }),
+        autoDetect,
         hashtags,
         via,
         platforms,
         theme,
         buttonText,
         labels,
+        shareTemplates,
         customClass,
         buttonColor,
         buttonHoverColor,
@@ -127,18 +134,22 @@ export const SocialShareButton = ({
         analyticsPlugins,
         componentId,
         debug,
-      });
+      };
+      if (autoDetect) window.SocialShareButton.clearContentCache();
+      shareButtonRef.current.updateOptions(updateOpts);
     }
   }, [
     currentUrl,
-    currentTitle,
+    title,
     description,
+    autoDetect,
     hashtags,
     via,
     platforms,
     theme,
     buttonText,
     labels,
+    shareTemplates,
     customClass,
     buttonColor,
     buttonHoverColor,

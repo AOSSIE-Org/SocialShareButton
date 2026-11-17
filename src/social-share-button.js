@@ -10,6 +10,149 @@ const ANALYTICS_SCHEMA_VERSION = "1.0";
 /** Modal positions with matching CSS; anything else falls back to "center". */
 const SAFE_MODAL_POSITIONS = ["center", "bottom"];
 
+/**
+ * Inlined copy of src/utils/extractContent.js so the CDN build stays dependency-free.
+ * Detection priorities, selectors, and excerpt logic must be kept in sync there.
+ */
+const _ContentDetector = (() => {
+  const _cache = new Map();
+  const CACHE_TTL_MS = 30_000;
+
+  function _getMeta(doc, selector) {
+    const el = doc.querySelector(selector);
+    const content = el && el.getAttribute("content");
+    return content ? content.trim() : "";
+  }
+
+  function _detectTitle(doc) {
+    const og = _getMeta(doc, 'meta[property="og:title"]');
+    if (og) return og;
+    const tw =
+      _getMeta(doc, 'meta[name="twitter:title"]') ||
+      _getMeta(doc, 'meta[property="twitter:title"]');
+    if (tw) return tw;
+    for (const selector of [
+      "article h1",
+      '[role="main"] h1',
+      "main h1",
+      ".post-title",
+      ".entry-title",
+      ".article-title",
+      ".page-title",
+      ".hero-title",
+      "h1",
+    ]) {
+      const el = doc.querySelector(selector);
+      const text = el && el.textContent.trim();
+      if (text) return text;
+    }
+    const raw = (doc.title || "").trim();
+    return raw.replace(/\s*[|\-\u2013\u2014]\s*.{1,60}$/, "").trim() || raw;
+  }
+
+  function _detectMetaDesc(doc) {
+    return (
+      _getMeta(doc, 'meta[property="og:description"]') ||
+      _getMeta(doc, 'meta[name="twitter:description"]') ||
+      _getMeta(doc, 'meta[property="twitter:description"]') ||
+      _getMeta(doc, 'meta[name="description"]')
+    );
+  }
+
+  function _findContentRoot(doc) {
+    for (const selector of [
+      "article",
+      '[role="main"]',
+      "main",
+      ".post-content",
+      ".entry-content",
+      ".article-content",
+      ".article-body",
+      ".blog-content",
+      ".page-content",
+      ".content-body",
+      "#content",
+      "#main-content",
+    ]) {
+      const el = doc.querySelector(selector);
+      if (el && el.textContent.trim().length > 50) return el;
+    }
+    return doc.body || doc.documentElement;
+  }
+
+  function _toPlainText(root) {
+    const clone = root.cloneNode(true);
+    clone
+      .querySelectorAll(
+        "script,style,noscript,nav,header,footer,aside,form," +
+          "[aria-hidden='true'],.nav,.navigation,.menu,.sidebar," +
+          ".advertisement,.ad,.cookie-banner,.social-share-modal-overlay"
+      )
+      .forEach(function (el) {
+        el.remove();
+      });
+    return clone.textContent.replace(/\s+/g, " ").trim();
+  }
+
+  function _excerpt(text, minLen = 140, maxLen = 200) {
+    if (!text) return "";
+    if (text.length <= maxLen) return text;
+    const windowText = text.slice(0, maxLen);
+    const sentenceEnd = Math.max(
+      windowText.lastIndexOf(". "),
+      windowText.lastIndexOf("! "),
+      windowText.lastIndexOf("? ")
+    );
+    if (sentenceEnd >= minLen) return windowText.slice(0, sentenceEnd + 1).trim();
+    const wordEnd = windowText.lastIndexOf(" ");
+    return wordEnd > minLen
+      ? windowText.slice(0, wordEnd).trim() + "\u2026"
+      : windowText.trim() + "\u2026";
+  }
+
+  return {
+    extract(doc, bustCache = false) {
+      const cacheKey = doc && doc.URL ? doc.URL : "default";
+      const cached = _cache.get(cacheKey);
+      if (!bustCache && cached && Date.now() - cached.ts < CACHE_TTL_MS) {
+        return cached.result;
+      }
+      let result;
+      try {
+        const title = _detectTitle(doc);
+        let excerpt = _detectMetaDesc(doc);
+        let textContent = "";
+        if (!excerpt) {
+          const root = _findContentRoot(doc);
+          textContent = _toPlainText(root);
+          excerpt = _excerpt(textContent);
+        } else {
+          try {
+            textContent = _toPlainText(_findContentRoot(doc));
+          } catch (error) {
+            this._debugWarn ? this._debugWarn("Content extraction failed", error) : null;
+            textContent = excerpt;
+          }
+        }
+        result = { title, excerpt, textContent };
+      } catch (error) {
+        result = {
+          title: typeof doc !== "undefined" && doc.title ? doc.title.trim() : "",
+          excerpt: "",
+          textContent: "",
+        };
+      }
+      _cache.set(cacheKey, { result, ts: Date.now() });
+      return result;
+    },
+
+    clearCache(url) {
+      if (url) _cache.delete(url);
+      else _cache.clear();
+    },
+  };
+})();
+
 /** Built-in UI text. Pass `labels` to translate any of it; missing keys keep these defaults. */
 const DEFAULT_LABELS = {
   share: "Share",
@@ -23,8 +166,41 @@ const DEFAULT_LABELS = {
   qrDownload: "Download QR",
 };
 
+const DEFAULT_SHARE_TEMPLATES = {
+  whatsapp: ({ title, description, hashtagString }) =>
+    `\u{1F680} ${title}${description ? "\n\n" + description : ""}${hashtagString ? "\n\n" + hashtagString : ""}\n\nLive on the site \u{1F440}\nClean UI, smooth flow \u{2014} worth peeking\n\u{1F447}`,
+  facebook: ({ title, description, hashtagString }) =>
+    `${title}${description ? "\n\n" + description : ""}${hashtagString ? "\n\n" + hashtagString : ""}`,
+  twitter: ({ title, description, hashtagString }) =>
+    `${title}${description ? "\n\n" + description : ""}${hashtagString ? "\n" + hashtagString : ""}`,
+  telegram: ({ title, description, hashtagString }) =>
+    `\u{1F517} ${title}${description ? "\n\n" + description : ""}${hashtagString ? "\n\n" + hashtagString : ""}\n\nLive + working\nClean stuff, take a look \u{1F447}`,
+  reddit: ({ title, description }) => `${title}${description ? " - " + description : ""}`,
+  email: ({ title, description }) =>
+    `Hey \u{1F44B}\n\nSharing a clean project I came across:\n${title}${description ? "\n\n" + description : ""}\n\nLive, simple, and usable \u{2014} take a look \u{1F447}`,
+  pinterest: ({ title, description }) => `${title || ""}${description ? " - " + description : ""}`,
+};
+
 class SocialShareButton {
   constructor(options = {}) {
+    const autoDetectEnabled = options.autoDetect !== false;
+    let autoTitle = "";
+    let autoDescription = "";
+
+    if (autoDetectEnabled && typeof document !== "undefined") {
+      const needsTitle = options.title == null;
+      const needsDescription = options.description == null;
+      if (needsTitle || needsDescription) {
+        try {
+          const detected = _ContentDetector.extract(document);
+          if (needsTitle) autoTitle = detected.title || "";
+          if (needsDescription) autoDescription = detected.excerpt || "";
+        } catch (error) {
+          if (options.debug) console.warn("[SocialShareButton] Content detection failed", error);
+        }
+      }
+    }
+
     // Resolve container element early to prevent duplicate instances
     const containerEl = SocialShareButton._resolveContainer(options.container);
 
@@ -34,8 +210,9 @@ class SocialShareButton {
 
     this.options = {
       url: options.url || (typeof window !== "undefined" ? window.location.href : ""),
-      title: options.title || (typeof document !== "undefined" ? document.title : ""),
-      description: options.description || "",
+      title:
+        options.title ?? (autoTitle || (typeof document !== "undefined" ? document.title : "")),
+      description: options.description ?? autoDescription,
       hashtags: options.hashtags || [],
       via: options.via || "",
       platforms: options.platforms || [
@@ -51,6 +228,7 @@ class SocialShareButton {
       theme: options.theme || "dark",
       buttonText: options.buttonText || "Share",
       labels: { ...DEFAULT_LABELS, ...options.labels },
+      shareTemplates: { ...DEFAULT_SHARE_TEMPLATES, ...options.shareTemplates },
       customClass: options.customClass || "",
       buttonColor: options.buttonColor || "",
       buttonHoverColor: options.buttonHoverColor || "",
@@ -67,6 +245,7 @@ class SocialShareButton {
       analyticsPlugins: options.analyticsPlugins || [], // array of { track(payload) } adapters
       componentId: options.componentId || null, // optional identifier for this instance
       debug: options.debug || false, // log emitted events to console in development
+      autoDetect: autoDetectEnabled,
     };
 
     this.isModalOpen = false;
@@ -85,7 +264,8 @@ class SocialShareButton {
     this.isDestroyed = false; // Track if instance has been destroyed (prevents async callbacks)
 
     this._dynamicUrl = !options.url; // true when url was not provided; updateCurrentPage() will overwrite on SPA route changes
-    this._dynamicTitle = !options.title; // true when title was not provided; updateCurrentPage() will overwrite on SPA route changes
+    this._dynamicTitle = options.title == null;
+    this._dynamicDescription = options.description == null;
 
     this._containerEl = containerEl; // Cache resolved element so cleanup still finds it after removal
 
@@ -250,43 +430,19 @@ class SocialShareButton {
     // const encodedDesc = encodeURIComponent(description);
     const hashtagString = hashtags.length ? "#" + hashtags.join(" #") : "";
 
-    // Build platform-specific messages with customizable parameters
-    let whatsappMessage,
-      facebookMessage,
-      twitterMessage,
-      telegramMessage,
-      redditTitle,
-      emailBody,
-      pinterestText;
+    const templateInput = { title, description, hashtagString, url };
+    const renderMessage = (key) => {
+      const template = this.options.shareTemplates[key];
+      return typeof template === "function" ? template(templateInput) : String(template ?? "");
+    };
 
-    // WhatsApp: Casual with emoji
-    whatsappMessage = `\u{1F680} ${title}${description ? "\n\n" + description : ""}${hashtagString ? "\n\n" + hashtagString : ""}\n\nLive on the site \u{1F440}\nClean UI, smooth flow \u{2014} worth peeking\n\u{1F447}`;
-
-    // Facebook: Title + Description
-    facebookMessage = `${title}${description ? "\n\n" + description : ""}${hashtagString ? "\n\n" + hashtagString : ""}`;
-
-    // Twitter: Title + Description + Hashtags + Via
-    twitterMessage = `${title}${description ? "\n\n" + description : ""}${hashtagString ? "\n" + hashtagString : ""}`;
-
-    // Telegram: Casual with emoji
-    telegramMessage = `\u{1F517} ${title}${description ? "\n\n" + description : ""}${hashtagString ? "\n\n" + hashtagString : ""}\n\nLive + working\nClean stuff, take a look \u{1F447}`;
-
-    // Reddit: Title + Description
-    redditTitle = `${title}${description ? " - " + description : ""}`;
-
-    // Email: Friendly greeting
-    emailBody = `Hey \u{1F44B}\n\nSharing a clean project I came across:\n${title}${description ? "\n\n" + description : ""}\n\nLive, simple, and usable \u{2014} take a look \u{1F447}`;
-
-    // Pinterest: Title + Description
-    pinterestText = `${title || ""}${description ? " - " + description : ""}`;
-
-    const encodedWhatsapp = encodeURIComponent(whatsappMessage);
-    const encodedFacebook = encodeURIComponent(facebookMessage);
-    const encodedTwitter = encodeURIComponent(twitterMessage);
-    const encodedTelegram = encodeURIComponent(telegramMessage);
-    const encodedReddit = encodeURIComponent(redditTitle);
-    const encodedEmail = encodeURIComponent(emailBody);
-    const encodedPinterest = encodeURIComponent(pinterestText);
+    const encodedWhatsapp = encodeURIComponent(renderMessage("whatsapp"));
+    const encodedFacebook = encodeURIComponent(renderMessage("facebook"));
+    const encodedTwitter = encodeURIComponent(renderMessage("twitter"));
+    const encodedTelegram = encodeURIComponent(renderMessage("telegram"));
+    const encodedReddit = encodeURIComponent(renderMessage("reddit"));
+    const encodedEmail = encodeURIComponent(renderMessage("email"));
+    const encodedPinterest = encodeURIComponent(renderMessage("pinterest"));
 
     const urls = {
       whatsapp: `https://wa.me/?text=${encodedWhatsapp}%20${encodedUrl}`,
@@ -657,14 +813,36 @@ class SocialShareButton {
   }
 
   updateOptions(options, isInternalRefresh = false) {
-    // External updates recompute dynamic flags, while internal SPA refreshes
-    // preserve caller-supplied values to maintain the auto-update contract.
+    const effectiveAutoDetect = Object.prototype.hasOwnProperty.call(options, "autoDetect")
+      ? options.autoDetect
+      : this.options.autoDetect;
+
+    const hasTitleKey = Object.prototype.hasOwnProperty.call(options, "title");
+    const hasDescriptionKey = Object.prototype.hasOwnProperty.call(options, "description");
+    const titleSupplied = hasTitleKey && options.title != null;
+    const descriptionSupplied = hasDescriptionKey && options.description != null;
+
+    // External updates recompute dynamic flags; internal SPA refreshes preserve them.
     if (!isInternalRefresh) {
-      if (options.url !== undefined) {
-        this._dynamicUrl = !options.url;
-      }
-      if (options.title !== undefined) {
-        this._dynamicTitle = !options.title;
+      if (options.url !== undefined) this._dynamicUrl = !options.url;
+      if (hasTitleKey) this._dynamicTitle = !titleSupplied;
+      if (hasDescriptionKey) this._dynamicDescription = !descriptionSupplied;
+    }
+
+    const needsTitle = this._dynamicTitle && !titleSupplied;
+    const needsDescription = this._dynamicDescription && !descriptionSupplied;
+    if (needsTitle || needsDescription) {
+      if (effectiveAutoDetect && typeof document !== "undefined") {
+        try {
+          const detected = _ContentDetector.extract(document, true);
+          if (needsTitle && detected.title) options.title = detected.title;
+          if (needsDescription && detected.excerpt) options.description = detected.excerpt;
+        } catch (error) {
+          this._debugWarn("Content detection failed in updateOptions", error);
+        }
+      } else if (typeof document !== "undefined") {
+        if (needsTitle) options.title = document.title;
+        if (needsDescription) options.description = "";
       }
     }
 
@@ -902,7 +1080,7 @@ class SocialShareButton {
       if (instance._dynamicUrl) {
         updates.url = window.location.href;
       }
-      if (instance._dynamicTitle) {
+      if (instance._dynamicTitle && !instance.options.autoDetect) {
         updates.title = document.title;
       }
       if (Object.keys(updates).length > 0) {
@@ -916,6 +1094,10 @@ class SocialShareButton {
 SocialShareButton.openModalCount = 0;
 SocialShareButton.originalBodyOverflow = null;
 SocialShareButton.instances = new Set();
+
+SocialShareButton.clearContentCache = function (url) {
+  _ContentDetector.clearCache(url);
+};
 
 (function () {
   // Helper for dynamic route changes in SPAs

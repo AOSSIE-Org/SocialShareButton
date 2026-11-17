@@ -78,10 +78,8 @@ const reactEffectBody = `  useEffect(() => {
   // Keep the share URL and title in sync with the current route
   useEffect(() => {
     if (shareButtonRef.current) {
-      shareButtonRef.current.updateOptions({
-        url: window.location.href,
-        title: document.title,
-      });
+      window.SocialShareButton.clearContentCache();
+      shareButtonRef.current.updateOptions({ url: window.location.href });
     }
   }, [pathname]); // re-runs on every client-side navigation
 
@@ -143,10 +141,8 @@ function Header() {
   // Keep the share URL and title in sync with the current route
   useEffect(() => {
     if (shareButtonRef.current) {
-      shareButtonRef.current.updateOptions({
-        url: window.location.href,
-        title: document.title,
-      });
+      window.SocialShareButton.clearContentCache();
+      shareButtonRef.current.updateOptions({ url: window.location.href });
     }
   }, [pathname]);
 
