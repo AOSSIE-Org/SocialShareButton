@@ -4,6 +4,7 @@ import { IBM_Plex_Mono, Inter, Noto_Sans_Devanagari } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { messagesMap, defaultMessages } from "@/i18n/messages";
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import { themeInitScript } from "@/components/providers/theme-script";
 import { LenisProvider } from "@/components/providers/lenis-provider";
 import { vendorBase } from "@/config/site";
 
@@ -40,6 +41,10 @@ export function SiteShell({ locale, children }: { locale: string; children: Reac
       className={`${inter.variable} ${plexMono.variable} ${devanagari.variable} h-full antialiased`}
       suppressHydrationWarning
     >
+      <head>
+        {/* Sets the theme class before <body> is parsed, so the first paint is never the wrong theme */}
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
       <body
         className="flex min-h-full flex-col bg-background-primary text-foreground-primary font-sans"
         suppressHydrationWarning

@@ -1,9 +1,9 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import SupportUsButton from "support-us-button";
+import SupportUsButton from "@aossie-org/support-us-button";
 // Scoped by the package to `.sub-root`, so it never styles the rest of the site
-import "support-us-button/style.css";
+import "@aossie-org/support-us-button/style.css";
 import { aossieLogoPath, aossieUrl, githubSponsorsUrl, projectLogoPath, supporters } from "@/config/site";
 
 /** The Support Us widget; `Theme="auto"` inherits the page font and colours in both themes. */

@@ -25,6 +25,7 @@ import { HomePage } from "@/components/site/HomePage";
 import { LegalPage } from "@/components/site/LegalPage";
 import { PageFrame } from "@/components/site/PageFrame";
 import { SiteShell } from "@/components/site/SiteShell";
+import { themeInitScript } from "@/components/providers/theme-script";
 import { SupportPage } from "@/components/site/SupportPage";
 import { faqKeys } from "@/components/sections/MoreSections";
 import {
@@ -204,6 +205,10 @@ describe("SiteShell", () => {
     expect(html).toContain(`<script src="${vendorBase}/social-share-button.js" data-strategy="afterInteractive">`);
     expect(html).toContain("<p>page</p>");
     expect(html).toContain('data-testid="lenis"');
+    // The theme is applied from <head>, before <body> exists, so the first paint is never the wrong theme
+    const script = new DOMParser().parseFromString(html, "text/html").head.querySelector("script");
+    expect(script?.hasAttribute("type")).toBe(false);
+    expect(script?.textContent).toBe(themeInitScript);
   });
 
   it("falls back to the default catalog for an unknown locale", () => {
