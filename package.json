@@ -9,6 +9,7 @@
     "src/social-share-button-react.jsx",
     "src/social-share-button-preact.jsx",
     "src/social-share-button-qwik.tsx",
+    "src/social-share-button-qr.js",
     "src/social-share-analytics.js",
     "README.md",
     "LICENSE"

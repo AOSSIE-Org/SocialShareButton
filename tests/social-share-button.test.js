@@ -78,8 +78,9 @@ describe("getShareURL", () => {
     expect(btn.getShareURL("discord")).toBe("https://discord.com/channels/@me");
   });
 
-  it("returns an empty string for an unknown platform", () => {
+  it("returns an empty string for an unknown platform or for qrcode", () => {
     expect(create().getShareURL("myspace")).toBe("");
+    expect(create().getShareURL("qrcode")).toBe("");
   });
 
   it("puts hashtags into the shared text and omits via when not set", () => {
@@ -611,6 +612,34 @@ describe("platform coverage", () => {
   it.each(PLATFORMS)("%s produces a non-empty, well-formed share target", (platform) => {
     const url = create().getShareURL(platform);
     expect(() => new URL(url)).not.toThrow();
+  });
+
+  it("qrcode platform renders button and handles label as text", () => {
+    const btn = create({ platforms: ["qrcode"] });
+    btn.openModal();
+    const qrBtn = document.querySelector('.social-share-platform-btn[data-platform="qrcode"]');
+    expect(qrBtn).not.toBeNull();
+    expect(qrBtn.querySelector("span").textContent).toBe("QR Code");
+    expect(btn.getShareURL("qrcode")).toBe("");
+  });
+
+  it("qrcode platform renders untrusted label safely as text", () => {
+    const btn = create({
+      platforms: ["qrcode"],
+      labels: { qrcode: '<img src=x onerror="alert(1)">' },
+    });
+    btn.openModal();
+    const qrBtn = document.querySelector('.social-share-platform-btn[data-platform="qrcode"]');
+    expect(qrBtn.querySelector("img")).toBeNull();
+    expect(qrBtn.querySelector("span").textContent).toBe('<img src=x onerror="alert(1)">');
+  });
+
+  it("updates qrcode label through updateOptions", () => {
+    const btn = create({ platforms: ["qrcode"] });
+    btn.openModal();
+    btn.updateOptions({ labels: { qrcode: "Scan Here" } });
+    const qrBtn = document.querySelector('.social-share-platform-btn[data-platform="qrcode"]');
+    expect(qrBtn.querySelector("span").textContent).toBe("Scan Here");
   });
 });
 
