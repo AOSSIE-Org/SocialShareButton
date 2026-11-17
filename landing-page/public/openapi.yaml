@@ -1,0 +1,35 @@
+openapi: 3.0.3
+info:
+  title: Social Share Button website
+  description: >-
+    Static, read-only resources published by the Social Share Button website.
+    There is no server-side API; these endpoints are plain files served from GitHub Pages.
+  version: "1.0.0"
+  license:
+    name: GPL-3.0
+    url: https://github.com/AOSSIE-Org/SocialShareButton/blob/main/LICENSE
+servers:
+  - url: https://social-share-button.aossie.org
+paths:
+  /llms.txt:
+    get:
+      summary: Machine-readable project overview for LLMs and AI agents
+      operationId: getLlmsTxt
+      responses:
+        "200":
+          description: Markdown overview of the library, installation and options.
+          content:
+            text/plain:
+              schema:
+                type: string
+  /sitemap.xml:
+    get:
+      summary: Localized sitemap
+      operationId: getSitemap
+      responses:
+        "200":
+          description: XML sitemap listing every locale of the landing page.
+          content:
+            application/xml:
+              schema:
+                type: string

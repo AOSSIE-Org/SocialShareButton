@@ -1,74 +1,94 @@
-'use client';
+"use client";
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from "react";
 
-// Import SocialShareButton directly for ESM bundles, fall back to window for CDN
-import SocialShareButtonCore from './social-share-button.js';
-
+/**
+ * SocialShareButton React Wrapper
+ *
+ * Provides a React functional component that wraps the core SocialShareButton
+ * vanilla JS library. Handles lifecycle, dynamic updates, and provides
+ * sensible defaults for all sharing options.
+ */
 export const SocialShareButton = ({
   url,
   title,
   description,
+  autoDetect = true,
   hashtags = [],
-  via = '',
-  platforms = ['whatsapp', 'facebook', 'twitter', 'linkedin', 'telegram', 'reddit'],
-  theme = 'dark',
-  buttonText = 'Share',
-  customClass = '',
+  via = "",
+  platforms = [
+    "whatsapp",
+    "facebook",
+    "twitter",
+    "linkedin",
+    "telegram",
+    "reddit",
+    "pinterest",
+    "discord",
+  ],
+  theme = "dark",
+  buttonText = "Share",
+  labels, // Translated UI text, e.g. { share, close, copy, copied, copyFailed, urlLabel }
+  shareTemplates, // Locale-specific share message templates
+  customClass = "",
+  buttonColor = "",
+  buttonHoverColor = "",
   onShare = null,
   onCopy = null,
-  buttonStyle = 'default',
-  modalPosition = 'center',
-  // Content auto-detection — set to false when all props are always provided.
-  autoDetect = true,
-  // Analytics props — the library itself never collects data.
-  // Provide any combination to connect your own analytics tools.
-  analytics = true, // set to false to disable all event emission
-  onAnalytics = null, // (payload) => void — direct callback hook
-  analyticsPlugins = [], // array of adapter instances (see social-share-analytics.js)
-  componentId = null, // optional string identifier for this instance
-  debug = false, // log events to console during development
+  buttonStyle = "default",
+  modalPosition = "center",
+
+  // Analytics: library emits events but never collects data
+  analytics = true,
+  onAnalytics = null, // Event callback
+  analyticsPlugins = [], // Event adapters (see social-share-analytics.js)
+  componentId = null, // Instance identifier
+  debug = false, // Log events to console during development
 }) => {
+  // DOM reference for the injection target
   const containerRef = useRef(null);
+
+  // Reference to the vanilla JS class instance
   const shareButtonRef = useRef(null);
 
-  // Resolve URL — fall back to current page URL but leave title/description
-  // undefined when not provided so the core SocialShareButton auto-detection
-  // priority chain (og:title → twitter:title → h1 → document.title etc.) runs.
-  const currentUrl = url || (typeof window !== 'undefined' ? window.location.href : '');
+  // Resolve fallback values when props are not provided (client-side only)
+  const currentUrl = url || (typeof window !== "undefined" ? window.location.href : "");
 
+  /**
+   * Initialization Effect
+   *
+   * Sets up the vanilla JS component once the React component mounts.
+   * Includes a safe check for the global SocialShareButton class.
+   */
   useEffect(() => {
     if (containerRef.current && !shareButtonRef.current) {
-      // Use imported class for ESM bundles, fall back to window for CDN script tags
-      const ShareButtonConstructor =
-        SocialShareButtonCore || (typeof window !== 'undefined' ? window.SocialShareButton : null);
-
-      if (ShareButtonConstructor) {
-        // Only include title/description in the options object when explicitly
-        // provided — omitting them lets the core detector's priority chain run.
-        const initOptions = {
+      if (typeof window !== "undefined" && window.SocialShareButton) {
+        shareButtonRef.current = new window.SocialShareButton({
           container: containerRef.current,
           url: currentUrl,
+          ...(title === undefined ? {} : { title }),
+          ...(description === undefined ? {} : { description }),
+          autoDetect,
           hashtags,
           via,
           platforms,
           theme,
           buttonText,
+          labels,
+          shareTemplates,
           customClass,
+          buttonColor,
+          buttonHoverColor,
           onShare,
           onCopy,
           buttonStyle,
           modalPosition,
-          autoDetect,
           analytics,
           onAnalytics,
           analyticsPlugins,
           componentId,
           debug,
-        };
-        if (title !== undefined) initOptions.title = title;
-        if (description !== undefined) initOptions.description = description;
-        shareButtonRef.current = new ShareButtonConstructor(initOptions);
+        });
       }
     }
 
@@ -80,72 +100,70 @@ export const SocialShareButton = ({
     };
   }, []);
 
-  // Update options when props change (including URL from route changes).
-  // Also bust the content-detection cache so the new page's metadata is used.
+  /**
+   * Update Effect
+   *
+   * Synchronizes React prop changes with the underlying vanilla JS instance
+   * without re-mounting the entire component.
+   */
+
   useEffect(() => {
     if (shareButtonRef.current) {
-      // Invalidate detection cache on every route/prop change so the new
-      // page content is picked up when autoDetect is enabled.
-      if (autoDetect) {
-        const ShareButtonConstructor =
-          SocialShareButtonCore ||
-          (typeof window !== 'undefined' ? window.SocialShareButton : null);
-
-        if (
-          ShareButtonConstructor &&
-          typeof ShareButtonConstructor.clearContentCache === 'function'
-        ) {
-          // Pass the current URL so only this page's cache entry is cleared,
-          // rather than wiping the entire global cache shared across instances.
-          ShareButtonConstructor.clearContentCache(currentUrl);
-        }
-      }
-
+      // Use the library's built-in update method
       const updateOpts = {
         url: currentUrl,
+        ...(title === undefined ? {} : { title }),
+        ...(description === undefined ? {} : { description }),
+        autoDetect,
         hashtags,
         via,
         platforms,
         theme,
         buttonText,
+        labels,
+        shareTemplates,
         customClass,
+        buttonColor,
+        buttonHoverColor,
         onShare,
         onCopy,
         buttonStyle,
         modalPosition,
-        autoDetect,
         analytics,
         onAnalytics,
         analyticsPlugins,
         componentId,
         debug,
       };
-      if (title !== undefined) updateOpts.title = title;
-      if (description !== undefined) updateOpts.description = description;
+      if (autoDetect) window.SocialShareButton.clearContentCache();
       shareButtonRef.current.updateOptions(updateOpts);
     }
   }, [
     currentUrl,
     title,
     description,
+    autoDetect,
     hashtags,
     via,
     platforms,
     theme,
     buttonText,
+    labels,
+    shareTemplates,
     customClass,
+    buttonColor,
+    buttonHoverColor,
     onShare,
     onCopy,
     buttonStyle,
     modalPosition,
-    autoDetect,
     analytics,
     onAnalytics,
     analyticsPlugins,
     componentId,
     debug,
   ]);
-
+  // Provide the mount point for the vanilla JS logic
   return <div ref={containerRef}></div>;
 };
 

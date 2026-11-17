@@ -3,17 +3,18 @@
  *
  * Tests for the content auto-detection utility (src/utils/extractContent.js).
  *
- * Uses Node's built-in test runner (`node:test`) — zero additional test
- * framework needed.  JSDOM provides a lightweight browser-like DOM.
- *
- * Run: node --experimental-vm-modules tests/extractContent.test.js
- * Or:  npm test
+ * Runs under the repository's Vitest + jsdom setup.
  */
 
-import { test, describe, beforeEach } from 'node:test';
-import assert from 'node:assert/strict';
-import { JSDOM } from 'jsdom';
-import { extractContent, clearContentCache } from '../src/utils/extractContent.js';
+import { test, describe, expect, beforeEach } from "vitest";
+import { JSDOM } from "jsdom";
+import { extractContent, clearContentCache } from "../src/utils/extractContent.js";
+
+const assert = {
+  equal: (actual, expected) => expect(actual).toBe(expected),
+  ok: (value) => expect(value).toBeTruthy(),
+  doesNotThrow: (fn) => expect(fn).not.toThrow(),
+};
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -25,7 +26,7 @@ import { extractContent, clearContentCache } from '../src/utils/extractContent.j
  * @returns {Document}
  */
 function makeDoc(html) {
-  const dom = new JSDOM(html, { url: 'https://example.com/' });
+  const dom = new JSDOM(html, { url: "https://example.com/" });
   return dom.window.document;
 }
 
@@ -33,10 +34,10 @@ function makeDoc(html) {
 // Test suite
 // ---------------------------------------------------------------------------
 
-describe('extractContent — title detection', () => {
+describe("extractContent — title detection", () => {
   beforeEach(() => clearContentCache());
 
-  test('prefers og:title over document.title', () => {
+  test("prefers og:title over document.title", () => {
     const doc = makeDoc(`
       <html>
         <head>
@@ -47,10 +48,10 @@ describe('extractContent — title detection', () => {
       </html>
     `);
     const result = extractContent(doc);
-    assert.equal(result.title, 'OG Title Here');
+    assert.equal(result.title, "OG Title Here");
   });
 
-  test('falls back to twitter:title when og:title is absent', () => {
+  test("falls back to twitter:title when og:title is absent", () => {
     const doc = makeDoc(`
       <html>
         <head>
@@ -61,10 +62,10 @@ describe('extractContent — title detection', () => {
       </html>
     `);
     const result = extractContent(doc);
-    assert.equal(result.title, 'Twitter Card Title');
+    assert.equal(result.title, "Twitter Card Title");
   });
 
-  test('falls back to article h1 when meta tags are absent', () => {
+  test("falls back to article h1 when meta tags are absent", () => {
     const doc = makeDoc(`
       <html>
         <head><title>Ignored</title></head>
@@ -77,10 +78,10 @@ describe('extractContent — title detection', () => {
       </html>
     `);
     const result = extractContent(doc);
-    assert.equal(result.title, 'Article Heading');
+    assert.equal(result.title, "Article Heading");
   });
 
-  test('strips site name suffix from document.title as last resort', () => {
+  test("strips site name suffix from document.title as last resort", () => {
     const doc = makeDoc(`
       <html>
         <head><title>My Blog Post | Acme Corp</title></head>
@@ -88,10 +89,10 @@ describe('extractContent — title detection', () => {
       </html>
     `);
     const result = extractContent(doc);
-    assert.equal(result.title, 'My Blog Post');
+    assert.equal(result.title, "My Blog Post");
   });
 
-  test('returns document.title unchanged when there is no pipe/dash separator', () => {
+  test("returns document.title unchanged when there is no pipe/dash separator", () => {
     const doc = makeDoc(`
       <html>
         <head><title>Simple Title</title></head>
@@ -99,14 +100,14 @@ describe('extractContent — title detection', () => {
       </html>
     `);
     const result = extractContent(doc);
-    assert.equal(result.title, 'Simple Title');
+    assert.equal(result.title, "Simple Title");
   });
 });
 
-describe('extractContent — description/excerpt detection', () => {
+describe("extractContent — description/excerpt detection", () => {
   beforeEach(() => clearContentCache());
 
-  test('prefers og:description meta tag', () => {
+  test("prefers og:description meta tag", () => {
     const doc = makeDoc(`
       <html>
         <head>
@@ -116,10 +117,10 @@ describe('extractContent — description/excerpt detection', () => {
       </html>
     `);
     const result = extractContent(doc);
-    assert.equal(result.excerpt, 'OG description text.');
+    assert.equal(result.excerpt, "OG description text.");
   });
 
-  test('falls back to meta[name=description]', () => {
+  test("falls back to meta[name=description]", () => {
     const doc = makeDoc(`
       <html>
         <head>
@@ -129,11 +130,11 @@ describe('extractContent — description/excerpt detection', () => {
       </html>
     `);
     const result = extractContent(doc);
-    assert.equal(result.excerpt, 'Standard meta description.');
+    assert.equal(result.excerpt, "Standard meta description.");
   });
 
-  test('generates excerpt from article body when no meta description exists', () => {
-    const longText = 'This is a very long article body. '.repeat(10).trim(); // ~340 chars
+  test("generates excerpt from article body when no meta description exists", () => {
+    const longText = "This is a very long article body. ".repeat(10).trim(); // ~340 chars
     const doc = makeDoc(`
       <html>
         <head><title>Article</title></head>
@@ -147,11 +148,11 @@ describe('extractContent — description/excerpt detection', () => {
     `);
     const result = extractContent(doc);
     // Excerpt must be non-empty and within the allowed length window
-    assert.ok(result.excerpt.length > 0, 'excerpt should be non-empty');
+    assert.ok(result.excerpt.length > 0, "excerpt should be non-empty");
     assert.ok(result.excerpt.length <= 210, `excerpt too long: ${result.excerpt.length} chars`);
   });
 
-  test('returns empty excerpt gracefully when body is nearly empty', () => {
+  test("returns empty excerpt gracefully when body is nearly empty", () => {
     const doc = makeDoc(`
       <html>
         <head><title>Empty</title></head>
@@ -159,14 +160,14 @@ describe('extractContent — description/excerpt detection', () => {
       </html>
     `);
     const result = extractContent(doc);
-    assert.equal(typeof result.excerpt, 'string');
+    assert.equal(typeof result.excerpt, "string");
   });
 });
 
-describe('extractContent — content root detection', () => {
+describe("extractContent — content root detection", () => {
   beforeEach(() => clearContentCache());
 
-  test('prefers <article> over generic <body> content', () => {
+  test("prefers <article> over generic <body> content", () => {
     const doc = makeDoc(`
       <html>
         <head><title>Test</title></head>
@@ -181,16 +182,16 @@ describe('extractContent — content root detection', () => {
     `);
     const result = extractContent(doc);
     assert.ok(
-      result.textContent.includes('Relevant article text'),
-      'textContent should include article body'
+      result.textContent.includes("Relevant article text"),
+      "textContent should include article body"
     );
     assert.ok(
-      !result.textContent.includes('Navigation noise'),
-      'textContent should not include nav noise'
+      !result.textContent.includes("Navigation noise"),
+      "textContent should not include nav noise"
     );
   });
 
-  test('strips <script> and <style> from text content', () => {
+  test("strips <script> and <style> from text content", () => {
     const doc = makeDoc(`
       <html>
         <head><title>Test</title></head>
@@ -204,14 +205,14 @@ describe('extractContent — content root detection', () => {
       </html>
     `);
     const result = extractContent(doc);
-    assert.ok(!result.textContent.includes('var x'), 'scripts should be stripped');
-    assert.ok(!result.textContent.includes('.foo'), 'styles should be stripped');
-    assert.ok(result.textContent.includes('Clean paragraph text'), 'body text preserved');
+    assert.ok(!result.textContent.includes("var x"), "scripts should be stripped");
+    assert.ok(!result.textContent.includes(".foo"), "styles should be stripped");
+    assert.ok(result.textContent.includes("Clean paragraph text"), "body text preserved");
   });
 });
 
-describe('extractContent — caching', () => {
-  test('returns cached result on second call without bustCache', () => {
+describe("extractContent — caching", () => {
+  test("returns cached result on second call without bustCache", () => {
     clearContentCache();
     const doc = makeDoc(`
       <html>
@@ -225,13 +226,13 @@ describe('extractContent — caching', () => {
     const first = extractContent(doc);
     // Mutate the DOM after first call — cache should serve stale result
     const meta = doc.querySelector('meta[property="og:title"]');
-    meta.setAttribute('content', 'New Title After Mutation');
+    meta.setAttribute("content", "New Title After Mutation");
 
     const second = extractContent(doc);
-    assert.equal(second.title, 'Cached Title', 'cache should return stale result');
+    assert.equal(second.title, "Cached Title", "cache should return stale result");
   });
 
-  test('busts cache when bustCache=true', () => {
+  test("busts cache when bustCache=true", () => {
     clearContentCache();
     const doc = makeDoc(`
       <html>
@@ -243,13 +244,13 @@ describe('extractContent — caching', () => {
     `);
 
     extractContent(doc); // prime cache
-    doc.querySelector('meta[property="og:title"]').setAttribute('content', 'Updated Title');
+    doc.querySelector('meta[property="og:title"]').setAttribute("content", "Updated Title");
 
     const fresh = extractContent(doc, true); // bustCache=true
-    assert.equal(fresh.title, 'Updated Title', 'bust cache should return fresh result');
+    assert.equal(fresh.title, "Updated Title", "bust cache should return fresh result");
   });
 
-  test('clearContentCache() forces re-extraction', () => {
+  test("clearContentCache() forces re-extraction", () => {
     clearContentCache();
     const doc = makeDoc(`
       <html>
@@ -261,27 +262,27 @@ describe('extractContent — caching', () => {
     `);
 
     extractContent(doc); // prime cache
-    doc.querySelector('meta[property="og:title"]').setAttribute('content', 'After Clear');
+    doc.querySelector('meta[property="og:title"]').setAttribute("content", "After Clear");
 
     clearContentCache();
     const fresh = extractContent(doc);
-    assert.equal(fresh.title, 'After Clear');
+    assert.equal(fresh.title, "After Clear");
   });
 });
 
-describe('extractContent — error resilience', () => {
+describe("extractContent — error resilience", () => {
   beforeEach(() => clearContentCache());
 
-  test('returns safe fallback when document is completely empty', () => {
-    const doc = makeDoc('<html><head></head><body></body></html>');
+  test("returns safe fallback when document is completely empty", () => {
+    const doc = makeDoc("<html><head></head><body></body></html>");
     const result = extractContent(doc);
-    assert.equal(typeof result.title, 'string');
-    assert.equal(typeof result.excerpt, 'string');
-    assert.equal(typeof result.textContent, 'string');
+    assert.equal(typeof result.title, "string");
+    assert.equal(typeof result.excerpt, "string");
+    assert.equal(typeof result.textContent, "string");
   });
 
-  test('never throws even for a document with no head', () => {
-    const doc = makeDoc('<html><body><p>Just body.</p></body></html>');
+  test("never throws even for a document with no head", () => {
+    const doc = makeDoc("<html><body><p>Just body.</p></body></html>");
     assert.doesNotThrow(() => extractContent(doc));
   });
 });

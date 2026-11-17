@@ -1,191 +1,167 @@
-/**
- * tests/socialShareButton.autodetect.test.js
- *
- * Integration tests verifying that SocialShareButton correctly auto-detects
- * page content and that manual props always override auto-detection.
- *
- * Uses Node's built-in test runner (`node:test`) and JSDOM.
- *
- * Run: npm test
- */
+import { describe, it, expect, beforeEach, afterEach } from "vitest";
 
-import { test, describe, beforeEach, afterEach } from 'node:test';
-import assert from 'node:assert/strict';
-import { JSDOM } from 'jsdom';
+await import("../src/social-share-button.js");
+const SocialShareButton = window.SocialShareButton;
 
-// ---------------------------------------------------------------------------
-// JSDOM global setup
-// We need `document` and `window` globals so SocialShareButton can run in Node.
-// ---------------------------------------------------------------------------
-
-const dom = new JSDOM(
-  `<!DOCTYPE html>
-  <html>
-    <head>
-      <title>Test Page | Site</title>
-      <meta property="og:title" content="OG Detected Title" />
-      <meta property="og:description" content="OG detected description for sharing." />
-    </head>
-    <body>
-      <article>
-        <h1>Article H1</h1>
-        <p>Article body content that is long enough to generate a meaningful excerpt for social sharing.</p>
-      </article>
-      <div id="share-root"></div>
-    </body>
-  </html>`,
-  {
-    url: 'https://example.com/',
-    pretendToBeVisual: true,
-  }
-);
-
-// Expose globals that SocialShareButton reads
-global.window = dom.window;
-global.document = dom.window.document;
-global.CustomEvent = dom.window.CustomEvent;
-// navigator is read-only in Node 22+ — use Object.defineProperty if needed
-try {
-  global.navigator = dom.window.navigator;
-} catch (_) {
-  Object.defineProperty(global, 'navigator', {
-    get: () => dom.window.navigator,
-    configurable: true,
-  });
+function setPage() {
+  document.head.innerHTML = `
+    <title>Test Page | Site</title>
+    <meta property="og:title" content="OG Detected Title" />
+    <meta property="og:description" content="OG detected description for sharing." />
+  `;
+  document.body.innerHTML = `
+    <article>
+      <h1>Article H1</h1>
+      <p>Article body content that is long enough to generate a meaningful excerpt for social sharing.</p>
+    </article>
+    <div id="share-root"></div>
+  `;
 }
-
-// Import AFTER globals are set
-const { default: SocialShareButton } = await import('../src/social-share-button.js');
-
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
-
-let instances = [];
 
 function makeButton(options = {}) {
-  const container = dom.window.document.querySelector('#share-root');
-  const btn = new SocialShareButton({ container, ...options });
-  instances.push(btn);
-  return btn;
+  const container = document.getElementById("share-root");
+  return new SocialShareButton({ container, ...options });
 }
 
+beforeEach(() => {
+  SocialShareButton.clearContentCache();
+  setPage();
+});
+
 afterEach(() => {
-  instances.forEach((b) => {
-    try {
-      b.destroy();
-    } catch (_) {
-      /* ignore */
-    }
-  });
-  instances = [];
+  for (const instance of [...SocialShareButton.instances]) instance.destroy();
+  document.body.innerHTML = "";
+  document.body.style.overflow = "";
+  document.title = "";
+  SocialShareButton.openModalCount = 0;
   SocialShareButton.clearContentCache();
 });
 
-// ---------------------------------------------------------------------------
-// Tests
-// ---------------------------------------------------------------------------
-
-describe('SocialShareButton — content auto-detection', () => {
-  test('auto-detects og:title when title prop is omitted', () => {
-    const btn = makeButton();
-    assert.equal(btn.options.title, 'OG Detected Title', 'should pick up og:title from page meta');
+describe("SocialShareButton content auto-detection", () => {
+  it("detects og:title when title is omitted", () => {
+    expect(makeButton().options.title).toBe("OG Detected Title");
   });
 
-  test('auto-detects og:description when description prop is omitted', () => {
-    const btn = makeButton();
-    assert.equal(
-      btn.options.description,
-      'OG detected description for sharing.',
-      'should pick up og:description from page meta'
-    );
+  it("detects og:description when description is omitted", () => {
+    expect(makeButton().options.description).toBe("OG detected description for sharing.");
   });
 
-  test('manual title prop overrides auto-detection', () => {
-    const btn = makeButton({ title: 'My Custom Title' });
-    assert.equal(
-      btn.options.title,
-      'My Custom Title',
-      'explicit title prop must win over auto-detection'
-    );
+  it("detects twitter:title and meta description", () => {
+    document.head.innerHTML = `
+      <title>Ignored</title>
+      <meta name="twitter:title" content="Twitter Title" />
+      <meta name="description" content="Meta description for sharing." />
+    `;
+    document.body.innerHTML = '<div id="share-root"></div>';
+    SocialShareButton.clearContentCache();
+
+    const button = makeButton();
+
+    expect(button.options.title).toBe("Twitter Title");
+    expect(button.options.description).toBe("Meta description for sharing.");
   });
 
-  test('manual description prop overrides auto-detection', () => {
-    const btn = makeButton({ description: 'My custom description.' });
-    assert.equal(
-      btn.options.description,
-      'My custom description.',
-      'explicit description prop must win over auto-detection'
-    );
+  it("falls back to h1 and a body excerpt", () => {
+    document.head.innerHTML = "<title>Ignored</title>";
+    document.body.innerHTML = `
+      <article>
+        <h1>Article H1</h1>
+        <p>This article has enough body text to generate a meaningful excerpt for social sharing because the detector needs more than fifty characters before it accepts a content root.</p>
+      </article>
+      <div id="share-root"></div>
+    `;
+    SocialShareButton.clearContentCache();
+
+    const button = makeButton();
+
+    expect(button.options.title).toBe("Article H1");
+    expect(button.options.description.length).toBeGreaterThan(0);
   });
 
-  test('both manual title and description disable auto-detection for those fields', () => {
-    const btn = makeButton({
-      title: 'Manual Title',
-      description: 'Manual Description',
+  it("strips a site suffix from document.title when no metadata exists", () => {
+    document.head.innerHTML = "<title>Page Title | Site</title>";
+    document.body.innerHTML = '<div id="share-root"></div>';
+    SocialShareButton.clearContentCache();
+
+    expect(makeButton().options.title).toBe("Page Title");
+  });
+
+  it("lets manual values override detection", () => {
+    const button = makeButton({
+      title: "Manual Title",
+      description: "Manual Description",
     });
-    assert.equal(btn.options.title, 'Manual Title');
-    assert.equal(btn.options.description, 'Manual Description');
+    expect(button.options.title).toBe("Manual Title");
+    expect(button.options.description).toBe("Manual Description");
   });
 
-  test('autoDetect: false skips all content detection', () => {
-    // With autoDetect: false, no og:title should be used — falls back to document.title
-    const btn = makeButton({ autoDetect: false });
-    // document.title is "Test Page | Site"
-    assert.notEqual(
-      btn.options.title,
-      'OG Detected Title',
-      'autoDetect:false should not use og:title'
-    );
-    assert.equal(btn.options.description, '', 'autoDetect:false should leave description empty');
+  it("preserves an explicit empty description", () => {
+    expect(makeButton({ description: "" }).options.description).toBe("");
   });
 
-  test('url defaults to window.location.href', () => {
-    const btn = makeButton();
-    assert.equal(btn.options.url, 'https://example.com/');
+  it("skips detection when autoDetect is false", () => {
+    const button = makeButton({ autoDetect: false });
+    expect(button.options.title).toBe("Test Page | Site");
+    expect(button.options.description).toBe("");
   });
 
-  test('explicit url prop is used as-is', () => {
-    const btn = makeButton({ url: 'https://my.site/page' });
-    assert.equal(btn.options.url, 'https://my.site/page');
+  it("uses the current URL by default", () => {
+    expect(makeButton().options.url).toBe(window.location.href);
   });
-});
 
-describe('SocialShareButton — fallback when detection produces nothing', () => {
-  test('title falls back to document.title when all meta and h1 are absent', () => {
-    // Temporarily remove the og:title meta
-    const meta = dom.window.document.querySelector('meta[property="og:title"]');
-    const parent = meta.parentNode;
-    parent.removeChild(meta);
+  it("re-detects on updateOptions when caller fields are omitted", () => {
+    const button = makeButton();
+    document.querySelector('meta[property="og:title"]').content = "Updated OG Title";
     SocialShareButton.clearContentCache();
 
-    const btn = makeButton();
-    // Should fall back through h1 → document.title strip
-    const title = btn.options.title;
-    assert.ok(title.length > 0, 'title must never be empty');
+    button.updateOptions({ url: "https://example.com/next" });
 
-    // Restore
-    parent.appendChild(meta);
-    SocialShareButton.clearContentCache();
+    expect(button.options.url).toBe("https://example.com/next");
+    expect(button.options.title).toBe("Updated OG Title");
+  });
+
+  it("uses detected title for SPA page updates", () => {
+    const button = makeButton();
+    document.querySelector('meta[property="og:title"]').content = "SPA OG Title";
+    window.history.replaceState({}, "", "/next");
+
+    SocialShareButton.updateCurrentPage();
+
+    expect(button.options.title).toBe("SPA OG Title");
+  });
+
+  it("does not let SPA updates overwrite caller-supplied values", () => {
+    const button = makeButton({
+      title: "Pinned Title",
+      description: "Pinned description",
+    });
+    document.querySelector('meta[property="og:title"]').content = "SPA OG Title";
+    window.history.replaceState({}, "", "/next");
+
+    SocialShareButton.updateCurrentPage();
+
+    expect(button.options.title).toBe("Pinned Title");
+    expect(button.options.description).toBe("Pinned description");
+  });
+
+  it("keeps document.title behavior when autoDetect is disabled", () => {
+    const button = makeButton({ autoDetect: false });
+    document.title = "New Route Title";
+    window.history.replaceState({}, "", "/next");
+
+    SocialShareButton.updateCurrentPage();
+
+    expect(button.options.title).toBe("New Route Title");
   });
 });
 
-describe('SocialShareButton — updateOptions preserves auto-detected values', () => {
-  test('updateOptions merges new values without losing unrelated options', () => {
-    const btn = makeButton();
-    const originalTitle = btn.options.title;
-    btn.updateOptions({ url: 'https://new.url/' });
-    assert.equal(btn.options.url, 'https://new.url/');
-    assert.equal(btn.options.title, originalTitle, 'title should be preserved after updateOptions');
-  });
-});
-
-describe('SocialShareButton — static clearContentCache', () => {
-  test('clearContentCache is a static function on the class', () => {
-    assert.equal(typeof SocialShareButton.clearContentCache, 'function');
+describe("SocialShareButton.clearContentCache", () => {
+  it("is callable on the class", () => {
+    expect(typeof SocialShareButton.clearContentCache).toBe("function");
+    expect(() => SocialShareButton.clearContentCache()).not.toThrow();
   });
 
-  test('calling clearContentCache does not throw', () => {
-    assert.doesNotThrow(() => SocialShareButton.clearContentCache());
+  it("accepts a URL-scoped clear", () => {
+    expect(() => SocialShareButton.clearContentCache(window.location.href)).not.toThrow();
   });
 });

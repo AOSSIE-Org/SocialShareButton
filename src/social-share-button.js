@@ -1,98 +1,55 @@
 /**
  * SocialShareButton - A lightweight, customizable social sharing component
- * @version 1.0.3
+ * @version 1.1.0
  * @license GPL-3.0
  */
 
-/**
- * ⚠️ IMPORTANT: This _ContentDetector IIFE is INTENTIONALLY DUPLICATED from
- * src/utils/extractContent.js to keep the CDN build zero-dependency.
- *
- * Any changes to detection priorities, selectors, or excerpt logic MUST be
- * mirrored in both places. The source of truth is src/utils/extractContent.js.
- *
- * This module-level detector:
- *   - Shares the same detection logic and selectors
- *   - Uses a URL-keyed Map cache (keyed by doc.URL) to prevent SSR cache leaks
- *   - Is used only by the vanilla JS SocialShareButton class
- *
- * For SSR/URL-keyed caching, use src/utils/extractContent.js instead.
- */
+/** Analytics event schema version. Increment when the payload shape changes. */
+const ANALYTICS_SCHEMA_VERSION = "1.0";
+
+/** Modal positions with matching CSS; anything else falls back to "center". */
+const SAFE_MODAL_POSITIONS = ["center", "bottom"];
 
 /**
- * Lightweight content auto-detection module (inlined to preserve zero-dependency CDN build).
- *
- * Detection priority for title:
- *   og:title → twitter:title → semantic h1 (article/main/landmark) → document.title
- *
- * Detection priority for description / excerpt:
- *   og:description → twitter:description → meta[name="description"] → body text excerpt
- *
- * Results are cached for 30 s per instance so repeated calls within the same
- * page lifecycle are negligible in cost.
+ * Inlined copy of src/utils/extractContent.js so the CDN build stays dependency-free.
+ * Detection priorities, selectors, and excerpt logic must be kept in sync there.
  */
 const _ContentDetector = (() => {
-  const _cache = new Map(); // keyed by doc.URL to prevent SSR cache leaks
+  const _cache = new Map();
   const CACHE_TTL_MS = 30_000;
 
-  /**
-   * Read a <meta> tag's `content` attribute using the given CSS selector.
-   * Returns an empty string when the element or its content attribute is absent.
-   */
   function _getMeta(doc, selector) {
     const el = doc.querySelector(selector);
-    return el && el.getAttribute('content') ? el.getAttribute('content').trim() : '';
+    const content = el && el.getAttribute("content");
+    return content ? content.trim() : "";
   }
 
-  /**
-   * Detect the page title using a priority chain:
-   *   1. og:title meta tag
-   *   2. twitter:title meta tag (name or property variant)
-   *   3. First non-empty h1 inside a landmark element (article/main/[role=main])
-   *      or a common CMS title class, then bare h1 as last-resort selector
-   *   4. document.title with the trailing "| SiteName" suffix stripped via regex
-   */
   function _detectTitle(doc) {
     const og = _getMeta(doc, 'meta[property="og:title"]');
     if (og) return og;
-
     const tw =
       _getMeta(doc, 'meta[name="twitter:title"]') ||
       _getMeta(doc, 'meta[property="twitter:title"]');
     if (tw) return tw;
-
-    const landmarkSelectors = [
-      'article h1',
+    for (const selector of [
+      "article h1",
       '[role="main"] h1',
-      'main h1',
-      '.post-title',
-      '.entry-title',
-      '.article-title',
-      '.page-title',
-      '.hero-title',
-      'h1',
-    ];
-    for (const sel of landmarkSelectors) {
-      const el = doc.querySelector(sel);
-      if (el) {
-        const text = el.textContent.trim();
-        if (text) return text;
-      }
+      "main h1",
+      ".post-title",
+      ".entry-title",
+      ".article-title",
+      ".page-title",
+      ".hero-title",
+      "h1",
+    ]) {
+      const el = doc.querySelector(selector);
+      const text = el && el.textContent.trim();
+      if (text) return text;
     }
-
-    // Strip trailing " | SiteName" suffix from document.title
-    const raw = (doc.title || '').trim();
-    return raw.replace(/\s*[|\-\u2013\u2014]\s*.{1,60}$/, '').trim() || raw;
+    const raw = (doc.title || "").trim();
+    return raw.replace(/\s*[|\-\u2013\u2014]\s*.{1,60}$/, "").trim() || raw;
   }
 
-  /**
-   * Detect the page description / excerpt using a priority chain:
-   *   1. og:description meta tag
-   *   2. twitter:description meta tag (name or property variant)
-   *   3. meta[name="description"]
-   * Returns an empty string when none of the above are present (caller should
-   * fall back to body text extraction via _findContentRoot + _toPlainText).
-   */
   function _detectMetaDesc(doc) {
     return (
       _getMeta(doc, 'meta[property="og:description"]') ||
@@ -102,84 +59,60 @@ const _ContentDetector = (() => {
     );
   }
 
-  /**
-   * Find the most specific semantic content root for body-text extraction.
-   * Tries landmark selectors in order of specificity (article → [role=main] →
-   * main → common CMS content classes → id-based selectors).  A candidate is
-   * accepted only when it contains at least 50 characters of text so that empty
-   * or stub elements are skipped.  Falls back to document.body when nothing
-   * qualifies.
-   */
   function _findContentRoot(doc) {
-    const candidates = [
-      'article',
+    for (const selector of [
+      "article",
       '[role="main"]',
-      'main',
-      '.post-content',
-      '.entry-content',
-      '.article-content',
-      '.article-body',
-      '.blog-content',
-      '.page-content',
-      '.content-body',
-      '#content',
-      '#main-content',
-    ];
-    for (const sel of candidates) {
-      const el = doc.querySelector(sel);
+      "main",
+      ".post-content",
+      ".entry-content",
+      ".article-content",
+      ".article-body",
+      ".blog-content",
+      ".page-content",
+      ".content-body",
+      "#content",
+      "#main-content",
+    ]) {
+      const el = doc.querySelector(selector);
       if (el && el.textContent.trim().length > 50) return el;
     }
     return doc.body || doc.documentElement;
   }
 
-  /**
-   * Produce a clean plain-text version of a DOM subtree for excerpt generation.
-   * Clones the root so the live DOM is never mutated, then strips scripts,
-   * styles, navigation, ads, ARIA-hidden nodes, and modal overlays — elements
-   * that carry no article content and would pollute shareable text.
-   * Normalizes collapsed whitespace in the resulting textContent.
-   */
   function _toPlainText(root) {
     const clone = root.cloneNode(true);
     clone
       .querySelectorAll(
-        'script,style,noscript,nav,header,footer,aside,form,' +
+        "script,style,noscript,nav,header,footer,aside,form," +
           "[aria-hidden='true'],.nav,.navigation,.menu,.sidebar," +
-          '.advertisement,.ad,.cookie-banner,.social-share-modal-overlay'
+          ".advertisement,.ad,.cookie-banner,.social-share-modal-overlay"
       )
       .forEach(function (el) {
         el.remove();
       });
-    return clone.textContent.replace(/\s+/g, ' ').trim();
+    return clone.textContent.replace(/\s+/g, " ").trim();
   }
 
   function _excerpt(text, minLen = 140, maxLen = 200) {
-    if (!text) return '';
+    if (!text) return "";
     if (text.length <= maxLen) return text;
-    // Take a window up to maxLen chars and try to end at a sentence boundary
-    // (sentEnd) — but only when the boundary is beyond minLen to avoid
-    // too-short snippets.  If no good sentence boundary exists, fall back to
-    // the last word boundary (wordEnd) and append an ellipsis so the result is
-    // always a complete word rather than a mid-word cut.
-    const win = text.slice(0, maxLen);
-    const sentEnd = Math.max(win.lastIndexOf('. '), win.lastIndexOf('! '), win.lastIndexOf('? '));
-    if (sentEnd >= minLen) return win.slice(0, sentEnd + 1).trim();
-    const wordEnd = win.lastIndexOf(' ');
-    return wordEnd > minLen ? win.slice(0, wordEnd).trim() + '\u2026' : win.trim() + '\u2026';
+    const windowText = text.slice(0, maxLen);
+    const sentenceEnd = Math.max(
+      windowText.lastIndexOf(". "),
+      windowText.lastIndexOf("! "),
+      windowText.lastIndexOf("? ")
+    );
+    if (sentenceEnd >= minLen) return windowText.slice(0, sentenceEnd + 1).trim();
+    const wordEnd = windowText.lastIndexOf(" ");
+    return wordEnd > minLen
+      ? windowText.slice(0, wordEnd).trim() + "\u2026"
+      : windowText.trim() + "\u2026";
   }
 
   return {
-    /**
-     * Extract sharing metadata from the document.
-     * Returns { title, excerpt, textContent }.
-     * Never throws — falls back gracefully on any DOM error.
-     *
-     * @param {Document} doc
-     * @param {boolean}  [bustCache=false]
-     * @returns {{ title: string, excerpt: string, textContent: string }}
-     */
     extract(doc, bustCache = false) {
-      const cacheKey = doc && doc.URL ? doc.URL : 'default';
+      const cacheKey = doc && doc.URL ? doc.URL : "default";
       const cached = _cache.get(cacheKey);
       if (!bustCache && cached && Date.now() - cached.ts < CACHE_TTL_MS) {
         return cached.result;
@@ -188,7 +121,7 @@ const _ContentDetector = (() => {
       try {
         const title = _detectTitle(doc);
         let excerpt = _detectMetaDesc(doc);
-        let textContent = '';
+        let textContent = "";
         if (!excerpt) {
           const root = _findContentRoot(doc);
           textContent = _toPlainText(root);
@@ -196,101 +129,115 @@ const _ContentDetector = (() => {
         } else {
           try {
             textContent = _toPlainText(_findContentRoot(doc));
-          } catch (_) {
+          } catch (error) {
+            this._debugWarn ? this._debugWarn("Content extraction failed", error) : null;
             textContent = excerpt;
           }
         }
         result = { title, excerpt, textContent };
-      } catch (_) {
+      } catch (error) {
         result = {
-          title: typeof doc !== 'undefined' && doc.title ? doc.title.trim() : '',
-          excerpt: '',
-          textContent: '',
+          title: typeof doc !== "undefined" && doc.title ? doc.title.trim() : "",
+          excerpt: "",
+          textContent: "",
         };
       }
       _cache.set(cacheKey, { result, ts: Date.now() });
       return result;
     },
 
-    /** Clear extraction cache (call on SPA navigation).
-     * @param {string} [url] — if provided, only that entry is cleared; otherwise the whole cache is cleared.
-     */
     clearCache(url) {
-      if (url) {
-        _cache.delete(url);
-      } else {
-        _cache.clear();
-      }
+      if (url) _cache.delete(url);
+      else _cache.clear();
     },
   };
 })();
 
-/** Analytics event schema version. Increment when the payload shape changes. */
-const ANALYTICS_SCHEMA_VERSION = '1.0';
+/** Built-in UI text. Pass `labels` to translate any of it; missing keys keep these defaults. */
+const DEFAULT_LABELS = {
+  share: "Share",
+  close: "Close",
+  copy: "Copy",
+  copied: "Copied!",
+  copyFailed: "Failed",
+  urlLabel: "URL to share",
+  qrcode: "QR Code",
+  qrScanTitle: "Scan QR Code",
+  qrDownload: "Download QR",
+};
+
+const DEFAULT_SHARE_TEMPLATES = {
+  whatsapp: ({ title, description, hashtagString }) =>
+    `\u{1F680} ${title}${description ? "\n\n" + description : ""}${hashtagString ? "\n\n" + hashtagString : ""}\n\nLive on the site \u{1F440}\nClean UI, smooth flow \u{2014} worth peeking\n\u{1F447}`,
+  facebook: ({ title, description, hashtagString }) =>
+    `${title}${description ? "\n\n" + description : ""}${hashtagString ? "\n\n" + hashtagString : ""}`,
+  twitter: ({ title, description, hashtagString }) =>
+    `${title}${description ? "\n\n" + description : ""}${hashtagString ? "\n" + hashtagString : ""}`,
+  telegram: ({ title, description, hashtagString }) =>
+    `\u{1F517} ${title}${description ? "\n\n" + description : ""}${hashtagString ? "\n\n" + hashtagString : ""}\n\nLive + working\nClean stuff, take a look \u{1F447}`,
+  reddit: ({ title, description }) => `${title}${description ? " - " + description : ""}`,
+  email: ({ title, description }) =>
+    `Hey \u{1F44B}\n\nSharing a clean project I came across:\n${title}${description ? "\n\n" + description : ""}\n\nLive, simple, and usable \u{2014} take a look \u{1F447}`,
+  pinterest: ({ title, description }) => `${title || ""}${description ? " - " + description : ""}`,
+};
 
 class SocialShareButton {
   constructor(options = {}) {
-    // -------------------------------------------------------------------------
-    // Intelligent content auto-detection (Issue #26)
-    //
-    // When title or description are not provided by the caller, attempt to
-    // detect them from the page's metadata and semantic HTML.  Manual props
-    // always win — auto-detection only fills in what's missing.
-    //
-    // Set autoDetect: false to disable entirely.
-    // -------------------------------------------------------------------------
-    let _autoTitle = '';
-    let _autoDescription = '';
+    const autoDetectEnabled = options.autoDetect !== false;
+    let autoTitle = "";
+    let autoDescription = "";
 
-    const _autoDetectEnabled = options.autoDetect !== false;
-
-    if (_autoDetectEnabled && typeof document !== 'undefined') {
-      // Use == null (covers both undefined and null) so an explicit empty string
-      // provided by the caller is honoured and does not trigger auto-detection.
-      const _needsTitle = options.title == null;
-      const _needsDesc = options.description == null;
-
-      if (_needsTitle || _needsDesc) {
+    if (autoDetectEnabled && typeof document !== "undefined") {
+      const needsTitle = options.title == null;
+      const needsDescription = options.description == null;
+      if (needsTitle || needsDescription) {
         try {
           const detected = _ContentDetector.extract(document);
-          if (_needsTitle) _autoTitle = detected.title || '';
-          if (_needsDesc) _autoDescription = detected.excerpt || '';
-        } catch (_err) {
-          // Never let detection errors break the constructor
-          if (options.debug) {
-            // eslint-disable-next-line no-console
-            console.warn('[SocialShareButton] Content detection failed', _err);
-          }
+          if (needsTitle) autoTitle = detected.title || "";
+          if (needsDescription) autoDescription = detected.excerpt || "";
+        } catch (error) {
+          if (options.debug) console.warn("[SocialShareButton] Content detection failed", error);
         }
       }
     }
 
+    // Resolve container element early to prevent duplicate instances
+    const containerEl = SocialShareButton._resolveContainer(options.container);
+
+    if (containerEl && containerEl._socialShareButtonInstance) {
+      return containerEl._socialShareButtonInstance;
+    }
+
     this.options = {
-      url: options.url || (typeof window !== 'undefined' ? window.location.href : ''),
+      url: options.url || (typeof window !== "undefined" ? window.location.href : ""),
       title:
-        options.title ?? (_autoTitle || (typeof document !== 'undefined' ? document.title : '')),
-      description: options.description ?? (_autoDescription || ''),
+        options.title ?? (autoTitle || (typeof document !== "undefined" ? document.title : "")),
+      description: options.description ?? autoDescription,
       hashtags: options.hashtags || [],
-      via: options.via || '',
+      via: options.via || "",
       platforms: options.platforms || [
-        'whatsapp',
-        'facebook',
-        'twitter',
-        'linkedin',
-        'telegram',
-        'reddit',
+        "whatsapp",
+        "facebook",
+        "twitter",
+        "linkedin",
+        "telegram",
+        "reddit",
+        "pinterest",
+        "discord",
       ],
-      theme: options.theme || 'dark',
-      buttonText: options.buttonText || 'Share',
-      customClass: options.customClass || '',
-      buttonColor: options.buttonColor || '',
-      buttonHoverColor: options.buttonHoverColor || '',
+      theme: options.theme || "dark",
+      buttonText: options.buttonText || "Share",
+      labels: { ...DEFAULT_LABELS, ...options.labels },
+      shareTemplates: { ...DEFAULT_SHARE_TEMPLATES, ...options.shareTemplates },
+      customClass: options.customClass || "",
+      buttonColor: options.buttonColor || "",
+      buttonHoverColor: options.buttonHoverColor || "",
       onShare: options.onShare || null,
       onCopy: options.onCopy || null,
       container: options.container || null,
       showButton: options.showButton !== false,
-      buttonStyle: options.buttonStyle || 'default',
-      modalPosition: options.modalPosition || 'center',
+      buttonStyle: options.buttonStyle || "default",
+      modalPosition: options.modalPosition || "center",
       // Analytics — the library emits events but never collects or sends data itself.
       // Website owners wire up their own analytics tools via these options.
       analytics: options.analytics !== false, // set to false to disable all event emission
@@ -298,8 +245,7 @@ class SocialShareButton {
       analyticsPlugins: options.analyticsPlugins || [], // array of { track(payload) } adapters
       componentId: options.componentId || null, // optional identifier for this instance
       debug: options.debug || false, // log emitted events to console in development
-      // Content auto-detection — set to false to disable (e.g. when all props are always provided)
-      autoDetect: _autoDetectEnabled,
+      autoDetect: autoDetectEnabled,
     };
 
     this.isModalOpen = false;
@@ -317,6 +263,26 @@ class SocialShareButton {
     this.eventsAttached = false; // Guard against multiple attachEvents() calls
     this.isDestroyed = false; // Track if instance has been destroyed (prevents async callbacks)
 
+    this._dynamicUrl = !options.url; // true when url was not provided; updateCurrentPage() will overwrite on SPA route changes
+    this._dynamicTitle = options.title == null;
+    this._dynamicDescription = options.description == null;
+
+    this._containerEl = containerEl; // Cache resolved element so cleanup still finds it after removal
+
+    // If a container was specified but could not be resolved (e.g. SSR or missing DOM node),
+    // abort registration and initialization to prevent orphan instances and DOM errors.
+    if (this.options.container && !this._containerEl) {
+      return;
+    }
+
+    if (containerEl) {
+      containerEl._socialShareButtonInstance = this;
+    }
+
+    if (typeof window !== "undefined" && SocialShareButton.instances) {
+      SocialShareButton.instances.add(this);
+    }
+
     if (this.options.container) {
       this.init();
     }
@@ -332,38 +298,37 @@ class SocialShareButton {
   }
 
   createButton() {
-    const button = document.createElement('button');
+    const button = document.createElement("button");
     button.className = `social-share-btn ${this.options.buttonStyle} ${this.options.customClass}`;
-    button.setAttribute('aria-label', 'Share');
+    button.setAttribute("aria-label", this.options.labels.share);
     button.innerHTML = `
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="share-icon">
         <path d="M18 16.08C17.24 16.08 16.56 16.38 16.04 16.85L8.91 12.7C8.96 12.47 9 12.24 9 12C9 11.76 8.96 11.53 8.91 11.3L15.96 7.19C16.5 7.69 17.21 8 18 8C19.66 8 21 6.66 21 5C21 3.34 19.66 2 18 2C16.34 2 15 3.34 15 5C15 5.24 15.04 5.47 15.09 5.7L8.04 9.81C7.5 9.31 6.79 9 6 9C4.34 9 3 10.34 3 12C3 13.66 4.34 15 6 15C6.79 15 7.5 14.69 8.04 14.19L15.16 18.35C15.11 18.56 15.08 18.78 15.08 19C15.08 20.61 16.39 21.92 18 21.92C19.61 21.92 20.92 20.61 20.92 19C20.92 17.39 19.61 16.08 18 16.08Z" fill="currentColor"/>
       </svg>
-      <span>${this.options.buttonText}</span>
     `;
+    // buttonText can come from data-button-text or user content, so it is set as text, never parsed as HTML
+    const label = document.createElement("span");
+    label.textContent = this.options.buttonText;
+    button.appendChild(label);
 
     this.button = button;
-    if (this.options.container) {
-      const container =
-        typeof this.options.container === 'string'
-          ? document.querySelector(this.options.container)
-          : this.options.container;
-
-      if (container) {
-        container.appendChild(button);
-      }
+    if (this._containerEl) {
+      this._containerEl.appendChild(button);
     }
   }
-
   createModal() {
-    const modal = document.createElement('div');
+    const modal = document.createElement("div");
     modal.className = `social-share-modal-overlay ${this.options.theme}`;
-    modal.style.display = 'none';
+    modal.style.display = "none";
+    // modalPosition is interpolated into markup, so only known positions are accepted
+    const modalPosition = SAFE_MODAL_POSITIONS.includes(this.options.modalPosition)
+      ? this.options.modalPosition
+      : "center";
     modal.innerHTML = `
-      <div class="social-share-modal-content ${this.options.modalPosition}">
+      <div class="social-share-modal-content ${modalPosition}">
         <div class="social-share-modal-header">
-          <h3>Share</h3>
-          <button class="social-share-modal-close" aria-label="Close">✕</button>
+          <h3></h3>
+          <button class="social-share-modal-close">✕</button>
         </div>
         <div class="social-share-platforms">
           ${this.getPlatformsHTML()}
@@ -371,59 +336,74 @@ class SocialShareButton {
         <div class="social-share-link-container">
           <div class="social-share-link-input">
           </div>
-          <button class="social-share-copy-btn">Copy</button>
+          <button class="social-share-copy-btn"></button>
         </div>
       </div>
     `;
 
-    const urlInputContainer = modal.querySelector('.social-share-link-input');
-    const urlInput = document.createElement('input');
-    urlInput.type = 'text';
+    const urlInputContainer = modal.querySelector(".social-share-link-input");
+    const urlInput = document.createElement("input");
+    urlInput.type = "text";
     urlInput.value = this.options.url;
     urlInput.readOnly = true;
-    urlInput.setAttribute('aria-label', 'URL to share');
     urlInputContainer.appendChild(urlInput);
 
     this.modal = modal;
+    this._applyLabels();
     document.body.appendChild(modal);
   }
 
   getPlatformsHTML() {
     const platforms = {
       whatsapp: {
-        name: 'WhatsApp',
-        color: '#25D366',
+        name: "WhatsApp",
+        color: "#25D366",
         icon: '<path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>',
       },
       facebook: {
-        name: 'Facebook',
-        color: '#1877F2',
+        name: "Facebook",
+        color: "#1877F2",
         icon: '<path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>',
       },
       twitter: {
-        name: 'X',
-        color: '#000000',
+        name: "X",
+        color: "#000000",
         icon: '<path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>',
       },
       linkedin: {
-        name: 'LinkedIn',
-        color: '#0A66C2',
+        name: "LinkedIn",
+        color: "#0A66C2",
         icon: '<path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>',
       },
       telegram: {
-        name: 'Telegram',
-        color: '#0088cc',
+        name: "Telegram",
+        color: "#0088cc",
         icon: '<path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>',
       },
       reddit: {
-        name: 'Reddit',
-        color: '#FF4500',
+        name: "Reddit",
+        color: "#FF4500",
         icon: '<path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/>',
       },
       email: {
-        name: 'Email',
-        color: '#7f7f7f',
+        name: "Email",
+        color: "#7f7f7f",
         icon: '<path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>',
+      },
+      pinterest: {
+        name: "Pinterest",
+        color: "#E60023",
+        icon: '<path d="M12 0C5.372 0 0 5.373 0 12c0 4.99 3.052 9.267 7.386 11.059-.102-.94-.194-2.385.04-3.413.211-.904 1.356-5.752 1.356-5.752s-.346-.693-.346-1.717c0-1.608.932-2.808 2.093-2.808.987 0 1.463.741 1.463 1.63 0 .993-.632 2.476-.958 3.853-.273 1.155.58 2.098 1.718 2.098 2.062 0 3.646-2.174 3.646-5.31 0-2.778-1.997-4.722-4.847-4.722-3.304 0-5.242 2.478-5.242 5.039 0 .997.384 2.066.865 2.647.095.115.109.215.08.331-.088.365-.282 1.155-.321 1.316-.05.212-.165.257-.381.155-1.418-.66-2.305-2.733-2.305-4.397 0-3.579 2.601-6.867 7.497-6.867 3.936 0 6.998 2.805 6.998 6.557 0 3.91-2.466 7.058-5.892 7.058-1.15 0-2.232-.597-2.6-1.302l-.707 2.692c-.255.983-.946 2.215-1.408 2.966A12.002 12.002 0 0024 12C24 5.373 18.627 0 12 0z"/>',
+      },
+      discord: {
+        name: "Discord",
+        color: "#5865F2",
+        icon: '<path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 11.756 11.756 0 0 0-.617-1.25.077.077 0 0 0-.079-.037 19.736 19.736 0 0 0-4.885 1.515.069.069 0 0 0-.032.027C.533 9.048-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.419-2.157 2.419zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.419-2.157 2.419z"/>',
+      },
+      qrcode: {
+        name: "QR Code",
+        color: "#000000",
+        icon: '<path d="M3 3h8v8H3V3zm2 2v4h4V5H5zm8-2h8v8h-8V3zm2 2v4h4V5h-4zM3 13h8v8H3v-8zm2 2v4h4v-4H5zm13-2h-3v2h3v-2zm-3 2v2h-2v-2h2zm0 2h3v2h-3v-2zm-2 2v2h-2v-2h2zm4 0h3v2h-3v-2zm-2-4h2v2h-2v-2z"/>',
       },
     };
 
@@ -440,7 +420,7 @@ class SocialShareButton {
           </button>
         `;
       })
-      .join('');
+      .join("");
   }
 
   getShareURL(platform) {
@@ -448,46 +428,35 @@ class SocialShareButton {
     const encodedUrl = encodeURIComponent(url);
     const encodedTitle = encodeURIComponent(title);
     // const encodedDesc = encodeURIComponent(description);
+    const hashtagString = hashtags.length ? "#" + hashtags.join(" #") : "";
 
-    // Build platform-specific messages.
-    // Templates are extracted here for easy localisation — replace these
-    // string-building expressions with your own i18n interpolation function
-    // (e.g. i18n.t('share.whatsapp', { title, description, hashtagString }))
-    // if you need locale-specific punctuation, ordering, or emoji variants.
-    const hashtagString = hashtags.length ? '#' + hashtags.join(' #') : '';
-    const SHARE_TEMPLATES = {
-      whatsapp: `\u{1F680} ${title}${description ? '\n\n' + description : ''}${hashtagString ? '\n\n' + hashtagString : ''}\n\nLive on the site \u{1F440}\nClean UI, smooth flow \u{2014} worth peeking\n\u{1F447}`,
-      facebook: `${title}${description ? '\n\n' + description : ''}${hashtagString ? '\n\n' + hashtagString : ''}`,
-      twitter: `${title}${description ? '\n\n' + description : ''}${hashtagString ? '\n' + hashtagString : ''}`,
-      telegram: `\u{1F517} ${title}${description ? '\n\n' + description : ''}${hashtagString ? '\n\n' + hashtagString : ''}\n\nLive + working\nClean stuff, take a look \u{1F447}`,
-      reddit: `${title}${description ? ' - ' + description : ''}`,
-      email: `Hey \u{1F44B}\n\nSharing a clean project I came across:\n${title}${description ? '\n\n' + description : ''}\n\nLive, simple, and usable \u{2014} take a look \u{1F447}`,
+    const templateInput = { title, description, hashtagString, url };
+    const renderMessage = (key) => {
+      const template = this.options.shareTemplates[key];
+      return typeof template === "function" ? template(templateInput) : String(template ?? "");
     };
-    const whatsappMessage = SHARE_TEMPLATES.whatsapp;
-    const facebookMessage = SHARE_TEMPLATES.facebook;
-    const twitterMessage = SHARE_TEMPLATES.twitter;
-    const telegramMessage = SHARE_TEMPLATES.telegram;
-    const redditTitle = SHARE_TEMPLATES.reddit;
-    const emailBody = SHARE_TEMPLATES.email;
 
-    const encodedWhatsapp = encodeURIComponent(whatsappMessage);
-    const encodedFacebook = encodeURIComponent(facebookMessage);
-    const encodedTwitter = encodeURIComponent(twitterMessage);
-    const encodedTelegram = encodeURIComponent(telegramMessage);
-    const encodedReddit = encodeURIComponent(redditTitle);
-    const encodedEmail = encodeURIComponent(emailBody);
+    const encodedWhatsapp = encodeURIComponent(renderMessage("whatsapp"));
+    const encodedFacebook = encodeURIComponent(renderMessage("facebook"));
+    const encodedTwitter = encodeURIComponent(renderMessage("twitter"));
+    const encodedTelegram = encodeURIComponent(renderMessage("telegram"));
+    const encodedReddit = encodeURIComponent(renderMessage("reddit"));
+    const encodedEmail = encodeURIComponent(renderMessage("email"));
+    const encodedPinterest = encodeURIComponent(renderMessage("pinterest"));
 
     const urls = {
       whatsapp: `https://wa.me/?text=${encodedWhatsapp}%20${encodedUrl}`,
       facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedFacebook}`,
-      twitter: `https://twitter.com/intent/tweet?text=${encodedTwitter}&url=${encodedUrl}${via ? '&via=' + encodeURIComponent(via) : ''}`,
+      twitter: `https://twitter.com/intent/tweet?text=${encodedTwitter}&url=${encodedUrl}${via ? "&via=" + encodeURIComponent(via) : ""}`,
       linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`,
       telegram: `https://t.me/share/url?url=${encodedUrl}&text=${encodedTelegram}`,
       reddit: `https://reddit.com/submit?url=${encodedUrl}&title=${encodedReddit}`,
       email: `mailto:?subject=${encodedTitle}&body=${encodedEmail}%20${encodedUrl}`,
+      pinterest: `https://pinterest.com/pin/create/button/?url=${encodedUrl}&description=${encodedPinterest}`,
+      discord: "https://discord.com/channels/@me",
     };
 
-    return urls[platform] || '';
+    return urls[platform] || "";
   }
 
   addEventListener(element, type, handler, options = false) {
@@ -513,7 +482,7 @@ class SocialShareButton {
     // Button click to open modal
     if (this.button) {
       const openModalHandler = () => this.openModal();
-      this.addEventListener(this.button, 'click', openModalHandler);
+      this.addEventListener(this.button, "click", openModalHandler);
     }
 
     // Modal overlay click to close
@@ -522,41 +491,41 @@ class SocialShareButton {
         this.closeModal();
       }
     };
-    this.addEventListener(this.modal, 'click', modalClickHandler);
+    this.addEventListener(this.modal, "click", modalClickHandler);
 
     // Close button
-    const closeBtn = this.modal.querySelector('.social-share-modal-close');
+    const closeBtn = this.modal.querySelector(".social-share-modal-close");
     const closeBtnHandler = () => this.closeModal();
-    this.addEventListener(closeBtn, 'click', closeBtnHandler);
+    this.addEventListener(closeBtn, "click", closeBtnHandler);
 
     // Platform buttons
-    const platformBtns = this.modal.querySelectorAll('.social-share-platform-btn');
+    const platformBtns = this.modal.querySelectorAll(".social-share-platform-btn");
     platformBtns.forEach((btn) => {
       const platformHandler = () => {
         const platform = btn.dataset.platform;
         this.share(platform);
       };
-      this.addEventListener(btn, 'click', platformHandler);
+      this.addEventListener(btn, "click", platformHandler);
     });
 
     // Copy button
-    const copyBtn = this.modal.querySelector('.social-share-copy-btn');
+    const copyBtn = this.modal.querySelector(".social-share-copy-btn");
     const copyBtnHandler = () => this.copyLink();
-    this.addEventListener(copyBtn, 'click', copyBtnHandler);
+    this.addEventListener(copyBtn, "click", copyBtnHandler);
 
     // Input click to select
-    const input = this.modal.querySelector('.social-share-link-input input');
+    const input = this.modal.querySelector(".social-share-link-input input");
     const inputSelectHandler = (e) => e.target.select();
-    this.addEventListener(input, 'click', inputSelectHandler);
+    this.addEventListener(input, "click", inputSelectHandler);
 
     // ESC key to close
     this.handleKeydown = (e) => {
-      if (e.key === 'Escape' && this.isModalOpen) {
+      if (e.key === "Escape" && this.isModalOpen) {
         this.closeModal();
       }
     };
-    if (typeof document !== 'undefined') {
-      document.addEventListener('keydown', this.handleKeydown);
+    if (typeof document !== "undefined") {
+      document.addEventListener("keydown", this.handleKeydown);
     }
 
     this.eventsAttached = true; // Mark as attached
@@ -566,11 +535,11 @@ class SocialShareButton {
     if (!this.modal) return;
 
     this.isModalOpen = true;
-    this.modal.style.display = 'flex';
-    this._emit('social_share_popup_open', 'popup_open');
+    this.modal.style.display = "flex";
+    this._emit("social_share_popup_open", "popup_open");
 
     // Shared body overflow management: only increment counter if this instance doesn't already own the lock
-    if (typeof document !== 'undefined' && document.body) {
+    if (typeof document !== "undefined" && document.body) {
       if (!this.ownsBodyLock) {
         // Only increment if this instance doesn't already own a lock
         if (SocialShareButton.openModalCount === 0) {
@@ -580,7 +549,7 @@ class SocialShareButton {
         SocialShareButton.openModalCount++;
         this.ownsBodyLock = true; // Mark that this instance owns a lock
       }
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     }
 
     // Clear any pending animations (both open and close to prevent race conditions)
@@ -597,7 +566,7 @@ class SocialShareButton {
     this.openTimeout = setTimeout(() => {
       if (this.modal) {
         // Safety check in case destroy() was called
-        this.modal.classList.add('active');
+        this.modal.classList.add("active");
       }
       this.openTimeout = null;
     }, 10);
@@ -606,8 +575,8 @@ class SocialShareButton {
   closeModal() {
     if (!this.modal) return; // Safety check
 
-    this.modal.classList.remove('active');
-    this._emit('social_share_popup_close', 'popup_close');
+    this.modal.classList.remove("active");
+    this._emit("social_share_popup_close", "popup_close");
 
     // Clear any pending animations (both open and close to prevent race conditions)
     if (this.openTimeout) {
@@ -623,10 +592,10 @@ class SocialShareButton {
       if (this.modal) {
         // Safety check in case destroy() was called
         this.isModalOpen = false;
-        this.modal.style.display = 'none';
+        this.modal.style.display = "none";
 
         // Shared body overflow management: only decrement if this instance owns the lock
-        if (this.ownsBodyLock && typeof document !== 'undefined' && document.body) {
+        if (this.ownsBodyLock && typeof document !== "undefined" && document.body) {
           // Decrement counter (guard against negative)
           if (SocialShareButton.openModalCount > 0) {
             SocialShareButton.openModalCount--;
@@ -635,7 +604,7 @@ class SocialShareButton {
 
           // Restore original overflow only when all modals are closed
           if (SocialShareButton.openModalCount === 0) {
-            document.body.style.overflow = SocialShareButton.originalBodyOverflow || '';
+            document.body.style.overflow = SocialShareButton.originalBodyOverflow || "";
             SocialShareButton.originalBodyOverflow = null;
           }
         }
@@ -648,21 +617,29 @@ class SocialShareButton {
     const shareUrl = this.getShareURL(platform);
 
     if (shareUrl) {
-      this._emit('social_share_click', 'share', { platform });
+      this._emit("social_share_click", "share", { platform });
 
-      if (platform === 'email') {
+      // Platform-specific sharing trigger logic:
+      // Discord does not provide a native web-share intent; therefore, the most reliable
+      // fallback is to copy the share URL to the clipboard and then navigate the user
+      // towards Discord's direct messaging area.
+      if (platform === "discord") {
+        this.copyLink();
+        window.open(shareUrl, "_blank", "noopener,noreferrer");
+      } else if (platform === "email") {
         window.location.href = shareUrl;
       } else {
-        window.open(shareUrl, '_blank', 'noopener,noreferrer,width=600,height=600');
+        // Default behavior: open platform's share intent in a specialized popup window
+        window.open(shareUrl, "_blank", "noopener,noreferrer,width=600,height=600");
       }
 
-      this._emit('social_share_success', 'share', { platform });
+      this._emit("social_share_success", "share", { platform });
 
       if (this.options.onShare) {
         this.options.onShare(platform, this.options.url);
       }
     } else {
-      this._emit('social_share_error', 'error', {
+      this._emit("social_share_error", "error", {
         platform,
         errorMessage: `No share URL configured for platform: ${platform}`,
       });
@@ -670,8 +647,8 @@ class SocialShareButton {
   }
 
   copyLink() {
-    const input = this.modal.querySelector('.social-share-link-input input');
-    const copyBtn = this.modal.querySelector('.social-share-copy-btn');
+    const input = this.modal.querySelector(".social-share-link-input input");
+    const copyBtn = this.modal.querySelector(".social-share-copy-btn");
 
     // Check if clipboard API is available
     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -681,9 +658,9 @@ class SocialShareButton {
           // Guard against async callback after destroy
           if (this.isDestroyed) return;
 
-          copyBtn.textContent = 'Copied!';
-          copyBtn.classList.add('copied');
-          this._emit('social_share_copy', 'copy');
+          copyBtn.textContent = this.options.labels.copied;
+          copyBtn.classList.add("copied");
+          this._emit("social_share_copy", "copy");
 
           if (this.options.onCopy) {
             this.options.onCopy(this.options.url);
@@ -697,8 +674,8 @@ class SocialShareButton {
           // Track feedback timeout to prevent callback after destroy
           this.feedbackTimeout = setTimeout(() => {
             if (this.isDestroyed || !copyBtn) return; // Safety check
-            copyBtn.textContent = 'Copy';
-            copyBtn.classList.remove('copied');
+            copyBtn.textContent = this.options.labels.copy;
+            copyBtn.classList.remove("copied");
             this.feedbackTimeout = null;
           }, 2000);
         })
@@ -719,11 +696,11 @@ class SocialShareButton {
     try {
       input.select();
       input.setSelectionRange(0, 99999); // For mobile devices
-      document.execCommand('copy');
+      document.execCommand("copy");
 
-      copyBtn.textContent = 'Copied!';
-      copyBtn.classList.add('copied');
-      this._emit('social_share_copy', 'copy');
+      copyBtn.textContent = this.options.labels.copied;
+      copyBtn.classList.add("copied");
+      this._emit("social_share_copy", "copy");
 
       if (this.options.onCopy) {
         this.options.onCopy(this.options.url);
@@ -737,12 +714,12 @@ class SocialShareButton {
       // Track feedback timeout to prevent callback after destroy
       this.feedbackTimeout = setTimeout(() => {
         if (this.isDestroyed || !copyBtn) return; // Safety check
-        copyBtn.textContent = 'Copy';
-        copyBtn.classList.remove('copied');
+        copyBtn.textContent = this.options.labels.copy;
+        copyBtn.classList.remove("copied");
         this.feedbackTimeout = null;
       }, 2000);
     } catch (_err) {
-      copyBtn.textContent = 'Failed';
+      copyBtn.textContent = this.options.labels.copyFailed;
 
       // Clear any existing feedback timeout
       if (this.feedbackTimeout) {
@@ -752,7 +729,7 @@ class SocialShareButton {
       // Track feedback timeout to prevent callback after destroy
       this.feedbackTimeout = setTimeout(() => {
         if (this.isDestroyed || !copyBtn) return; // Safety check
-        copyBtn.textContent = 'Copy';
+        copyBtn.textContent = this.options.labels.copy;
         this.feedbackTimeout = null;
       }, 2000);
     }
@@ -760,8 +737,8 @@ class SocialShareButton {
 
   destroy() {
     if (this.handleKeydown) {
-      if (typeof document !== 'undefined') {
-        document.removeEventListener('keydown', this.handleKeydown);
+      if (typeof document !== "undefined") {
+        document.removeEventListener("keydown", this.handleKeydown);
       }
       this.handleKeydown = null;
     }
@@ -787,11 +764,11 @@ class SocialShareButton {
 
     // Remove custom color handlers
     if (this.button && this.customColorMouseEnterHandler) {
-      this.button.removeEventListener('mouseenter', this.customColorMouseEnterHandler);
+      this.button.removeEventListener("mouseenter", this.customColorMouseEnterHandler);
       this.customColorMouseEnterHandler = null;
     }
     if (this.button && this.customColorMouseLeaveHandler) {
-      this.button.removeEventListener('mouseleave', this.customColorMouseLeaveHandler);
+      this.button.removeEventListener("mouseleave", this.customColorMouseLeaveHandler);
       this.customColorMouseLeaveHandler = null;
     }
 
@@ -804,7 +781,7 @@ class SocialShareButton {
     }
 
     // Shared body overflow management: only decrement if this instance owns the lock
-    if (this.ownsBodyLock && typeof document !== 'undefined' && document.body) {
+    if (this.ownsBodyLock && typeof document !== "undefined" && document.body) {
       // Decrement counter (guard against negative)
       if (SocialShareButton.openModalCount > 0) {
         SocialShareButton.openModalCount--;
@@ -813,9 +790,19 @@ class SocialShareButton {
 
       // Restore original overflow only when all modals are closed
       if (SocialShareButton.openModalCount === 0) {
-        document.body.style.overflow = SocialShareButton.originalBodyOverflow || '';
+        document.body.style.overflow = SocialShareButton.originalBodyOverflow || "";
         SocialShareButton.originalBodyOverflow = null;
       }
+    }
+
+    // Remove from active instances registry
+    if (typeof window !== "undefined" && SocialShareButton.instances) {
+      SocialShareButton.instances.delete(this);
+    }
+
+    const containerEl = this._getContainer();
+    if (containerEl && containerEl._socialShareButtonInstance === this) {
+      delete containerEl._socialShareButtonInstance;
     }
 
     // Clear references (makes destroy idempotent)
@@ -825,49 +812,76 @@ class SocialShareButton {
     this.eventsAttached = false; // Reset re-entrancy guard
   }
 
-  updateOptions(options) {
-    // Re-run content detection if autoDetect is enabled and title/description not provided.
-    // Compute effectiveAutoDetect from the *incoming* options first so that
-    // toggling autoDetect on/off in the same call takes effect immediately.
-    const effectiveAutoDetect = Object.prototype.hasOwnProperty.call(options, 'autoDetect')
+  updateOptions(options, isInternalRefresh = false) {
+    const effectiveAutoDetect = Object.prototype.hasOwnProperty.call(options, "autoDetect")
       ? options.autoDetect
       : this.options.autoDetect;
-    if (effectiveAutoDetect && typeof document !== 'undefined') {
-      // Base detection need on the *incoming* options object (not on previously
-      // resolved values) so route navigations without explicit props trigger
-      // fresh detection even after initial auto-detection populated this.options.
-      const needsTitle = !Object.prototype.hasOwnProperty.call(options, 'title');
-      const needsDesc = !Object.prototype.hasOwnProperty.call(options, 'description');
 
-      if (needsTitle || needsDesc) {
+    const hasTitleKey = Object.prototype.hasOwnProperty.call(options, "title");
+    const hasDescriptionKey = Object.prototype.hasOwnProperty.call(options, "description");
+    const titleSupplied = hasTitleKey && options.title != null;
+    const descriptionSupplied = hasDescriptionKey && options.description != null;
+
+    // External updates recompute dynamic flags; internal SPA refreshes preserve them.
+    if (!isInternalRefresh) {
+      if (options.url !== undefined) this._dynamicUrl = !options.url;
+      if (hasTitleKey) this._dynamicTitle = !titleSupplied;
+      if (hasDescriptionKey) this._dynamicDescription = !descriptionSupplied;
+    }
+
+    const needsTitle = this._dynamicTitle && !titleSupplied;
+    const needsDescription = this._dynamicDescription && !descriptionSupplied;
+    if (needsTitle || needsDescription) {
+      if (effectiveAutoDetect && typeof document !== "undefined") {
         try {
-          const detected = _ContentDetector.extract(document, true); // bustCache
-          if (needsTitle && detected.title) {
-            options.title = detected.title;
-          }
-          if (needsDesc && detected.excerpt) {
-            options.description = detected.excerpt;
-          }
-        } catch (_err) {
-          // Never let detection errors break updateOptions
-          this._debugWarn('Content detection failed in updateOptions', _err);
+          const detected = _ContentDetector.extract(document, true);
+          if (needsTitle && detected.title) options.title = detected.title;
+          if (needsDescription && detected.excerpt) options.description = detected.excerpt;
+        } catch (error) {
+          this._debugWarn("Content detection failed in updateOptions", error);
         }
+      } else if (typeof document !== "undefined") {
+        if (needsTitle) options.title = document.title;
+        if (needsDescription) options.description = "";
       }
     }
 
-    this.options = { ...this.options, ...options };
+    const labels = options.labels
+      ? { ...this.options.labels, ...options.labels }
+      : this.options.labels;
+    this.options = { ...this.options, ...options, labels };
+    if (options.labels) this._applyLabels();
 
     // Update URL in modal if it exists
     if (this.modal) {
-      const input = this.modal.querySelector('.social-share-link-input input');
+      const input = this.modal.querySelector(".social-share-link-input input");
       if (input) {
         input.value = this.options.url;
       }
     }
 
     // Reapply custom colors if color option changed
-    if ('buttonColor' in options || 'buttonHoverColor' in options) {
+    if ("buttonColor" in options || "buttonHoverColor" in options) {
       this.applyCustomColors();
+    }
+  }
+
+  /** Puts the (possibly translated) labels on the button and modal. Text is never parsed as HTML. */
+  _applyLabels() {
+    const { labels } = this.options;
+    if (this.button) this.button.setAttribute("aria-label", labels.share);
+    if (!this.modal) return;
+    this.modal.querySelector(".social-share-modal-header h3").textContent = labels.share;
+    this.modal.querySelector(".social-share-modal-close").setAttribute("aria-label", labels.close);
+    this.modal.querySelector(".social-share-copy-btn").textContent = labels.copy;
+    this.modal
+      .querySelector(".social-share-link-input input")
+      .setAttribute("aria-label", labels.urlLabel);
+    const qrSpan = this.modal.querySelector(
+      '.social-share-platform-btn[data-platform="qrcode"] span'
+    );
+    if (qrSpan) {
+      qrSpan.textContent = labels.qrcode || "QR Code";
     }
   }
 
@@ -875,38 +889,38 @@ class SocialShareButton {
     if (!this.button) return;
 
     // Remove legacy global style tag to prevent cross-instance color bleed.
-    const styleTag = document.getElementById('social-share-custom-colors');
+    const styleTag = document.getElementById("social-share-custom-colors");
     if (styleTag && styleTag.parentNode) {
       styleTag.parentNode.removeChild(styleTag);
     }
 
     if (this.customColorMouseEnterHandler) {
-      this.button.removeEventListener('mouseenter', this.customColorMouseEnterHandler);
+      this.button.removeEventListener("mouseenter", this.customColorMouseEnterHandler);
       this.customColorMouseEnterHandler = null;
     }
     if (this.customColorMouseLeaveHandler) {
-      this.button.removeEventListener('mouseleave', this.customColorMouseLeaveHandler);
+      this.button.removeEventListener("mouseleave", this.customColorMouseLeaveHandler);
       this.customColorMouseLeaveHandler = null;
     }
 
-    this.button.style.removeProperty('background-color');
-    this.button.style.removeProperty('background-image');
-    this.button.style.removeProperty('border-color');
+    this.button.style.removeProperty("background-color");
+    this.button.style.removeProperty("background-image");
+    this.button.style.removeProperty("border-color");
 
-    const baseColor = this.options.buttonColor || '';
+    const baseColor = this.options.buttonColor || "";
     const hoverColor = this.options.buttonHoverColor || baseColor;
 
     if (!baseColor && !hoverColor) return;
 
     if (baseColor) {
-      this.button.style.backgroundImage = 'none';
+      this.button.style.backgroundImage = "none";
       this.button.style.backgroundColor = baseColor;
       this.button.style.borderColor = baseColor;
     }
 
     this.customColorMouseEnterHandler = () => {
       if (hoverColor) {
-        this.button.style.backgroundImage = 'none';
+        this.button.style.backgroundImage = "none";
         this.button.style.backgroundColor = hoverColor;
         this.button.style.borderColor = hoverColor;
       }
@@ -914,20 +928,20 @@ class SocialShareButton {
 
     this.customColorMouseLeaveHandler = () => {
       if (baseColor) {
-        this.button.style.backgroundImage = 'none';
+        this.button.style.backgroundImage = "none";
         this.button.style.backgroundColor = baseColor;
         this.button.style.borderColor = baseColor;
       } else {
-        this.button.style.removeProperty('background-color');
-        this.button.style.removeProperty('background-image');
-        this.button.style.removeProperty('border-color');
+        this.button.style.removeProperty("background-color");
+        this.button.style.removeProperty("background-image");
+        this.button.style.removeProperty("border-color");
       }
     };
 
     // Note: Custom color handlers are managed separately (not in listeners)
     // because they need to be removed/reapplied when colors change
-    this.button.addEventListener('mouseenter', this.customColorMouseEnterHandler);
-    this.button.addEventListener('mouseleave', this.customColorMouseLeaveHandler);
+    this.button.addEventListener("mouseenter", this.customColorMouseEnterHandler);
+    this.button.addEventListener("mouseleave", this.customColorMouseLeaveHandler);
   }
 
   // ---------------------------------------------------------------------------
@@ -947,16 +961,28 @@ class SocialShareButton {
   //                         systems to all receive the same event simultaneously.
   // ---------------------------------------------------------------------------
 
-  /**
-   * Returns the host container element, or null when no container is configured.
-   * @returns {Element|null}
-   */
+  // Resolves a raw container value (string or Element) to a DOM Element, or null if absent/SSR.
+  static _resolveContainer(raw) {
+    if (!raw) return null;
+    if (typeof document === "undefined") return null;
+    return typeof raw === "string" ? document.querySelector(raw) : raw;
+  }
+
+  // Returns the cached host container element, or null.
   _getContainer() {
-    if (!this.options.container) return null;
-    if (typeof document === 'undefined') return null;
-    return typeof this.options.container === 'string'
-      ? document.querySelector(this.options.container)
-      : this.options.container;
+    return this._containerEl || null;
+  }
+
+  /**
+   * Logs analytics warnings only when debug mode is enabled.
+   * @param {string} message - Description of the failed analytics path.
+   * @param {Error} err - The caught error instance.
+   */
+  _debugWarn(message, err) {
+    // _debugWarn: emit analytics warnings only in debug mode for visibility.
+    if (!this.options.debug) return;
+    // eslint-disable-next-line no-console
+    console.warn("[SocialShareButton Analytics]", message, err);
   }
 
   /**
@@ -980,25 +1006,12 @@ class SocialShareButton {
    * @param {string} interactionType - broad interaction category
    * @param {Object} [extra]         - optional extra fields (platform, errorMessage)
    */
-
-  /**
-   * Debug helper - logs warnings when debug option is enabled.
-   * @param {string} message
-   * @param {Error} err
-   */
-  _debugWarn(message, err) {
-    if (this.options.debug) {
-      // eslint-disable-next-line no-console
-      console.warn('[SocialShareButton]', message, err);
-    }
-  }
-
   _emit(eventName, interactionType, extra = {}) {
     if (this.options.analytics === false) return;
 
     const payload = {
       version: ANALYTICS_SCHEMA_VERSION,
-      source: 'social-share-button',
+      source: "social-share-button",
       eventName,
       interactionType,
       platform: extra.platform || null,
@@ -1015,14 +1028,14 @@ class SocialShareButton {
     // Optional console output for development / debugging
     if (this.options.debug) {
       // eslint-disable-next-line no-console
-      console.log('[SocialShareButton Analytics]', payload);
+      console.log("[SocialShareButton Analytics]", payload);
     }
 
     // Path 1 — DOM CustomEvent (framework-agnostic, CDN-friendly)
     // Bubbles from the container element so delegated listeners work naturally.
-    if (typeof window !== 'undefined' && typeof CustomEvent !== 'undefined') {
+    if (typeof window !== "undefined" && typeof CustomEvent !== "undefined") {
       try {
-        const domEvent = new CustomEvent('social-share', {
+        const domEvent = new CustomEvent("social-share", {
           bubbles: true,
           cancelable: false,
           composed: true, // crosses shadow-DOM boundaries; safe to set in all envs
@@ -1030,60 +1043,238 @@ class SocialShareButton {
         });
         const el = this._getContainer();
         (el || document).dispatchEvent(domEvent);
-      } catch (_err) {
-        // Swallow CustomEvent dispatch errors (e.g. in sandboxed environments)
-        this._debugWarn('CustomEvent dispatch failed', _err);
+      } catch (err) {
+        this._debugWarn("DOM event dispatch failed", err);
       }
     }
 
     // Path 2 — onAnalytics callback (direct, single-consumer hook)
-    if (typeof this.options.onAnalytics === 'function') {
+    if (typeof this.options.onAnalytics === "function") {
       try {
         this.options.onAnalytics(payload);
-      } catch (_err) {
-        // Swallow errors thrown by consumer callbacks
-        this._debugWarn('onAnalytics callback threw', _err);
+      } catch (err) {
+        this._debugWarn("onAnalytics callback failed", err);
       }
     }
 
     // Path 3 — plugin / adapter registry (supports multiple simultaneous consumers)
     if (Array.isArray(this.options.analyticsPlugins)) {
       for (const plugin of this.options.analyticsPlugins) {
-        if (plugin && typeof plugin.track === 'function') {
+        if (plugin && typeof plugin.track === "function") {
           try {
             plugin.track(payload);
-          } catch (_err) {
-            // Swallow errors thrown by individual plugin adapters
-            this._debugWarn('Analytics plugin failed', _err);
+          } catch (err) {
+            this._debugWarn("plugin.track() failed", err);
           }
         }
       }
     }
+  }
+
+  static updateCurrentPage() {
+    if (typeof window === "undefined" || !SocialShareButton.instances) return;
+    SocialShareButton.instances.forEach((instance) => {
+      // Only refresh fields that were auto-defaulted from the page;
+      // caller-supplied url/title values must remain unchanged.
+      const updates = {};
+      if (instance._dynamicUrl) {
+        updates.url = window.location.href;
+      }
+      if (instance._dynamicTitle && !instance.options.autoDetect) {
+        updates.title = document.title;
+      }
+      if (Object.keys(updates).length > 0) {
+        instance.updateOptions(updates, true);
+      }
+    });
   }
 }
 
 // Static properties for shared body overflow management across all instances
 SocialShareButton.openModalCount = 0;
 SocialShareButton.originalBodyOverflow = null;
+SocialShareButton.instances = new Set();
 
-/**
- * Clears the internal content-detection cache.
- *
- * Call this after a client-side navigation (SPA route change) so the next
- * SocialShareButton instance picks up freshly detected content.
- *
- * @example
- * // React Router / Next.js
- * useEffect(() => {
- *   SocialShareButton.clearContentCache();
- * }, [pathname]);
- */
 SocialShareButton.clearContentCache = function (url) {
   _ContentDetector.clearCache(url);
 };
 
-if (typeof window !== 'undefined') {
-  window.SocialShareButton = SocialShareButton;
+(function () {
+  // Helper for dynamic route changes in SPAs
+  function handleRouteChange() {
+    setTimeout(() => {
+      SocialShareButton.updateCurrentPage();
+    }, 50);
+  }
+
+  // Patch pushState and replaceState to track SPA routing dynamically
+  let isHistoryPatched = false;
+  function patchHistory() {
+    if (typeof window === "undefined" || !window.history || isHistoryPatched) return;
+    isHistoryPatched = true;
+
+    const wrap = (type) => {
+      const orig = window.history[type];
+      return function (...args) {
+        const result = orig.apply(this, args);
+        try {
+          const event = new CustomEvent("pushstate-or-replacestate", { detail: { type } });
+          window.dispatchEvent(event);
+        } catch (_e) {
+          // Ignore error
+        }
+        return result;
+      };
+    };
+
+    window.history.pushState = wrap("pushState");
+    window.history.replaceState = wrap("replaceState");
+  }
+
+  // Auto-initialize elements with `data-social-share` attribute
+  function autoInitElement(element) {
+    if (element._socialShareButtonInstance) return;
+
+    const options = { container: element };
+    const attrs = {
+      url: "data-url",
+      title: "data-title",
+      description: "data-description",
+      via: "data-via",
+      theme: "data-theme",
+      buttonText: "data-button-text",
+      customClass: "data-custom-class",
+      buttonColor: "data-button-color",
+      buttonHoverColor: "data-button-hover-color",
+      buttonStyle: "data-button-style",
+      modalPosition: "data-modal-position",
+    };
+
+    for (const [key, attr] of Object.entries(attrs)) {
+      const val = element.getAttribute(attr);
+      if (val !== null) {
+        options[key] = val;
+      }
+    }
+
+    if (element.hasAttribute("data-hashtags")) {
+      options.hashtags = element
+        .getAttribute("data-hashtags")
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
+    }
+
+    if (element.hasAttribute("data-platforms")) {
+      options.platforms = element
+        .getAttribute("data-platforms")
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
+    }
+
+    if (element.hasAttribute("data-show-button")) {
+      options.showButton = element.getAttribute("data-show-button") !== "false";
+    }
+
+    new SocialShareButton(options);
+  }
+
+  function autoInit(root = document) {
+    if (typeof document === "undefined") return;
+
+    // Fast short-circuit: skip nodes appended by the library itself to avoid redundant scans
+    if (
+      root !== document &&
+      root.classList &&
+      (root.classList.contains("social-share-btn") ||
+        root.classList.contains("social-share-modal-overlay"))
+    ) {
+      return;
+    }
+
+    if (root !== document && root.hasAttribute && root.hasAttribute("data-social-share")) {
+      autoInitElement(root);
+    }
+    const elements = root.querySelectorAll ? root.querySelectorAll("[data-social-share]") : [];
+    elements.forEach((element) => autoInitElement(element));
+  }
+
+  // Setup MutationObserver to watch for added/removed sharing components
+  let globalObserver = null;
+  let initTimeout = null;
+  function setupMutationObserver() {
+    if (typeof document === "undefined" || globalObserver) return;
+    globalObserver = new MutationObserver((mutations) => {
+      let needsInit = false;
+
+      mutations.forEach((mutation) => {
+        // Auto-cleanup on removal
+        // Fast-path: Skip costly removal traversal if we have no active tracked instances
+        if (
+          mutation.removedNodes.length > 0 &&
+          SocialShareButton.instances &&
+          SocialShareButton.instances.size > 0
+        ) {
+          mutation.removedNodes.forEach((node) => {
+            if (node.nodeType !== 1) return;
+            SocialShareButton.instances.forEach((instance) => {
+              const containerEl = instance._getContainer();
+              if (containerEl && (node === containerEl || node.contains(containerEl))) {
+                instance.destroy();
+              }
+            });
+          });
+        }
+
+        // Track if there are any element additions to trigger a batched scan
+        if (!needsInit && mutation.addedNodes.length > 0) {
+          for (let i = 0; i < mutation.addedNodes.length; i++) {
+            if (mutation.addedNodes[i].nodeType === 1) {
+              needsInit = true;
+              break;
+            }
+          }
+        }
+      });
+
+      // Batch auto-init to avoid costly scans on every single added node.
+      // If a timeout is already pending, we let it run (throttle vs debounce)
+      // so continuous DOM mutations don't indefinitely delay initialization.
+      if (needsInit && !initTimeout) {
+        initTimeout = setTimeout(() => {
+          initTimeout = null;
+          autoInit(document); // Single global scan is highly optimized natively
+        }, 10);
+      }
+    });
+    globalObserver.observe(document.body, { childList: true, subtree: true });
+  }
+
+  // Initialize on browser load
+  if (typeof window !== "undefined" && typeof document !== "undefined") {
+    patchHistory();
+    window.addEventListener("popstate", handleRouteChange);
+    window.addEventListener("hashchange", handleRouteChange);
+    window.addEventListener("pushstate-or-replacestate", handleRouteChange);
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", () => {
+        autoInit();
+        setupMutationObserver();
+      });
+    } else {
+      autoInit();
+      setupMutationObserver();
+    }
+  }
+})();
+
+// Export for different module systems
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = SocialShareButton;
 }
 
-export default SocialShareButton;
+if (typeof window !== "undefined") {
+  window.SocialShareButton = SocialShareButton;
+}

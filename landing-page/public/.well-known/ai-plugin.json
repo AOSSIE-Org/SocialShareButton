@@ -1,0 +1,18 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "Social Share Button",
+  "name_for_model": "social_share_button",
+  "description_for_human": "Lightweight, zero-dependency social share button library for modern websites.",
+  "description_for_model": "Documentation site for Social Share Button, an open-source (GPL-3.0) vanilla JavaScript library by AOSSIE that adds a share button and modal for WhatsApp, Facebook, X, LinkedIn, Telegram, Reddit, Email, Pinterest and Discord. Read /llms.txt for installation steps, options and framework guides.",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "https://social-share-button.aossie.org/openapi.yaml",
+    "is_user_authenticated": false
+  },
+  "logo_url": "https://social-share-button.aossie.org/brand/icons/social-share-button-mark.svg",
+  "contact_email": "admin@aossie.org",
+  "legal_info_url": "https://github.com/AOSSIE-Org/SocialShareButton/blob/main/LICENSE"
+}

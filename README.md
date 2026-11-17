@@ -1,6 +1,5 @@
-# <!-- Don't delete it -->
-
-<div name="readme-top"></div>
+<!-- Don't delete it -->
+<div id="readme-top"></div>
 
 > ⚠️ **IMPORTANT**
 >
@@ -12,90 +11,194 @@
 > **Maintainer:** @kpj2006
 
 <!-- Organization Logo -->
-<div align="center" style="display: flex; align-items: center; justify-content: center; gap: 16px;">
-  <img alt="Stability Nexus" src="public/aossie_logo.svg" width="175">
-  <!-- <img src="public/todo-project-logo.svg" width="175" /> -->
-</div>
-
-&nbsp;
+<p align="center">
+  <img src="public/aossie_logo.svg" height="130" alt="AOSSIE logo" />
+  &nbsp;&nbsp;
+  <img src="public/socialshare.png" height="150" alt="Social Share Button logo" />
+</p>
 
 <!-- Organization Name -->
-<div align="center">
+<p align="center">
+  <a href="https://github.com/AOSSIE-Org/SocialShareButton">
+    <img src="https://img.shields.io/badge/AOSSIE-Social_Share_Button-228B22?style=for-the-badge&labelColor=FFC517" alt="AOSSIE Social Share Button Badge" />
+  </a>
+</p>
 
-[![Static Badge](https://img.shields.io/badge/AOSSIE-Social_Share_Button-228B22?style=for-the-badge&labelColor=FFC517)](https://github.com/AOSSIE-Org/SocialShareButton)
-
-<!-- Correct deployed url to be added -->
-
-</div>
+<p align="center">
+  <img src="./badges/lighthouse-performance.svg" alt="Lighthouse Performance" />
+  <img src="./badges/lighthouse-accessibility.svg" alt="Lighthouse Accessibility" />
+  <img src="./badges/lighthouse-best-practices.svg" alt="Lighthouse Best Practices" />
+  <img src="./badges/lighthouse-seo.svg" alt="Lighthouse SEO" />
+  <img src="./badges/lighthouse-pwa.svg" alt="Lighthouse PWA" />
+</p>
 
 <!-- Organization/Project Social Handles -->
 <p align="center">
-<!-- Telegram -->
-<a href="https://t.me/StabilityNexus">
-<img src="https://img.shields.io/badge/Telegram-black?style=flat&logo=telegram&logoColor=white&logoSize=auto&color=24A1DE" alt="Telegram Badge"/></a>
-&nbsp;&nbsp;
-<!-- X (formerly Twitter) -->
-<a href="https://x.com/aossie_org">
-<img src="https://img.shields.io/twitter/follow/aossie_org" alt="X (formerly Twitter) Badge"/></a>
-&nbsp;&nbsp;
-<!-- Discord -->
-<a href="https://discord.gg/hjUhu33uAn">
-<img src="https://img.shields.io/discord/1022871757289422898?style=flat&logo=discord&logoColor=white&logoSize=auto&label=Discord&labelColor=5865F2&color=57F287" alt="Discord Badge"/></a>
-&nbsp;&nbsp;
-<!-- Medium -->
-<a href="https://news.stability.nexus/">
-  <img src="https://img.shields.io/badge/Medium-black?style=flat&logo=medium&logoColor=black&logoSize=auto&color=white" alt="Medium Badge"></a>
-&nbsp;&nbsp;
-<!-- LinkedIn -->
-<a href="https://www.linkedin.com/company/aossie/">
-  <img src="https://img.shields.io/badge/LinkedIn-black?style=flat&logo=LinkedIn&logoColor=white&logoSize=auto&color=0A66C2" alt="LinkedIn Badge"></a>
-&nbsp;&nbsp;
-<!-- Youtube -->
-<a href="https://www.youtube.com/@StabilityNexus">
-  <img src="https://img.shields.io/youtube/channel/subscribers/UCZOG4YhFQdlGaLugr_e5BKw?style=flat&logo=youtube&logoColor=white&logoSize=auto&labelColor=FF0000&color=FF0000" alt="Youtube Badge"></a>
+  <a href="https://t.me/StabilityNexus">
+    <img src="https://img.shields.io/badge/Telegram-black?style=flat&logo=telegram&logoColor=white&logoSize=auto&color=24A1DE" alt="Telegram Badge"/>
+  </a>
+  &nbsp;
+  <a href="https://x.com/aossie_org">
+    <img src="https://img.shields.io/twitter/follow/aossie_org" alt="X (formerly Twitter) Badge"/>
+  </a>
+  &nbsp;
+  <a href="https://discord.gg/hjUhu33uAn">
+    <img src="https://img.shields.io/discord/1022871757289422898?style=flat&logo=discord&logoColor=white&logoSize=auto&label=Discord&labelColor=5865F2&color=57F287" alt="Discord Badge"/>
+  </a>
+  &nbsp;
+  <a href="https://news.stability.nexus/">
+    <img src="https://img.shields.io/badge/Medium-black?style=flat&logo=medium&logoColor=black&logoSize=auto&color=white" alt="Medium Badge"/>
+  </a>
+  &nbsp;
+  <a href="https://www.linkedin.com/company/aossie/">
+    <img src="https://img.shields.io/badge/LinkedIn-black?style=flat&logo=LinkedIn&logoColor=white&logoSize=auto&color=0A66C2" alt="LinkedIn Badge"/>
+  </a>
+  &nbsp;
+  <a href="https://www.youtube.com/@StabilityNexus">
+    <img src="https://img.shields.io/youtube/channel/subscribers/UCZOG4YhFQdlGaLugr_e5BKw?style=flat&logo=youtube&logoColor=white&logoSize=auto&labelColor=FF0000&color=FF0000" alt="Youtube Badge"/>
+  </a>
 </p>
 
 ---
 
 <div align="center">
-<h1>SocialShareButton</h1>
+<h1>Social Share Button</h1>
 </div>
 
-Lightweight social sharing component for web applications. Zero dependencies, framework-agnostic.
+Lightweight social sharing component for web applications. **Zero dependencies, framework-agnostic.** One script and one stylesheet add a share button and a clean share modal to any website.
 
-[![npm version](https://img.shields.io/npm/v/social-share-button-aossie.svg)](https://www.npmjs.com/package/social-share-button-aossie)
+🌐 **Website & live demo:** [social-share-button.aossie.org](https://social-share-button.aossie.org)
+
+[![npm version](https://img.shields.io/npm/v/@aossie-org/social-share-button.svg)](https://www.npmjs.com/package/@aossie-org/social-share-button)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 
 ---
 
-## Features
+## 🚀 Project's Features
 
-- 🌐 Multiple platforms: WhatsApp, Facebook, X, LinkedIn, Telegram, Reddit, Email
-- 🎯 Zero dependencies - pure vanilla JavaScript
-- ⚛️ Framework support: React, Next.js, Vue, Angular, or plain HTML
-- 🔄 Auto-detects current URL and page title
-- 🧠 Intelligent content detection — automatically extracts title & description from page metadata and semantic HTML
-- 📱 Fully responsive and mobile-ready
-- 🎨 Customizable themes (dark/light)
-- ⚡ Lightweight (< 10KB gzipped)
+- 🌐 **Multiple platforms:** WhatsApp, Facebook, X, LinkedIn, Telegram, Reddit, Email, Pinterest, Discord
+- 📷 QR Code sharing (optional — requires the `social-share-button-qr.js` extension, which loads `qrcode-generator` at runtime)
+- 🎯 **Zero dependencies:** pure vanilla JavaScript
+- ⚛️ **Framework support:** React, Preact, Next.js, Qwik, Vue, Angular, or plain HTML
+- 🔄 **SPA-aware:** auto-detects the current URL and page title, and follows client-side route changes
+- 📱 **Responsive:** fully responsive and mobile-ready
+- 🎨 **Customizable:** dark/light themes, four button styles, custom colors and classes
+- 📊 **Privacy-first analytics:** emits events only — adapters for Google Analytics 4, Mixpanel, Segment, Plausible and PostHog
+- ⚡ **Lightweight:** ≈15 KB gzipped for the JS + CSS (unminified; the website computes the exact figure at build time)
 
 ---
 
-## Installation
+## 💻 Tech Stack
+
+| Part                      | Stack                                                                                                                                                                                                          |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Library (`src/`)          | Vanilla JavaScript, plain CSS, no runtime dependencies. Delivered via [jsDelivr](https://www.jsdelivr.com/) and [npm](https://www.npmjs.com/package/@aossie-org/social-share-button). Formatted with Prettier. |
+| Framework wrappers        | React (`social-share-button-react.jsx`), Preact (`social-share-button-preact.jsx`), Qwik (`social-share-button-qwik.tsx`)                                                                                      |
+| Website (`landing-page/`) | Next.js 16 (App Router, static export), React 19, Tailwind CSS v4, TypeScript, `next-intl` (i18n/l10n), `next-themes`, Lenis, `sugar-high`                                                                     |
+| CI/CD                     | GitHub Actions — lint & build, GitHub Pages deployment, Lighthouse/SEO audit, dependency review, CodeRabbit AI review                                                                                          |
+
+---
+
+## 📋 Project Maturity Checklist
+
+[![CI](https://github.com/AOSSIE-Org/SocialShareButton/actions/workflows/ci.yml/badge.svg)](https://github.com/AOSSIE-Org/SocialShareButton/actions/workflows/ci.yml) [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/AOSSIE-Org/SocialShareButton/badge)](https://scorecard.dev/viewer/?uri=github.com/AOSSIE-Org/SocialShareButton)
+
+Status of the GSoC / AOSSIE project checklist:
+
+- [x] The project has a logo (`public/socialshare.png`, `landing-page/public/brand/icons/social-share-button-mark.svg`).
+- [x] The project has a favicon (`landing-page/public/brand/icons/favicon.ico`).
+- [x] The library has unit and property tests (Vitest + fast-check) with a 90% coverage gate in CI and before every npm release (`npm run test:coverage`).
+- [x] OpenSSF Scorecard analysis (`.github/workflows/scorecard.yml`) and a security policy (`SECURITY.md`).
+- [x] The web frontend:
+  - [x] Has proper title and metadata.
+  - [x] Has proper open graph metadata, to ensure that it is shown well when shared in social media.
+  - [x] Has a footer and header with AOSSIE logos and social handles.
+  - [x] Uses React Server Components by default, introducing Client Components (`"use client"`) only when interactivity or client hooks are required.
+  - [x] Is deployed to GitHub Pages via a GitHub Workflow (`.github/workflows/nextjs.yml`).
+  - [x] Has automated CI build and lint validation (`.github/workflows/ci.yml`).
+  - [x] Has a `sitemap.xml` and a `robots.txt` that blocks `/pr-preview/`.
+  - [x] Has CodeRabbit automated AI code review (`.coderabbit.yaml`).
+  - [x] Has open-source legal compliance (`DCO.md`, `COPYRIGHT.md`, `LICENSE`).
+  - [x] Is available in more than one language (English and Hindi).
+  - [ ] Features real testimonials from adopters.
+
+See also the [OpenSSF-based best practices checklist](BestPracticesChecklist.md).
+
+---
+
+## 🚀 Website's Features
+
+The website in [`landing-page/`](landing-page/) is built from the [AOSSIE Next.js webpage template](https://github.com/AOSSIE-Org/Template-Repo-NextJS):
+
+- **Dogfooded:** the “Share” button in the navigation and the “Click to Try Demo” live preview run the real library from `src/`, copied in at build time.
+- **Copy-paste installation guide:** pick a framework and get the exact snippets, with a copy button on every code block and beginner-friendly tooltips.
+- **Next.js 16 & React 19:** Server Components, static export, async routing.
+- **Tailwind CSS v4:** semantic design tokens with a design language inspired by [tailwindcss.com](https://tailwindcss.com).
+- **Dual Theme System:** flash-free light and dark themes with `next-themes`; first-time visitors start on their OS preference.
+- **Robust i18n & l10n:** English at `/` and Hindi at `/hi` with `next-intl`, localized metadata, `hreflang` alternates and a localized sitemap.
+- **SEO & AI discoverability:** Open Graph, JSON-LD (`SoftwareApplication`, `FAQPage`), `robots.txt`, `sitemap.xml`, `llms.txt`, `.well-known/ai-plugin.json`.
+- **Accessibility:** keyboard-navigable listbox and dialog, focus management, skip link, WCAG AA color contrast.
+- **AI Agent Pairing Ready:** includes [`AGENTS.md`](AGENTS.md) and [`CLAUDE.md`](CLAUDE.md).
+
+---
+
+## 📂 Project Structure
+
+```text
+├── .github/
+│   ├── ISSUE_TEMPLATE/          # Bug, feature and good-first-issue templates
+│   ├── copilot/                 # AI-agent prompts for integrating the library
+│   └── workflows/               # CI, GitHub Pages deploy, SEO audit, labels, template sync
+├── src/                         # 📦 The library (published to npm / jsDelivr)
+│   ├── social-share-button.js           # Core
+│   ├── social-share-button.css          # Styles
+│   ├── social-share-analytics.js        # Optional analytics adapters
+│   └── social-share-button-{react,preact,qwik}.*  # Optional framework wrappers
+├── index.html                   # Local demo page for the library
+├── docs/                        # Roadmap and guides
+├── landing-page/                # 🌐 The website (Next.js 16)
+│   ├── next.config.ts           # Static export + next-intl; injects library version & size
+│   ├── scripts/sync-library.mjs # Copies ../src into public/vendor before dev/build
+│   ├── public/
+│   │   ├── .well-known/         # ai-plugin.json, assetlinks.json
+│   │   ├── brand/               # Brand.md, logos, favicon, Open Graph image
+│   │   └── llms.txt, robots.txt, openapi.yaml, site.webmanifest
+│   └── src/
+│       ├── app/
+│       │   ├── (default)/       # "/" — default locale (English), canonical
+│       │   ├── [locale]/        # "/en", "/hi" + localized error & not-found pages
+│       │   ├── globals.css      # Tailwind v4 theme tokens (light/dark)
+│       │   └── sitemap.ts       # Localized sitemap
+│       ├── components/          # site/, sections/, demo/, ui/, providers/
+│       ├── config/              # languages.ts, site.ts
+│       ├── content/install.ts   # Per-framework installation snippets
+│       ├── i18n/                # routing, request, navigation, metadata, messages
+│       ├── lib/                 # Library constants and React bindings
+│       └── messages/            # en.json, hi.json
+├── AGENTS.md / CLAUDE.md        # Guidance for AI coding agents
+├── BestPracticesChecklist.md    # OpenSSF-based checklist
+├── CONTRIBUTING.md, MAINTAINERS.md, SECURITY.md
+├── COPYRIGHT.md, DCO.md, LICENSE
+└── .coderabbit.yaml             # CodeRabbit AI review configuration
+```
+
+---
+
+## 📦 Installation
 
 ### Via CDN (Recommended)
 
 ```html
 <link
   rel="stylesheet"
-  href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css"
+  href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.1.0/src/social-share-button.css"
 />
-<script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.1.0/src/social-share-button.js"></script>
 ```
 
 ---
 
-## Quick Start Guide
+## ⚡ Quick Start Guide
 
 > 🚫 **IMPORTANT:** Do NOT create new files like `ShareButton.jsx` or `ShareButton.tsx`!  
 > ✅ Add code directly to your **existing** component (Header, Navbar, etc.)
@@ -121,12 +224,12 @@ No matter which framework you use, integration always follows the same 3 steps:
 <head>
   <link
     rel="stylesheet"
-    href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css"
+    href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.1.0/src/social-share-button.css"
   />
 </head>
 <body>
   <div id="root"></div>
-  <script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.1.0/src/social-share-button.js"></script>
 </body>
 ```
 
@@ -135,8 +238,8 @@ No matter which framework you use, integration always follows the same 3 steps:
 Open an **existing** component that renders on every page — typically `src/components/Header.jsx`, `src/layouts/MainLayout.jsx`, or your root `App.jsx`. Add the snippet below to that component so the share button is consistently available across your app.
 
 ```jsx
-import { useEffect, useRef } from 'react';
-import { useLocation } from 'react-router-dom'; // omit if not using React Router
+import { useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom"; // omit if not using React Router
 
 // ⬇️ Replace 'Header' with the name of the component where you want the
 // share button to appear — e.g. Navbar, MainLayout, App, etc.
@@ -149,7 +252,7 @@ function Header() {
     if (initRef.current || !window.SocialShareButton) return;
 
     shareButtonRef.current = new window.SocialShareButton({
-      container: '#share-button',
+      container: "#share-button",
     });
     initRef.current = true;
 
@@ -187,7 +290,7 @@ function Header() {
 ### Step 1: Add CDN to `app/layout.tsx`
 
 ```tsx
-import Script from 'next/script';
+import Script from "next/script";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -195,13 +298,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link
           rel="stylesheet"
-          href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css"
+          href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.1.0/src/social-share-button.css"
         />
       </head>
       <body>
         {children}
         <Script
-          src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js"
+          src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.1.0/src/social-share-button.js"
           strategy="beforeInteractive"
         />
       </body>
@@ -215,10 +318,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 Because `SocialShareButton` manipulates the DOM, it must run inside a **Client Component** (note the `"use client"` directive at the top). Add the snippet below to an existing component such as `app/components/Header.tsx` or `app/components/Navbar.tsx` — any component already included in your layout.
 
 ```tsx
-'use client';
+"use client";
 
-import { useEffect, useRef } from 'react';
-import { usePathname } from 'next/navigation';
+import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 
 // ⬇️ Replace 'Header' with the name of the component where you want the
 // share button to appear — e.g. Navbar, MainLayout, App, etc.
@@ -233,7 +336,7 @@ export default function Header() {
       if (initRef.current || !window.SocialShareButton || !containerRef.current) return;
 
       shareButtonRef.current = new window.SocialShareButton({
-        container: '#share-button',
+        container: "#share-button",
       });
       initRef.current = true;
     };
@@ -297,7 +400,7 @@ declare global {
 ### Step 1: Add CDN to `pages/_document.tsx`
 
 ```tsx
-import { Html, Head, Main, NextScript } from 'next/document';
+import { Html, Head, Main, NextScript } from "next/document";
 
 export default function Document() {
   return (
@@ -305,13 +408,13 @@ export default function Document() {
       <Head>
         <link
           rel="stylesheet"
-          href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css"
+          href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.1.0/src/social-share-button.css"
         />
       </Head>
       <body>
         <Main />
         <NextScript />
-        <script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.1.0/src/social-share-button.js"></script>
       </body>
     </Html>
   );
@@ -323,8 +426,8 @@ export default function Document() {
 Open an existing component that is rendered on every page — typically `components/Header.tsx`, `components/Navbar.tsx`, or `components/Layout.tsx`. Since `_document.tsx` loads the script globally, the button is ready to initialize in any of these components.
 
 ```tsx
-import { useEffect, useRef } from 'react';
-import { useRouter } from 'next/router';
+import { useEffect, useRef } from "react";
+import { useRouter } from "next/router";
 
 // ⬇️ Replace 'Header' with the name of the component where you want the
 // share button to appear — e.g. Navbar, MainLayout, App, etc.
@@ -339,7 +442,7 @@ export default function Header() {
       if (initRef.current || !window.SocialShareButton || !containerRef.current) return;
 
       shareButtonRef.current = new window.SocialShareButton({
-        container: '#share-button',
+        container: "#share-button",
       });
       initRef.current = true;
     };
@@ -406,12 +509,12 @@ declare global {
 <head>
   <link
     rel="stylesheet"
-    href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.css"
+    href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.1.0/src/social-share-button.css"
   />
 </head>
 <body>
   <div id="app"></div>
-  <script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.0.3/src/social-share-button.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.1.0/src/social-share-button.js"></script>
 </body>
 ```
 
@@ -423,148 +526,165 @@ Open your root or layout component (e.g., `App.vue`, `app.component.html`, or `A
 // Add <div id="share-button"></div> to your component's template/HTML first,
 // then initialize once the DOM is ready (e.g., in mounted(), ngAfterViewInit(), or useEffect()):
 new window.SocialShareButton({
-  container: '#share-button',
+  container: "#share-button",
 });
+```
+
+</details>
+
+<details>
+<summary><b>⚛️ Preact</b></summary>
+
+### Step 1: Add CDN to `index.html`
+
+```html
+<head>
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.1.0/src/social-share-button.css"
+  />
+</head>
+<body>
+  <div id="app"></div>
+  <script src="https://cdn.jsdelivr.net/gh/AOSSIE-Org/SocialShareButton@v1.1.0/src/social-share-button.js"></script>
+</body>
+```
+
+### Step 2: Add to a layout or header component
+
+Open an **existing** component that renders on every page — typically `src/components/Header.jsx`, `src/components/Navbar.jsx`, or your root `App.jsx`. Add the snippet below to that component so the share button is consistently available across your app.
+
+```jsx
+import { useEffect, useRef } from "preact/hooks";
+
+// ⬇️ Replace 'Header' with the name of the component where you want the
+// share button to appear — e.g. Navbar, MainLayout, App, etc.
+export default function Header() {
+  const shareButtonRef = useRef(null);
+  const containerRef = useRef(null);
+  const initRef = useRef(false);
+
+  useEffect(() => {
+    if (initRef.current || !window.SocialShareButton || !containerRef.current) return;
+
+    shareButtonRef.current = new window.SocialShareButton({
+      container: "#share-button",
+    });
+    initRef.current = true;
+
+    return () => {
+      if (shareButtonRef.current?.destroy) {
+        shareButtonRef.current.destroy();
+      }
+      initRef.current = false;
+    };
+  }, []);
+
+  return (
+    <header>
+      <div id="share-button" ref={containerRef}></div>
+    </header>
+  );
+}
 ```
 
 </details>
 
 ---
 
-## Automatic Content Detection
-
-SocialShareButton can automatically detect the title and description for sharing from your page — no manual configuration needed.
-
-### How It Works
-
-When `title` or `description` props are not provided, the component runs a lightweight detection pass over the page:
-
-| Priority | Signal                                                   | Used for               |
-| -------- | -------------------------------------------------------- | ---------------------- |
-| 1        | `<meta property="og:title">`                             | Title                  |
-| 2        | `<meta name="twitter:title">`                            | Title                  |
-| 3        | First `<h1>` in `<article>` / `<main>` / `[role="main"]` | Title                  |
-| 4        | Common CMS selectors (`.post-title`, `.entry-title`, …)  | Title                  |
-| 5        | `document.title` (strips common site name suffixes)      | Title (fallback)       |
-| 1        | `<meta property="og:description">`                       | Description            |
-| 2        | `<meta name="twitter:description">`                      | Description            |
-| 3        | `<meta name="description">`                              | Description            |
-| 4        | Main content body excerpt (150–200 chars)                | Description (fallback) |
-
-No external libraries are loaded. The detector is inlined directly in the script — zero added bytes to `node_modules` and no network requests.
-
-### Zero-Config Usage
-
-```html
-<!-- The component picks up og:title, og:description, or falls back to body content -->
-<div id="share-button"></div>
-<script>
-  new SocialShareButton({ container: '#share-button' });
-</script>
-```
-
-Or in React:
-
-```jsx
-// No title or description props needed — auto-detected from the page
-<SocialShareButton />
-```
-
-### Manual Props Always Win
-
-If you supply `title` or `description`, auto-detection is bypassed for those fields. You can mix-and-match:
-
-```jsx
-new SocialShareButton({
-  container: '#share-button',
-  title: 'My Custom Title', // explicit — used as-is
-  // description omitted           — auto-detected from page meta/body
-});
-```
-
-### Disabling Auto-Detection
-
-```jsx
-new SocialShareButton({
-  container: '#share-button',
-  autoDetect: false, // skip detection entirely
-  title: 'My Title',
-  description: 'My description',
-});
-```
-
-### SPA / Client-Side Navigation
-
-When the route changes, call `clearContentCache()` before updating options. The component will automatically re-detect content when `autoDetect` is enabled (default):
-
-```jsx
-// React Router / Next.js
-useEffect(() => {
-  SocialShareButton.clearContentCache();
-  shareButtonRef.current?.updateOptions({
-    url: window.location.href,
-  });
-}, [pathname]);
-```
-
-Note: You only need to provide `url` — if `autoDetect` is enabled (default), the component will automatically re-detect `title` and `description` from the new page's metadata. If you explicitly provide `title` or `description` in `updateOptions`, those values will be used instead of auto-detection.
-
----
-
-## Configuration
+## ⚙️ Configuration
 
 ### Basic Options
 
 ```jsx
 new SocialShareButton({
-  container: '#share-button', // Required: CSS selector or DOM element
-  url: 'https://example.com', // Optional: defaults to window.location.href
-  title: 'Custom Title', // Optional: auto-detected from page metadata when omitted
-  buttonText: 'Share', // Optional: button label text
-  buttonStyle: 'primary', // default | primary | compact | icon-only
-  theme: 'dark', // dark | light
-  platforms: ['twitter', 'linkedin'], // Optional: defaults to all platforms
+  container: "#share-button", // Required: CSS selector or DOM element
+  url: "https://example.com", // Optional: defaults to window.location.href
+  title: "Custom Title", // Optional: auto-detected from the page when omitted
+  buttonText: "Share", // Optional: button label text
+  buttonStyle: "primary", // default | primary | compact | icon-only
+  theme: "dark", // dark | light
+  platforms: ["twitter", "linkedin"], // Optional: defaults to all platforms
 });
+```
+
+### Automatic Content Detection
+
+When `title` or `description` is omitted, the component detects them from the page:
+
+1. Title: `og:title` → `twitter:title` → semantic `h1` → `document.title`
+2. Description: `og:description` → `twitter:description` → `meta[name=description]` → body excerpt
+
+Manual props always win. Set `autoDetect: false` to opt out. Detection is cached for 30 seconds per document URL; clear the cache after SPA navigation and call `updateOptions()` to re-detect.
+
+```js
+SocialShareButton.clearContentCache();
+button.updateOptions({ url: newUrl });
 ```
 
 ### All Available Options
 
-| Option             | Type           | Default                                                     | Description                                                          |
-| ------------------ | -------------- | ----------------------------------------------------------- | -------------------------------------------------------------------- |
-| `container`        | string/Element | -                                                           | **Required.** CSS selector or DOM element                            |
-| `url`              | string         | `window.location.href`                                      | URL to share                                                         |
-| `title`            | string         | auto-detected (og:title → h1 → document.title)              | Share title/headline — auto-detected from page metadata when omitted |
-| `description`      | string         | auto-detected (og:description → meta description → excerpt) | Additional description text — auto-detected when omitted             |
-| `hashtags`         | array          | `[]`                                                        | Hashtags for posts (e.g., `['js', 'webdev']`)                        |
-| `via`              | string         | `''`                                                        | Twitter handle (without @)                                           |
-| `platforms`        | array          | All platforms                                               | Platforms to show (see below)                                        |
-| `buttonText`       | string         | `'Share'`                                                   | Button label text                                                    |
-| `buttonStyle`      | string         | `'default'`                                                 | `default`, `primary`, `compact`, `icon-only`                         |
-| `buttonColor`      | string         | `''`                                                        | Custom button background color                                       |
-| `buttonHoverColor` | string         | `''`                                                        | Custom button hover color                                            |
-| `customClass`      | string         | `''`                                                        | Additional CSS class for button                                      |
-| `theme`            | string         | `'dark'`                                                    | `dark` or `light`                                                    |
-| `modalPosition`    | string         | `'center'`                                                  | Modal position on screen                                             |
-| `showButton`       | boolean        | `true`                                                      | Show/hide the share button                                           |
-| `onShare`          | function       | `null`                                                      | Callback when user shares: `(platform, url) => {}`                   |
-| `onCopy`           | function       | `null`                                                      | Callback when user copies link: `(url) => {}`                        |
-| `autoDetect`       | boolean        | `true`                                                      | Auto-detect title/description from page when omitted                 |
+| Option             | Type           | Default                | Description                                        |
+| ------------------ | -------------- | ---------------------- | -------------------------------------------------- |
+| `container`        | string/Element | -                      | **Required.** CSS selector or DOM element          |
+| `url`              | string         | `window.location.href` | URL to share                                       |
+| `title`            | string         | auto-detected          | Share title; falls back to `document.title`        |
+| `description`      | string         | auto-detected / `''`   | Additional description text                        |
+| `autoDetect`       | boolean        | `true`                 | Detect omitted title/description from the page     |
+| `shareTemplates`   | object         | English                | Locale-specific share message templates            |
+| `hashtags`         | array          | `[]`                   | Hashtags for posts (e.g., `['js', 'webdev']`)      |
+| `via`              | string         | `''`                   | Twitter handle (without @)                         |
+| `platforms`        | array          | All platforms          | Platforms to show (see below)                      |
+| `buttonText`       | string         | `'Share'`              | Button label text                                  |
+| `labels`           | object         | English                | Translated UI text (see below)                     |
+| `buttonStyle`      | string         | `'default'`            | `default`, `primary`, `compact`, `icon-only`       |
+| `buttonColor`      | string         | `''`                   | Custom button background color                     |
+| `buttonHoverColor` | string         | `''`                   | Custom button hover color                          |
+| `customClass`      | string         | `''`                   | Additional CSS class for button                    |
+| `theme`            | string         | `'dark'`               | `dark` or `light`                                  |
+| `modalPosition`    | string         | `'center'`             | Modal position on screen                           |
+| `showButton`       | boolean        | `true`                 | Show/hide the share button                         |
+| `onShare`          | function       | `null`                 | Callback when user shares: `(platform, url) => {}` |
+| `onCopy`           | function       | `null`                 | Callback when user copies link: `(url) => {}`      |
 
 **Available Platforms:**  
-`whatsapp`, `facebook`, `twitter`, `linkedin`, `telegram`, `reddit`, `email`
+`whatsapp`, `facebook`, `twitter`, `linkedin`, `telegram`, `reddit`, `email`, `pinterest`, `discord`, `qrcode` (requires `social-share-button-qr.js` extension)
+
+### Translate the Button and Modal
+
+Pass `labels` to translate the built-in text. Any key you leave out keeps its English default. Labels are always rendered as text, never as HTML.
+
+```js
+new SocialShareButton({
+  container: "#share-button",
+  labels: {
+    share: "शेयर करें", // modal title and button aria-label (default "Share")
+    close: "बंद करें", // close button aria-label (default "Close")
+    copy: "कॉपी करें", // copy button (default "Copy")
+    copied: "कॉपी हो गया!", // shown after copying (default "Copied!")
+    copyFailed: "विफल", // shown if copying fails (default "Failed")
+    urlLabel: "शेयर करने का URL", // aria-label of the link field (default "URL to share")
+    qrcode: "क्यूआर कोड", // QR platform button label (default "QR Code")
+    qrScanTitle: "क्यूआर कोड स्कैन करें", // QR panel title (default "Scan QR Code")
+    qrDownload: "क्यूआर डाउनलोड करें", // QR download button (default "Download QR")
+  },
+});
+```
+
+The React, Preact and Qwik wrappers accept the same `labels` prop.
 
 ### Customize Share Message/Post Text
 
-Control the text that appears when users share to social platforms:
+Pass `shareTemplates` functions to localize or replace share text; each function receives `{ title, description, hashtagString, url }`. Missing keys keep the built-in template.
 
 ```jsx
 new SocialShareButton({
-  container: '#share-button',
-  url: 'https://myproject.com',
-  title: 'Check out my awesome project!', // Main title/headline
-  description: 'An amazing tool for developers', // Additional description
-  hashtags: ['javascript', 'webdev', 'opensource'], // Hashtags included in posts
-  via: 'MyProjectHandle', // Your Twitter handle
+  container: "#share-button",
+  url: "https://myproject.com",
+  title: "Check out my awesome project!", // Main title/headline
+  description: "An amazing tool for developers", // Additional description
+  hashtags: ["javascript", "webdev", "opensource"], // Hashtags included in posts
+  via: "MyProjectHandle", // Your Twitter handle
 });
 ```
 
@@ -577,6 +697,8 @@ new SocialShareButton({
 - **LinkedIn:** `title` + `description` + link
 - **Reddit:** `title` - `description` (used as title)
 - **Email:** Subject = `title`, Body = `description` + link
+- **Pinterest:** `title` + `description` + `hashtags` + link
+- **Discord:** `title` + `description` + `hashtags` + link
 
 ### Customize Button Color & Appearance
 
@@ -584,8 +706,8 @@ new SocialShareButton({
 
 ```jsx
 new SocialShareButton({
-  container: '#share-button',
-  buttonStyle: 'primary', // or 'default', 'compact', 'icon-only'
+  container: "#share-button",
+  buttonStyle: "primary", // or 'default', 'compact', 'icon-only'
 });
 ```
 
@@ -595,9 +717,9 @@ Pass `buttonColor` and `buttonHoverColor` to match your project's color scheme:
 
 ```jsx
 new SocialShareButton({
-  container: '#share-button',
-  buttonColor: '#ff6b6b', // Button background color
-  buttonHoverColor: '#ff5252', // Hover state color
+  container: "#share-button",
+  buttonColor: "#ff6b6b", // Button background color
+  buttonHoverColor: "#ff5252", // Hover state color
 });
 ```
 
@@ -607,9 +729,9 @@ For more complex styling, use a custom CSS class:
 
 ```jsx
 new SocialShareButton({
-  container: '#share-button',
-  buttonStyle: 'primary',
-  customClass: 'my-custom-button',
+  container: "#share-button",
+  buttonStyle: "primary",
+  customClass: "my-custom-button",
 });
 ```
 
@@ -633,23 +755,23 @@ Then in your CSS file:
 ```jsx
 // Material Design Red
 new SocialShareButton({
-  container: '#share-button',
-  buttonColor: '#f44336',
-  buttonHoverColor: '#da190b',
+  container: "#share-button",
+  buttonColor: "#f44336",
+  buttonHoverColor: "#da190b",
 });
 
 // Tailwind Blue
 new SocialShareButton({
-  container: '#share-button',
-  buttonColor: '#3b82f6',
-  buttonHoverColor: '#2563eb',
+  container: "#share-button",
+  buttonColor: "#3b82f6",
+  buttonHoverColor: "#2563eb",
 });
 
 // Custom Brand Color
 new SocialShareButton({
-  container: '#share-button',
-  buttonColor: '#your-brand-color',
-  buttonHoverColor: '#your-brand-color-dark',
+  container: "#share-button",
+  buttonColor: "#your-brand-color",
+  buttonHoverColor: "#your-brand-color-dark",
 });
 ```
 
@@ -666,28 +788,69 @@ new SocialShareButton({
 
 ```jsx
 new SocialShareButton({
-  container: '#share-button',
+  container: "#share-button",
   onShare: (platform, url) => {
     console.log(`Shared on ${platform}: ${url}`);
   },
   onCopy: (url) => {
-    console.log('Link copied:', url);
+    console.log("Link copied:", url);
   },
 });
 ```
 
 ---
 
-## Advanced Usage
+## 🧠 Advanced Usage
+
+### Using the QR Code Extension
+
+The QR code feature is an **optional extension**. The core library has zero runtime dependencies; this extension loads `qrcode-generator` from jsDelivr at runtime.
+
+#### Via CDN (HTML)
+
+```html
+<!-- Main CSS and JS -->
+<link rel="stylesheet" href="path/to/social-share-button.css" />
+<script src="path/to/social-share-button.js"></script>
+
+<!-- QR Code Extension (loads qrcode-generator from jsDelivr automatically) -->
+<script src="path/to/social-share-button-qr.js"></script>
+```
+
+#### Via npm / bundler
+
+```javascript
+// Load the Social Share Button core first so window.SocialShareButton exists
+import "@aossie-org/social-share-button";
+import "@aossie-org/social-share-button/src/social-share-button.css";
+
+// Then load the QR extension
+import "@aossie-org/social-share-button/src/social-share-button-qr.js";
+```
+
+The extension will dynamically inject `qrcode-generator` from jsDelivr the first time a user clicks the QR platform.
+
+#### Self-hosting under a strict CSP
+
+If your Content Security Policy (CSP) blocks `cdn.jsdelivr.net`, download `qrcode-generator` locally and load it **before** the extension:
+
+```html
+<!-- Self-hosted qrcode-generator -->
+<script src="/path/to/qrcode.min.js"></script>
+<!-- QR extension will detect window.qrcode and skip the CDN fetch -->
+<script src="path/to/social-share-button-qr.js"></script>
+```
+
+When you pass `qrcode` in the `platforms` array, a QR code panel will be rendered inline inside the share modal with a canvas preview and a **Download QR** button.
 
 ### Using npm Package
 
 ```javascript
-import SocialShareButton from 'social-share-button-aossie';
-import 'social-share-button-aossie/src/social-share-button.css';
+import SocialShareButton from "@aossie-org/social-share-button";
+import "@aossie-org/social-share-button/src/social-share-button.css";
 
 new SocialShareButton({
-  container: '#share-button',
+  container: "#share-button",
 });
 ```
 
@@ -696,21 +859,12 @@ new SocialShareButton({
 If you want a reusable React component, copy `src/social-share-button-react.jsx` to your project:
 
 ```jsx
-import { SocialShareButton } from './components/SocialShareButton';
+import { SocialShareButton } from "./components/SocialShareButton";
 
 function App() {
-  return <SocialShareButton platforms={['twitter', 'linkedin']} />;
+  return <SocialShareButton platforms={["twitter", "linkedin"]} />;
 }
 ```
-
-> **Performance tip:** Array and callback props (`hashtags`, `platforms`, `analyticsPlugins`, `onShare`, `onCopy`, `onAnalytics`) are compared by reference. Passing inline literals (e.g. `platforms={['twitter']}`) creates a new reference on every parent render and triggers `updateOptions()` unnecessarily. Wrap them with `useMemo` / `useCallback` in your parent component:
->
-> ```jsx
-> const platforms = useMemo(() => ['twitter', 'linkedin'], []);
-> const onShare = useCallback((platform, url) => console.log(platform, url), []);
->
-> return <SocialShareButton platforms={platforms} onShare={onShare} />;
-> ```
 
 ### Update URL Dynamically (SPA)
 
@@ -727,7 +881,7 @@ const shareButton = useRef(null);
 
 useEffect(() => {
   shareButton.current = new window.SocialShareButton({
-    container: '#share-button',
+    container: "#share-button",
   });
 }, []);
 
@@ -743,7 +897,7 @@ useEffect(() => {
 
 ---
 
-## Troubleshooting
+## 🩺 Troubleshooting
 
 <details>
 <summary><b>Multiple buttons appearing</b></summary>
@@ -763,7 +917,7 @@ useEffect(() => {
 
 ```jsx
 if (window.SocialShareButton) {
-  new window.SocialShareButton({ container: '#share-button' });
+  new window.SocialShareButton({ container: "#share-button" });
 }
 ```
 
@@ -801,7 +955,7 @@ if (window.SocialShareButton) {
 
 ---
 
-## Examples
+## 🧪 Examples
 
 ### Mobile Menu
 
@@ -816,14 +970,14 @@ if (window.SocialShareButton) {
 ```jsx
 // Professional networks only
 new SocialShareButton({
-  container: '#share-button',
-  platforms: ['linkedin', 'twitter', 'email'],
+  container: "#share-button",
+  platforms: ["linkedin", "twitter", "email"],
 });
 
 // Messaging apps only
 new SocialShareButton({
-  container: '#share-button',
-  platforms: ['whatsapp', 'telegram'],
+  container: "#share-button",
+  platforms: ["whatsapp", "telegram"],
 });
 ```
 
@@ -831,51 +985,59 @@ new SocialShareButton({
 
 ```jsx
 new SocialShareButton({
-  container: '#share-button',
-  buttonStyle: 'icon-only',
-  theme: 'light',
+  container: "#share-button",
+  buttonStyle: "icon-only",
+  theme: "light",
 });
 ```
 
 ---
 
-## Demo
+## 🎬 Demo
 
-Open `index.html` in your browser to see all features.
+Try the live, configurable demo at **[social-share-button.aossie.org](https://social-share-button.aossie.org)** (“Click to Try Demo”), or open `index.html` in your browser to see all features locally.
 Tutorial: https://youtu.be/cLJaT-8rEvQ?si=CLipA0Db4WL0EqKM
 
 ---
 
-## Contributing
+## 🌐 Website Development and Deployment
+
+```bash
+cd landing-page
+npm install
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000). `npm run dev` and `npm run build` first copy the library from `../src`, so the site always showcases your local changes. `npm run build` produces a static export in `landing-page/out`, deployed to GitHub Pages by [`.github/workflows/nextjs.yml`](.github/workflows/nextjs.yml). See [`landing-page/README.md`](landing-page/README.md) for adding languages, translating text and theming.
+
+---
+
+## 🤝 Contributing
 
 We welcome contributions of all kinds! To contribute:
 
 1. Fork the repository and create your feature branch (`git checkout -b feature/AmazingFeature`).
-2. Commit your changes (`git commit -m 'Add some AmazingFeature'`).
-3. Run code quality checks:
-   - `npm run lint` - Check for code issues
-   - `npm run format:check` - Check code formatting
-   - `npm run format` - Auto-format code
-4. Test your changes by opening `index.html` in your browser to verify functionality.
+2. Run code quality checks:
+   - `npm run test:coverage` — library unit and property tests, 90% coverage gate (repository root)
+   - `npm run format:check` / `npm run format` — library formatting (repository root)
+   - `npm run lint` and `npm run build` — website (inside `landing-page/`)
+3. Try your changes by opening `index.html` in your browser, or run the website locally.
+4. Commit your changes with a sign-off (`git commit -s -m 'Add some AmazingFeature'`).
 5. Push your branch (`git push origin feature/AmazingFeature`).
 6. Open a Pull Request for review.
 
-If you encounter bugs, need help, or have feature requests:
+Please read [`CONTRIBUTING.md`](CONTRIBUTING.md) and [`DCO.md`](DCO.md) first. If you encounter bugs, need help, or have feature requests, please open an issue with detailed information, logs or screenshots.
 
-- Please open an issue in this repository providing detailed information.
-- Describe the problem clearly and include any relevant logs or screenshots.
-
-We appreciate your feedback and contributions!
-
-This project is licensed under the GNU General Public License v3.0.
-See the [LICENSE](LICENSE) file for details.
+This project is licensed under the GNU General Public License v3.0. See the [LICENSE](LICENSE) file and [COPYRIGHT.md](COPYRIGHT.md) for details.
 
 ---
 
 ## 💪 Thanks To All Contributors
 
-Thanks a lot for spending your time helping SocialShareButton grow. Keep rocking 🥂
+Thanks a lot for spending your time helping Social Share Button grow. Keep rocking 🥂
 
 [![Contributors](https://contrib.rocks/image?repo=AOSSIE-Org/SocialShareButton)](https://github.com/AOSSIE-Org/SocialShareButton/graphs/contributors)
 
-© 2025 AOSSIE
+© 2025-2026 AOSSIE
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>

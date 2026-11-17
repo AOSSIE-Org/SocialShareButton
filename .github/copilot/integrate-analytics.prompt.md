@@ -59,7 +59,7 @@ forwards to whatever tool they choose.
 ```js
 // Fires on the container element and bubbles through the DOM (composed:true
 // means it also crosses shadow-DOM boundaries).
-document.addEventListener('social-share', (e) => {
+document.addEventListener("social-share", (e) => {
   const payload = e.detail;
   // Forward to your analytics tool here
 });
@@ -72,7 +72,7 @@ and Mixpanel both need the same event.
 
 ```js
 new SocialShareButton({
-  container: '#share-button',
+  container: "#share-button",
   onAnalytics: (payload) => {
     // Forward to your analytics tool here
   },
@@ -96,7 +96,7 @@ Load the adapters file **in addition to** the main library script:
 const { GoogleAnalyticsAdapter, MixpanelAdapter } = window.SocialShareAnalytics;
 
 new SocialShareButton({
-  container: '#share-button',
+  container: "#share-button",
   analyticsPlugins: [new GoogleAnalyticsAdapter(), new MixpanelAdapter()],
 });
 ```
@@ -122,7 +122,7 @@ Prerequisite: GA4 `gtag.js` snippet loaded by the host.
 const { GoogleAnalyticsAdapter } = window.SocialShareAnalytics;
 
 new SocialShareButton({
-  container: '#share-button',
+  container: "#share-button",
   analyticsPlugins: [new GoogleAnalyticsAdapter()],
 });
 
@@ -132,7 +132,7 @@ new SocialShareButton({
 Custom event category (optional):
 
 ```js
-new GoogleAnalyticsAdapter({ eventCategory: 'engagement' });
+new GoogleAnalyticsAdapter({ eventCategory: "engagement" });
 ```
 
 ### Mixpanel
@@ -142,7 +142,7 @@ Prerequisite: `mixpanel-browser` snippet or SDK loaded.
 ```js
 const { MixpanelAdapter } = window.SocialShareAnalytics;
 new SocialShareButton({
-  container: '#share-button',
+  container: "#share-button",
   analyticsPlugins: [new MixpanelAdapter()],
 });
 // Calls: mixpanel.track(eventName, { platform, url, ... })
@@ -153,7 +153,7 @@ new SocialShareButton({
 ```js
 const { SegmentAdapter } = window.SocialShareAnalytics;
 new SocialShareButton({
-  container: '#share-button',
+  container: "#share-button",
   analyticsPlugins: [new SegmentAdapter()],
 });
 // Calls: analytics.track(eventName, { platform, url, ... })
@@ -166,7 +166,7 @@ Prerequisite: Plausible `script.js` loaded with custom events enabled.
 ```js
 const { PlausibleAdapter } = window.SocialShareAnalytics;
 new SocialShareButton({
-  container: '#share-button',
+  container: "#share-button",
   analyticsPlugins: [new PlausibleAdapter()],
 });
 // Calls: plausible(eventName, { props: { platform, url, ... } })
@@ -177,7 +177,7 @@ new SocialShareButton({
 ```js
 const { PostHogAdapter } = window.SocialShareAnalytics;
 new SocialShareButton({
-  container: '#share-button',
+  container: "#share-button",
   analyticsPlugins: [new PostHogAdapter()],
 });
 // Calls: posthog.capture(eventName, { platform, url, ... })
@@ -192,8 +192,8 @@ const { CustomAdapter } = window.SocialShareAnalytics;
 new SocialShareButton({
   analyticsPlugins: [
     new CustomAdapter((payload) => {
-      fetch('/api/analytics', {
-        method: 'POST',
+      fetch("/api/analytics", {
+        method: "POST",
         body: JSON.stringify(payload),
       });
     }),
@@ -228,17 +228,17 @@ GA4, Mixpanel, and a custom endpoint at the same time:
 ```js
 const { GoogleAnalyticsAdapter, MixpanelAdapter, CustomAdapter } = window.SocialShareAnalytics;
 
-document.addEventListener('social-share', (e) => {
-  console.log('Raw event:', e.detail); // Debugging / logging
+document.addEventListener("social-share", (e) => {
+  console.log("Raw event:", e.detail); // Debugging / logging
 });
 
 new SocialShareButton({
-  container: '#share-button',
-  componentId: 'homepage-hero',
+  container: "#share-button",
+  componentId: "homepage-hero",
   analyticsPlugins: [
     new GoogleAnalyticsAdapter(),
     new MixpanelAdapter(),
-    new CustomAdapter((p) => fetch('/log', { method: 'POST', body: JSON.stringify(p) })),
+    new CustomAdapter((p) => fetch("/log", { method: "POST", body: JSON.stringify(p) })),
   ],
 });
 ```
@@ -252,7 +252,7 @@ development. Remove or set to `false` in production.
 
 ```js
 new SocialShareButton({
-  container: '#share-button',
+  container: "#share-button",
   debug: true,
   // → [SocialShareButton Analytics] { version: '1.0', source: 'social-share-button', ... }
 });
@@ -268,7 +268,7 @@ instrumentation must be explicitly consented to before activation.
 
 ```js
 new SocialShareButton({
-  container: '#share-button',
+  container: "#share-button",
   analytics: false,
 });
 ```

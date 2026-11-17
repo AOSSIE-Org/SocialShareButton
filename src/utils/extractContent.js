@@ -35,9 +35,9 @@ const CACHE_TTL_MS = 30_000;
  */
 function _getCacheKey(doc) {
   try {
-    return doc.URL || doc.location?.href || 'default';
+    return doc.URL || doc.location?.href || "default";
   } catch (_) {
-    return 'default';
+    return "default";
   }
 }
 
@@ -62,7 +62,7 @@ function _getCacheKey(doc) {
  */
 function getMetaContent(doc, selector) {
   const el = doc.querySelector(selector);
-  return el && el.getAttribute('content') ? el.getAttribute('content').trim() : '';
+  return el && el.getAttribute("content") ? el.getAttribute("content").trim() : "";
 }
 
 /**
@@ -85,15 +85,15 @@ function detectTitle(doc) {
 
   // 3. Semantic landmark h1 — prefer scoped headings over generic ones
   const landmarkSelectors = [
-    'article h1',
+    "article h1",
     '[role="main"] h1',
-    'main h1',
-    '.post-title',
-    '.entry-title',
-    '.article-title',
-    '.page-title',
-    '.hero-title',
-    'h1',
+    "main h1",
+    ".post-title",
+    ".entry-title",
+    ".article-title",
+    ".page-title",
+    ".hero-title",
+    "h1",
   ];
 
   for (const sel of landmarkSelectors) {
@@ -105,9 +105,9 @@ function detectTitle(doc) {
   }
 
   // 4. Last resort: document.title (strip common " | Site" suffixes)
-  const raw = (doc.title || '').trim();
+  const raw = (doc.title || "").trim();
   // Remove trailing " | SiteName" or " - SiteName" patterns (up to 60 chars suffix)
-  const cleaned = raw.replace(/\s*[|\-–—]\s*.{1,60}$/, '').trim();
+  const cleaned = raw.replace(/\s*[|\-–—]\s*.{1,60}$/, "").trim();
   return cleaned || raw;
 }
 
@@ -138,18 +138,18 @@ function detectMetaDescription(doc) {
  */
 function findContentRoot(doc) {
   const candidates = [
-    'article',
+    "article",
     '[role="main"]',
-    'main',
-    '.post-content',
-    '.entry-content',
-    '.article-content',
-    '.article-body',
-    '.blog-content',
-    '.page-content',
-    '.content-body',
-    '#content',
-    '#main-content',
+    "main",
+    ".post-content",
+    ".entry-content",
+    ".article-content",
+    ".article-body",
+    ".blog-content",
+    ".page-content",
+    ".content-body",
+    "#content",
+    "#main-content",
   ];
 
   for (const sel of candidates) {
@@ -177,15 +177,15 @@ function extractPlainText(root) {
 
   // Remove noise elements that carry no article content
   const noise = clone.querySelectorAll(
-    'script, style, noscript, nav, header, footer, aside, form, ' +
+    "script, style, noscript, nav, header, footer, aside, form, " +
       "[aria-hidden='true'], .nav, .navigation, .menu, .sidebar, " +
-      '.advertisement, .ad, .cookie-banner, .social-share-modal-overlay'
+      ".advertisement, .ad, .cookie-banner, .social-share-modal-overlay"
   );
   noise.forEach(function (el) {
     el.remove();
   });
 
-  return clone.textContent.replace(/\s+/g, ' ').trim();
+  return clone.textContent.replace(/\s+/g, " ").trim();
 }
 
 /**
@@ -198,15 +198,15 @@ function extractPlainText(root) {
  * @returns {string}
  */
 function generateExcerpt(text, minLen = 140, maxLen = 200) {
-  if (!text) return '';
+  if (!text) return "";
   if (text.length <= maxLen) return text;
 
   // Try to end at a sentence boundary within the window
   const window = text.slice(0, maxLen);
   const sentenceEnd = Math.max(
-    window.lastIndexOf('. '),
-    window.lastIndexOf('! '),
-    window.lastIndexOf('? ')
+    window.lastIndexOf(". "),
+    window.lastIndexOf("! "),
+    window.lastIndexOf("? ")
   );
 
   if (sentenceEnd >= minLen) {
@@ -214,12 +214,12 @@ function generateExcerpt(text, minLen = 140, maxLen = 200) {
   }
 
   // Fall back to word boundary
-  const wordEnd = window.lastIndexOf(' ');
+  const wordEnd = window.lastIndexOf(" ");
   if (wordEnd > minLen) {
-    return window.slice(0, wordEnd).trim() + '…';
+    return window.slice(0, wordEnd).trim() + "…";
   }
 
-  return window.trim() + '…';
+  return window.trim() + "…";
 }
 
 // ---------------------------------------------------------------------------
@@ -255,7 +255,7 @@ function extractContent(doc, bustCache = false) {
 
     // Description: prefer explicit meta tags; generate excerpt from body as fallback
     let excerpt = detectMetaDescription(doc);
-    let textContent = '';
+    let textContent = "";
 
     if (!excerpt) {
       const contentRoot = findContentRoot(doc);
@@ -277,9 +277,9 @@ function extractContent(doc, bustCache = false) {
   } catch (_err) {
     // Hard fallback: never throw to callers
     result = {
-      title: typeof doc !== 'undefined' && doc.title ? doc.title.trim() : '',
-      excerpt: '',
-      textContent: '',
+      title: typeof doc !== "undefined" && doc.title ? doc.title.trim() : "",
+      excerpt: "",
+      textContent: "",
     };
   }
 
