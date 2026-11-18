@@ -28,8 +28,9 @@ export const SocialShareButton = component$<Props>((props) => {
     if (typeof window !== 'undefined' && (window as any).SocialShareButton && containerRef.value) {
       const shareButton = new (window as any).SocialShareButton({
         container: containerRef.value,
-        url: props.url || window.location.href,
-        title: props.title || document.title,
+        // Unset url/title: the library shares the current page and follows route changes
+        url: props.url,
+        title: props.title,
         description: props.description || '',
         hashtags: props.hashtags || [],
         via: props.via || '',
