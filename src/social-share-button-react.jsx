@@ -47,23 +47,29 @@ export const SocialShareButton = ({
   // Reference to the vanilla JS class instance
   const shareButtonRef = useRef(null);
 
-  // Resolve fallback values when props are not provided (client-side only)
-  const currentUrl = url || (typeof window !== "undefined" ? window.location.href : "");
-  const currentTitle = title || (typeof document !== "undefined" ? document.title : "");
+  // Pass url/title only when set. Without them the library shares the current page
+  // and keeps following client-side route changes.
+  const pageOptions = {
+    ...(url ? { url } : {}),
+    ...(title ? { title } : {}),
+  };
+  const hasUrl = Boolean(url);
+  const hasTitle = Boolean(title);
 
   /**
    * Initialization Effect
    *
    * Sets up the vanilla JS component once the React component mounts.
    * Includes a safe check for the global SocialShareButton class.
+   * Re-created when url/title switch between set and unset, because
+   * updateOptions() cannot switch the library back to following the page.
    */
   useEffect(() => {
     if (containerRef.current && !shareButtonRef.current) {
       if (typeof window !== "undefined" && window.SocialShareButton) {
         shareButtonRef.current = new window.SocialShareButton({
           container: containerRef.current,
-          url: currentUrl,
-          title: currentTitle,
+          ...pageOptions,
           description,
           hashtags,
           via,
@@ -93,7 +99,7 @@ export const SocialShareButton = ({
         shareButtonRef.current = null;
       }
     };
-  }, []);
+  }, [hasUrl, hasTitle]);
 
   /**
    * Update Effect
@@ -106,8 +112,7 @@ export const SocialShareButton = ({
     if (shareButtonRef.current) {
       // Use the library's built-in update method
       shareButtonRef.current.updateOptions({
-        url: currentUrl,
-        title: currentTitle,
+        ...pageOptions,
         description,
         hashtags,
         via,
@@ -130,8 +135,8 @@ export const SocialShareButton = ({
       });
     }
   }, [
-    currentUrl,
-    currentTitle,
+    url,
+    title,
     description,
     hashtags,
     via,

@@ -613,7 +613,7 @@ new SocialShareButton({
 | Option             | Type           | Default                | Description                                        |
 | ------------------ | -------------- | ---------------------- | -------------------------------------------------- |
 | `container`        | string/Element | -                      | **Required.** CSS selector or DOM element          |
-| `url`              | string         | `window.location.href` | URL to share                                       |
+| `url`              | string         | `window.location.href` | URL to share. Follows page changes when omitted    |
 | `title`            | string         | `document.title`       | Share title/headline                               |
 | `description`      | string         | `''`                   | Additional description text                        |
 | `hashtags`         | array          | `[]`                   | Hashtags for posts (e.g., `['js', 'webdev']`)      |

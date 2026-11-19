@@ -44,14 +44,18 @@ export default function SocialShareButton({
   // Storage for the latest options to avoid stale closures during async initialization
   const latestOptionsRef = useRef(null);
 
-  // Fallback to current browser location/title if not explicitly provided
-  const resolvedUrl = url || (typeof window !== "undefined" ? window.location.href : "");
-  const resolvedTitle = title || (typeof document !== "undefined" ? document.title : "");
+  // Pass url/title only when set. Without them the library shares the current page
+  // and keeps following client-side route changes.
+  const pageOptions = {
+    ...(url ? { url } : {}),
+    ...(title ? { title } : {}),
+  };
+  const hasUrl = Boolean(url);
+  const hasTitle = Boolean(title);
 
   // Update latestOptionsRef on every render so the async init loop uses current values
   latestOptionsRef.current = {
-    url: resolvedUrl,
-    title: resolvedTitle,
+    ...pageOptions,
     description,
     hashtags,
     via,
@@ -80,6 +84,8 @@ export default function SocialShareButton({
    * Handles the setup of the vanilla JS instance once the component mounts.
    * Includes a polling mechanism to wait for the core library if it's loaded
    * asynchronously (e.g., via a CDN script tag).
+   * Re-created when url/title switch between set and unset, because
+   * updateOptions() cannot switch the library back to following the page.
    */
   useEffect(() => {
     let checkInterval = null;
@@ -129,7 +135,7 @@ export default function SocialShareButton({
         shareButtonRef.current = null;
       }
     };
-  }, []);
+  }, [hasUrl, hasTitle]);
 
   /**
    * Update Effect
@@ -147,8 +153,7 @@ export default function SocialShareButton({
     if (shareButtonRef.current) {
       // Pass all updated props into the updateOptions method
       shareButtonRef.current.updateOptions({
-        url: resolvedUrl,
-        title: resolvedTitle,
+        ...pageOptions,
         description,
         hashtags,
         via,
@@ -172,8 +177,8 @@ export default function SocialShareButton({
       });
     }
   }, [
-    resolvedUrl,
-    resolvedTitle,
+    url,
+    title,
     description,
     hashtagsDep,
     via,
