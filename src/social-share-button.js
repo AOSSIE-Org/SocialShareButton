@@ -247,7 +247,6 @@ class SocialShareButton {
     const { url, title, description, hashtags, via } = this.options;
     const encodedUrl = encodeURIComponent(url);
     const encodedTitle = encodeURIComponent(title);
-    // const encodedDesc = encodeURIComponent(description);
     const hashtagString = hashtags.length ? "#" + hashtags.join(" #") : "";
 
     // Build platform-specific messages with customizable parameters

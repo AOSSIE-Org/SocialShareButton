@@ -68,6 +68,9 @@ afterEach(() => {
 describe("getShareURL", () => {
   it("builds the intent URL for every supported platform", () => {
     const btn = create({ via: "aossie_org", hashtags: ["oss", "gsoc"] });
+    expect(btn.getShareURL("facebook")).toMatch(
+      /^https:\/\/www\.facebook\.com\/sharer\/sharer\.php\?u=.+&quote=.+$/
+    );
     expect(btn.getShareURL("linkedin")).toBe(
       "https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fexample.org%2Fpage%3Fa%3D1%26b%3D2"
     );
@@ -76,6 +79,26 @@ describe("getShareURL", () => {
     );
     expect(btn.getShareURL("email")).toMatch(/^mailto:\?subject=Hello%20%26%20welcome&body=/);
     expect(btn.getShareURL("discord")).toBe("https://discord.com/channels/@me");
+  });
+
+  it("builds a valid Facebook share URL with u and quote parameters and no malformed query string", () => {
+    const btn = create({
+      url: "https://example.org/page?a=1&b=2",
+      title: "Hello & welcome",
+      description: "A great tool",
+      hashtags: ["oss", "gsoc"],
+    });
+    const shareUrl = btn.getShareURL("facebook");
+    expect(shareUrl).not.toContain('"e=');
+    expect(shareUrl).toContain("&quote=");
+    const parsed = new URL(shareUrl);
+    expect(parsed.origin).toBe("https://www.facebook.com");
+    expect(parsed.pathname).toBe("/sharer/sharer.php");
+    expect(parsed.searchParams.get("u")).toBe("https://example.org/page?a=1&b=2");
+    const quote = parsed.searchParams.get("quote");
+    expect(quote).toContain("Hello & welcome");
+    expect(quote).toContain("A great tool");
+    expect(quote).toContain("#oss #gsoc");
   });
 
   it("returns an empty string for an unknown platform or for qrcode", () => {
@@ -121,6 +144,8 @@ describe("getShareURL", () => {
         const btn = create({ title: title || "t", description });
         const params = new URL(btn.getShareURL("reddit")).searchParams;
         expect([...params.keys()]).toEqual(["url", "title"]);
+        const fbParams = new URL(btn.getShareURL("facebook")).searchParams;
+        expect([...fbParams.keys()]).toEqual(["u", "quote"]);
         btn.destroy();
       }),
       { numRuns: 60 }
