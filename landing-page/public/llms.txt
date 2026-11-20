@@ -59,7 +59,7 @@ Instance methods: `openModal()`, `closeModal()`, `updateOptions(options)`, `dest
 
 ## Analytics
 
-Events are emitted three ways: a bubbling `social-share` DOM `CustomEvent`, the `onAnalytics(payload)` callback, and `analyticsPlugins` adapters (Google Analytics 4, Mixpanel, Segment, Plausible, PostHog, custom) from `src/social-share-analytics.js`.
+Events are emitted three ways: a bubbling `social-share` DOM `CustomEvent`, the `onAnalytics(payload)` callback, and `analyticsPlugins` adapters (Google Analytics 4, Google Tag Manager, Mixpanel, Segment, Plausible, PostHog, custom) from `src/social-share-analytics.js`.
 
 ---
 

@@ -44,13 +44,38 @@ export function SiteShell({ locale, children }: { locale: string; children: Reac
         className="flex min-h-full flex-col bg-background-primary text-foreground-primary font-sans"
         suppressHydrationWarning
       >
-        <link rel="stylesheet" href={`${vendorBase}/social-share-button.css`} precedence="default" />
+        <link
+          rel="stylesheet"
+          href={`${vendorBase}/social-share-button.css`}
+          precedence="default"
+        />
         <NextIntlClientProvider locale={locale} messages={messages} timeZone="UTC">
           <ThemeProvider>
             <LenisProvider>{children}</LenisProvider>
           </ThemeProvider>
         </NextIntlClientProvider>
         <Script src={`${vendorBase}/social-share-button.js`} strategy="afterInteractive" />
+        <Script src={`${vendorBase}/social-share-analytics.js`} strategy="afterInteractive" />
+        <Script id="gtm-datalayer-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            window.addEventListener("social-share", function(e) {
+              if (window.dataLayer && e.detail) {
+                window.dataLayer.push({
+                  event: e.detail.eventName,
+                  event_category: "social_share",
+                  share_platform: e.detail.platform,
+                  share_url: e.detail.url,
+                  share_title: e.detail.title,
+                  interaction_type: e.detail.interactionType,
+                  component_id: e.detail.componentId,
+                  timestamp: e.detail.timestamp,
+                  error_message: e.detail.errorMessage || null,
+                });
+              }
+            });
+          `}
+        </Script>
       </body>
     </html>
   );

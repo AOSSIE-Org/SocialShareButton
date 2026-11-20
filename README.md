@@ -83,7 +83,7 @@ Lightweight social sharing component for web applications. **Zero dependencies, 
 - 🔄 **SPA-aware:** auto-detects the current URL and page title, and follows client-side route changes
 - 📱 **Responsive:** fully responsive and mobile-ready
 - 🎨 **Customizable:** dark/light themes, four button styles, custom colors and classes
-- 📊 **Privacy-first analytics:** emits events only — adapters for Google Analytics 4, Mixpanel, Segment, Plausible and PostHog
+- 📊 **Privacy-first analytics:** emits events only — adapters for Google Analytics 4, Google Tag Manager, Mixpanel, Segment, Plausible and PostHog
 - ⚡ **Lightweight:** ≈15 KB gzipped for the JS + CSS (unminified; the website computes the exact figure at build time)
 
 ---

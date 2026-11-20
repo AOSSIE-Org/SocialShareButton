@@ -10,7 +10,16 @@ beforeAll(async () => {
 });
 
 afterEach(() => {
-  for (const key of ["gtag", "mixpanel", "analytics", "plausible", "posthog"]) delete window[key];
+  for (const key of [
+    "gtag",
+    "mixpanel",
+    "analytics",
+    "plausible",
+    "posthog",
+    "dataLayer",
+    "customLayer",
+  ])
+    delete window[key];
 });
 
 const payload = {
@@ -50,6 +59,80 @@ describe("analytics adapters", () => {
     });
   });
 
+  it("GoogleTagManagerAdapter pushes events with default dataLayer and category", () => {
+    window.dataLayer = [];
+    new A.GoogleTagManagerAdapter().track(payload);
+    expect(window.dataLayer).toHaveLength(1);
+    expect(window.dataLayer[0]).toMatchObject({
+      event: "social_share_click",
+      event_category: "social_share",
+      share_platform: "linkedin",
+      share_url: "https://example.org",
+      share_title: "Example",
+      interaction_type: "share",
+      component_id: "hero",
+      timestamp: 1700000000000,
+    });
+  });
+
+  it("GoogleTagManagerAdapter auto-initializes window.dataLayer if undefined", () => {
+    delete window.dataLayer;
+    const adapter = new A.GoogleTagManagerAdapter();
+    expect(Array.isArray(window.dataLayer)).toBe(true);
+    adapter.track(payload);
+    expect(window.dataLayer).toHaveLength(1);
+    expect(window.dataLayer[0].event).toBe("social_share_click");
+  });
+
+  it("GoogleTagManagerAdapter forwards custom category and error message", () => {
+    window.dataLayer = [];
+    new A.GoogleTagManagerAdapter({ eventCategory: "custom_share" }).track({
+      ...payload,
+      errorMessage: "boom",
+    });
+    expect(window.dataLayer[0]).toMatchObject({
+      event: "social_share_click",
+      event_category: "custom_share",
+      error_message: "boom",
+    });
+  });
+
+  it("GoogleTagManagerAdapter sets error_message or clears it with null on subsequent events", () => {
+    window.dataLayer = [];
+    const adapter = new A.GoogleTagManagerAdapter();
+    adapter.track({ ...payload, errorMessage: "network failure" });
+    expect(window.dataLayer[0]).toMatchObject({
+      event: "social_share_click",
+      error_message: "network failure",
+    });
+
+    adapter.track(payload);
+    expect(window.dataLayer[1]).toMatchObject({
+      event: "social_share_click",
+      error_message: null,
+    });
+  });
+
+  it("GoogleTagManagerAdapter reinitializes dataLayer if not an array with push", () => {
+    const adapter = new A.GoogleTagManagerAdapter();
+    window.dataLayer = null;
+    adapter.track(payload);
+    expect(Array.isArray(window.dataLayer)).toBe(true);
+    expect(window.dataLayer).toHaveLength(1);
+
+    window.dataLayer = { notAnArray: true };
+    adapter.track(payload);
+    expect(Array.isArray(window.dataLayer)).toBe(true);
+    expect(window.dataLayer).toHaveLength(1);
+  });
+
+  it("GoogleTagManagerAdapter supports a custom dataLayerName", () => {
+    window.customLayer = [];
+    new A.GoogleTagManagerAdapter({ dataLayerName: "customLayer" }).track(payload);
+    expect(window.customLayer).toHaveLength(1);
+    expect(window.customLayer[0].event).toBe("social_share_click");
+  });
+
   it.each([
     ["MixpanelAdapter", "mixpanel", "track"],
     ["SegmentAdapter", "analytics", "track"],
@@ -82,6 +165,7 @@ describe("analytics adapters", () => {
   it("every adapter is a silent no-op when its analytics tool is not loaded", () => {
     for (const name of [
       "GoogleAnalyticsAdapter",
+      "GoogleTagManagerAdapter",
       "MixpanelAdapter",
       "SegmentAdapter",
       "PlausibleAdapter",
@@ -101,12 +185,14 @@ describe("analytics adapters", () => {
 
   it("property: adapters never mutate the payload they receive", () => {
     window.gtag = vi.fn();
+    window.dataLayer = [];
     window.posthog = { capture: vi.fn() };
     fc.assert(
       fc.property(fc.string(), fc.option(fc.string(), { nil: null }), (eventName, platform) => {
         const p = { ...payload, eventName, platform };
         const snapshot = structuredClone(p);
         new A.GoogleAnalyticsAdapter().track(p);
+        new A.GoogleTagManagerAdapter().track(p);
         new A.PostHogAdapter().track(p);
         expect(p).toEqual(snapshot);
       })

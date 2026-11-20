@@ -74,6 +74,7 @@ function useSiteShare() {
       platforms: [...platformIds],
       theme: resolvedTheme === "light" ? ("light" as const) : ("dark" as const),
       showButton: false,
+      debug: true,
     }),
     [locale, resolvedTheme, t]
   );

@@ -25,10 +25,24 @@ vi.mock("next/font/google", () => {
   return { Inter: font("inter"), IBM_Plex_Mono: font("plex-mono"), Noto_Sans_Devanagari: font("devanagari") };
 });
 
-// next/script injects scripts through the Next.js runtime; render a plain tag so the src can be checked.
+// next/script injects scripts through the Next.js runtime; render a plain tag so the src, id and content can be checked.
 vi.mock("next/script", () => ({
-  // eslint-disable-next-line @next/next/no-sync-scripts -- a test double that only records the src and strategy
-  default: ({ src, strategy }: { src: string; strategy?: string }) => <script src={src} data-strategy={strategy} />,
+  // eslint-disable-next-line @next/next/no-sync-scripts -- a test double that records props for tests
+  default: ({
+    src,
+    strategy,
+    id,
+    children,
+  }: {
+    src?: string;
+    strategy?: string;
+    id?: string;
+    children?: React.ReactNode;
+  }) => (
+    <script src={src} data-strategy={strategy} id={id}>
+      {children}
+    </script>
+  ),
 }));
 
 // The pathname and router come from the Next.js App Router, which tests do not run; Link and getPathname stay real.

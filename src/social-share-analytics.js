@@ -144,6 +144,48 @@ class GoogleAnalyticsAdapter extends SocialShareAnalyticsPlugin {
 }
 
 // -----------------------------------------------------------------------------
+// Google Tag Manager (GTM)
+// Requires: window.dataLayer initialized by the host's GTM container snippet.
+// Docs: https://developers.google.com/tag-platform/tag-manager/datalayer
+// -----------------------------------------------------------------------------
+class GoogleTagManagerAdapter extends SocialShareAnalyticsPlugin {
+  /**
+   * @param {Object} [config]
+   * @param {string} [config.dataLayerName='dataLayer'] - Global dataLayer property name.
+   * @param {string} [config.eventCategory='social_share'] - GTM event_category value.
+   */
+  constructor(config = {}) {
+    super();
+    this.dataLayerName = config.dataLayerName || "dataLayer";
+    this.eventCategory = config.eventCategory || "social_share";
+    if (typeof window !== "undefined") {
+      window[this.dataLayerName] = window[this.dataLayerName] || [];
+    }
+  }
+
+  track(payload) {
+    if (typeof window === "undefined") {
+      return;
+    }
+    if (!window[this.dataLayerName] || typeof window[this.dataLayerName].push !== "function") {
+      window[this.dataLayerName] = [];
+    }
+    const dataLayer = window[this.dataLayerName];
+    dataLayer.push({
+      event: payload.eventName,
+      event_category: this.eventCategory,
+      share_platform: payload.platform,
+      share_url: payload.url,
+      share_title: payload.title,
+      interaction_type: payload.interactionType,
+      component_id: payload.componentId,
+      timestamp: payload.timestamp,
+      error_message: payload.errorMessage || null,
+    });
+  }
+}
+
+// -----------------------------------------------------------------------------
 // Mixpanel
 // Requires: window.mixpanel loaded by the host.
 // Docs: https://developer.mixpanel.com/docs/javascript
@@ -274,6 +316,7 @@ class CustomAdapter extends SocialShareAnalyticsPlugin {
 const adapters = {
   SocialShareAnalyticsPlugin,
   GoogleAnalyticsAdapter,
+  GoogleTagManagerAdapter,
   MixpanelAdapter,
   SegmentAdapter,
   PlausibleAdapter,

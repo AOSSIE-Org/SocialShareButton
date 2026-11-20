@@ -10,7 +10,7 @@ const repoRoot = join(websiteRoot, "..");
 const target = join(websiteRoot, "public", "vendor", "social-share-button");
 
 mkdirSync(target, { recursive: true });
-for (const file of ["social-share-button.js", "social-share-button.css"]) {
+for (const file of ["social-share-button.js", "social-share-button.css", "social-share-analytics.js", "social-share-button-qr.js"]) {
   copyFileSync(join(repoRoot, "src", file), join(target, file));
 }
 console.log(`Synced SocialShareButton library into ${target}`);
