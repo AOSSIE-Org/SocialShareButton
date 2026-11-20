@@ -44,7 +44,11 @@ export function SiteShell({ locale, children }: { locale: string; children: Reac
         className="flex min-h-full flex-col bg-background-primary text-foreground-primary font-sans"
         suppressHydrationWarning
       >
-        <link rel="stylesheet" href={`${vendorBase}/social-share-button.css`} precedence="default" />
+        <link
+          rel="stylesheet"
+          href={`${vendorBase}/social-share-button.css`}
+          precedence="default"
+        />
         <NextIntlClientProvider locale={locale} messages={messages} timeZone="UTC">
           <ThemeProvider>
             <LenisProvider>{children}</LenisProvider>
@@ -66,7 +70,7 @@ export function SiteShell({ locale, children }: { locale: string; children: Reac
                   interaction_type: e.detail.interactionType,
                   component_id: e.detail.componentId,
                   timestamp: e.detail.timestamp,
-                  ...(e.detail.errorMessage ? { error_message: e.detail.errorMessage } : {})
+                  error_message: e.detail.errorMessage || null,
                 });
               }
             });

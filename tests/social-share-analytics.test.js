@@ -97,6 +97,35 @@ describe("analytics adapters", () => {
     });
   });
 
+  it("GoogleTagManagerAdapter sets error_message or clears it with null on subsequent events", () => {
+    window.dataLayer = [];
+    const adapter = new A.GoogleTagManagerAdapter();
+    adapter.track({ ...payload, errorMessage: "network failure" });
+    expect(window.dataLayer[0]).toMatchObject({
+      event: "social_share_click",
+      error_message: "network failure",
+    });
+
+    adapter.track(payload);
+    expect(window.dataLayer[1]).toMatchObject({
+      event: "social_share_click",
+      error_message: null,
+    });
+  });
+
+  it("GoogleTagManagerAdapter reinitializes dataLayer if not an array with push", () => {
+    const adapter = new A.GoogleTagManagerAdapter();
+    window.dataLayer = null;
+    adapter.track(payload);
+    expect(Array.isArray(window.dataLayer)).toBe(true);
+    expect(window.dataLayer).toHaveLength(1);
+
+    window.dataLayer = { notAnArray: true };
+    adapter.track(payload);
+    expect(Array.isArray(window.dataLayer)).toBe(true);
+    expect(window.dataLayer).toHaveLength(1);
+  });
+
   it("GoogleTagManagerAdapter supports a custom dataLayerName", () => {
     window.customLayer = [];
     new A.GoogleTagManagerAdapter({ dataLayerName: "customLayer" }).track(payload);

@@ -33,11 +33,17 @@ type SocialShareButtonConstructor = new (
   options: SocialShareButtonOptions
 ) => SocialShareButtonInstance;
 
+export type AnalyticsPluginConstructor = new (config?: Record<string, unknown>) => {
+  track(payload: Record<string, unknown>): void;
+};
+
+export type DataLayerEntry = Record<string, unknown>;
+
 declare global {
   interface Window {
     SocialShareButton?: SocialShareButtonConstructor;
-    SocialShareAnalytics?: Record<string, any>;
-    dataLayer?: any[];
+    SocialShareAnalytics?: Record<string, AnalyticsPluginConstructor | unknown>;
+    dataLayer?: DataLayerEntry[];
   }
 }
 
@@ -68,9 +74,7 @@ export function useLibraryReady() {
  * destroy + recreate cycle is the reliable way to reflect every option.
  * `options` must be referentially stable (memoize it) to avoid needless rebuilds.
  */
-export function useSocialShareButton(
-  options: Omit<SocialShareButtonOptions, "container"> | null
-) {
+export function useSocialShareButton(options: Omit<SocialShareButtonOptions, "container"> | null) {
   const containerRef = useRef<HTMLDivElement>(null);
   const instanceRef = useRef<SocialShareButtonInstance | null>(null);
   const ready = useLibraryReady();

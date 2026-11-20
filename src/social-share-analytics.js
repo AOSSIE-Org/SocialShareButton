@@ -180,7 +180,7 @@ class GoogleTagManagerAdapter extends SocialShareAnalyticsPlugin {
       interaction_type: payload.interactionType,
       component_id: payload.componentId,
       timestamp: payload.timestamp,
-      ...(payload.errorMessage ? { error_message: payload.errorMessage } : {}),
+      error_message: payload.errorMessage || null,
     });
   }
 }
