@@ -24,6 +24,9 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: path.resolve(__dirname),
   },
+  experimental: {
+    agentUpgrade: "security",
+  },
   env: {
     NEXT_PUBLIC_LIBRARY_VERSION: libraryPackage.version,
     NEXT_PUBLIC_LIBRARY_GZIP_KB: String(Math.round(gzippedBytes / 1024)),

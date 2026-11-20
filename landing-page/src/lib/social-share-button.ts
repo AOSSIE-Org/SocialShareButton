@@ -17,6 +17,9 @@ export interface SocialShareButtonOptions {
   buttonColor?: string;
   buttonHoverColor?: string;
   showButton?: boolean;
+  analytics?: boolean;
+  analyticsPlugins?: unknown[];
+  debug?: boolean;
 }
 
 export interface SocialShareButtonInstance {
@@ -33,6 +36,8 @@ type SocialShareButtonConstructor = new (
 declare global {
   interface Window {
     SocialShareButton?: SocialShareButtonConstructor;
+    SocialShareAnalytics?: Record<string, any>;
+    dataLayer?: any[];
   }
 }
 
